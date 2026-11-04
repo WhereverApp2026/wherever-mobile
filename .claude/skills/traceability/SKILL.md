@@ -7,7 +7,8 @@ description: Trazabilidad spec↔código↔test
 > Rector: `.specify/memory/constitution.md`. Ante conflicto, manda la constitución.
 
 ## What I do
-- Tabla requisito → archivo → test.
+- Tabla `R#` → plan → tarea → gate → archivo → test.
+- Verifica referencias `[planificado nv-0X]` y archivos huérfanos.
 
 ## Cuando usarme
 Cerrar una fase.

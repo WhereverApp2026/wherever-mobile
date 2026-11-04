@@ -1,0 +1,3 @@
+# Copia este archivo a local.properties y ajusta los valores.
+sdk.dir=/ruta/a/Android/Sdk
+API_BASE_URL=https://10.0.2.2:8443/api/v1/

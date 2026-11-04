@@ -1,6 +1,6 @@
 ---
 name: security-reviewer
-description: Audita sin editar antes de tag vX.Y.Z-featN
+description: Audita sin editar antes de tag vX.Y.Z-featN y en cada PR
 tools: Read, Glob, Grep, Skill
 model: inherit
 ---

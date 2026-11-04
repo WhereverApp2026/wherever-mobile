@@ -8,6 +8,7 @@ description: Orden de CI-PR
 
 ## What I do
 - deps → build → lint → unit → data → security → ui → critic → routes → sdd → coverage → delta-check → mutation → semgrep → deps-scan.
+- `.github/dependabot.yml` activo para dependencias `[planificado nv-03]`.
 
 ## Cuando usarme
 Editar `ci-pr.yml`.

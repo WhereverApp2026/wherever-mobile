@@ -1,6 +1,7 @@
-# Tasks Template — SDD
+# Feature Tasks Template — nv-05+ (funcionalidad liberable)
 
-> Cada funcionalidad liberable: spec→datos→dominio→ViewModel→UI→tests→gates→tag.
+> Cada funcionalidad liberable: spec→datos→dominio→ViewModel→UI→tests→gates→tag `vX.Y.Z-featN`.
+> Para fases de arquitectura (`nv-00…nv-04`) usar `phase-task-template.md`.
 
 - [ ] 1. Spec en `specs/nv-0X/spec.md` aprobada
 - [ ] 2. Entidad Room + DAO + esquema exportado + migración

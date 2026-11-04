@@ -9,6 +9,7 @@ description: Crea el proyecto base Android sin pantallas del producto
 ## What I do
 - Gradle Kotlin DSL, catálogo de versiones, módulo `app`, paquetes `core/*`.
 - Hilt, Navigation, tema Wherever, `strings.xml`.
+- `detekt`, `ktlint`, `.editorconfig`, `LocalPropertiesExampleTest` y scripts de gobernanza.
 
 ## Cuando usarme
 Ejecutar `specs/nv-01`.

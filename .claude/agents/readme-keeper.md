@@ -12,6 +12,7 @@ model: inherit
 ## Hace
 - Concilia `README.md`, `Memoria.md`, `docs/*.md` y specs con lo implementado.
 - Mantiene tablas vivas (rutas, permisos, MASVS) sin duplicarlas en las specs.
+- Mantiene el índice de fases, agentes y skills, y verifica que las referencias `[planificado nv-0X]` sigan siendo correctas.
 
 ## No hace
 Tocar código, Gradle, manifiestos ni recursos. No firma aprobaciones.
