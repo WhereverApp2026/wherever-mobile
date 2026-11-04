@@ -1,7 +1,7 @@
 # 013 — Inicio y feed
 
 > Rector: `.specify/memory/constitution.md`. Plantilla: `.specify/templates/spec-template.md`. Arquitectura: `specs/000-arquitectura/spec.md`. Mapa: `specs/001-flujo-general/spec.md`.
-> Sección de la maqueta: 2 · Inicio, feed y notificaciones. Posterior al Sprint 1. La implementación queda sujeta a la etapa vigente (`nv-00…nv-03` sin pantallas del producto).
+> Sección de la maqueta: 2 · Inicio, feed y notificaciones. Posterior al Sprint 1, salvo el Inicio provisional que ya existe; ver "Implementado".
 
 ## 1. Objetivo
 
@@ -110,9 +110,29 @@ Entidades de feed y lugares en Room, con caché y cursor.
 
 Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas, y los endpoints de "Pendiente de backend". `plan.md` y `task.md` se generan al tomar la spec.
 
+## Implementado (2026-11-04)
+
+**Hecho**
+
+- Inicio provisional para cerrar el flujo de cuenta: encabezado de `10_Inicio` con saludo y ciudad, leídos del perfil en Room, y un aviso de que falta el contenido.
+- Barra provisional con Inicio y Perfil (D22).
+
+**Difiere de lo especificado**
+
+- El resto de esta spec no está implementado: feed, sugerencias, amigos, reacciones y crear plan no tienen endpoint publicado.
+
+**Archivos** (bajo `app/src/main/java/com/wherever/mobile/`)
+
+- `feature/home/ui/HomeScreen.kt`
+- `feature/home/ui/HomeViewModel.kt`
+
+**Límites de la verificación**
+
+- Sin prueba unitaria propia: solo lee el perfil de Room y lo muestra.
+
 ## Aprobación
 - [ ] Revisor 1 — fecha:
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Borrador.
+**Estado:** 🚧 Borrador; solo el Inicio provisional está implementado.
