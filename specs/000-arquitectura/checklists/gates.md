@@ -5,5 +5,5 @@
 - [x] Spec con plantilla de 7 secciones + Aprobación
 - [x] Diagramas Mermaid de capas y flujo de datos
 - [x] Decisiones fuera de la constitución marcadas con su porqué
-- [ ] `gradlew.bat assembleDebug → BUILD SUCCESSFUL`
+- [x] `gradlew assembleDebug → BUILD SUCCESSFUL` (2026-11-04)
 - [ ] Aprobación firmada: (pendiente de revisor)

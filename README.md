@@ -27,7 +27,7 @@ App Android en Kotlin + Jetpack Compose para Wherever, desarrollada con **Spec D
 Estado: proyecto Gradle creado con una pantalla `home` mínima. Las tareas de `nv-01…nv-03` y las pantallas del producto siguen **sin ejecutar**.
 
 ## Compilar
-Requisitos: Android Studio con Android SDK (API 37 y Build-Tools 37), y `JAVA_HOME` apuntando a un JDK, por ejemplo el de Android Studio (`<Android Studio>/jbr`).
+Requisitos: Android Studio con Android SDK (API 37; Gradle descarga las Build-Tools que falten si las licencias están aceptadas), y `JAVA_HOME` apuntando a un JDK, por ejemplo el de Android Studio (`<Android Studio>/jbr`).
 
 ```
 copy local.properties.example local.properties   # ajusta sdk.dir; API_BASE_URL es opcional en debug
