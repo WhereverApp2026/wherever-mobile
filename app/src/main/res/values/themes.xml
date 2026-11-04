@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Wherever" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/wherever_mist</item>
+    </style>
+</resources>

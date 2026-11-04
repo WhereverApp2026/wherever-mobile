@@ -1,0 +1,28 @@
+# Gradle y build
+build/
+.gradle/
+.kotlin/
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+
+# Local y secretos (constitución §6)
+local.properties
+.env
+.env.*
+google-services.json
+*.jks
+*.keystore
+
+# IDE
+.idea/
+*.iml
+.DS_Store
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Maqueta de Figma: referencia local, 50 MB de PNG
+maqueta/

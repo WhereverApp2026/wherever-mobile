@@ -1,0 +1,8 @@
+# Copiar a local.properties (no se sube a Git). Sin secretos.
+# sdk.dir=C\:\\Users\\<usuario>\\AppData\\Local\\Android\\Sdk
+
+# Debug: opcional, sin este valor se usa staging (gradle.properties).
+# Release: obligatorio definir la URL real.
+# Solo HTTPS y con barra final. Emulador contra backend local con certificado de desarrollo:
+# https://10.0.2.2:8443/api/v1/
+API_BASE_URL=https://example.invalid/api/v1/
