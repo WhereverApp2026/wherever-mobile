@@ -1,7 +1,7 @@
 # 009 — Ajustes y cerrar sesión
 
 > Rector: `.specify/memory/constitution.md`. Plantilla: `.specify/templates/spec-template.md`. Arquitectura: `specs/000-arquitectura/spec.md`. Mapa: `specs/001-flujo-general/spec.md`.
-> Sección de la maqueta: 10 · Perfil, ajustes y estados. **Sprint 1.** La implementación queda sujeta a la etapa vigente (`nv-00…nv-03` sin pantallas del producto).
+> Sección de la maqueta: 10 · Perfil, ajustes y estados. **Sprint 1.** Implementada por encargo explícito (2026-11-04); ver "Implementado".
 
 ## 1. Objetivo
 
@@ -13,9 +13,9 @@ Reunir las preferencias de la cuenta y permitir salir de forma segura.
 
 **US-019.** Como usuario quiero cerrar sesión para proteger mi cuenta en este teléfono.
 
-- [ ] Botón en Ajustes con confirmación.
-- [ ] Borra tokens y caché personal.
-- [ ] Regresa a Iniciar sesión.
+- [x] Botón en Ajustes con confirmación.
+- [x] Borra tokens y caché personal.
+- [x] Regresa a Iniciar sesión.
 
 ### UI
 
@@ -97,11 +97,43 @@ Lee `UserProfileEntity`. Logout borra tablas personales de Room y `TokenStore`.
 
 ## 7. Plan de entrega
 
-Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. `plan.md` y `task.md` se generan al tomar la spec.
+Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. Ver `plan.md` y `task.md`.
+
+## Implementado (2026-11-04)
+
+**Hecho**
+
+- Preferencias con `PATCH /usuarios/yo/preferencias`: tema, votaciones, cupones, reseñas y promociones. El tema se aplica a toda la app.
+- Usar mi ubicación va a `PATCH /usuarios/yo/privacidad`.
+- Pantalla Sesiones abiertas (sin frame, D07): `GET /auth/sesiones`, `DELETE /auth/sesiones/{id}` y `POST /auth/logout-todos` con confirmación.
+- Cerrar sesión: `POST /auth/logout` y limpieza local aunque la llamada falle. Cerrar todas solo limpia si el servidor confirma.
+- La sesión actual no se cierra desde la lista: se usa Cerrar sesión, que también limpia el teléfono.
+
+**Difiere de lo especificado**
+
+- Sin interruptor de Recordatorios de reservación: la API responde 422 (D06).
+- Las filas Correo y Contraseña no están: no estaban pedidas ni tienen frame de destino (D07).
+- Tengo un negocio, Ayuda y Términos no están: sus pantallas no existen.
+
+**Archivos** (bajo `app/src/main/java/com/wherever/mobile/`)
+
+- `feature/settings/ui/SettingsScreen.kt`
+- `feature/settings/ui/SettingsViewModel.kt`
+- `feature/settings/ui/SessionsScreen.kt`
+- `feature/settings/ui/SessionsViewModel.kt`
+
+**Pruebas**
+
+- `feature/settings/ui/SettingsViewModelsTest.kt`
+- `feature/auth/data/AuthRepositoryImplTest.kt`
+
+**Límites de la verificación**
+
+- No probado en dispositivo ni contra staging con una cuenta real: no hay emulador configurado. Verificado con `assembleDebug`, `testDebugUnitTest`, `ktlintCheck` y `lintDebug`.
 
 ## Aprobación
 - [ ] Revisor 1 — fecha:
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Borrador.
+**Estado:** 🚧 Implementada, sin revisor (falta prueba en dispositivo).

@@ -1,7 +1,7 @@
 # 008 — Sesión y tokens
 
 > Rector: `.specify/memory/constitution.md`. Plantilla: `.specify/templates/spec-template.md`. Arquitectura: `specs/000-arquitectura/spec.md`. Mapa: `specs/001-flujo-general/spec.md`.
-> Sección de la maqueta: Sin pantalla. **Sprint 1.** La implementación queda sujeta a la etapa vigente (`nv-00…nv-03` sin pantallas del producto).
+> Sección de la maqueta: Sin pantalla. **Sprint 1.** Implementada por encargo explícito (2026-11-04); ver "Implementado".
 
 ## 1. Objetivo
 
@@ -13,11 +13,11 @@ Guardar tokens cifrados y renovarlos una sola vez ante un 401, sin que la UI lo 
 
 **US-158.** Como usuario quiero que mi sesión sea segura y no se interrumpa.
 
-- [ ] Tokens cifrados con DataStore + Keystore.
-- [ ] El interceptor agrega Bearer en rutas con JWT.
-- [ ] Ante 401 se renueva una sola vez y se repite la petición.
-- [ ] Guarda siempre el refresh nuevo, porque rota.
-- [ ] Si el servidor rechaza el refresh, limpia la sesión y va a Login.
+- [x] Tokens cifrados con DataStore + Keystore.
+- [x] El interceptor agrega Bearer en rutas con JWT.
+- [x] Ante 401 se renueva una sola vez y se repite la petición.
+- [x] Guarda siempre el refresh nuevo, porque rota.
+- [x] Si el servidor rechaza el refresh, limpia la sesión y va a Login.
 
 ### UI
 
@@ -80,11 +80,44 @@ Errores con forma `{codigo, mensaje, campos[], traza_id}`, mapeados a `AppError`
 
 ## 7. Plan de entrega
 
-Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. `plan.md` y `task.md` se generan al tomar la spec.
+Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. Ver `plan.md` y `task.md`.
+
+## Implementado (2026-11-04)
+
+**Hecho**
+
+- Cadena `RequestId → AuthHeader → RedactedLogging` + `TokenRefreshAuthenticator`, con lock y cliente aparte para el refresh.
+- `DataStore` cifrado con AES-256-GCM de Android Keystore; descifrado fallido equivale a sin sesión.
+- Las rutas públicas se marcan con `@PublicEndpoint`.
+- El log solo tiene método, ruta sin parámetros, estado e ids; nunca cabeceras ni cuerpos.
+- 429 llega como `AppError.RateLimited(retryAfterSeconds)`; cada pantalla hace la cuenta atrás. No se reintenta solo.
+
+**Difiere de lo especificado**
+
+- Refresh con red caída, 429 o 503: conserva la sesión, no va a Login (D16). Solo 401 o 422 del refresh la terminan.
+
+**Archivos** (bajo `app/src/main/java/com/wherever/mobile/`)
+
+- `core/network/*`
+- `core/security/*`
+- `core/di/NetworkModule.kt`
+- `core/di/SecurityModule.kt`
+
+**Pruebas**
+
+- `core/network/TokenRefreshAuthenticatorTest.kt` (incluye dos 401 simultáneos = un solo refresh; se comprobó que falla sin el lock)
+- `core/network/InterceptorsTest.kt`
+- `core/network/SafeApiCallTest.kt`
+- `core/security/EncryptedTokensSerializerTest.kt`
+
+**Límites de la verificación**
+
+- No probado en dispositivo ni contra staging con una cuenta real: no hay emulador configurado. Verificado con `assembleDebug`, `testDebugUnitTest`, `ktlintCheck` y `lintDebug`.
+- `KeystoreTokenCipher` no tiene prueba: el JVM no tiene Android Keystore y no hay emulador. El serializador se prueba con un cifrado de prueba.
 
 ## Aprobación
 - [ ] Revisor 1 — fecha:
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Borrador.
+**Estado:** 🚧 Implementada, sin revisor (falta prueba en dispositivo).

@@ -1,7 +1,7 @@
 # 002 — Splash y bienvenida
 
 > Rector: `.specify/memory/constitution.md`. Plantilla: `.specify/templates/spec-template.md`. Arquitectura: `specs/000-arquitectura/spec.md`. Mapa: `specs/001-flujo-general/spec.md`.
-> Sección de la maqueta: 1 · Acceso y registro. **Sprint 1.** La implementación queda sujeta a la etapa vigente (`nv-00…nv-03` sin pantallas del producto).
+> Sección de la maqueta: 1 · Acceso y registro. **Sprint 1.** Implementada por encargo explícito (2026-11-04); ver "Implementado".
 
 ## 1. Objetivo
 
@@ -14,9 +14,9 @@ Decidir el primer destino de la app en menos de 2 s y presentar el producto a qu
 **US-001.** Como usuario quiero que la app abra rápido y me lleve al lugar correcto para no repetir pasos.
 
 - [ ] Usa SplashScreen API, entre 0.8 y 2 s.
-- [ ] Sin tokens → Bienvenida.
-- [ ] Sesión válida → Inicio.
-- [ ] Sesión vencida (refresh rechazado) → Login.
+- [x] Sin tokens → Bienvenida.
+- [x] Sesión válida → Inicio.
+- [x] Sesión vencida (refresh rechazado) → Login.
 - [ ] Sin red → Sin conexión con Reintentar (`specs/012`).
 
 ### UI
@@ -86,11 +86,37 @@ Sin entidades propias. Lee `TokenStore` y `UserProfileEntity`.
 
 ## 7. Plan de entrega
 
-Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. `plan.md` y `task.md` se generan al tomar la spec.
+Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. Ver `plan.md` y `task.md`.
+
+## Implementado (2026-11-04)
+
+**Hecho**
+
+- SplashScreen API: se mantiene hasta decidir el destino. `MainViewModel` lee `TokenStore` y Room.
+- Con sesión entra de inmediato con la caché y valida detrás con `GET /usuarios/yo`. Si el servidor rechaza el refresh, `SessionEvents` lleva a Login.
+
+**Difiere de lo especificado**
+
+- No se fuerza la duración de 0.8 a 2 s: el splash dura lo que tarde en leer los tokens.
+- Sin red no va a `SinConexion` (no implementada): con sesión entra con la caché; sin sesión, a Bienvenida.
+
+**Archivos** (bajo `app/src/main/java/com/wherever/mobile/`)
+
+- `feature/auth/ui/WelcomeScreen.kt`
+- `navigation/MainViewModel.kt`
+- `MainActivity.kt`
+
+**Pruebas**
+
+- `navigation/MainViewModelTest.kt`
+
+**Límites de la verificación**
+
+- No probado en dispositivo ni contra staging con una cuenta real: no hay emulador configurado. Verificado con `assembleDebug`, `testDebugUnitTest`, `ktlintCheck` y `lintDebug`.
 
 ## Aprobación
 - [ ] Revisor 1 — fecha:
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Borrador.
+**Estado:** 🚧 Implementada, sin revisor (falta prueba en dispositivo).

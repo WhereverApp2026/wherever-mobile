@@ -1,7 +1,7 @@
 # 011 — Privacidad, mis datos y eliminar cuenta
 
 > Rector: `.specify/memory/constitution.md`. Plantilla: `.specify/templates/spec-template.md`. Arquitectura: `specs/000-arquitectura/spec.md`. Mapa: `specs/001-flujo-general/spec.md`.
-> Sección de la maqueta: 10 · Perfil, ajustes y estados. **Sprint 1.** La implementación queda sujeta a la etapa vigente (`nv-00…nv-03` sin pantallas del producto).
+> Sección de la maqueta: 10 · Perfil, ajustes y estados. **Sprint 1.** Implementada por encargo explícito (2026-11-04); ver "Implementado".
 
 ## 1. Objetivo
 
@@ -13,15 +13,15 @@ Dar control sobre los datos personales, incluida su descarga y la eliminación d
 
 **US-007.** Como usuario quiero ver, descargar y borrar mis datos.
 
-- [ ] Interruptores de ubicación, aprendizaje, ánimo y datos de uso.
+- [x] Interruptores de ubicación, aprendizaje, ánimo y datos de uso.
 - [ ] Descargar mis datos: enlace por correo, 24 h.
 - [ ] Borrar historial.
-- [ ] Eliminar cuenta escribiendo ELIMINAR, efectiva en 30 días y cancelable.
+- [x] Eliminar cuenta escribiendo ELIMINAR, efectiva en 30 días y cancelable.
 
 **US-236.** Como usuario quiero decidir quién puede encontrarme.
 
-- [ ] Interruptor buscable por teléfono, apagado por defecto.
-- [ ] Los cambios aplican al instante.
+- [x] Interruptor buscable por teléfono, apagado por defecto.
+- [x] Los cambios aplican al instante.
 
 ### UI
 
@@ -110,11 +110,43 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 
 ## 7. Plan de entrega
 
-Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. `plan.md` y `task.md` se generan al tomar la spec.
+Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. Ver `plan.md` y `task.md`.
+
+## Implementado (2026-11-04)
+
+**Hecho**
+
+- Privacidad usa los 5 interruptores de la API, en el estilo de `28_PrivSocial` (D04).
+- Eliminar cuenta sigue a la API: se escribe ELIMINAR y hay 30 días para cancelar (D03). Al aceptar limpia la sesión local y va a Login.
+- Pantalla de eliminación pendiente (sin frame, D13): se detecta con `eliminar_en`, y permite cancelar con `POST /usuarios/yo/cancelar-eliminacion` o cerrar sesión.
+
+**Difiere de lo especificado**
+
+- Los controles del frame `28_PrivSocial` no están: no existen en la API (D04).
+- Descargar mis datos y Borrar historial no están implementados (D35): no estaban en este encargo.
+- Se asume que `/auth/login` funciona con eliminación pendiente; falta confirmarlo (D15).
+
+**Archivos** (bajo `app/src/main/java/com/wherever/mobile/`)
+
+- `feature/settings/ui/PrivacyScreen.kt`
+- `feature/settings/ui/PrivacyViewModel.kt`
+- `feature/settings/ui/DeleteAccountScreen.kt`
+- `feature/settings/ui/DeleteAccountViewModel.kt`
+- `feature/settings/ui/DeletionPendingScreen.kt`
+- `feature/settings/ui/DeletionPendingViewModel.kt`
+
+**Pruebas**
+
+- `feature/settings/ui/SettingsViewModelsTest.kt`
+- `feature/profile/data/ProfileRepositoryImplTest.kt`
+
+**Límites de la verificación**
+
+- No probado en dispositivo ni contra staging con una cuenta real: no hay emulador configurado. Verificado con `assembleDebug`, `testDebugUnitTest`, `ktlintCheck` y `lintDebug`.
 
 ## Aprobación
 - [ ] Revisor 1 — fecha:
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Borrador.
+**Estado:** 🚧 Implementada, sin revisor (falta prueba en dispositivo).

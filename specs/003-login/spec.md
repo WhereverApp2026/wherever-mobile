@@ -1,7 +1,7 @@
 # 003 — Iniciar sesión
 
 > Rector: `.specify/memory/constitution.md`. Plantilla: `.specify/templates/spec-template.md`. Arquitectura: `specs/000-arquitectura/spec.md`. Mapa: `specs/001-flujo-general/spec.md`.
-> Sección de la maqueta: 1 · Acceso y registro. **Sprint 1.** La implementación queda sujeta a la etapa vigente (`nv-00…nv-03` sin pantallas del producto).
+> Sección de la maqueta: 1 · Acceso y registro. **Sprint 1.** Implementada por encargo explícito (2026-11-04); ver "Implementado".
 
 ## 1. Objetivo
 
@@ -13,10 +13,10 @@ Entrar con correo y contraseña, recordar la sesión 30 días y volver al destin
 
 **US-013.** Como usuario quiero iniciar sesión y que se recuerde para no escribir mi contraseña cada vez.
 
-- [ ] Refresh token cifrado (DataStore + Keystore), válido 30 días.
-- [ ] Tras 5 intentos fallidos, bloqueo de 15 min (423) con mensaje claro.
+- [x] Refresh token cifrado (DataStore + Keystore), válido 30 días.
+- [x] Tras 5 intentos fallidos, bloqueo de 15 min (423) con mensaje claro.
 - [ ] Tras el login regresa al destino del enlace profundo, si lo hubo.
-- [ ] Correo o contraseña incorrectos (401) muestran un solo mensaje, sin revelar si el correo existe.
+- [x] Correo o contraseña incorrectos (401) muestran un solo mensaje, sin revelar si el correo existe.
 
 ### UI
 
@@ -91,11 +91,38 @@ Errores con forma `{codigo, mensaje, campos[], traza_id}`, mapeados a `AppError`
 
 ## 7. Plan de entrega
 
-Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. `plan.md` y `task.md` se generan al tomar la spec.
+Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. Ver `plan.md` y `task.md`.
+
+## Implementado (2026-11-04)
+
+**Hecho**
+
+- 401 muestra el `mensaje` de la API. 423 usa texto propio sobre el bloqueo de 15 min. 429 desactiva Entrar con cuenta atrás según `Retry-After`.
+- Tras entrar pide `GET /usuarios/yo` y decide el destino: eliminación pendiente, Gustos (si `gustos` es null y no se omitieron) o Inicio.
+
+**Difiere de lo especificado**
+
+- "Continuar con Google" no se muestra (D10).
+- No regresa al destino de un enlace profundo: aún no hay enlaces (D11).
+
+**Archivos** (bajo `app/src/main/java/com/wherever/mobile/`)
+
+- `feature/auth/ui/LoginScreen.kt`
+- `feature/auth/ui/LoginViewModel.kt`
+- `feature/auth/data/AuthRepositoryImpl.kt`
+
+**Pruebas**
+
+- `feature/auth/ui/AuthViewModelsTest.kt`
+- `feature/auth/data/AuthRepositoryImplTest.kt`
+
+**Límites de la verificación**
+
+- No probado en dispositivo ni contra staging con una cuenta real: no hay emulador configurado. Verificado con `assembleDebug`, `testDebugUnitTest`, `ktlintCheck` y `lintDebug`.
 
 ## Aprobación
 - [ ] Revisor 1 — fecha:
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Borrador.
+**Estado:** 🚧 Implementada, sin revisor (falta prueba en dispositivo).

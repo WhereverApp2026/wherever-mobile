@@ -1,7 +1,7 @@
 # 010 — Perfil, edición e insignias
 
 > Rector: `.specify/memory/constitution.md`. Plantilla: `.specify/templates/spec-template.md`. Arquitectura: `specs/000-arquitectura/spec.md`. Mapa: `specs/001-flujo-general/spec.md`.
-> Sección de la maqueta: 10 · Perfil, ajustes y estados. **Sprint 1.** La implementación queda sujeta a la etapa vigente (`nv-00…nv-03` sin pantallas del producto).
+> Sección de la maqueta: 10 · Perfil, ajustes y estados. **Sprint 1.** Implementada por encargo explícito (2026-11-04); ver "Implementado".
 
 ## 1. Objetivo
 
@@ -15,11 +15,11 @@ Ver y editar la identidad de la cuenta, con su nivel y logros.
 
 - [ ] Los cambios se guardan al instante.
 - [ ] Cambiar correo pide verificación.
-- [ ] Tema Claro, Oscuro o Automático.
+- [x] Tema Claro, Oscuro o Automático.
 
 **HU propuesta.** Como usuario quiero ver mi nivel y mis insignias para motivarme.
 
-- [ ] Muestra `nivel`, `puntos` y `racha_semanas`.
+- [x] Muestra `nivel`, `puntos` y `racha_semanas`.
 - [ ] Las insignias salen del backend cuando exista.
 
 ### UI
@@ -114,11 +114,47 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 
 ## 7. Plan de entrega
 
-Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. `plan.md` y `task.md` se generan al tomar la spec.
+Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. Ver `plan.md` y `task.md`.
+
+## Implementado (2026-11-04)
+
+**Hecho**
+
+- Perfil lee de Room y actualiza con `GET /usuarios/yo`. Sin red conserva la caché y muestra el error.
+- Editar perfil une `82_EditarPerfil` y `84_DatosPers` (D09): nombre y ciudad, con `PATCH /usuarios/yo` e `If-Match`.
+- Ante 409 avisa "Tus datos cambiaron en otro dispositivo", recarga y deja al usuario revisar.
+- Aviso de correo sin verificar, que lleva a Revisa tu correo (D20).
+- Room: `UserProfileEntity` con esquema exportado en `app/schemas`.
+
+**Difiere de lo especificado**
+
+- Guarda con botón, no al instante (D09).
+- Sin `@usuario`, bio, contadores de planes, amigos ni reseñas, ni teléfono: la API no los da (D08).
+- Sin foto: la API no permite subirla (D34). Se muestra la inicial.
+- Sin `83_Insignias`: faltan datos (se muestran `puntos`, `nivel` y `racha`).
+- Sin cambio de correo: no estaba pedido.
+
+**Archivos** (bajo `app/src/main/java/com/wherever/mobile/`)
+
+- `feature/profile/ui/ProfileScreen.kt`
+- `feature/profile/ui/ProfileViewModel.kt`
+- `feature/profile/ui/EditProfileScreen.kt`
+- `feature/profile/ui/EditProfileViewModel.kt`
+- `feature/profile/data/*`
+
+**Pruebas**
+
+- `feature/profile/ui/ProfileViewModelsTest.kt`
+- `feature/profile/data/ProfileRepositoryImplTest.kt`
+- `androidTest/.../UserProfileDaoTest.kt` (Room real; sin correr, requiere emulador)
+
+**Límites de la verificación**
+
+- No probado en dispositivo ni contra staging con una cuenta real: no hay emulador configurado. Verificado con `assembleDebug`, `testDebugUnitTest`, `ktlintCheck` y `lintDebug`.
 
 ## Aprobación
 - [ ] Revisor 1 — fecha:
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Borrador.
+**Estado:** 🚧 Implementada, sin revisor (falta prueba en dispositivo).

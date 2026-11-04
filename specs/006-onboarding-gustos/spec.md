@@ -1,7 +1,7 @@
 # 006 — Onboarding de gustos
 
 > Rector: `.specify/memory/constitution.md`. Plantilla: `.specify/templates/spec-template.md`. Arquitectura: `specs/000-arquitectura/spec.md`. Mapa: `specs/001-flujo-general/spec.md`.
-> Sección de la maqueta: 1 · Acceso y registro. **Sprint 1.** La implementación queda sujeta a la etapa vigente (`nv-00…nv-03` sin pantallas del producto).
+> Sección de la maqueta: 1 · Acceso y registro. **Sprint 1.** Implementada por encargo explícito (2026-11-04); ver "Implementado".
 
 ## 1. Objetivo
 
@@ -13,20 +13,20 @@ Conocer gustos, gasto habitual y restricciones para que la IA arme planes a la m
 
 **US-020.** Como usuario nuevo quiero elegir mis gustos con chips para recibir planes que me interesen.
 
-- [ ] 15 chips con emoji.
-- [ ] Mínimo 3 para continuar.
-- [ ] Botón Omitir.
-- [ ] Se guardan en el perfil.
+- [x] 15 chips con emoji.
+- [x] Mínimo 3 para continuar.
+- [x] Botón Omitir.
+- [x] Se guardan en el perfil.
 
 **US-021.** Como usuario quiero indicar cuánto suelo gastar por salida.
 
-- [ ] Deslizador de 0 a 1,000+ MXN, inicial 150 a 300.
-- [ ] Sin ubicación, pide ciudad con autocompletado.
+- [x] Deslizador de 0 a 1,000+ MXN, inicial 150 a 300.
+- [x] Sin ubicación, pide ciudad con autocompletado.
 
 **US-022.** Como usuario quiero indicar dieta, alergias y accesibilidad.
 
-- [ ] Chips opcionales.
-- [ ] Alergias abre un campo de texto.
+- [x] Chips opcionales.
+- [x] Alergias abre un campo de texto.
 
 ### UI
 
@@ -103,11 +103,41 @@ Errores con forma `{codigo, mensaje, campos[], traza_id}`, mapeados a `AppError`
 
 ## 7. Plan de entrega
 
-Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. `plan.md` y `task.md` se generan al tomar la spec.
+Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. Ver `plan.md` y `task.md`.
+
+## Implementado (2026-11-04)
+
+**Hecho**
+
+- Se siguen las historias, no la maqueta, donde difieren (D05): 15 chips con emoji y deslizador de presupuesto.
+- Guarda en orden: `PUT /usuarios/yo/gustos`, `PATCH /usuarios/yo/preferencias` (`movilidad_default`) y `PATCH /usuarios/yo` (`ciudad_id`). Si una falla, se muestra el error y se puede reintentar.
+- Máximo 10 categorías. Autocompletado de ciudad con espera de 300 ms y mínimo 2 letras.
+- Omitir guarda una marca local por usuario (D12).
+- También se abre desde Ajustes, con los datos actuales.
+
+**Difiere de lo especificado**
+
+- "Cómo me muevo" es de una sola opción, porque `movilidad_default` es único (D05).
+- "Suelo salir" no está: no tiene campo en la API (D05).
+- **Las claves de `categorias` y `restricciones` son propuestas:** la API no publica catálogo (D05).
+
+**Archivos** (bajo `app/src/main/java/com/wherever/mobile/`)
+
+- `feature/tastes/ui/TastesScreen.kt`
+- `feature/tastes/ui/TastesViewModel.kt`
+- `feature/profile/ui/CitySearch.kt`
+
+**Pruebas**
+
+- `feature/profile/ui/ProfileViewModelsTest.kt`
+
+**Límites de la verificación**
+
+- No probado en dispositivo ni contra staging con una cuenta real: no hay emulador configurado. Verificado con `assembleDebug`, `testDebugUnitTest`, `ktlintCheck` y `lintDebug`.
 
 ## Aprobación
 - [ ] Revisor 1 — fecha:
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Borrador.
+**Estado:** 🚧 Implementada, sin revisor (falta prueba en dispositivo).

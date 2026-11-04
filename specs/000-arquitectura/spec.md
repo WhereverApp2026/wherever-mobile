@@ -14,7 +14,7 @@ La app **solo habla con la API v1** (backend Go, staging `https://18-227-230-50.
 
 **In:** decisiones de arquitectura, estructura de paquetes y convenciones. El proyecto Gradle mínimo y la pantalla `home` vacía (`nv-01` R1-R3).
 
-**Out:** implementar la cadena de red, `TokenStore` o Room (tareas de `nv-01`, sin ejecutar); pantallas del producto (`nv-04+`); FCM y mapas reales.
+**Out:** FCM y mapas reales. La cadena de red, `TokenStore`, Room y las primeras pantallas se implementaron el 2026-11-04 (ver `specs/README.md`).
 
 ### 2.1 Capas y patrón
 
@@ -89,7 +89,7 @@ sequenceDiagram
   end
 ```
 
-**Excepción a Room como fuente de verdad [Decisión propuesta]:** las respuestas que son acciones y no datos reutilizables (`/auth/*`, `correo-disponible`, `ciudades/autocompletar`) no pasan por Room. Porqué: no hay nada que mostrar sin red, y credenciales o tokens jamás deben llegar a una tabla. El perfil devuelto en `usuario`/`GET /usuarios/yo` sí se persiste.
+**Excepción a Room como fuente de verdad [Decisión propuesta]:** las respuestas que son acciones y no datos reutilizables (`/auth/*`, `correo-disponible`, `ciudades/autocompletar`) no pasan por Room. Porqué: no hay nada que mostrar sin red, y credenciales o tokens jamás deben llegar a una tabla. El perfil de `GET /usuarios/yo` sí se persiste; `usuario` de las respuestas de sesión no, porque está incompleto.
 
 ### 2.3 Estado
 
@@ -204,7 +204,7 @@ data class ApiErrorDto(
 | Tiempo agotado | — | `Timeout` | Reintentar |
 | Cuerpo ilegible | — | `Unknown` | Error genérico |
 
-- Reglas: el `codigo` decide la lógica, no el texto de `mensaje`; `traza_id` se conserva para logs y soporte; los textos visibles salen de `strings.xml`, salvo los `campos[].mensaje` del servidor, que se muestran bajo su campo.
+- Reglas: el `codigo` decide la lógica, no el texto de `mensaje`. `traza_id` se conserva en `AppError`. **La UI muestra el `mensaje` de la API** (encargo del 2026-11-04), con mayúscula inicial, y usa `strings.xml` si no hay mensaje (sin red, tiempo agotado) o si la pantalla pide un texto concreto (423 en login, 409 en perfil). `campos[].mensaje` va bajo su campo.
 - **[Decisión propuesta]** El mapeo vive en una sola función `safeApiCall { }` de `core/network` que devuelve `Result<T>`. Porqué: un `CallAdapter` propio agrega magia sin ventaja, y esto es trivial de probar con MockWebServer.
 
 ### 3.4 Otros contratos transversales
@@ -236,7 +236,7 @@ data class ApiErrorDto(
 - Contenido: `access_token`, `refresh_token`, `expira_en`.
 - Si no se puede descifrar (clave perdida, restauración): `CorruptionHandler` devuelve vacío, lo que equivale a sesión vencida y lleva a Login.
 - Porqué DataStore + Keystore y no `EncryptedSharedPreferences`: esa API de `security-crypto` está obsoleta, y US-013 pide DataStore. Porqué sin Tink: la API de Keystore basta (MASVS CRYPTO: sin cripto propia, solo APIs de plataforma) y no agrega dependencias.
-- **Excepción de stack** (constitución §3, regla de `nv-00`): `androidx.datastore` no está en la tabla. Licencia Apache 2.0, mantenida por Google. La pide US-013. Lo mismo para `androidx.core:core-splashscreen` (US-001).
+- **Excepción de stack** (constitución §3, regla de `nv-00`): `androidx.datastore` no está en la tabla. Licencia Apache 2.0, mantenida por Google. La pide US-013. Lo mismo para `androidx.core:core-splashscreen` (US-001). También `androidx.compose.material:material-icons-core`, para los íconos de la maqueta, y `androidx.hilt:hilt-lifecycle-viewmodel-compose`, para `hiltViewModel()`: Apache 2.0, de Google.
 
 ### 5.2 Red y plataforma
 

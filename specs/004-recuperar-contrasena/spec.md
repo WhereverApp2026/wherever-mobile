@@ -1,7 +1,7 @@
 # 004 — Recuperar contraseña
 
 > Rector: `.specify/memory/constitution.md`. Plantilla: `.specify/templates/spec-template.md`. Arquitectura: `specs/000-arquitectura/spec.md`. Mapa: `specs/001-flujo-general/spec.md`.
-> Sección de la maqueta: 1 · Acceso y registro. **Sprint 1.** La implementación queda sujeta a la etapa vigente (`nv-00…nv-03` sin pantallas del producto).
+> Sección de la maqueta: 1 · Acceso y registro. **Sprint 1.** Implementada por encargo explícito (2026-11-04); ver "Implementado".
 
 ## 1. Objetivo
 
@@ -13,8 +13,8 @@ Recuperar el acceso por correo y terminar con la sesión iniciada.
 
 **US-014.** Como usuario que olvidó su contraseña quiero un enlace por correo para volver a entrar.
 
-- [ ] Envía el enlace y siempre muestra el mismo mensaje, exista o no la cuenta (202).
-- [ ] El reenvío se habilita a los 60 s con cuenta atrás.
+- [x] Envía el enlace y siempre muestra el mismo mensaje, exista o no la cuenta (202).
+- [x] El reenvío se habilita a los 60 s con cuenta atrás.
 - [ ] El enlace abre la app en Nueva contraseña.
 - [ ] Al guardar queda con sesión iniciada y las otras sesiones se cierran.
 - [ ] El enlace vence en 1 h; vencido o usado, ofrece pedir otro.
@@ -95,11 +95,39 @@ Sin entidades. Tokens en `TokenStore`, `usuario` en `UserProfileEntity`.
 
 ## 7. Plan de entrega
 
-Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. `plan.md` y `task.md` se generan al tomar la spec.
+Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. Ver `plan.md` y `task.md`.
+
+## Implementado (2026-11-04)
+
+**Hecho**
+
+- `03_Recuperar` y `04_RevisaCorreo`, con el aviso "Si el correo existe, te llegará un enlace".
+- `CheckEmailRoute` tiene modo: `RECOVERY` reenvía con `POST /auth/recuperar` y arranca con 60 s; `VERIFICATION` reenvía con `POST /auth/reenviar-verificacion` y se abre desde el aviso de Perfil.
+- 429 usa `Retry-After` para la cuenta atrás. El texto dice 1 hora (D02).
+
+**Difiere de lo especificado**
+
+- **`NuevaContrasena` no está implementada:** requiere los enlaces profundos (D11). El flujo termina en el correo.
+- El correo viaja como argumento de la ruta `CheckEmailRoute`, sin persistirse en disco. En pantalla va enmascarado.
+
+**Archivos** (bajo `app/src/main/java/com/wherever/mobile/`)
+
+- `feature/auth/ui/RecoverScreen.kt`
+- `feature/auth/ui/RecoverViewModel.kt`
+- `feature/auth/ui/CheckEmailScreen.kt`
+- `feature/auth/ui/CheckEmailViewModel.kt`
+
+**Pruebas**
+
+- `feature/auth/ui/AuthViewModelsTest.kt`
+
+**Límites de la verificación**
+
+- No probado en dispositivo ni contra staging con una cuenta real: no hay emulador configurado. Verificado con `assembleDebug`, `testDebugUnitTest`, `ktlintCheck` y `lintDebug`.
 
 ## Aprobación
 - [ ] Revisor 1 — fecha:
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Borrador.
+**Estado:** 🚧 Implementada, sin revisor (falta prueba en dispositivo).

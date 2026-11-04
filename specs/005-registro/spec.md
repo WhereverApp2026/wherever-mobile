@@ -1,7 +1,7 @@
 # 005 — Registro con correo
 
 > Rector: `.specify/memory/constitution.md`. Plantilla: `.specify/templates/spec-template.md`. Arquitectura: `specs/000-arquitectura/spec.md`. Mapa: `specs/001-flujo-general/spec.md`.
-> Sección de la maqueta: 1 · Acceso y registro. **Sprint 1.** La implementación queda sujeta a la etapa vigente (`nv-00…nv-03` sin pantallas del producto).
+> Sección de la maqueta: 1 · Acceso y registro. **Sprint 1.** Implementada por encargo explícito (2026-11-04); ver "Implementado".
 
 ## 1. Objetivo
 
@@ -13,11 +13,11 @@ Crear la cuenta en menos de un minuto y dejar la sesión iniciada para seguir el
 
 **US-012.** Como persona nueva quiero registrarme con correo y contraseña para usar Wherever.
 
-- [ ] Campos nombre, fecha de nacimiento (18+), correo y contraseña.
-- [ ] Valida al salir de cada campo.
-- [ ] Avisa si el correo ya existe, antes de enviar y ante un 409.
-- [ ] Envía el correo de verificación.
-- [ ] Queda con sesión iniciada (201).
+- [x] Campos nombre, fecha de nacimiento (18+), correo y contraseña.
+- [x] Valida al salir de cada campo.
+- [x] Avisa si el correo ya existe, antes de enviar y ante un 409.
+- [x] Envía el correo de verificación.
+- [x] Queda con sesión iniciada (201).
 
 ### UI
 
@@ -100,11 +100,43 @@ Errores con forma `{codigo, mensaje, campos[], traza_id}`, mapeados a `AppError`
 
 ## 7. Plan de entrega
 
-Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. `plan.md` y `task.md` se generan al tomar la spec.
+Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. Ver `plan.md` y `task.md`.
+
+## Implementado (2026-11-04)
+
+**Hecho**
+
+- Validación en vivo de nombre, edad y contraseña; el correo se comprueba con `GET /usuarios/correo-disponible` al salir del campo.
+- Se agregó la fecha de nacimiento, que la maqueta no tiene y la API exige (D01). Se elige con `DatePicker`.
+- `version_terminos` viene de `BuildConfig.TERMS_VERSION`; `promociones_correo` es `false` (D14).
+- Los errores `campos[]` de la API se muestran bajo su campo.
+
+**Difiere de lo especificado**
+
+- Sin tarjeta de ciudad: la API no la acepta aquí, y se pide en Gustos (D19).
+- Sin Google (D10).
+- Barra de pasos "1 de 2": amigos y permisos no existen aún (D12).
+- Los enlaces a términos y aviso no abren nada: no hay URL ni frame (D14).
+
+**Archivos** (bajo `app/src/main/java/com/wherever/mobile/`)
+
+- `feature/auth/ui/RegisterScreen.kt`
+- `feature/auth/ui/RegisterViewModel.kt`
+- `feature/auth/domain/RegistrationValidator.kt`
+
+**Pruebas**
+
+- `feature/auth/ui/AuthViewModelsTest.kt`
+- `feature/auth/data/AuthRepositoryImplTest.kt`
+- `core/common/ValidatorsTest.kt`
+
+**Límites de la verificación**
+
+- No probado en dispositivo ni contra staging con una cuenta real: no hay emulador configurado. Verificado con `assembleDebug`, `testDebugUnitTest`, `ktlintCheck` y `lintDebug`.
 
 ## Aprobación
 - [ ] Revisor 1 — fecha:
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Borrador.
+**Estado:** 🚧 Implementada, sin revisor (falta prueba en dispositivo).

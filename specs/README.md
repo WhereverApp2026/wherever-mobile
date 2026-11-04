@@ -45,6 +45,30 @@
 
 Inventario: **162 frames** de pantalla, que son 135 pantallas distintas al agrupar variantes, y 36 anotaciones `label · …` que no son pantallas.
 
+## Pantallas que ya consumen la API
+
+Implementadas el 2026-11-04. **Compilan y tienen pruebas unitarias, pero no se han abierto en un dispositivo ni se han probado contra staging con una cuenta real.**
+
+| Pantalla | Frame | Spec | Endpoints | Estado |
+|---|---|---|---|---|
+| Bienvenida y arranque | `01_Bienvenida` | 002 | `GET /usuarios/yo` (si hay sesión) | ✅ |
+| Iniciar sesión | `03_Login` | 003 | `POST /auth/login`, `GET /usuarios/yo` | ✅ |
+| Registro | `05_Registro` | 005 | `GET /usuarios/correo-disponible`, `POST /usuarios`, `GET /usuarios/yo` | ✅ |
+| Recuperar contraseña | `03_Recuperar` | 004 | `POST /auth/recuperar` | ✅ |
+| Revisa tu correo | `04_RevisaCorreo` | 004 | `POST /auth/recuperar`, `POST /auth/reenviar-verificacion` | ✅ |
+| Gustos | `06_Gustos` | 006 | `PUT /usuarios/yo/gustos`, `PATCH /usuarios/yo/preferencias`, `PATCH /usuarios/yo`, `GET /ciudades/autocompletar` | ✅ |
+| Perfil | `81_Perfil` | 010 | `GET /usuarios/yo` | ✅ |
+| Editar perfil | `82_EditarPerfil`, `84_DatosPers` | 010 | `PATCH /usuarios/yo` con `If-Match`, `GET /ciudades/autocompletar` | ✅ |
+| Ajustes | `85_Ajustes` | 009 | `PATCH /usuarios/yo/preferencias`, `PATCH /usuarios/yo/privacidad`, `POST /auth/logout` | ✅ |
+| Sesiones abiertas | Sin frame | 009 | `GET /auth/sesiones`, `DELETE /auth/sesiones/{id}`, `POST /auth/logout-todos` | ✅ |
+| Privacidad | `28_PrivSocial` | 011 | `PATCH /usuarios/yo/privacidad` | ✅ |
+| Eliminar cuenta | `EliminarCuenta` | 011 | `DELETE /usuarios/yo` | ✅ |
+| Eliminación pendiente | Sin frame | 011 | `POST /usuarios/yo/cancelar-eliminacion`, `POST /auth/logout` | ✅ |
+| Inicio provisional | Parte de `10_Inicio` | 013 | Lee el perfil de Room | Provisional |
+| Sesión y tokens | Sin pantalla | 008 | `POST /auth/refresh` | ✅ |
+
+Pendiente del Sprint 1: `NuevaContrasena` y verificar correo por enlace (D11), Sin conexión (012), Descargar datos y Borrar historial (D35).
+
 ## Pantalla → endpoints
 
 "Pendiente de backend" significa que no hay endpoint publicado en la API v1. El detalle de cada caso está en la spec.
@@ -191,6 +215,8 @@ Inventario: **162 frames** de pantalla, que son 135 pantallas distintas al agrup
 
 ### Endpoints publicados sin pantalla dibujada
 
+Con pantalla propia ya implementada: sesiones y `logout-todos`, en Sesiones abiertas; `reenviar-verificacion`, en Revisa tu correo.
+
 - `POST /auth/logout-todos`
 - `GET /auth/sesiones`
 - `DELETE /auth/sesiones/{id}`
@@ -200,6 +226,32 @@ Inventario: **162 frames** de pantalla, que son 135 pantallas distintas al agrup
 - `POST /usuarios/exportaciones/descargar`
 
 ## Dudas encontradas
+
+### Cómo quedaron en el código (a validar)
+
+Las dudas siguen abiertas hasta que diseño o backend las confirmen. Mientras tanto, el código hace esto:
+
+- **D01:** se agregó la fecha de nacimiento al registro.
+- **D02:** el texto dice 1 hora.
+- **D03:** se sigue a la API: escribir ELIMINAR, 30 días para cancelar.
+- **D04:** Privacidad muestra los interruptores de la API, no los del frame.
+- **D05:** 15 chips con emoji y deslizador, como piden las historias. **Las claves de categorías son propuestas: el backend podría rechazarlas.**
+- **D06:** sin interruptor de recordatorios de reservación.
+- **D07:** agregados tema y sesiones.
+- **D09:** una sola pantalla de edición, con botón Guardar.
+- **D10:** sin botón de Google.
+- **D12:** alta de 2 pasos y marca local al omitir gustos.
+- **D13:** se agregaron textos de 423, 409 y eliminación pendiente, sin validación de diseño.
+- **D14:** versión de términos en `BuildConfig` y `promociones_correo=false`.
+- **D16:** el refresh con fallo transitorio conserva la sesión.
+- **D19:** la ciudad se pide en Gustos.
+- **D20:** aviso en Perfil con opción de reenviar.
+- **D22:** barra provisional con Inicio y Perfil.
+
+### Encontradas al implementar
+
+- **D38 · Catálogo de ciudades.** En staging, `GET /ciudades/autocompletar` devolvió `[]` con `q=tula` y con `q=guada`, que es el ejemplo de la documentación. Parece que el catálogo está vacío: hasta que tenga datos, en la app no se puede elegir ciudad. La pantalla muestra "No encontramos esa ciudad".
+- **D39 · Permisos de WorkManager.** Al agregar WorkManager (`nv-01`) hay que registrar sus permisos en `docs/permissions-matrix.md`.
 
 ### Afectan al Sprint 1 (3 al 16 nov 2026)
 
