@@ -1,6 +1,6 @@
 # Wherever Móvil
 
-App Android en Kotlin + Jetpack Compose para Wherever, desarrollada con **Spec Driven Development**. Este repositorio está en la etapa de **arquitectura base** (`specs/nv-00…nv-03`): no incluye pantallas del producto.
+App Android en Kotlin + Jetpack Compose para Wherever, desarrollada con **Spec Driven Development**. Este repositorio está en la etapa de **arquitectura base** (`specs/nv-00…nv-03`): las pantallas del producto ya están especificadas (`specs/002…034`), pero aún no se implementan.
 
 ## Estructura SDD
 - `.specify/memory/constitution.md`: constitución (canónica). `constitution.md` en raíz es su espejo.
@@ -18,4 +18,20 @@ App Android en Kotlin + Jetpack Compose para Wherever, desarrollada con **Spec D
 | `nv-02` | Molde Repository → ViewModel → UiState sin pantallas |
 | `nv-03` | Puerta de calidad incremental (advisory) |
 
-Estado: tareas **sin ejecutar**. La funcionalidad específica tendrá sus propias specs (`nv-04+`).
+| `000-arquitectura` | Capas, red, tokens, DI, paquetes y convenciones |
+| `001-flujo-general` | Mapa de navegación y flujos de usuario y negocio |
+| `002…034` | Una spec por pantalla o funcionalidad, con sus endpoints |
+
+Índice, tabla de pantallas y endpoints, y dudas abiertas: [`specs/README.md`](specs/README.md).
+
+Estado: proyecto Gradle creado con una pantalla `home` mínima. Las tareas de `nv-01…nv-03` y las pantallas del producto siguen **sin ejecutar**.
+
+## Compilar
+Requisitos: Android Studio con Android SDK (API 37 y Build-Tools 37), y `JAVA_HOME` apuntando a un JDK, por ejemplo el de Android Studio (`<Android Studio>/jbr`).
+
+```
+copy local.properties.example local.properties   # ajusta sdk.dir; API_BASE_URL es opcional en debug
+gradlew.bat assembleDebug
+```
+
+En debug, sin `API_BASE_URL`, la app usa staging (`gradle.properties`). `google-services.json` no se sube a Git. `detekt` requiere JDK 17 a 22 (ver `Memoria.md`).

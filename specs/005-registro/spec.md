@@ -1,0 +1,110 @@
+# 005 — Registro con correo
+
+> Rector: `.specify/memory/constitution.md`. Plantilla: `.specify/templates/spec-template.md`. Arquitectura: `specs/000-arquitectura/spec.md`. Mapa: `specs/001-flujo-general/spec.md`.
+> Sección de la maqueta: 1 · Acceso y registro. **Sprint 1.** La implementación queda sujeta a la etapa vigente (`nv-00…nv-03` sin pantallas del producto).
+
+## 1. Objetivo
+
+Crear la cuenta en menos de un minuto y dejar la sesión iniciada para seguir el onboarding.
+
+## 2. Alcance / No-alcance
+
+### Historias y criterios de aceptación
+
+**US-012.** Como persona nueva quiero registrarme con correo y contraseña para usar Wherever.
+
+- [ ] Campos nombre, fecha de nacimiento (18+), correo y contraseña.
+- [ ] Valida al salir de cada campo.
+- [ ] Avisa si el correo ya existe, antes de enviar y ante un 409.
+- [ ] Envía el correo de verificación.
+- [ ] Queda con sesión iniciada (201).
+
+### UI
+
+| Frame | Contenido |
+|---|---|
+| `05_Registro` | Paso 1 de 4, "Crea tu cuenta", Nombre, Correo, Contraseña, tarjeta de ciudad con Cambiar, casilla de términos, Crear cuenta, Continuar con Google. |
+
+Colores y tipografía desde `core/designsystem`; textos en `strings.xml`; áreas táctiles de 48 dp.
+
+### Estados
+
+| Estado | Comportamiento |
+|---|---|
+| Cargando | Indicador en Crear cuenta; comprobación de correo discreta junto al campo. |
+| Vacío | No aplica. |
+| Error | 409: "Ese correo ya tiene cuenta" con enlace a Login (sin frame). 422: `campos[].mensaje` bajo su campo. 429: límite de 5/h, mensaje con reintento. |
+| Sin red | Sin red o `503`: conserva lo escrito y muestra aviso con Reintentar (`AppError.Network`/`Server`). |
+| Éxito | Guarda tokens y pasa a `Gustos`. |
+
+### Validaciones
+
+- Nombre de 2 a 40 caracteres.
+- Fecha de nacimiento AAAA-MM-DD, mayor de 18 años; reloj inyectado.
+- Correo válido y disponible (`correo-disponible`, al salir del campo, con 20/min de límite).
+- Contraseña de 8 a 128 caracteres, con letra y número.
+- Casilla de términos obligatoria (`acepta_terminos=true`).
+
+### Dudas abiertas
+
+- **D01** Registro sin fecha de nacimiento (`specs/README.md`)
+- **D10** Google Sign-In (`specs/README.md`)
+- **D11** Enlaces profundos (`specs/README.md`)
+- **D13** Estados sin frame (`specs/README.md`)
+- **D14** Términos y aviso de privacidad (`specs/README.md`)
+- **D19** Ciudad al registrarse (`specs/README.md`)
+- **D20** Correo sin verificar (`specs/README.md`)
+
+### No-alcance
+
+- Lo marcado como "Pendiente de backend" no se implementa con datos simulados (constitución §2.7).
+
+## 3. Contratos (API y navegación)
+
+### Navegación
+
+- `Bienvenida` o `Login` → `Registro` → `Gustos` (`specs/006`).
+- Enlaces de términos y aviso → textos (sin frame).
+
+Nombres de ruta propuestos. Se registran en `docs/routes.md` al implementar la spec.
+
+### Endpoints
+
+| Método | Ruta | Auth | Envía | Recibe | Errores |
+|---|---|---|---|---|---|
+| `GET` | `/api/v1/usuarios/correo-disponible` | no · 20/min por IP | ?correo= | 200: disponible | 400, 422, 429 |
+| `POST` | `/api/v1/usuarios` | no · 5/h por IP | nombre, fecha_nacimiento, correo, password, acepta_terminos, version_terminos, promociones_correo, dispositivo{modelo, sistema, app_version} (opcional) | 201: access_token, refresh_token, expira_en, usuario{id, nombre, correo, correo_verificado, roles[]} | 400, 409, 422, 429 |
+| `GET` | `/api/v1/ciudades/autocompletar` | no | ?q= (2+ letras) &limite= (8, máx. 50) | 200: [id, nombre, estado] | 400, 422 |
+| `POST` | `/api/v1/auth/verificar-correo` | token del enlace · 10/min por IP | token | 200: correo_verificado | 400, 422, 429 |
+| `POST` | `/api/v1/auth/reenviar-verificacion` | JWT | — | 202 (máx. uno cada 60 s) | 401, 429 con Retry-After |
+
+Errores con forma `{codigo, mensaje, campos[], traza_id}`, mapeados a `AppError` (`specs/000-arquitectura §3.3`). Detalle en `docs/contexto_api_sprint1.md`.
+
+## 4. Modelo de datos
+
+`UserProfileEntity` desde `usuario`. El borrador del formulario no se persiste en disco.
+
+## 5. Seguridad y privacidad
+
+- Contraseña y fecha de nacimiento fuera de los logs.
+- La contraseña no se guarda en `SavedStateHandle`.
+- Sin tokens ni datos personales en logs; solo HTTPS (constitución §6).
+
+## 6. Tests / Gates
+
+- Unit: validación de edad en el límite de 18 años con reloj inyectado.
+- Unit: `RegisterViewModel` con 201, 409, 422 y 429.
+- Data: cuerpo enviado con MockWebServer.
+- UI: errores al salir del campo.
+- Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
+
+## 7. Plan de entrega
+
+Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. `plan.md` y `task.md` se generan al tomar la spec.
+
+## Aprobación
+- [ ] Revisor 1 — fecha:
+- [ ] CHECKLIST_PR.md OK
+- [ ] Sin conflicto con constitución
+
+**Estado:** 🚧 Borrador.
