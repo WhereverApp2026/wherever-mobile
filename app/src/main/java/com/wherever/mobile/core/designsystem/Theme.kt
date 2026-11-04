@@ -10,27 +10,49 @@ import androidx.compose.ui.graphics.Color
 private val LightColors = lightColorScheme(
     primary = RouteBlue,
     onPrimary = Color.White,
+    primaryContainer = RouteBlueTint,
+    onPrimaryContainer = Ink,
     secondary = Sunset,
     onSecondary = Ink,
     tertiary = Mint,
     onTertiary = Color.White,
+    tertiaryContainer = MintTint,
+    onTertiaryContainer = Ink,
     background = Mist,
     onBackground = Ink,
     surface = Color.White,
-    onSurface = Ink
+    onSurface = Ink,
+    onSurfaceVariant = InkMuted,
+    surfaceVariant = SegmentTrack,
+    outline = OutlineSoft,
+    error = Danger,
+    onError = Color.White,
+    errorContainer = DangerTint,
+    onErrorContainer = Ink
 )
 
 private val DarkColors = darkColorScheme(
-    primary = RouteBlue,
-    onPrimary = Color.White,
+    primary = RouteBlueTint,
+    onPrimary = Ink,
+    primaryContainer = InkDeep,
+    onPrimaryContainer = Mist,
     secondary = Sunset,
     onSecondary = Ink,
     tertiary = Mint,
     onTertiary = Color.White,
+    tertiaryContainer = InkDeep,
+    onTertiaryContainer = Mist,
     background = Ink,
     onBackground = Mist,
-    surface = Ink,
-    onSurface = Mist
+    surface = InkDeep,
+    onSurface = Mist,
+    onSurfaceVariant = OutlineSoft,
+    surfaceVariant = InkDeep,
+    outline = InkMuted,
+    error = DangerTint,
+    onError = Ink,
+    errorContainer = Danger,
+    onErrorContainer = Color.White
 )
 
 @Composable

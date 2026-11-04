@@ -1,6 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="es">
     <string name="app_name">Wherever</string>
-    <string name="home_title">Wherever</string>
-    <string name="home_subtitle">Planes y lugares cerca de ti</string>
+
+    <!-- Comunes -->
+    <string name="common_back">Regresar</string>
+    <string name="common_retry">Reintentar</string>
+    <string name="common_cancel">Cancelar</string>
+    <string name="common_accept">Aceptar</string>
+    <string name="common_save">Guardar</string>
+    <string name="common_continue">Continuar</string>
+    <string name="common_wait">Espera %1$s</string>
+    <string name="common_char_count">%1$d / %2$d</string>
+    <string name="tab_home">Inicio</string>
+    <string name="tab_profile">Perfil</string>
+
+    <!-- Errores -->
+    <string name="error_network">Sin conexión. Revisa tu internet e inténtalo de nuevo.</string>
+    <string name="error_timeout">El servidor tardó demasiado. Inténtalo de nuevo.</string>
+    <string name="error_server">El servidor no está disponible por ahora. Inténtalo más tarde.</string>
+    <string name="error_rate_limited">Demasiados intentos. Espera un momento.</string>
+    <string name="error_unknown">Algo salió mal. Inténtalo de nuevo.</string>
+
+    <!-- Campos -->
+    <string name="field_name">Nombre</string>
+    <string name="field_email">Correo</string>
+    <string name="field_email_placeholder">tucorreo@ejemplo.com</string>
+    <string name="field_password">Contraseña</string>
+    <string name="field_birth_date">Fecha de nacimiento</string>
+    <string name="field_city">Ciudad</string>
+    <string name="validation_name">Escribe de 2 a 40 caracteres</string>
+    <string name="validation_email">Revisa el correo</string>
+    <string name="validation_password">Mínimo 8 caracteres, con una letra y un número</string>
+    <string name="validation_adult">Debes ser mayor de 18 años</string>
+    <string name="city_placeholder">Escribe tu ciudad</string>
+    <string name="city_no_results">No encontramos esa ciudad</string>
+    <string name="city_suggestion">%1$s, %2$s</string>
+
+    <!-- 01_Bienvenida -->
+    <string name="welcome_title">Tu día completo, en una sola palabra.</string>
+    <string name="welcome_subtitle">Dinos qué se te antoja y armamos el plan: lugares, horarios y cómo llegar.</string>
+    <string name="welcome_create_account">Crear cuenta</string>
+    <string name="welcome_have_account">Ya tengo cuenta</string>
+
+    <!-- 03_Login -->
+    <string name="login_title">Qué bueno verte de nuevo</string>
+    <string name="login_subtitle">Entra para ver tus planes y reservas.</string>
+    <string name="login_password_placeholder">Tu contraseña</string>
+    <string name="login_forgot">Olvidé mi contraseña</string>
+    <string name="login_submit">Entrar</string>
+    <string name="login_no_account">¿No tienes cuenta?</string>
+    <string name="login_create_account">Crea una</string>
+    <string name="login_error_credentials">Correo o contraseña incorrectos</string>
+    <string name="login_error_locked">Demasiados intentos fallidos. Tu acceso quedó bloqueado por 15 minutos.</string>
+
+    <!-- 05_Registro -->
+    <string name="register_step">Paso 1 de 2</string>
+    <string name="register_title">Crea tu cuenta</string>
+    <string name="register_subtitle">Tardas menos de un minuto.</string>
+    <string name="register_name_placeholder">Cómo te llamas</string>
+    <string name="register_birth_date_placeholder">Elige la fecha</string>
+    <string name="register_password_placeholder">Mínimo 8 caracteres</string>
+    <string name="register_terms">Acepto los términos y el aviso de privacidad.</string>
+    <string name="register_submit">Crear cuenta</string>
+    <string name="register_email_checking">Revisando el correo…</string>
+    <string name="register_email_available">Correo disponible</string>
+    <string name="register_error_email_taken">Ese correo ya tiene cuenta. Inicia sesión.</string>
+
+    <!-- 03_Recuperar -->
+    <string name="recover_title">¿Olvidaste tu contraseña?</string>
+    <string name="recover_subtitle">Escribe el correo de tu cuenta y te mandamos un enlace para crear una nueva.</string>
+    <string name="recover_notice">Si el correo existe, te llegará un enlace.</string>
+    <string name="recover_submit">Enviar enlace</string>
+    <string name="recover_back_to_login">Volver a iniciar sesión</string>
+
+    <!-- 04_RevisaCorreo -->
+    <string name="check_email_title">Revisa tu correo</string>
+    <string name="check_email_body_recovery">Si el correo existe, te llegará un enlace a</string>
+    <string name="check_email_body_verification">Te mandamos un enlace para verificar</string>
+    <string name="check_email_expires_recovery">Vence en 1 hora.</string>
+    <string name="check_email_expires_verification">Vence en 24 horas.</string>
+    <string name="check_email_help">¿No llega? Revisa spam o promociones. A veces tarda un par de minutos.</string>
+    <string name="check_email_open">Abrir correo</string>
+    <string name="check_email_resend">Reenviar enlace</string>
+    <string name="check_email_resend_in">Reenviar enlace en %1$s</string>
+    <string name="check_email_resent">Listo, te lo mandamos otra vez.</string>
+    <string name="check_email_other">Usar otro correo</string>
+
+    <!-- 06_Gustos -->
+    <string name="tastes_step">Paso 2 de 2</string>
+    <string name="tastes_title">¿Qué te gusta?</string>
+    <string name="tastes_subtitle">La IA lo usa para armar planes a tu medida. Lo cambias cuando quieras.</string>
+    <string name="tastes_settings_title">Tus gustos</string>
+    <string name="tastes_section_categories">Se me antoja (%1$d, mínimo %2$d)</string>
+    <string name="tastes_section_mobility">Cómo me muevo</string>
+    <string name="tastes_section_budget">Gasto por salida</string>
+    <string name="tastes_section_restrictions">Dieta y accesibilidad (opcional)</string>
+    <string name="tastes_budget_range">$%1$d a $%2$s MXN</string>
+    <string name="tastes_budget_max_open">1,000+</string>
+    <string name="tastes_allergies_chip">Alergias</string>
+    <string name="tastes_allergies_label">¿A qué tienes alergia?</string>
+    <string name="tastes_allergies_placeholder">Ej. nueces</string>
+    <string name="tastes_skip">Omitir por ahora</string>
+    <string name="taste_tacos">🌮 Tacos</string>
+    <string name="taste_cafes">☕ Café</string>
+    <string name="taste_postres">🍰 Postres</string>
+    <string name="taste_aire_libre">🌳 Aire libre</string>
+    <string name="taste_museos">🏛️ Museos</string>
+    <string name="taste_musica">🎵 Música</string>
+    <string name="taste_mercados">🧺 Mercados</string>
+    <string name="taste_bares">🍸 Bares tranquilos</string>
+    <string name="taste_parques">🏞️ Parques</string>
+    <string name="taste_comida_corrida">🍲 Comida corrida</string>
+    <string name="taste_mariscos">🍤 Mariscos</string>
+    <string name="taste_arte">🎨 Arte</string>
+    <string name="taste_senderismo">🥾 Senderismo</string>
+    <string name="taste_cine">🎬 Cine</string>
+    <string name="taste_pueblos">🏘️ Pueblos</string>
+    <string name="mobility_a_pie">A pie</string>
+    <string name="mobility_auto">Coche</string>
+    <string name="mobility_transporte_publico">Transporte público</string>
+    <string name="mobility_bicicleta">Bici</string>
+    <string name="restriction_vegetariano">Vegetariano</string>
+    <string name="restriction_vegano">Vegano</string>
+    <string name="restriction_sin_gluten">Sin gluten</string>
+    <string name="restriction_sin_lactosa">Sin lactosa</string>
+    <string name="restriction_accesible">Accesible en silla de ruedas</string>
+
+    <!-- Inicio provisional -->
+    <string name="home_greeting">¿Qué hacemos hoy?</string>
+    <string name="home_greeting_name">¿Qué hacemos hoy, %1$s?</string>
+    <string name="home_placeholder">Pronto verás aquí lugares y planes cerca de ti. Mientras, revisa tu perfil.</string>
+
+    <!-- 81_Perfil -->
+    <string name="profile_settings">Ajustes</string>
+    <string name="profile_edit">Editar perfil</string>
+    <string name="profile_points">puntos</string>
+    <string name="profile_level">nivel</string>
+    <string name="profile_streak">semanas de racha</string>
+    <string name="profile_tastes">Mis gustos</string>
+    <string name="profile_verify_notice">Aún no verificas tu correo.</string>
+    <string name="profile_verify_action">Verificar mi correo</string>
+
+    <!-- 82_EditarPerfil / 84_DatosPers -->
+    <string name="edit_profile_title">Editar perfil</string>
+    <string name="edit_profile_verified">Verificado</string>
+    <string name="edit_profile_tastes">Mis gustos</string>
+    <string name="edit_profile_conflict">Tus datos cambiaron en otro dispositivo. Ya los actualizamos: revísalos y guarda de nuevo.</string>
+
+    <!-- 85_Ajustes -->
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_section_account">Cuenta</string>
+    <string name="settings_section_preferences">Preferencias</string>
+    <string name="settings_section_theme">Tema</string>
+    <string name="settings_section_privacy">Privacidad</string>
+    <string name="settings_personal_data">Datos personales</string>
+    <string name="settings_sessions">Sesiones abiertas</string>
+    <string name="settings_city">Ciudad</string>
+    <string name="settings_no_city">Sin elegir</string>
+    <string name="settings_tastes">Tus gustos</string>
+    <plurals name="settings_tastes_count">
+        <item quantity="one">%1$d elegido</item>
+        <item quantity="many">%1$d elegidos</item>
+        <item quantity="other">%1$d elegidos</item>
+    </plurals>
+    <string name="settings_notif_groups">Avisos de votaciones</string>
+    <string name="settings_notif_coupons">Avisos de cupones</string>
+    <string name="settings_notif_reviews">Avisos de reseñas</string>
+    <string name="settings_notif_promotions">Promociones</string>
+    <string name="settings_theme_light">Claro</string>
+    <string name="settings_theme_dark">Oscuro</string>
+    <string name="settings_theme_system">Automático</string>
+    <string name="settings_use_location">Usar mi ubicación para armar planes</string>
+    <string name="settings_logout">Cerrar sesión</string>
+    <string name="settings_logout_title">¿Cerrar sesión?</string>
+    <string name="settings_logout_message">Borraremos tus datos de este teléfono. Tu cuenta sigue igual.</string>
+
+    <!-- Sesiones -->
+    <string name="sessions_last_used">Último uso: %1$s</string>
+    <string name="sessions_current">Este teléfono</string>
+    <string name="sessions_close">Cerrar</string>
+    <string name="sessions_close_all">Cerrar todas las sesiones</string>
+    <string name="sessions_close_all_title">¿Cerrar todas las sesiones?</string>
+    <string name="sessions_close_all_message">Saldrás de todos tus dispositivos, incluido este.</string>
+
+    <!-- 28_PrivSocial -->
+    <string name="privacy_title">Privacidad</string>
+    <string name="privacy_location">Ubicación</string>
+    <string name="privacy_location_detail">Para calcular rutas y lugares cerca de ti</string>
+    <string name="privacy_learning">Aprendizaje personalizado</string>
+    <string name="privacy_learning_detail">La IA aprende de lo que eliges</string>
+    <string name="privacy_mood">Estado de ánimo</string>
+    <string name="privacy_mood_detail">Para sugerir planes según cómo te sientes</string>
+    <string name="privacy_usage">Datos de uso</string>
+    <string name="privacy_usage_detail">Nos ayudan a mejorar la app</string>
+    <string name="privacy_searchable">Buscable por teléfono</string>
+    <string name="privacy_searchable_detail">Quien tenga tu número podrá encontrarte</string>
+
+    <!-- EliminarCuenta -->
+    <string name="delete_account_title">¿Eliminar tu cuenta?</string>
+    <string name="delete_account_subtitle">Esto es lo que pasará:</string>
+    <string name="delete_account_point_grace">Tu cuenta se elimina en 30 días.</string>
+    <string name="delete_account_point_sessions">Se cierran todas tus sesiones.</string>
+    <string name="delete_account_point_cancel">Puedes cancelarlo antes de esa fecha entrando de nuevo.</string>
+    <string name="delete_account_confirm_label">Escribe %1$s para confirmar</string>
+    <string name="delete_account_keep">Mejor me quedo</string>
+    <string name="delete_account_action">Eliminar mi cuenta</string>
+
+    <!-- Eliminación pendiente -->
+    <string name="deletion_pending_title">Tu cuenta se eliminará</string>
+    <string name="deletion_pending_body">Se eliminará el %1$s. Si cambiaste de opinión, todavía puedes cancelarlo.</string>
+    <string name="deletion_pending_cancel">Cancelar eliminación</string>
 </resources>
