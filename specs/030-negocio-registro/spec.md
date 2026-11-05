@@ -100,6 +100,7 @@ Borrador en Room sin documentos ni CLABE.
 - Unit: validación de CLABE.
 - Unit: reanudar borrador.
 - Security: CLABE fuera de logs y de Room.
+- Data: el borrador de registro de negocio persiste en Room y se reanuda tras reiniciar.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

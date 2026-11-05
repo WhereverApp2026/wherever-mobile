@@ -18,7 +18,7 @@
 <!-- Tokens, permisos, red, datos locales, MASVS. -->
 
 ## 6. Tests / Gates
-<!-- Unit, Data (Room + MockWebServer), Security, UI, Arquitectura. Cobertura ≥45%. -->
+<!-- Obligatorias: Unit, Data (integración: Room en memoria + MockWebServer) y Security (const. §7). Opcionales: UI, Arquitectura. Cobertura ≥45%. Verificado por scripts/check_specs.sh. -->
 
 ## 7. Plan de entrega
 <!-- assembleDebug/Release, verificación manual en emulador, tag vX.Y.Z-featN. -->

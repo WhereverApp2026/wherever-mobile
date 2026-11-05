@@ -88,6 +88,8 @@ Ruta en memoria; paradas desde `PlanStopEntity`.
 
 - Unit: pasos de la ruta.
 - UI: estados sin permiso.
+- Data: el estado del check-in queda en Room y se lee sin red.
+- Security: no queda histórico de ubicación en disco ni en logs.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

@@ -7,7 +7,7 @@
 > Stack: ver `constitution.md §3`. Nada fuera sin excepción documentada.
 - Setup: `local.properties.example → local.properties` con `API_BASE_URL` (ej. `https://10.0.2.2:8443/api/v1/` para el emulador con certificado de desarrollo); `google-services.json` en `app/` (no se sube a Git); `./gradlew assembleDebug`.
 - Comandos: `./gradlew assembleDebug`, `./gradlew ktlintCheck detekt lintDebug`, `./gradlew testDebugUnitTest` (Unit, Data, Security, Arquitectura), `./gradlew connectedDebugAndroidTest` (UI y migraciones), `./gradlew koverVerify`.
-- CI `ci-pr.yml` (ubuntu-latest): deps → build → lint → unit → data → security → ui → critic → routes → sdd → coverage → delta-check → mutation → semgrep → deps-scan. Sin deploy.
+- CI `ci-pr.yml` (ubuntu-latest): deps → build → lint → unit → data → security → ui → critic → routes → sdd → coverage → delta-check → mutation → semgrep → deps-scan. Sin deploy. `mutation` y `deps-scan` aún no configurados: ver `specs/035-ci-cd` §2.6.
 - PR = 1 slice (funcionalidad); `CHECKLIST_PR.md` + 1 revisor + `Memoria.md` al día.
 - Naming: inglés en código y paquetes; textos en español en `strings.xml`.
 - Sin secretos, sin TODO sin issue, sin imports muertos, sin código muerto.
@@ -37,11 +37,12 @@
 ## 4. Verificación por funcionalidad
 - `assembleDebug` sin errores antes de test.
 - `Unit/Data/Security/UI/Arquitectura` 100% verdes.
-- `scripts/critic-guardrails.sh → PASS`, `scripts/check_sdd.sh → SDD-OK`, `scripts/check_routes.sh → OK`, `scripts/check_strings.sh → OK`, `scripts/check_coverage.sh --min 45`, `check_delta_coverage.py --min 80 --advisory` informa (no bloquea), `semgrep scan --config=auto --config=.semgrep/semgrep.yaml --error` 0 nuevos.
-- Mutación PR advisory (Pitest sobre lo cambiado, `continue-on-error`) + nightly opcional; tras ella siempre `assembleDebug`.
+- `scripts/critic-guardrails.sh → PASS`, `scripts/check_sdd.sh → SDD-OK`, `scripts/check_specs.sh → SPECS-OK`, `scripts/check_routes.sh → OK`, `scripts/check_strings.sh → OK`, `scripts/check_coverage.sh --min 45`, `check_delta_coverage.py --min 80 --advisory` informa (no bloquea), `semgrep scan --config=.semgrep/semgrep.yaml --error` 0 hallazgos y `semgrep scan --config=auto` advisory.
+- Mutación PR advisory (Pitest sobre lo cambiado, `continue-on-error`) + nightly opcional; tras ella siempre `assembleDebug`. Pitest no está en el build: pendiente en `specs/035-ci-cd` §2.6.
 - La app abre sin red y muestra el estado correspondiente.
 
 ## 5. Convenciones técnicas
+- `compileSdk` y `targetSdk` 36, `minSdk` 26 (no hay SDK 37 en este equipo; ver `app/build.gradle.kts`).
 - Un `UiState` por pantalla; el ViewModel lo expone con `StateFlow`; el Composable envía eventos.
 - Room fuente de verdad; el repositorio guarda lo que llega de la red y la UI lee de Room.
 - Cadena de red: `RequestId → AuthHeader → RedactedLogging`; `Authenticator` renueva el token una vez.

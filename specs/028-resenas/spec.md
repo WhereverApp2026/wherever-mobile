@@ -90,6 +90,7 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 - Unit: `PostVisitViewModel`.
 - Data: borrador sin red.
 - UI: diálogo de eliminar.
+- Security: el texto de la reseña y los datos del autor no aparecen en logs antes de publicar.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

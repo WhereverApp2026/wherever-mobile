@@ -99,6 +99,7 @@ Errores con forma `{codigo, mensaje, campos[], traza_id}`, mapeados a `AppError`
 - Unit: reglas de mínimo y máximo de chips.
 - Data: `PUT` reemplaza y actualiza Room.
 - UI: Continuar deshabilitado con menos de 3.
+- Security: dieta y alergias no aparecen en logs; el cuerpo de `PUT /usuarios/yo/gustos` se redacta.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

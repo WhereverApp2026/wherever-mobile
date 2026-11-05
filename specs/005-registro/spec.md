@@ -96,6 +96,7 @@ Errores con forma `{codigo, mensaje, campos[], traza_id}`, mapeados a `AppError`
 - Unit: `RegisterViewModel` con 201, 409, 422 y 429.
 - Data: cuerpo enviado con MockWebServer.
 - UI: errores al salir del campo.
+- Security: la contraseña y la fecha de nacimiento no aparecen en el cuerpo registrado de `POST /usuarios`.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

@@ -42,6 +42,7 @@
 | [`032-negocio-resenas`](032-negocio-resenas/spec.md) | Negocio: reseñas y momentos | — | 3 |
 | [`033-negocio-cupones-horas`](033-negocio-cupones-horas/spec.md) | Negocio: cupones y cupo | — | 3 |
 | [`034-negocio-perfil-cobros`](034-negocio-perfil-cobros/spec.md) | Negocio: perfil, fotos y cobros | — | 6 |
+| [`035-ci-cd`](035-ci-cd/spec.md) | CI/CD: gates del pull request | — | — |
 
 Inventario: **162 frames** de pantalla, que son 135 pantallas distintas al agrupar variantes, y 36 anotaciones `label · …` que no son pantallas.
 

@@ -82,6 +82,8 @@ Lee entidades de plan y reserva cuando existan.
 
 - Unit: reintento con monitor de red falso inyectado.
 - UI: lista oculta sin datos.
+- Data: sin red, la pantalla lee de Room lo ya guardado y `GET /health` reintenta con el monitor inyectado.
+- Security: el QR guardado vive en almacenamiento privado y se borra al cerrar sesión (verificación sobre el archivo en disco).
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

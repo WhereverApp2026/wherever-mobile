@@ -88,6 +88,8 @@ Caché de cupones y cupos.
 
 - Unit: validaciones por tipo.
 - UI: vista previa.
+- Data: el cupón creado queda en Room tras el 201 y se lee sin red.
+- Security: el código generado no aparece en logs.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

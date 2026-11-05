@@ -272,6 +272,9 @@ Sin modelo propio. Ver cada spec.
 
 - UI: `SessionGate` lleva a cada destino de §3.1.
 - `scripts/check_routes.sh` cuando exista (`nv-01`), con las rutas de `docs/routes.md`.
+- Unit: `SessionGate` decide el destino con cada combinación de sesión, eliminación pendiente y onboarding, con reloj y repositorio inyectados.
+- Data: al reiniciar sin red, Room conserva `usuario` y la sesión ya decidida; `logout` deja Room vacío.
+- Security: ninguna ruta recibe tokens ni contraseñas como argumentos, y los destinos protegidos no se abren sin sesión.
 
 ## 7. Plan de entrega
 

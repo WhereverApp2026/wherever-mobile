@@ -79,6 +79,8 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 
 - Unit: textos de vigencia.
 - UI: Copiar.
+- Data: el uso de un cupón se refleja en Room tras la respuesta del servidor.
+- Security: el código del cupón no aparece en logs.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

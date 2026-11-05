@@ -93,6 +93,7 @@ Lee `UserProfileEntity`. Logout borra tablas personales de Room y `TokenStore`.
 - Unit: logout con 204, 401 y sin red siempre limpia.
 - Data: Room vacío tras logout.
 - UI: diálogo de confirmación.
+- Security: tras logout el `TokenStore` queda vacío y no hay `usuario` en Room, aunque `POST /auth/logout` falle.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

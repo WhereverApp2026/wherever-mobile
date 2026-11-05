@@ -93,6 +93,7 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 ## 6. Tests / Gates
 
 - Unit: cola de subida.
+- Data: la cola de subida de postales persiste en Room y se reanuda tras reiniciar.
 - Security: sin EXIF de ubicación.
 - UI: estado vacío.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).

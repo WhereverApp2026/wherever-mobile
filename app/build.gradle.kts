@@ -30,12 +30,12 @@ fun checkedApiBaseUrl(url: String): String {
 
 android {
     namespace = "com.wherever.mobile"
-    compileSdk = 37
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.wherever.mobile"
         minSdk = 26
-        targetSdk = 37
+        targetSdk = 36
         versionCode = 1
         versionName = "0.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

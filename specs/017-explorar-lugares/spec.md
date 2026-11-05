@@ -95,6 +95,7 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 - Unit: combinación de filtros.
 - Data: caché y actualización.
 - UI: conteo en el botón.
+- Security: la ubicación se usa solo en primer plano; no se escribe histórico de coordenadas en disco ni en logs.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

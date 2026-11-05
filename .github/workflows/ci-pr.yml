@@ -1,0 +1,113 @@
+name: ci-pr
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-pr-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    # Orden de constitución §8: deps → build → lint → tests → ui → critic →
+    # routes → sdd → coverage → delta-check → mutation → semgrep → deps-scan.
+    # mutation (Pitest) y deps-scan (Dependency-Check) no están configurados
+    # en este proyecto: ver specs/035-ci-cd/spec.md §2 (no-alcance).
+    name: gates (constitución §8)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Plataforma android-36
+        run: |
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          [ -x "$SDKMANAGER" ] || SDKMANAGER="$(command -v sdkmanager)"
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
+          "$SDKMANAGER" "platforms;android-36"
+
+      - name: Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: deps
+        run: ./gradlew :app:dependencies --configuration debugRuntimeClasspath
+
+      - name: build
+        run: ./gradlew assembleDebug
+
+      - name: lint
+        run: ./gradlew ktlintCheck detekt lintDebug
+
+      - name: "unit · data · security · arquitectura"
+        run: ./gradlew testDebugUnitTest
+
+      - name: KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: ui
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          disable-animations: true
+          script: ./gradlew connectedDebugAndroidTest
+
+      - name: critic
+        run: bash scripts/critic-guardrails.sh
+
+      - name: routes
+        run: bash scripts/check_routes.sh
+
+      - name: strings
+        run: bash scripts/check_strings.sh
+
+      - name: specs
+        run: bash scripts/check_specs.sh
+
+      - name: sdd
+        run: bash scripts/check_sdd.sh
+
+      - name: coverage
+        run: bash scripts/check_coverage.sh --min 45
+
+      - name: delta-check (advisory)
+        run: python3 scripts/check_delta_coverage.py --min 80 --advisory
+
+      - name: semgrep (reglas propias)
+        run: |
+          python3 -m pip install --quiet semgrep
+          semgrep scan --config=.semgrep/semgrep.yaml --error
+
+      - name: semgrep (registry, advisory)
+        continue-on-error: true
+        run: semgrep scan --config=auto --error
+
+      - name: Reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: |
+            app/build/reports/
+            build/reports/
+          if-no-files-found: ignore

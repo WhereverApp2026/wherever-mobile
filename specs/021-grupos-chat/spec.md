@@ -103,6 +103,7 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 - Unit: reglas de voto.
 - Data: cola de mensajes.
 - UI: votación.
+- Security: el enlace de compartir no lleva tokens de sesión y los mensajes se borran de Room al cerrar sesión.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

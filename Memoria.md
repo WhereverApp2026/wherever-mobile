@@ -47,6 +47,29 @@
 - A recordar: en Xiaomi/HyperOS, `input tap` exige activar "Depuración USB (ajustes de seguridad)".
 - A recordar: `python -I` ignora `PYTHONIOENCODING`; en Windows hay que reconfigurar `stdout` para imprimir emojis.
 
+## Preparación para ejecutar en este equipo (2026-11-05)
+- Estado: rama `spec/arquitectura`; `local.properties` con `API_BASE_URL=https://18-227-230-50.sslip.io/api/v1/`; sin ejecutar build ni app (pedido del usuario).
+- Decisión: usar `compileSdk`/`targetSdk` 36 porque este equipo no tiene Android SDK 37 y el canal estable no lo ofrece; bajar `coreKtx` a 1.18.0, `navigation` a 2.9.5, `lifecycle` a 2.10.0, `hilt-lifecycle-viewmodel-compose` a 1.3.0, el BOM de Compose a 2026.03.00 (Compose 1.10.5) y OkHttp a 5.4.0 porque sus versiones nuevas exigen `compileSdk 37` o AGP 9.1.
+- Decisión: usar AGP 9.0.1 porque el Android Studio instalado (AI-253) rechaza 9.5.0; se conserva Gradle 9.8.2 y Kotlin 2.4.21, que KGP requiere por su variante `gradle96`.
+- Decisión: `@OptIn(ExperimentalTextApi::class)` en `Type.kt` porque Compose 1.10.5 aún marca `FontVariation` como experimental; en 1.12 ya era estable.
+- A evitar: subir esas dependencias hasta instalar API 37; Gradle fallará por `minCompileSdk`.
+
+## Specs con las tres suites obligatorias (2026-11-05)
+- Estado: las 35 specs de producto (`000`…`034`) declaran en su §6 las suites **Unit**, **Data** y **Security** (antes solo 3 las tenían completas). Plantilla `.specify/templates/spec-template.md`, `AGENTS.md §4` y nuevo `scripts/check_specs.sh` actualizados. Verificado: `SPECS-OK (35 specs)`, y `SPECS-FAIL` con una spec temporal sin las suites.
+- Decisión: la suite de integración se llama `Data` porque así la nombra la constitución §7 (Room en memoria + MockWebServer) y la cadena de CI; el alias "integración" vive en el comentario de la plantilla.
+- Decisión: `check_specs.sh` revisa solo `specs/NNN-*` (7 secciones + Aprobación + las 3 suites). `specs/nv-*` usan otra plantilla y los cubre `check_sdd.sh`.
+- A evitar: publicar una spec sin las tres suites: la puerta devuelve `SPECS-FAIL`.
+
+## CI/CD y puertas SDD (2026-11-05)
+- Estado: la rama ya tiene todos los gates ejecutables y verificados en local: `critic-guardrails` → PASS, `check_routes` → OK, `check_strings` → OK, `check_specs` → SPECS-OK (36 specs), `check_sdd` → SDD-OK. Nuevos: `scripts/check_routes.sh`, `check_strings.sh`, `check_sdd.sh`, `critic-guardrails.sh`, `check_coverage.sh`, `check_delta_coverage.py`, `.semgrep/semgrep.yaml`, `.github/workflows/ci-pr.yml` (21 pasos, validado con `yaml.safe_load`) y `specs/035-ci-cd`.
+- Decisión: un solo paso para las cuatro suites de la constitución §7 (`testDebugUnitTest`): viven en el mismo source set y separarlas repetiría el task sin ganar señal.
+- Decisión: `critic-guardrails.sh` aplica el patrón de credenciales solo fuera de `app/src/test` y `app/src/androidTest` (un `TEST_PASSWORD` de fixture no es secreto), y las claves reales (`AIza`, `ghp_`, `AKIA`, llaves privadas) sí se buscan en todo el repo.
+- Decisión: `.semgrep/semgrep.yaml` con dos reglas propias en 0 hallazgos (`fallbackToDestructiveMigration`, `http://` en `app/src/main/java`); el registry corre advisory hasta afinar baseline. `AGENTS.md §5` registra ahora `compileSdk 36` (lo exige `check_sdd.sh`).
+- Decisión: mutación (Pitest) y Dependency-Check quedan **fuera** del workflow: no están en `libs.versions.toml` y añadirlos exige acuerdo (constitución §3). No se simulan para no dar verde falso.
+- A evitar: los scripts en Git sin bit de ejecución → al commitear usar `git add --chmod=+x scripts/*.sh` (y `scripts/check_delta_coverage.py` no necesita bit).
+- Pendiente (primer rojo previsible): cobertura medida **28,16 %** (1104/3920) frente al umbral ≥ 45 % → el paso `coverage` fallará hasta subir pruebas; `lint { warningsAsErrors = true }` no se ejecutó en local. Hace falta push a GitHub para ver el workflow en Actions.
+- D21 (naming `nv-0X` vs `NNN-`) sigue abierto.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

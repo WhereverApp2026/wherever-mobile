@@ -104,6 +104,7 @@ Entidades de feed y lugares en Room, con caché y cursor.
 - Unit: `HomeViewModel` por estado.
 - Data: feed paginado con Room y MockWebServer.
 - UI: pestañas y hoja de creación.
+- Security: los logs del feed no incluyen el access token ni nombres o correos de otros usuarios.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

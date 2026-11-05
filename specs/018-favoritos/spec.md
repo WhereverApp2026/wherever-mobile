@@ -73,6 +73,8 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 ## 6. Tests / Gates
 
 - Data: encolado y sincronización con Room real.
+- Unit: `FavoritesViewModel` refleja el cambio optimista ante 200, 409 y sin red.
+- Security: la lista de favoritos se borra de Room al cerrar sesión.
 - UI: estado vacío.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 

@@ -110,6 +110,7 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 - Data: `If-Match` correcto y 409 con recarga.
 - Unit: `EditProfileViewModel`.
 - UI: tema aplicado.
+- Security: el teléfono y el correo no aparecen en logs; a Room solo llega `telefono_registrado`.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

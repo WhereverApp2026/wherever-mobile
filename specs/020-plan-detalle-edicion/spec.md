@@ -87,6 +87,7 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 - Unit: reordenar y límites.
 - Data: guardar borrador con Room.
 - UI: acciones de parada.
+- Security: editar un plan ajeno recibe 403 del servidor y la app no aplica el cambio localmente.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

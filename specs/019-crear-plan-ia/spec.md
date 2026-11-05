@@ -84,6 +84,8 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 
 - Unit: transiciones y cancelación con dispatcher de prueba.
 - UI: pasos.
+- Data: el borrador del plan generado persiste en Room y sobrevive a un reinicio sin red.
+- Security: los gustos usados por la IA no aparecen en logs y viaja `privacidad.aprendizaje_personalizado`.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

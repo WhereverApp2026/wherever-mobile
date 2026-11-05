@@ -107,6 +107,7 @@ Solo los últimos 4 dígitos de la cuenta en caché.
 - Unit: CLABE y RFC.
 - Security: sin datos fiscales en logs.
 - UI: reordenar fotos.
+- Data: la configuración del negocio se guarda en Room tras el PATCH y se lee sin red.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

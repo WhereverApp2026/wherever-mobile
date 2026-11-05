@@ -99,6 +99,7 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 - Unit: flujo de check-in.
 - UI: barra de negocio.
 - Data: lista por pestaña.
+- Security: un token de consumidor en el panel recibe 403 y no se muestran datos de reservas.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

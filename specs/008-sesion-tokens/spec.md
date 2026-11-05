@@ -76,6 +76,9 @@ Errores con forma `{codigo, mensaje, campos[], traza_id}`, mapeados a `AppError`
 ## 6. Tests / Gates
 
 - Casos de `specs/000-arquitectura §6`.
+- Unit: 401 con refresh OK repite con el token nuevo; dos 401 simultáneos hacen un solo `POST /auth/refresh`.
+- Data: `TokenStore` conserva los tokens rotados y Room mantiene `usuario` tras el refresh; logout limpia ambos.
+- Security: el archivo cifrado en disco no contiene tokens en claro y no se registran en logs.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

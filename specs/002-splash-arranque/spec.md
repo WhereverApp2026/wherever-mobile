@@ -82,6 +82,8 @@ Sin entidades propias. Lee `TokenStore` y `UserProfileEntity`.
 - Unit: `StartupViewModel` con cada combinación de sesión y red, reloj inyectado.
 - UI: botones de Bienvenida navegan.
 - Empírico: medir arranque en frío antes de fijar umbral.
+- Data: `StartupRepository` con MockWebServer guarda `usuario` en Room con 200; con 401 Room queda vacío.
+- Security: el log de arranque no incluye el access token ni el cuerpo de `GET /usuarios/yo`.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

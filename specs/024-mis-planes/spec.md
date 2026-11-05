@@ -77,6 +77,8 @@ Lee `PlanEntity`.
 ## 6. Tests / Gates
 
 - Data: lectura por pestaña.
+- Unit: `PlansViewModel` muestra carga, vacío y error según el resultado del repositorio por pestaña.
+- Security: los planes se borran de Room al cerrar sesión.
 - UI: estado vacío.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 

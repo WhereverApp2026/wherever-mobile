@@ -104,6 +104,7 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 - Unit: máquina de estados de la solicitud.
 - Data: lista con cursor.
 - UI: botón según estado.
+- Security: los contactos no viajan en claro ni se registran en logs (hash o no envío, según el backend).
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

@@ -76,6 +76,8 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 
 - Unit: el ejemplo de la maqueta ($760 entre 4, $190; Jorge debe $70).
 - Unit: redondeo sin centavos perdidos.
+- Data: gastos y saldos se guardan en Room y se recalculan tras reiniciar sin red.
+- Security: no hay datos bancarios ni de tarjeta en los gastos y su cuerpo no se registra en logs.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

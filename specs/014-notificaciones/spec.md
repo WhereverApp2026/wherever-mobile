@@ -92,6 +92,7 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 - Unit: filtros.
 - Data: marcar leídas.
 - UI: acción Aceptar.
+- Security: el payload del push no lleva datos sensibles y `google-services.json` no está en el repositorio.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

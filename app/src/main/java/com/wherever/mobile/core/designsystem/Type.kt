@@ -1,12 +1,14 @@
 package com.wherever.mobile.core.designsystem
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 import com.wherever.mobile.R
 
+@OptIn(ExperimentalTextApi::class)
 private fun variableFont(resId: Int, weight: FontWeight) = Font(
     resId = resId,
     weight = weight,

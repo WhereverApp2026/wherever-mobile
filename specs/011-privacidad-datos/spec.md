@@ -106,6 +106,7 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 - Unit: botón activo solo con ELIMINAR exacto.
 - Data: 202, 409 y 429 con MockWebServer.
 - Unit: 403 con eliminación pendiente lleva a su pantalla.
+- Security: el token de un solo uso de exportar no se registra en logs ni queda en Room tras descargar.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

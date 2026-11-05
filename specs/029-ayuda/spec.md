@@ -76,6 +76,8 @@ Preguntas en `strings.xml` (propuesta), mientras no haya contenido remoto.
 
 - Unit: filtro.
 - UI: acordeón.
+- Data: las entradas de ayuda se cachean en Room y se muestran sin red.
+- Security: el reporte de problema no incluye datos personales automáticos.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

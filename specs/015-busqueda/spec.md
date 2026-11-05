@@ -78,6 +78,8 @@ Recientes en Room, borrados al cerrar sesión.
 
 - Unit: espera y cancelación con dispatcher inyectado.
 - UI: estado sin resultados.
+- Data: los resultados con cursor se guardan en Room y la UI lee de Room sin red.
+- Security: la búsqueda de personas respeta `buscable_por_telefono` y no registra correos ni teléfonos en logs.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

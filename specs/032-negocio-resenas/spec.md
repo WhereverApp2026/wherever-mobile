@@ -84,6 +84,8 @@ Caché de reseñas del negocio.
 
 - Unit: límite de texto.
 - UI: chips que llenan la respuesta.
+- Data: las respuestas del negocio se guardan en Room y se leen sin red.
+- Security: los datos del cliente en la reseña no aparecen en logs.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

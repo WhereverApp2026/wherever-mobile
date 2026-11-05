@@ -91,6 +91,7 @@ Sin entidades. Tokens en `TokenStore`, `usuario` en `UserProfileEntity`.
 - Unit: extracción de `#token=` del `Intent`.
 - Data: 202 y 422 con MockWebServer.
 - UI: medidor y coincidencia.
+- Security: el token de `#token=` no aparece en logs ni queda en `SavedStateHandle` después de `restablecer`; el correo se enmascara.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 7. Plan de entrega

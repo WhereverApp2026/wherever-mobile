@@ -80,6 +80,7 @@ Sin entidades. `privacidad.ubicacion` en `UserProfileEntity`.
 ## 6. Tests / Gates
 
 - Unit: flujo de decisión por permiso.
+- Data: `PATCH /usuarios/yo/privacidad` con MockWebServer escribe Room tras la decisión, y la UI lee de Room.
 - Security: el manifiesto declara solo los permisos de la matriz.
 - UI: Ahora no navega sin diálogos.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
