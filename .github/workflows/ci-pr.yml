@@ -33,15 +33,18 @@ jobs:
           distribution: temurin
           java-version: "21"
 
-      - name: Android SDK
-        uses: android-actions/setup-android@v3
-
+      # Sin android-actions/setup-android: el runner ya trae el SDK en
+      # $ANDROID_HOME y esa acción falla pidiendo el paquete `tools`.
       - name: Plataforma android-36
         run: |
-          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
-          [ -x "$SDKMANAGER" ] || SDKMANAGER="$(command -v sdkmanager)"
-          yes | "$SDKMANAGER" --licenses >/dev/null || true
-          "$SDKMANAGER" "platforms;android-36"
+          SDKMANAGER="$(ls -d "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager 2>/dev/null | sort -V | tail -n 1 || true)"
+          if [ -z "$SDKMANAGER" ]; then SDKMANAGER="$(command -v sdkmanager || true)"; fi
+          if [ -z "$SDKMANAGER" ]; then
+            echo "sdkmanager no encontrado; AGP descargará el SDK que falte"
+          else
+            yes | "$SDKMANAGER" --licenses >/dev/null || true
+            "$SDKMANAGER" "platforms;android-36"
+          fi
 
       - name: Gradle
         uses: gradle/actions/setup-gradle@v4
