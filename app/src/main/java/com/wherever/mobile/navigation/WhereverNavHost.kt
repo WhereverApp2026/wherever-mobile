@@ -2,11 +2,14 @@ package com.wherever.mobile.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.wherever.mobile.core.designsystem.SystemBarIcons
 import com.wherever.mobile.feature.auth.domain.PostAuthDestination
 import com.wherever.mobile.feature.auth.ui.CheckEmailMode
 import com.wherever.mobile.feature.auth.ui.CheckEmailRoute as CheckEmailScreen
@@ -37,6 +40,10 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>) {
             }
         }
     }
+    val destination = navController.currentBackStackEntryAsState().value?.destination
+    SystemBarIcons(
+        lightStatusIcons = destination?.hasRoute<WelcomeRoute>() == true || destination?.hasRoute<HomeRoute>() == true
+    )
     val startRoute: Any = when (start) {
         StartDestination.WELCOME -> WelcomeRoute
         StartDestination.HOME -> HomeRoute

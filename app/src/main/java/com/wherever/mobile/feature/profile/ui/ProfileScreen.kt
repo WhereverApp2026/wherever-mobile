@@ -33,6 +33,7 @@ import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.GoldTint
 import com.wherever.mobile.core.designsystem.InfoBanner
 import com.wherever.mobile.core.designsystem.InitialAvatar
+import com.wherever.mobile.core.designsystem.Ink
 import com.wherever.mobile.core.designsystem.LoadingState
 import com.wherever.mobile.core.designsystem.MainTab
 import com.wherever.mobile.core.designsystem.StatusPill
@@ -45,6 +46,7 @@ import com.wherever.mobile.feature.profile.domain.NotificationSettings
 import com.wherever.mobile.feature.profile.domain.Preferences
 import com.wherever.mobile.feature.profile.domain.Privacy
 import com.wherever.mobile.feature.profile.domain.UserProfile
+import com.wherever.mobile.feature.tastes.ui.tasteLabelRes
 
 /** 81_Perfil */
 @Composable
@@ -117,7 +119,7 @@ private fun ProfileContent(
             tag = "profile_edit"
         )
         if (!profile.emailVerified) {
-            InfoBanner(stringResource(R.string.profile_verify_notice), container = GoldTint)
+            InfoBanner(stringResource(R.string.profile_verify_notice), container = GoldTint, contentColor = Ink)
             WhereverTextLink(stringResource(R.string.profile_verify_action), onVerifyEmail)
         }
         errorBanner()
@@ -154,8 +156,10 @@ private fun Stat(value: String, label: String) {
     }
 }
 
-/** cafes -> Cafes. Las claves no tienen catálogo en la API (duda D05). */
-private fun tasteLabel(key: String): String = key.replace('_', ' ').replaceFirstChar { it.uppercase() }
+/** La etiqueta de Gustos. Si la API trae una clave desconocida (duda D05), se muestra legible: pan_dulce -> Pan dulce. */
+@Composable
+private fun tasteLabel(key: String): String =
+    tasteLabelRes(key)?.let { stringResource(it) } ?: key.replace('_', ' ').replaceFirstChar { it.uppercase() }
 
 @Preview
 @Composable

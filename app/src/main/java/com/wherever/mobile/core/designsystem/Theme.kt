@@ -1,11 +1,18 @@
 package com.wherever.mobile.core.designsystem
 
+import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 
 private val LightColors = lightColorScheme(
     primary = RouteBlue,
@@ -55,11 +62,30 @@ private val DarkColors = darkColorScheme(
     onErrorContainer = Color.White
 )
 
+private const val DARK_LUMINANCE = 0.5f
+
 @Composable
 fun WhereverTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = if (darkTheme) DarkColors else LightColors,
-        typography = WhereverTypography,
-        content = content
-    )
+        typography = WhereverTypography
+    ) {
+        // Sin esto, el texto fuera de un Surface sale negro también en tema oscuro.
+        CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onBackground, content = content)
+    }
+}
+
+/** Íconos de las barras del sistema. Los fija el tema, y [lightStatusIcons] para encabezados oscuros. */
+@Composable
+fun SystemBarIcons(lightStatusIcons: Boolean) {
+    val view = LocalView.current
+    val darkBackground = MaterialTheme.colorScheme.background.luminance() < DARK_LUMINANCE
+    SideEffect {
+        (view.context as? Activity)?.window?.let { window ->
+            WindowCompat.getInsetsController(window, view).apply {
+                isAppearanceLightStatusBars = !lightStatusIcons && !darkBackground
+                isAppearanceLightNavigationBars = !darkBackground
+            }
+        }
+    }
 }

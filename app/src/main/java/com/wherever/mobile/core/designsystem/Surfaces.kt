@@ -65,12 +65,13 @@ fun InfoBanner(
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     container: Color = MaterialTheme.colorScheme.primaryContainer,
+    contentColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
     tag: String = ""
 ) {
     Surface(
         shape = RoundedCornerShape(16.dp),
         color = container,
-        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        contentColor = contentColor,
         modifier = modifier.fillMaxWidth().testTag(tag)
     ) {
         Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -250,8 +251,8 @@ private fun androidx.compose.foundation.layout.RowScope.BarItem(
         icon = { Icon(icon, contentDescription = null) },
         label = { Text(label) },
         colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = RouteBlue,
-            selectedTextColor = RouteBlue,
+            selectedIconColor = MaterialTheme.colorScheme.primary,
+            selectedTextColor = MaterialTheme.colorScheme.primary,
             indicatorColor = MaterialTheme.colorScheme.primaryContainer
         )
     )

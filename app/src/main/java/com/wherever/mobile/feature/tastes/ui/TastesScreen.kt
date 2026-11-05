@@ -62,6 +62,10 @@ private val CATEGORIES = listOf(
     TasteOption("pueblos", R.string.taste_pueblos)
 )
 
+/** Etiqueta de una clave de categoría; null si no está en el catálogo local. */
+@StringRes
+internal fun tasteLabelRes(key: String): Int? = CATEGORIES.firstOrNull { it.key == key }?.label
+
 private val MOBILITY = listOf(
     TasteOption("a_pie", R.string.mobility_a_pie),
     TasteOption("auto", R.string.mobility_auto),

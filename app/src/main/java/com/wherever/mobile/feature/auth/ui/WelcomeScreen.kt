@@ -13,20 +13,28 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wherever.mobile.R
@@ -66,6 +74,7 @@ fun WelcomeScreen(onCreateAccount: () -> Unit, onHaveAccount: () -> Unit, modifi
             Text(
                 text = stringResource(R.string.welcome_title),
                 style = MaterialTheme.typography.displaySmall,
+                fontWeight = FontWeight.Bold,
                 color = Color.White
             )
             Spacer(Modifier.height(12.dp))
@@ -96,6 +105,7 @@ fun WelcomeScreen(onCreateAccount: () -> Unit, onHaveAccount: () -> Unit, modifi
 /** La ruta punteada con tres paradas. */
 @Composable
 private fun RouteIllustration(modifier: Modifier = Modifier) {
+    val pin = rememberVectorPainter(Icons.Filled.Place)
     Canvas(modifier = modifier) {
         val w = size.width
         val h = size.height
@@ -115,16 +125,51 @@ private fun RouteIllustration(modifier: Modifier = Modifier) {
                 pathEffect = PathEffect.dashPathEffect(floatArrayOf(2.dp.toPx(), 8.dp.toPx()))
             )
         )
-        stop(Offset(w * 0.22f, h * 0.6f), Color.White, RouteBlue)
-        stop(Offset(w * 0.55f, h * 0.66f), Sunset, Ink)
-        stop(Offset(w * 0.81f, h * 0.38f), Mint, Color.White)
+        val cafe = Offset(w * 0.22f, h * 0.6f)
+        val place = Offset(w * 0.55f, h * 0.66f)
+        val goal = Offset(w * 0.81f, h * 0.38f)
+        stop(cafe, Color.White)
+        cupIcon(cafe, RouteBlue)
+        stop(place, Sunset)
+        val pinSize = 28.dp.toPx()
+        translate(place.x - pinSize / 2, place.y - pinSize / 2) {
+            with(pin) { draw(Size(pinSize, pinSize), colorFilter = ColorFilter.tint(Ink)) }
+        }
+        stop(goal, Mint)
+        targetIcon(goal, Color.White)
     }
 }
 
-private fun DrawScope.stop(center: Offset, fill: Color, dot: Color) {
+private fun DrawScope.stop(center: Offset, fill: Color) {
     drawCircle(Color.White, radius = 28.dp.toPx(), center = center)
     drawCircle(fill, radius = 24.dp.toPx(), center = center)
-    drawCircle(dot, radius = 7.dp.toPx(), center = center)
+}
+
+private fun DrawScope.cupIcon(center: Offset, color: Color) {
+    val unit = 1.dp.toPx()
+    val stroke = Stroke(width = 2 * unit, cap = StrokeCap.Round)
+    drawRoundRect(
+        color = color,
+        topLeft = center + Offset(-10 * unit, -7 * unit),
+        size = Size(15 * unit, 15 * unit),
+        cornerRadius = CornerRadius(4 * unit),
+        style = stroke
+    )
+    drawArc(
+        color = color,
+        startAngle = -90f,
+        sweepAngle = 180f,
+        useCenter = false,
+        topLeft = center + Offset(2 * unit, -4 * unit),
+        size = Size(8 * unit, 8 * unit),
+        style = stroke
+    )
+}
+
+private fun DrawScope.targetIcon(center: Offset, color: Color) {
+    val unit = 1.dp.toPx()
+    drawCircle(color, radius = 11 * unit, center = center, style = Stroke(width = 2 * unit))
+    drawCircle(color, radius = 4 * unit, center = center)
 }
 
 @Preview
