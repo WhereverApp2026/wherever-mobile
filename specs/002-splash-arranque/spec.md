@@ -112,11 +112,12 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 
 **Límites de la verificación**
 
-- No probado en dispositivo ni contra staging con una cuenta real: no hay emulador configurado. Verificado con `assembleDebug`, `testDebugUnitTest`, `ktlintCheck` y `lintDebug`.
+- Probado el 2026-11-04 contra staging con una cuenta de prueba, en un teléfono Samsung SM-A346M con Android 16, en tema claro y oscuro. Verificado también con `assembleDebug`, `testDebugUnitTest`, `ktlintCheck` y `lintDebug`.
+- Sin probar en dispositivo: el arranque sin red.
 
 ## Aprobación
 - [ ] Revisor 1 — fecha:
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Implementada, sin revisor (falta prueba en dispositivo).
+**Estado:** 🚧 Implementada y probada en un teléfono, sin revisor.

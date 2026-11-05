@@ -47,7 +47,7 @@ Inventario: **162 frames** de pantalla, que son 135 pantallas distintas al agrup
 
 ## Pantallas que ya consumen la API
 
-Implementadas el 2026-11-04. **Compilan y tienen pruebas unitarias, pero no se han abierto en un dispositivo ni se han probado contra staging con una cuenta real.**
+Implementadas el 2026-11-04 y probadas ese día contra staging, con una cuenta de prueba, en un teléfono Samsung SM-A346M (Android 16), en tema claro y oscuro. **No se han probado en emulador.** Lo que faltó probar está en cada spec.
 
 | Pantalla | Frame | Spec | Endpoints | Estado |
 |---|---|---|---|---|
@@ -235,7 +235,7 @@ Las dudas siguen abiertas hasta que diseño o backend las confirmen. Mientras ta
 - **D02:** el texto dice 1 hora.
 - **D03:** se sigue a la API: escribir ELIMINAR, 30 días para cancelar.
 - **D04:** Privacidad muestra los interruptores de la API, no los del frame.
-- **D05:** 15 chips con emoji y deslizador, como piden las historias. **Las claves de categorías son propuestas: el backend podría rechazarlas.**
+- **D05:** 15 chips con emoji y deslizador, como piden las historias. **Las claves de categorías son propuestas:** staging aceptó `tacos`, `cafes` y `aire_libre`; las demás no se han enviado.
 - **D06:** sin interruptor de recordatorios de reservación.
 - **D07:** agregados tema y sesiones.
 - **D09:** una sola pantalla de edición, con botón Guardar.
@@ -250,8 +250,11 @@ Las dudas siguen abiertas hasta que diseño o backend las confirmen. Mientras ta
 
 ### Encontradas al implementar
 
-- **D38 · Catálogo de ciudades.** En staging, `GET /ciudades/autocompletar` devolvió `[]` con `q=tula` y con `q=guada`, que es el ejemplo de la documentación. Parece que el catálogo está vacío: hasta que tenga datos, en la app no se puede elegir ciudad. La pantalla muestra "No encontramos esa ciudad".
+- **D38 · Catálogo de ciudades.** En staging, `GET /ciudades/autocompletar` devolvió `[]` con `q=tula` y con `q=guada`, que es el ejemplo de la documentación. Parece que el catálogo está vacío: hasta que tenga datos, en la app no se puede elegir ciudad. La pantalla muestra "No encontramos esa ciudad". Seguía vacío el 2026-11-04 a las 18:29 con `q=tula`.
 - **D39 · Permisos de WorkManager.** Al agregar WorkManager (`nv-01`) hay que registrar sus permisos en `docs/permissions-matrix.md`.
+- **D40 · Tema que no cambia, intermitente.** Al elegir Oscuro, el `PATCH /usuarios/yo/preferencias` respondió 200 y la app siguió en Claro. Pasó 1 de 8 veces y no se reprodujo. Hipótesis sin confirmar: el `GET /usuarios/yo` posterior devolvió el valor anterior y sobrescribió Room. Falta saber si staging puede leer un valor viejo justo después de escribir.
+- **D41 · Pesos de fuente en Xiaomi.** En un Xiaomi 2311DRK48G con Android 16, títulos y botones se vieron sin negrita; en el Samsung sí salen bien. No se sabe si es la configuración de ese teléfono o algo general de HyperOS. No se corrigió y falta repetir la prueba allí.
+- **D42 · Fecha de nacimiento y accesibilidad.** La capa que abre el selector oculta el valor del campo en el árbol de accesibilidad. Falta probarlo con TalkBack.
 
 ### Afectan al Sprint 1 (3 al 16 nov 2026)
 
@@ -269,7 +272,7 @@ Las dudas siguen abiertas hasta que diseño o backend las confirmen. Mientras ta
 - **D12 · Onboarding: paso de amigos y cómo saber si terminó.** El paso 3 de 4 (`07_EncuentraAmigos`) depende de amigos, sin endpoints (US-232/233 fuera de alcance). Propuesta: en Sprint 1 son 3 pasos. Además, la API no indica si se completó el onboarding; si se omiten los gustos, `gustos` queda `null` igual que en una cuenta nueva. Propuesta: marca local por usuario.
 - **D13 · Estados sin frame.** Sin dibujo: login bloqueado (423), correo ya registrado (409), verificación de correo, cuenta con eliminación pendiente, confirmación de cerrar sesión, carga genérica y error genérico. Estas specs los definen con textos propuestos; falta que los valide diseño.
 - **D14 · Términos y aviso de privacidad.** `POST /usuarios` pide `version_terminos`, y no hay endpoint para saber la vigente. Tampoco hay URL ni frame de los textos, ni casilla para `promociones_correo`. Propuesta: versión en `BuildConfig`, `promociones_correo=false` por defecto.
-- **D15 · Cuenta con eliminación pendiente.** El ejemplo solo muestra `estado: "activo"`: falta el valor para pendiente. `DELETE /usuarios/yo` cierra todas las sesiones, así que cancelar exige volver a entrar: hay que confirmar que `/auth/login` funciona en ese estado.
+- **D15 · Cuenta con eliminación pendiente.** El ejemplo solo muestra `estado: "activo"`: falta el valor para pendiente. `DELETE /usuarios/yo` cierra todas las sesiones, así que cancelar exige volver a entrar: hay que confirmar que `/auth/login` funciona en ese estado. **Confirmado en staging el 2026-11-04:** responde 200 y `GET /usuarios/yo` permite mostrar la pantalla de eliminación pendiente.
 - **D16 · Refresh con fallo transitorio.** Constitución §6: "si el refresh falla, se limpia la sesión". `specs/000-arquitectura §3.2` lo interpreta como rechazo del servidor (401/422), no como falta de red. Requiere confirmación.
 - **D17 · Backend fuera de horario.** Staging se apaga a las 22:00 y los fines de semana. La API local es `http://localhost:8080`, y la constitución prohíbe HTTP en claro. `AGENTS.md` cita HTTPS en `10.0.2.2:8443` con certificado de desarrollo, lo que exige confiar en esa CA solo en debug. Falta acordar cómo.
 - **D18 · Permisos.** `08_Permisos` marca Ubicación como "Necesario", pero la constitución §6 dice que la app funciona sin ella. La navegación y `06_PermisoSys` necesitan ubicación precisa, y `docs/permissions-matrix.md` solo lista `ACCESS_COARSE_LOCATION`. Los contactos (`07`, `24`) usan `READ_CONTACTS`, que tampoco está en la matriz.

@@ -124,6 +124,7 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 - Editar perfil une `82_EditarPerfil` y `84_DatosPers` (D09): nombre y ciudad, con `PATCH /usuarios/yo` e `If-Match`.
 - Ante 409 avisa "Tus datos cambiaron en otro dispositivo", recarga y deja al usuario revisar.
 - Aviso de correo sin verificar, que lleva a Revisa tu correo (D20).
+- Mis gustos muestra las etiquetas de Gustos; una clave desconocida se muestra legible.
 - Room: `UserProfileEntity` con esquema exportado en `app/schemas`.
 
 **Difiere de lo especificado**
@@ -150,11 +151,12 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 
 **Límites de la verificación**
 
-- No probado en dispositivo ni contra staging con una cuenta real: no hay emulador configurado. Verificado con `assembleDebug`, `testDebugUnitTest`, `ktlintCheck` y `lintDebug`.
+- Probado el 2026-11-04 contra staging con una cuenta de prueba, en un teléfono Samsung SM-A346M con Android 16, en tema claro y oscuro. Verificado también con `assembleDebug`, `testDebugUnitTest`, `ktlintCheck` y `lintDebug`.
+- Sin probar en dispositivo: el conflicto 409 y `UserProfileDaoTest`, que sigue sin correr. La app sí usó Room real en el teléfono.
 
 ## Aprobación
 - [ ] Revisor 1 — fecha:
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Implementada, sin revisor (falta prueba en dispositivo).
+**Estado:** 🚧 Implementada y probada en un teléfono, sin revisor.

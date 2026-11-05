@@ -128,7 +128,7 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 
 **Límites de la verificación**
 
-- Sin prueba unitaria propia: solo lee el perfil de Room y lo muestra.
+- Sin prueba unitaria propia: solo lee el perfil de Room y lo muestra. Probado el 2026-11-04 en un teléfono contra staging.
 
 ## Aprobación
 - [ ] Revisor 1 — fecha:
