@@ -96,6 +96,12 @@
 - A evitar: timeout del emulador con 900 s = sin aceleración; sin `/dev/kvm` el paso `ui` nunca pasa en el runner estándar de un repo privado.
 - Pendiente: el PR #3 (`spec/035-ci-cd`) tiene base `main` y sale `mergeable: dirty` (27 commits, 304 archivos); cambiar la base a `spec/arquitectura` o decidir cómo se retoma `main` (ver sección siguiente).
 
+## ArchitectureTest portado de main, en verde (2026-11-06)
+- Estado: el run #11 del PR #3 fallaba en `testDebugUnitTest` por 2 reglas de `arch/ArchitectureTest` (portado en `9efafd2` sin correrlo en local). Corregido; 144 pruebas JVM verdes, cobertura 71,97 %.
+- Decisión: `core/database` queda fuera de la regla de capas y tiene la suya: solo puede importar `*Entity`/`*Dao` de `feature/*/data`. Porqué: `WhereverDatabase` debe listar las entidades de cada feature (Room lo exige; nv-04 lo pide así).
+- Decisión: `Dispatchers.IO` vive en `core/common/DefaultDispatcherProvider.kt`; `AppModule` solo lo instancia. Porqué: es la convención que la regla espera y deja un único sitio que nombra el despachador.
+- A evitar: portar reglas de Konsist de otra rama sin correr `testDebugUnitTest` antes del push; los paquetes y nombres de archivo no son los mismos.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

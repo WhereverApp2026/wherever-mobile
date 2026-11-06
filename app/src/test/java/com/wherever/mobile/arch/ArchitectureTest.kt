@@ -3,6 +3,7 @@ package com.wherever.mobile.arch
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.architecture.KoArchitectureCreator.assertArchitecture
 import com.lemonappdev.konsist.api.architecture.Layer
+import com.lemonappdev.konsist.api.declaration.KoFileDeclaration
 import com.lemonappdev.konsist.api.verify.assertFalse
 import com.lemonappdev.konsist.api.verify.assertTrue
 import java.io.File
@@ -18,7 +19,9 @@ class ArchitectureTest {
 
     @Test
     fun layersOnlyDependOnAllowedLayers() {
-        Konsist.scopeFromProduction().assertArchitecture {
+        // `core/database` se valida aparte: `WhereverDatabase` registra las entidades y DAOs
+        // de cada feature porque Room lo exige (nv-04: "cada feature aporta entidades y DAOs").
+        Konsist.scopeFromProduction().slice { !it.isInPackage(DATABASE_PACKAGE) }.assertArchitecture {
             val core = Layer("Core", "com.wherever.mobile.core..")
             val feature = Layer("Feature", "com.wherever.mobile.feature..")
             val navigation = Layer("Navigation", "com.wherever.mobile.navigation..")
@@ -26,6 +29,18 @@ class ArchitectureTest {
             core.dependsOnNothing()
             feature.dependsOn(core)
             navigation.dependsOn(feature, core)
+        }
+    }
+
+    @Test
+    fun databaseOnlyReachesFeatureEntitiesAndDaos() {
+        val databaseFiles = Konsist.scopeFromProduction().files.filter { it.isInPackage(DATABASE_PACKAGE) }
+        org.junit.Assert.assertTrue("core/database sin archivos", databaseFiles.isNotEmpty())
+        databaseFiles.assertTrue { file ->
+            file.imports
+                .map { it.name }
+                .filter { it.startsWith(FEATURE_PACKAGE) || it.startsWith(NAVIGATION_PACKAGE) }
+                .all { it.contains(".data.") && (it.endsWith("Entity") || it.endsWith("Dao")) }
         }
     }
 
@@ -70,5 +85,14 @@ class ArchitectureTest {
         // El working dir de las pruebas de Gradle es `app/`.
         val demoPath = File("src/main/java/com/wherever/mobile/demo")
         org.junit.Assert.assertFalse(demoPath.exists())
+    }
+
+    private fun KoFileDeclaration.isInPackage(prefix: String): Boolean =
+        packagee?.name?.let { it == prefix || it.startsWith("$prefix.") } == true
+
+    private companion object {
+        const val DATABASE_PACKAGE = "com.wherever.mobile.core.database"
+        const val FEATURE_PACKAGE = "com.wherever.mobile.feature."
+        const val NAVIGATION_PACKAGE = "com.wherever.mobile.navigation."
     }
 }
