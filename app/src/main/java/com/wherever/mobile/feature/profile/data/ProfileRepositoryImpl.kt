@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.map
 
 private const val CITY_SUGGESTIONS = 8
 
+@Suppress("TooManyFunctions") // Una función por endpoint de la API (docs/contexto_api_sprint1.md).
 class ProfileRepositoryImpl @Inject constructor(private val api: UsersApi, private val dao: UserProfileDao) :
     ProfileRepository {
     override fun observeProfile(): Flow<UserProfile?> = dao.observe().map { it?.toDomain() }

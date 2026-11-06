@@ -1,3 +1,6 @@
+// Catálogo de superficies del design system: un Composable pequeño por componente.
+@file:Suppress("TooManyFunctions")
+
 package com.wherever.mobile.core.designsystem
 
 import androidx.compose.foundation.BorderStroke
