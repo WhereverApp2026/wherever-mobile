@@ -1,0 +1,11 @@
+# Gitleaks (specs/nv-39 §5). Reglas por defecto + excepciones mínimas.
+[extend]
+useDefault = true
+
+# Ejemplo público del contrato de la API: el mismo refresh token de muestra
+# aparece en cada respuesta con tokens. No es una credencial real.
+[[allowlists]]
+description = "Refresh token de ejemplo en docs/contexto_api_sprint1.md"
+condition = "AND"
+paths = ['''^docs/contexto_api_sprint1\.md$''']
+regexes = ['''q8Zs3v1nX0r4bE7yTk2mW9pLhA6cUfGd''']

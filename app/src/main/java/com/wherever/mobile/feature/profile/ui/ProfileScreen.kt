@@ -157,8 +157,8 @@ private fun Stat(value: String, label: String) {
 }
 
 /**
- * La etiqueta de Gustos. Si la API trae una clave desconocida (duda D05),
- * se muestra legible: pan_dulce -> Pan dulce.
+ * La etiqueta de Gustos. Si la API trae una clave desconocida (duda D05), se muestra legible:
+ * pan_dulce -> Pan dulce.
  */
 @Composable
 private fun tasteLabel(key: String): String =

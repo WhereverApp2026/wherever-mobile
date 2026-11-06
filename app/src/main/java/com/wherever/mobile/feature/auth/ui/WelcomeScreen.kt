@@ -104,7 +104,8 @@ fun WelcomeScreen(onCreateAccount: () -> Unit, onHaveAccount: () -> Unit, modifi
     }
 }
 
-/** La ruta punteada con tres paradas. */
+/** La ruta punteada con tres paradas. Las cifras son la geometría del dibujo, en fracciones del lienzo. */
+@Suppress("MagicNumber")
 @Composable
 private fun RouteIllustration(modifier: Modifier = Modifier) {
     val pin = rememberVectorPainter(Icons.Filled.Place)
@@ -147,6 +148,7 @@ private fun DrawScope.stop(center: Offset, fill: Color) {
     drawCircle(fill, radius = 24.dp.toPx(), center = center)
 }
 
+@Suppress("MagicNumber") // Geometría del ícono en dp.
 private fun DrawScope.cupIcon(center: Offset, color: Color) {
     val unit = 1.dp.toPx()
     val stroke = Stroke(width = 2 * unit, cap = StrokeCap.Round)
@@ -168,6 +170,7 @@ private fun DrawScope.cupIcon(center: Offset, color: Color) {
     )
 }
 
+@Suppress("MagicNumber") // Geometría del ícono en dp.
 private fun DrawScope.targetIcon(center: Offset, color: Color) {
     val unit = 1.dp.toPx()
     drawCircle(color, radius = 11 * unit, center = center, style = Stroke(width = 2 * unit))

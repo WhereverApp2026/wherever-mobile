@@ -15,10 +15,13 @@ naming:
   FunctionNaming:
     ignoreAnnotated: ['Composable']
   TopLevelPropertyNaming:
-    # Constantes en SCREAMING_SNAKE_CASE (HTTP_UNAUTHORIZED, PASSWORD_MIN, …).
-    constantPattern: '[_A-Z][_A-Z0-9]*'
+    # Kotlin: constantes en MAYÚSCULAS_CON_GUION_BAJO (const val MAX_LENGTH).
+    constantPattern: '[A-Z][_A-Za-z0-9]*'
 style:
   MagicNumber:
     excludes: ['**/core/designsystem/**', '**/test/**', '**/androidTest/**']
   UnusedPrivateMember:
     ignoreAnnotated: ['Preview']
+  ReturnCount:
+    # Las cláusulas de guarda (`?: return`, `if (...) return`) no cuentan.
+    excludeGuardClauses: true

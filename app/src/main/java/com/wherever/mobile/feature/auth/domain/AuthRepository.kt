@@ -21,6 +21,7 @@ data class ActiveSession(
 /** A dónde ir después de abrir sesión. */
 enum class PostAuthDestination { HOME, TASTES, DELETION_PENDING }
 
+@Suppress("TooManyFunctions") // Una función por endpoint de la API (docs/contexto_api_sprint1.md).
 interface AuthRepository {
     suspend fun hasSession(): Boolean
 

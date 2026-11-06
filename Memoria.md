@@ -12,11 +12,11 @@
 - A evitar: token falso, repositorio simulado en pruebas de datos, `Dispatchers.IO` fijo, `fallbackToDestructiveMigration`, workaround sin issue, pantallas de negocio en `nv-00…nv-03`.
 
 ## Arquitectura, proyecto Gradle y specs de producto (2026-11-04)
-- Estado: `specs/000-arquitectura`, proyecto Gradle con pantalla `home`, `specs/001-flujo-general`, specs `002…034` y `specs/README.md`. Revisados los 162 frames de `maqueta/figma-frames/`; un script comprobó que cada uno cae en una spec. Verificado: `assembleDebug` y `ktlintCheck` pasan. Sin correr: `lintDebug`, pruebas ni la app en emulador. En esta fase las tareas de `nv-01` aún no se ejecutaban.
-- Decisión: `specs/NNN-nombre` para arquitectura y producto, además de `nv-00…nv-03`. Porqué: formato de Spec Kit pedido en el encargo. Choca con constitución §11 (`/specs/nv-0X`): pendiente enmendar o renombrar (D21).
+- Estado: `specs/nv-04`, proyecto Gradle con pantalla `home`, `specs/nv-05`, specs `nv-06…nv-38` y `specs/README.md`. Revisados los 162 frames de `maqueta/figma-frames/`; un script comprobó que cada uno cae en una spec. Verificado: `assembleDebug` y `ktlintCheck` pasan. Sin correr: `lintDebug`, pruebas ni la app en emulador. En esta fase las tareas de `nv-01` aún no se ejecutaban.
+- Decisión: `specs/NNN-nombre` para arquitectura y producto, además de `nv-00…nv-03`. Porqué: formato de Spec Kit pedido en el encargo. Choca con constitución §11 (`/specs/nv-0X`): pendiente enmendar o renombrar (D21). Resuelta el 2026-11-05: ver la fase de esa fecha.
 - Decisión: `AuthHeader` e `Authenticator` separados, aunque el encargo pedía un solo interceptor. Porqué: manda constitución §4.
 - Decisión: el refresh con lock único y cliente aparte. Porqué: la API rota el refresh, y reusar uno viejo cierra todas las sesiones.
-- Decisión: `datastore` y `core-splashscreen` como excepción de stack. Porqué: los piden US-013 y US-001 (`specs/000-arquitectura §5.1`).
+- Decisión: `datastore` y `core-splashscreen` como excepción de stack. Porqué: los piden US-013 y US-001 (`specs/nv-04 §5.1`).
 - Decisión: versiones estables más recientes a esta fecha, en `gradle/libs.versions.toml`. AGP 9.5 trae Kotlin integrado (sin plugin `kotlin-android`) y exige Gradle ≥ 9.6.
 - Límite: detekt 1.23.8 (último estable) no corre sobre JDK 25, el único JDK local (JBR de Android Studio). La 2.0 sigue en alfa. Falla con el mensaje `25.0.4`. Correr `detekt` con JDK 17-22. **Falta abrir su issue** (constitución §2.6).
 - Entorno: `JAVA_HOME` no está definido en el equipo; apuntarlo al JBR de Android Studio para usar `gradlew`.
@@ -55,25 +55,43 @@
 - A evitar: subir esas dependencias hasta instalar API 37; Gradle fallará por `minCompileSdk`.
 
 ## Specs con las tres suites obligatorias (2026-11-05)
-- Estado: las 35 specs de producto (`000`…`034`) declaran en su §6 las suites **Unit**, **Data** y **Security** (antes solo 3 las tenían completas). Plantilla `.specify/templates/spec-template.md`, `AGENTS.md §4` y nuevo `scripts/check_specs.sh` actualizados. Verificado: `SPECS-OK (35 specs)`, y `SPECS-FAIL` con una spec temporal sin las suites.
+- Estado: las 35 specs de producto (`nv-04`…`nv-38`) declaran en su §6 las suites **Unit**, **Data** y **Security** (antes solo 3 las tenían completas). Plantilla `.specify/templates/spec-template.md`, `AGENTS.md §4` y nuevo `scripts/check_specs.sh` actualizados. Verificado: `SPECS-OK (35 specs)`, y `SPECS-FAIL` con una spec temporal sin las suites.
 - Decisión: la suite de integración se llama `Data` porque así la nombra la constitución §7 (Room en memoria + MockWebServer) y la cadena de CI; el alias "integración" vive en el comentario de la plantilla.
 - Decisión: `check_specs.sh` revisa solo `specs/NNN-*` (7 secciones + Aprobación + las 3 suites). `specs/nv-*` usan otra plantilla y los cubre `check_sdd.sh`.
 - A evitar: publicar una spec sin las tres suites: la puerta devuelve `SPECS-FAIL`.
 
 ## CI/CD y puertas SDD (2026-11-05)
-- Estado: la rama ya tiene todos los gates ejecutables y verificados en local: `critic-guardrails` → PASS, `check_routes` → OK, `check_strings` → OK, `check_specs` → SPECS-OK (36 specs), `check_sdd` → SDD-OK. Nuevos: `scripts/check_routes.sh`, `check_strings.sh`, `check_sdd.sh`, `critic-guardrails.sh`, `check_coverage.sh`, `check_delta_coverage.py`, `.semgrep/semgrep.yaml`, `.github/workflows/ci-pr.yml` (21 pasos, validado con `yaml.safe_load`) y `specs/035-ci-cd`.
+- Estado: la rama ya tiene todos los gates ejecutables y verificados en local: `critic-guardrails` → PASS, `check_routes` → OK, `check_strings` → OK, `check_specs` → SPECS-OK (36 specs), `check_sdd` → SDD-OK. Nuevos: `scripts/check_routes.sh`, `check_strings.sh`, `check_sdd.sh`, `critic-guardrails.sh`, `check_coverage.sh`, `check_delta_coverage.py`, `.semgrep/semgrep.yaml`, `.github/workflows/ci-pr.yml` (21 pasos, validado con `yaml.safe_load`) y `specs/nv-39`.
 - Decisión: un solo paso para las cuatro suites de la constitución §7 (`testDebugUnitTest`): viven en el mismo source set y separarlas repetiría el task sin ganar señal.
 - Decisión: `critic-guardrails.sh` aplica el patrón de credenciales solo fuera de `app/src/test` y `app/src/androidTest` (un `TEST_PASSWORD` de fixture no es secreto), y las claves reales (`AIza`, `ghp_`, `AKIA`, llaves privadas) sí se buscan en todo el repo.
 - Decisión: `.semgrep/semgrep.yaml` con dos reglas propias en 0 hallazgos (`fallbackToDestructiveMigration`, `http://` en `app/src/main/java`); el registry corre advisory hasta afinar baseline. `AGENTS.md §5` registra ahora `compileSdk 36` (lo exige `check_sdd.sh`).
 - Decisión: mutación (Pitest) y Dependency-Check quedan **fuera** del workflow: no están en `libs.versions.toml` y añadirlos exige acuerdo (constitución §3). No se simulan para no dar verde falso.
 - A evitar: los scripts en Git sin bit de ejecución → al commitear usar `git add --chmod=+x scripts/*.sh` (y `scripts/check_delta_coverage.py` no necesita bit).
 - Pendiente (primer rojo previsible): cobertura medida **28,16 %** (1104/3920) frente al umbral ≥ 45 % → el paso `coverage` fallará hasta subir pruebas; `lint { warningsAsErrors = true }` no se ejecutó en local. Hace falta push a GitHub para ver el workflow en Actions.
-- D21 (naming `nv-0X` vs `NNN-`) sigue abierto.
+- D21 resuelta el 2026-11-05 (sección siguiente).
+
+## Correcciones del equipo: CI/CD, estructura y pruebas por spec (2026-11-05, noche)
+- Estado: rama `spec/arquitectura` con el trabajo de Diego (`spec/035-ci-cd`, por fast-forward). Specs renombradas a `nv-04…nv-39`, cada una con `spec.md`, `plan.md`, `task.md` y `checklists/gates.md`. CI con gitleaks, OSV, Kover 45 %, emulador y APK. Verificado: `assembleDebug`, `ktlintCheck`, `detekt` (JDK 17), `lintDebug`, `testDebugUnitTest` (138), `koverVerifyDebug`, `assembleDebugAndroidTest` y todos los scripts de puerta. Sin correr: `connectedDebugAndroidTest` (no hay dispositivo) ni el primer run en Actions. Resumen y pendientes en `docs/revision-jorge.md`. Sin aprobaciones firmadas.
+- Decisión: D21 → `specs/NNN-nombre` pasa a `specs/nv-(NNN+4)`. Porqué: constitución §11 y `main`, donde `nv-04` ya es arquitectura. Choca con el `nv-05` de `main` (auth de Diego): resolver al fusionar.
+- Decisión: `check_specs.sh` revisa `nv-04+` con `spec-template.md` (y exige plan, task, gates y revisor); `check_sdd.sh` deja la forma Contexto/Requisitos solo para `nv-00…nv-03`. Porqué: conviven dos formas de spec y la plantilla canónica es la de 7 secciones.
+- Decisión: las pruebas de integración leen las respuestas de `docs/contexto_api_sprint1.md` (`testing/ApiDoc.kt`). Porqué: "respuestas exactas" sin copiar JSON a mano; si cambia el contrato, cambian las pruebas.
+- Decisión: Kover excluye código generado y funciones `@Composable`/`@Preview`: 71,99 %, contra 37,17 % sin esa exclusión. Porqué: Kover mide solo JVM y la UI va en Compose Testing. **A revisar por Jorge.**
+- Decisión: deps-scan con OSV (`scripts/check_deps_osv.py`) y no con el plugin Dependency-Check. Porqué: sin clave NVD, que sería un secreto en CI, y sin descargar la base completa en cada run.
+- Decisión: gitleaks como binario verificado por checksum, no `gitleaks-action`. Porqué: en organizaciones la acción pide una licencia como secreto.
+- Decisión: Room real en `androidTest` contra MockWebServer por HTTPS local (`okhttp-tls`). Porqué: `network_security_config` prohíbe el cleartext también en el dispositivo; no se relaja la config de la app.
+- A evitar: el JWT de ejemplo de la doc trae `…` (U+2026); en una cabecera HTTP OkHttp lo rechaza y la petición no sale (prueba colgada en `takeRequest()`). Normalizar a `...` y poner `Timeout` en las pruebas con MockWebServer.
+- A evitar: AGP 9.0.1 con JDK 25 falla en `compileDebugNavigationResources` ("Could not isolate value"). Usar JDK 17 para todo el build.
+- A evitar: `gradle/gradle-daemon-jvm.properties` (lo genera Android Studio, sin versionar) fuerza el daemon a JDK 25; apartarlo para correr detekt con JDK 17.
+- A evitar: heredocs con comillas simples en el shell de la herramienta y escapes `
+` dentro de Python embebido; escribir el script a un archivo.
+- A recordar: la imagen `android-37.0` del SDK de este equipo está vacía y no hay `sdkmanager`; para pruebas instrumentadas hace falta instalar una imagen desde Android Studio o conectar un teléfono.
+- A recordar: el DNS del equipo falla a ratos (`Host desconocido`); reintentar Gradle antes de tocar nada.
 
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).
-- Nombre del revisor para firmar las specs.
+- Firma de Jorge como revisor en cada spec (`docs/revision-jorge.md`).
+- Exclusión de Composables en Kover y numeración frente a `main`.
 - Dudas de la maqueta frente a la API: `specs/README.md`.
 
 ## Mapa de fases

@@ -26,3 +26,6 @@ captures/
 
 # Maqueta de Figma: referencia local, 50 MB de PNG
 maqueta/
+
+# Python
+__pycache__/

@@ -50,6 +50,7 @@ data class TastesUiState(
         get() = categories.size in TASTES_MIN..TASTES_MAX && !saving
 }
 
+@Suppress("TooManyFunctions") // Un evento de UI por control del formulario de Gustos.
 @HiltViewModel
 class TastesViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -136,6 +137,7 @@ class TastesViewModel @Inject constructor(
     }
 
     /** Tres rutas en orden. Son idempotentes: reintentar tras un fallo no duplica nada. */
+    @Suppress("ReturnCount") // Corta en el primer fallo; cada return es la salida de una ruta.
     private suspend fun save(state: TastesUiState): AppError? {
         val tastes = Tastes(
             categories = state.categories.toList(),

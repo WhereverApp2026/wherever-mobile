@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
-# Verifica que toda spec de producto (specs/NNN-*) tenga la estructura
-# canónica de 7 secciones + Aprobación (constitución §11) y declare en su
-# sección 6 las suites obligatorias Unit, Data (integración) y Security
-# (constitución §7). Sale con SPECS-OK o SPECS-FAIL.
+# Verifica que toda spec de funcionalidad (specs/nv-04 en adelante) tenga la
+# estructura canónica de 7 secciones + Aprobación (constitución §11,
+# .specify/templates/spec-template.md), los cuatro archivos (spec, plan, task,
+# checklists/gates), el revisor nombrado en la Aprobación y en su sección 6 las
+# suites obligatorias Unit, Data (integración) y Security (constitución §7).
+# Las fases nv-00…nv-03 usan otra forma y las revisa check_sdd.sh.
+# Sale con SPECS-OK o SPECS-FAIL.
 set -euo pipefail
 export LC_ALL=C
 
@@ -20,23 +23,37 @@ sections=(
     '^## Aprobaci'
 )
 suites=(Unit Data Security)
+reviewer='^- \[[ x]\] Revisor: [A-Z]'
 
 errors=()
+specs=()
 shopt -s nullglob
-specs=(specs/[0-9][0-9][0-9]-*/spec.md)
+for dir in specs/nv-[0-9][0-9]; do
+    number="${dir##*nv-}"
+    if [ "$((10#$number))" -ge 4 ]; then
+        specs+=("$dir")
+    fi
+done
 shopt -u nullglob
 
 if [ "${#specs[@]}" -eq 0 ]; then
-    printf 'SPECS-FAIL: no hay specs en specs/NNN-*\n' >&2
+    printf 'SPECS-FAIL: no hay specs en specs/nv-04 en adelante\n' >&2
     exit 1
 fi
 
-for spec in "${specs[@]}"; do
-    name="$(basename "$(dirname "$spec")")"
+for dir in "${specs[@]}"; do
+    name="$(basename "$dir")"
+    spec="$dir/spec.md"
+
+    for file in spec.md plan.md task.md checklists/gates.md; do
+        [ -f "$dir/$file" ] || errors+=("$name: falta $file")
+    done
+    [ -f "$spec" ] || continue
 
     for section in "${sections[@]}"; do
         grep -q "$section" "$spec" || errors+=("$name: falta la sección $section")
     done
+    grep -q "$reviewer" "$spec" || errors+=("$name: la Aprobación no nombra al revisor")
 
     start="$(grep -n '^## 6\.' "$spec" | head -n 1 | cut -d: -f1 || true)"
     end="$(grep -n '^## 7\.' "$spec" | head -n 1 | cut -d: -f1 || true)"

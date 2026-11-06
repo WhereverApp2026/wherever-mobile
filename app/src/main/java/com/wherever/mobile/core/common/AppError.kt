@@ -3,7 +3,7 @@ package com.wherever.mobile.core.common
 /** Campo rechazado por la API (`campos[]`). */
 data class FieldError(val field: String, val message: String)
 
-/** Errores uniformes de la app (constitución §4, specs/000-arquitectura §3.3). */
+/** Errores uniformes de la app (constitución §4, specs/nv-04 §3.3). */
 sealed class AppError {
     open val apiMessage: String? = null
     open val traceId: String? = null

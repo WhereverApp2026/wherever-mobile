@@ -76,7 +76,8 @@ android {
         warningsAsErrors = true
         abortOnError = true
         // Avisos de "hay versión nueva": dependen de la fecha, no del código. Las actualiza Dependabot.
-        disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion")
+        // OldTargetApi: targetSdk 36 es decisión del equipo hasta tener SDK 37 en todos los equipos (AGENTS.md §5).
+        disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion", "OldTargetApi")
     }
 }
 
@@ -100,6 +101,39 @@ tasks.withType<Detekt>().configureEach {
 
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
+}
+
+// Cobertura (constitución §7, specs/nv-39 §3.3): `koverVerifyDebug` falla bajo el 45 % de líneas.
+kover {
+    reports {
+        filters {
+            excludes {
+                // Código generado por Hilt, Room, Compose y AGP: no lo escribimos nosotros.
+                classes(
+                    "*_Factory",
+                    "*_Factory\$*",
+                    "*_MembersInjector",
+                    "*_HiltModules*",
+                    "*_GeneratedInjector",
+                    "Hilt_*",
+                    "*.Hilt_*",
+                    "dagger.hilt.*",
+                    "hilt_aggregated_deps.*",
+                    "*_Impl",
+                    "*_Impl\$*",
+                    "*.BuildConfig",
+                    "*ComposableSingletons*"
+                )
+                // Las pantallas Compose se prueban con Compose Testing en `connectedDebugAndroidTest`, no en la JVM.
+                annotatedBy("androidx.compose.runtime.Composable", "androidx.compose.ui.tooling.preview.Preview")
+            }
+        }
+        verify {
+            rule("Cobertura de líneas (constitución §7)") {
+                minBound(45)
+            }
+        }
+    }
 }
 
 dependencies {
@@ -141,4 +175,6 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.okhttp.mockwebserver)
+    androidTestImplementation(libs.okhttp.tls)
 }

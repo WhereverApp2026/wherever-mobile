@@ -16,9 +16,7 @@ class AuthHeaderInterceptor(private val tokenStore: TokenStore) : Interceptor {
         val isPublic = request.tag(Invocation::class.java)?.method()
             ?.isAnnotationPresent(PublicEndpoint::class.java) == true
         val token = if (isPublic) null else runBlocking { tokenStore.current() }?.accessToken
-        val authorized = token?.let {
-            request.newBuilder().header(HEADER_AUTHORIZATION, BEARER_PREFIX + it).build()
-        } ?: request
-        return chain.proceed(authorized)
+        val authorized = token?.let { request.newBuilder().header(HEADER_AUTHORIZATION, BEARER_PREFIX + it).build() }
+        return chain.proceed(authorized ?: request)
     }
 }

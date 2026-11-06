@@ -12,8 +12,9 @@ sealed interface UiText {
 
     data class Plain(val value: String) : UiText
 
-    @Composable
+    // stringResource recibe vararg: el spread es obligatorio y la lista es corta.
     @Suppress("SpreadOperator")
+    @Composable
     fun asString(): String = when (this) {
         is Res -> stringResource(id, *args.toTypedArray())
         is Plain -> value

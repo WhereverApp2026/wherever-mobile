@@ -30,6 +30,12 @@ for phase_dir in specs/nv-*; do
         [ -f "$phase_dir/$file" ] || fail "$phase sin $file"
     done
 
+    # nv-04 en adelante siguen spec-template.md: sus secciones las revisa check_specs.sh.
+    number="${phase##*nv-}"
+    if [ "$((10#$number))" -ge 4 ]; then
+        continue
+    fi
+
     for section in \
         '## Contexto' \
         '## Requisitos' \
