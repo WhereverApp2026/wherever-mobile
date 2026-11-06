@@ -44,19 +44,28 @@ def parse_coordinates(text: str) -> list[tuple[str, str]]:
     return sorted(found)
 
 
+def _checked(url: str) -> str:
+    """Solo la API pública de OSV por HTTPS: nunca file:// ni otro host."""
+    if not url.startswith("https://api.osv.dev/"):
+        raise ValueError(f"URL no permitida: {url}")
+    return url
+
+
 def _post(url: str, payload: dict) -> dict:
     request = urllib.request.Request(
-        url,
+        _checked(url),
         data=json.dumps(payload).encode(),
         headers={"Content-Type": "application/json", "User-Agent": "wherever-ci"},
     )
-    with urllib.request.urlopen(request, timeout=60) as response:  # noqa: S310 (URL fija HTTPS)
+    # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected.dynamic-urllib-use-detected
+    with urllib.request.urlopen(request, timeout=60) as response:  # noqa: S310
         return json.load(response)
 
 
 def _get(url: str) -> dict:
-    request = urllib.request.Request(url, headers={"User-Agent": "wherever-ci"})
-    with urllib.request.urlopen(request, timeout=60) as response:  # noqa: S310 (URL fija HTTPS)
+    request = urllib.request.Request(_checked(url), headers={"User-Agent": "wherever-ci"})
+    # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected.dynamic-urllib-use-detected
+    with urllib.request.urlopen(request, timeout=60) as response:  # noqa: S310
         return json.load(response)
 
 

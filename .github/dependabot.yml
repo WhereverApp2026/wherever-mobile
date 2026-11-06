@@ -5,9 +5,15 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    # Espera 7 días tras cada versión nueva antes de proponerla (versiones recién publicadas = más riesgo).
+    cooldown:
+      default-days: 7
     open-pull-requests-limit: 5
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
+    # Espera 7 días tras cada versión nueva antes de proponerla (versiones recién publicadas = más riesgo).
+    cooldown:
+      default-days: 7
     open-pull-requests-limit: 5

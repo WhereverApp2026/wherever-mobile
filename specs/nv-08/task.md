@@ -12,7 +12,7 @@
 ## T3 — Pruebas (unitarias, integración y seguridad)
 - [x] Unit: `test/.../feature/auth/ui/AuthViewModelsTest.kt` — recuperar tras 202, 429 con `Retry-After`, cuenta atrás de 60 s y reenviar
 - [x] Integración: `test/.../integration/AuthIntegrationTest.kt` — `POST /auth/recuperar` 202 sin cuerpo y 429 con `Retry-After`
-- [x] Seguridad: `test/.../feature/auth/ui/AuthViewModelsTest.kt` — el mensaje no revela si la cuenta existe
+- [x] Seguridad: `test/.../integration/AuthIntegrationTest.kt` — el 202 de la doc no trae datos: la app no puede distinguir si la cuenta existe
 - [x] Seguridad: `test/.../integration/AuthIntegrationTest.kt` — el correo no aparece en logs
 - [x] Seguridad: `test/.../core/common/ValidatorsTest.kt` — correo validado antes de llamar
 - **No hacer**: usar el servidor de staging en las pruebas.

@@ -20,7 +20,7 @@
 - `test/.../integration/AuthIntegrationTest.kt` — `POST /auth/recuperar` 202 sin cuerpo y 429 con `Retry-After`
 
 ### Seguridad (`docs/masvs-checklist.md`)
-- `test/.../feature/auth/ui/AuthViewModelsTest.kt` — el mensaje no revela si la cuenta existe — MASVS AUTH, PRIVACY
+- `test/.../integration/AuthIntegrationTest.kt` — el 202 de la doc no trae datos: la app no puede distinguir si la cuenta existe — MASVS AUTH, PRIVACY
 - `test/.../integration/AuthIntegrationTest.kt` — el correo no aparece en logs — MASVS STORAGE
 - `test/.../core/common/ValidatorsTest.kt` — correo validado antes de llamar — MASVS CODE
 

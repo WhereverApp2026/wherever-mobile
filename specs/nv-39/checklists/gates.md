@@ -6,8 +6,8 @@
 - [x] `./gradlew assembleDebug` sin errores; paso de artefacto `wherever-debug-apk`
 - [x] `ktlintCheck`, `detekt` (JDK 17) y `lintDebug` sin errores
 - [x] Unit + Data (MockWebServer) + Security: `testDebugUnitTest` verde
-- [ ] UI + Data instrumentada (Room real): `connectedDebugAndroidTest` (ver `docs/revision-jorge.md`)
-- [x] Kover: `koverVerifyDebug` con `minBound(45)` y `check_coverage.sh --min 45 → COVERAGE-OK`
+- [ ] UI + Data instrumentada (Room real): `connectedDebugAndroidTest` compila (`assembleDebugAndroidTest`); sin correr en local: no hay emulador ni teléfono (ver `docs/revision-jorge.md`)
+- [x] Kover: `koverVerifyDebug` con `minBound(45)` y `check_coverage.sh --min 45 → COVERAGE-OK` (71,99 %; 37,17 % sin excluir `@Composable`, ver spec §2.5)
 - [x] Delta advisory informa sin bloquear
 - [x] Security · secretos: `gitleaks git . --config .gitleaks.toml --redact → no leaks found`; sin `secrets.*` en el workflow
 - [x] Security · dependencias: `check_deps_osv.py` → `DEPS-OK` (detecta log4j 2.14.1 con entrada sintética)
