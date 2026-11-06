@@ -13,6 +13,7 @@ sealed interface UiText {
     data class Plain(val value: String) : UiText
 
     @Composable
+    @Suppress("SpreadOperator")
     fun asString(): String = when (this) {
         is Res -> stringResource(id, *args.toTypedArray())
         is Plain -> value

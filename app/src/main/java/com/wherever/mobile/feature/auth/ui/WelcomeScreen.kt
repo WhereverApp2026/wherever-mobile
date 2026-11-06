@@ -1,3 +1,5 @@
+@file:Suppress("MagicNumber")
+
 package com.wherever.mobile.feature.auth.ui
 
 import androidx.compose.foundation.Canvas

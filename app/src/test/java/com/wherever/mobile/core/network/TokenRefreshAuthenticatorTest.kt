@@ -118,17 +118,17 @@ class TokenRefreshAuthenticatorTest {
         val refreshCalls = AtomicInteger()
         val bothArrived = CountDownLatch(2)
         server.dispatcher = object : Dispatcher() {
-            override fun dispatch(request: RecordedRequest): MockResponse {
-                if (request.url.encodedPath.endsWith("auth/refresh")) {
+            override fun dispatch(request: RecordedRequest): MockResponse = when {
+                request.url.encodedPath.endsWith("auth/refresh") -> {
                     refreshCalls.incrementAndGet()
-                    return MockResponse.Builder().code(200).body(refreshed).build()
+                    MockResponse.Builder().code(200).body(refreshed).build()
                 }
-                if (request.headers["Authorization"] == "Bearer viejo") {
+                request.headers["Authorization"] == "Bearer viejo" -> {
                     bothArrived.countDown()
                     bothArrived.await()
-                    return MockResponse.Builder().code(401).build()
+                    MockResponse.Builder().code(401).build()
                 }
-                return MockResponse.Builder().code(200).build()
+                else -> MockResponse.Builder().code(200).build()
             }
         }
         val pool = Executors.newFixedThreadPool(2)

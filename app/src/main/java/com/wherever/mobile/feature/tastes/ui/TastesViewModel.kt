@@ -144,14 +144,13 @@ class TastesViewModel @Inject constructor(
             restrictions = state.restrictions.toList(),
             allergies = if (state.allergiesEnabled) state.allergies.trim() else ""
         )
-        (profileRepository.updateTastes(tastes) as? Result.Failure)?.let { return it.error }
-        state.mobility?.let { mobility ->
-            (profileRepository.updatePreferences(PreferencesPatch(mobility = mobility)) as? Result.Failure)
-                ?.let { return it.error }
+        val tasteError = (profileRepository.updateTastes(tastes) as? Result.Failure)?.error
+        val prefsError = tasteError ?: state.mobility?.let { mobility ->
+            (profileRepository.updatePreferences(PreferencesPatch(mobility = mobility)) as? Result.Failure)?.error
         }
-        state.city.selectedId?.let { cityId ->
-            (profileRepository.updateProfile(cityId = cityId) as? Result.Failure)?.let { return it.error }
+        val cityError = prefsError ?: state.city.selectedId?.let { cityId ->
+            (profileRepository.updateProfile(cityId = cityId) as? Result.Failure)?.error
         }
-        return null
+        return cityError
     }
 }

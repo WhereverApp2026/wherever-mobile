@@ -27,15 +27,16 @@ class TokenRefreshAuthenticator(
 
     override fun authenticate(route: Route?, response: Response): Request? {
         if (response.priorResponse != null) return null
-        val sent = response.request.header(HEADER_AUTHORIZATION)?.removePrefix(BEARER_PREFIX) ?: return null
-        val fresh = synchronized(lock) { freshAccessToken(sent) } ?: return null
-        return response.request.newBuilder().header(HEADER_AUTHORIZATION, BEARER_PREFIX + fresh).build()
+        val sent = response.request.header(HEADER_AUTHORIZATION)?.removePrefix(BEARER_PREFIX)
+        val fresh = sent?.let { synchronized(lock) { freshAccessToken(it) } }
+        return fresh?.let {
+            response.request.newBuilder().header(HEADER_AUTHORIZATION, BEARER_PREFIX + it).build()
+        }
     }
 
     private fun freshAccessToken(sent: String): String? {
         val current = runBlocking { tokenStore.current() } ?: return null
-        if (current.accessToken != sent) return current.accessToken
-        return refresh(current)
+        return if (current.accessToken != sent) current.accessToken else refresh(current)
     }
 
     private fun refresh(current: SessionTokens): String? {
