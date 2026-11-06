@@ -68,7 +68,7 @@ Traslada a CI lo que `nv-03` dejó escrito pero no ejecutable: los scripts de pu
 ### 2.5 Dudas abiertas
 
 - **[Decisión propuesta] Cobertura, a revisar.** Medido el 2026-11-05 tras las pruebas nuevas: **71,99 %** (1113/1546) excluyendo código generado y funciones `@Composable`/`@Preview`; **37,17 %** (1113/2994) excluyendo solo código generado. Antes de las pruebas nuevas, Diego midió 28,16 % (1104/3920) sin exclusiones. Porqué de la exclusión: Kover solo mide pruebas JVM y las pantallas se prueban con Compose Testing en el paso `ui`. Si el revisor no la acepta, `koverVerifyDebug` falla hasta escribir pruebas de UI o subir las de JVM; el umbral de 45 % no se rebaja.
-- Semgrep registry (advisory) informa: acciones con etiqueta mutable (`@v4`, no fijadas por SHA), la actividad launcher exportada (necesaria), AES-GCM en `KeystoreTokenCipher` (correcto: IV aleatorio de Keystore) y `xml.etree` en `check_delta_coverage.py` (lee un XML local de Kover).
+- Semgrep registry (advisory) informa: acciones con etiqueta mutable (corregido: fijadas por SHA con la versión en comentario), la actividad launcher exportada (necesaria), AES-GCM en `KeystoreTokenCipher` (correcto: IV aleatorio de Keystore) y `xml.etree` en `check_delta_coverage.py` (lee un XML local de Kover).
 - El paso `ui` corre en API 35; los teléfonos de prueba usan Android 16. Subir la imagen cuando el runner la tenga en caché.
 - Un push a la rama de un PR abierto corre el workflow dos veces (evento `push` y `pull_request`). Se acepta por el pedido "en cada push y PR".
 
