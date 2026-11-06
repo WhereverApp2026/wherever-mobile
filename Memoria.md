@@ -67,7 +67,7 @@
 - Decisión: `.semgrep/semgrep.yaml` con dos reglas propias en 0 hallazgos (`fallbackToDestructiveMigration`, `http://` en `app/src/main/java`); el registry corre advisory hasta afinar baseline. `AGENTS.md §5` registra ahora `compileSdk 36` (lo exige `check_sdd.sh`).
 - Decisión: mutación (Pitest) y Dependency-Check quedan **fuera** del workflow: no están en `libs.versions.toml` y añadirlos exige acuerdo (constitución §3). No se simulan para no dar verde falso.
 - A evitar: los scripts en Git sin bit de ejecución → al commitear usar `git add --chmod=+x scripts/*.sh` (y `scripts/check_delta_coverage.py` no necesita bit).
-- Pendiente (primer rojo previsible): cobertura medida **28,16 %** (1104/3920) frente al umbral ≥ 45 % → el paso `coverage` fallará hasta subir pruebas; `lint { warningsAsErrors = true }` no se ejecutó en local. Hace falta push a GitHub para ver el workflow en Actions.
+- Pendiente (primer rojo previsible): cobertura medida **28,16 %** (1104/3920) frente al umbral ≥ 45 % → el paso `coverage` fallará hasta subir pruebas; `lint { warningsAsErrors = true }` no se ejecutó en local. Hace falta push a GitHub para ver el workflow en Actions. **Resuelto 2026-11-06:** las pruebas nuevas + exclusión de Composables → `coverage` en verde.
 - D21 resuelta el 2026-11-05 (sección siguiente).
 
 ## Correcciones del equipo: CI/CD, estructura y pruebas por spec (2026-11-05, noche)
@@ -86,6 +86,15 @@
 ` dentro de Python embebido; escribir el script a un archivo.
 - A recordar: la imagen `android-37.0` del SDK de este equipo está vacía y no hay `sdkmanager`; para pruebas instrumentadas hace falta instalar una imagen desde Android Studio o conectar un teléfono.
 - A recordar: el DNS del equipo falla a ratos (`Host desconocido`); reintentar Gradle antes de tocar nada.
+
+## CI en verde de punta a punta (2026-11-06)
+- Estado: corrida #5 de `eaf3fdb` → **success en 7 min 42 s**, los 23 pasos (lint, unit/data/security, gitleaks, KVM + emulador, critic/routes/strings/specs/sdd, coverage 45 %, delta, semgrep, OSV, APK). La suite UI por fin corrió: el runner da `/dev/kvm` porque el repo pasó a **público**. Sin corridas pendientes.
+- Estado: `spec/arquitectura` (7 commits de Jorge: specs `nv-XX`, gitleaks/OSV, `fix(calidad)` con JDK 17, 6 suites nuevas, `docs/revision-jorge.md`) bajado a `spec/035-ci-cd` en `eaf3fdb`. Conflictos resueltos: `ci-pr.yml` (su 23 pasos + `emulator-boot-timeout: 900`), `AuthHeaderInterceptor`, `ProfileScreen` y `detekt.yml` (su lado, ya validado en su corrida), y un `@Suppress("SpreadOperator")` duplicado en `UiText.kt` que dejó el merge (habría sido error de compilación).
+- Decisión: `UiText.asString` conserva un solo `@Suppress("SpreadOperator")`. Porqué: apilar dos `@Suppress` sobre la misma declaración no es repeatable en Kotlin.
+- Decisión: el aviso de credenciales del commit público queda anulado; se confirmó con la usuaria. La URL de staging en `gradle.properties` queda visible con el repo público.
+- A evitar: leer un log viejo de Actions y corregir código que ya está corregido; antes de diagnosticar, mirar el SHA de la corrida (`f89d225` frente a `43cfedf` costó un ciclo de ida y vuelta).
+- A evitar: timeout del emulador con 900 s = sin aceleración; sin `/dev/kvm` el paso `ui` nunca pasa en el runner estándar de un repo privado.
+- Pendiente: el PR #3 (`spec/035-ci-cd`) tiene base `main` y sale `mergeable: dirty` (27 commits, 304 archivos); cambiar la base a `spec/arquitectura` o decidir cómo se retoma `main` (ver sección siguiente).
 
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
