@@ -1,9 +1,10 @@
 name: ci-pr
 
+# Spec: specs/035-ci-cd. Sin CD ni publicación (constitución §1 y §8).
+# Sin secretos: solo usa el GITHUB_TOKEN de solo lectura que da Actions.
 on:
-  pull_request:
   push:
-    branches: [main]
+  pull_request:
 
 permissions:
   contents: read
@@ -12,26 +13,30 @@ concurrency:
   group: ci-pr-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  GITLEAKS_VERSION: "8.28.0"
+
 jobs:
-  ci:
-    # Orden de constitución §8: deps → build → lint → tests → ui → critic →
-    # routes → sdd → coverage → delta-check → mutation → semgrep → deps-scan.
-    # mutation (Pitest) y deps-scan (Dependency-Check) no están configurados
-    # en este proyecto: ver specs/035-ci-cd/spec.md §2 (no-alcance).
+  gates:
+    # Orden de constitución §8: deps → build → lint → unit → data → security →
+    # ui → critic → routes → sdd → coverage → delta-check → mutation → semgrep →
+    # deps-scan. mutation (Pitest) no está configurado: specs/035-ci-cd §2.6.
     name: gates (constitución §8)
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          # Historia completa: la necesitan gitleaks y el delta de cobertura.
           fetch-depth: 0
 
-      - name: Java 21
+      # JDK 17 para todo el build: detekt 1.23 no corre sobre JDK > 22.
+      - name: Java 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "21"
+          java-version: "17"
 
       # Sin android-actions/setup-android: el runner ya trae el SDK en
       # $ANDROID_HOME y esa acción falla pidiendo el paquete `tools`.
@@ -50,16 +55,40 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: deps
-        run: ./gradlew :app:dependencies --configuration debugRuntimeClasspath
+        run: |
+          mkdir -p build
+          ./gradlew :app:dependencies --configuration debugRuntimeClasspath | tee build/deps.txt
 
       - name: build
         run: ./gradlew assembleDebug
 
+      - name: APK de debug
+        uses: actions/upload-artifact@v4
+        with:
+          name: wherever-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 14
+
+      # Android Lint incluye la categoría Security (AllowBackup, cleartext,
+      # TrustAllX509TrustManager, HardcodedDebugMode…) con advertencias como error.
       - name: lint
         run: ./gradlew ktlintCheck detekt lintDebug
 
-      - name: "unit · data · security · arquitectura"
+      # Unit, Data (MockWebServer), Security (manifiesto, red, tokens) y
+      # Arquitectura viven en el mismo source set: specs/035-ci-cd §2.2.
+      - name: "unit · data · security"
         run: ./gradlew testDebugUnitTest
+
+      - name: "security · secretos (gitleaks)"
+        run: |
+          base="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}"
+          tarball="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          curl -sSfL -o "/tmp/$tarball" "$base/$tarball"
+          curl -sSfL -o /tmp/gitleaks_checksums.txt "$base/gitleaks_${GITLEAKS_VERSION}_checksums.txt"
+          (cd /tmp && grep " $tarball\$" gitleaks_checksums.txt | sha256sum -c -)
+          tar -xzf "/tmp/$tarball" -C /tmp gitleaks
+          /tmp/gitleaks git . --config .gitleaks.toml --redact --no-banner --exit-code 1
 
       - name: KVM
         run: |
@@ -67,12 +96,15 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: ui
+      # UI y Room real (instrumentadas). Sin servidor de staging: MockWebServer.
+      - name: "ui · data instrumentada"
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35
           arch: x86_64
+          target: google_apis
           disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: ./gradlew connectedDebugAndroidTest
 
       - name: critic
@@ -90,10 +122,14 @@ jobs:
       - name: sdd
         run: bash scripts/check_sdd.sh
 
+      # Umbral en app/build.gradle.kts (kover.reports.verify, 45 %).
       - name: coverage
-        run: bash scripts/check_coverage.sh --min 45
+        run: |
+          ./gradlew koverXmlReportDebug koverVerifyDebug
+          bash scripts/check_coverage.sh --min 45
 
       - name: delta-check (advisory)
+        continue-on-error: true
         run: python3 scripts/check_delta_coverage.py --min 80 --advisory
 
       - name: semgrep (reglas propias)
@@ -105,12 +141,21 @@ jobs:
         continue-on-error: true
         run: semgrep scan --config=auto --error
 
+      # Informativo (constitución §6): base pública OSV, sin clave.
+      - name: "deps-scan (OSV, advisory)"
+        continue-on-error: true
+        run: python3 scripts/check_deps_osv.py build/deps.txt --advisory | tee -a "$GITHUB_STEP_SUMMARY"
+
       - name: Reports
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: reports
           path: |
             app/build/reports/
+            app/build/test-results/
+            app/build/outputs/androidTest-results/
             build/reports/
+            build/deps.txt
           if-no-files-found: ignore
+          retention-days: 14
