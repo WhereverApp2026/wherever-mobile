@@ -1,4 +1,4 @@
-# Gitleaks (specs/035-ci-cd §5). Reglas por defecto + excepciones mínimas.
+# Gitleaks (specs/nv-39 §5). Reglas por defecto + excepciones mínimas.
 [extend]
 useDefault = true
 

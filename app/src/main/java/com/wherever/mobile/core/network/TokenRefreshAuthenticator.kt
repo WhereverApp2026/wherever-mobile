@@ -16,7 +16,7 @@ private const val HTTP_UNPROCESSABLE = 422
  * Ante un 401 renueva una sola vez y repite la petición.
  *
  * La API rota el refresh y reusar uno viejo cierra todas las sesiones, así que el lock es obligatorio:
- * quien espera compara su token con el actual y reutiliza el nuevo. Ver specs/000-arquitectura §3.2.
+ * quien espera compara su token con el actual y reutiliza el nuevo. Ver specs/nv-04 §3.2.
  */
 class TokenRefreshAuthenticator(
     private val tokenStore: TokenStore,

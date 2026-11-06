@@ -7,42 +7,42 @@
 | Spec | Tema | Sprint 1 | Frames |
 |---|---|---|---|
 | [`nv-00…nv-03`](nv-00/spec.md) | Constitución, foundation, molde y puerta de calidad | Base | — |
-| [`000-arquitectura`](000-arquitectura/spec.md) | Capas, red, tokens, DI, paquetes | Base | — |
-| [`001-flujo-general`](001-flujo-general/spec.md) | Mapa de navegación, flujos de usuario y negocio | — | Todos |
-| [`002-splash-arranque`](002-splash-arranque/spec.md) | Splash y bienvenida | Sí | 1 |
-| [`003-login`](003-login/spec.md) | Iniciar sesión | Sí | 1 |
-| [`004-recuperar-contrasena`](004-recuperar-contrasena/spec.md) | Recuperar contraseña | Sí | 3 |
-| [`005-registro`](005-registro/spec.md) | Registro con correo | Sí | 1 |
-| [`006-onboarding-gustos`](006-onboarding-gustos/spec.md) | Onboarding de gustos | Sí | 1 |
-| [`007-permisos`](007-permisos/spec.md) | Permisos en contexto | — | 2 |
-| [`008-sesion-tokens`](008-sesion-tokens/spec.md) | Sesión y tokens | Sí | 0 |
-| [`009-ajustes-cerrar-sesion`](009-ajustes-cerrar-sesion/spec.md) | Ajustes y cerrar sesión | Sí | 1 |
-| [`010-perfil`](010-perfil/spec.md) | Perfil, edición e insignias | Sí | 4 |
-| [`011-privacidad-datos`](011-privacidad-datos/spec.md) | Privacidad, mis datos y eliminar cuenta | Sí | 2 |
-| [`012-sin-conexion`](012-sin-conexion/spec.md) | Sin conexión | Sí | 1 |
-| [`013-inicio-feed`](013-inicio-feed/spec.md) | Inicio y feed | — | 15 |
-| [`014-notificaciones`](014-notificaciones/spec.md) | Notificaciones | — | 4 |
-| [`015-busqueda`](015-busqueda/spec.md) | Búsqueda | — | 4 |
-| [`016-amigos`](016-amigos/spec.md) | Amigos | — | 15 |
-| [`017-explorar-lugares`](017-explorar-lugares/spec.md) | Explorar y lugares | — | 8 |
-| [`018-favoritos`](018-favoritos/spec.md) | Favoritos | — | 2 |
-| [`019-crear-plan-ia`](019-crear-plan-ia/spec.md) | Crear plan con IA | — | 6 |
-| [`020-plan-detalle-edicion`](020-plan-detalle-edicion/spec.md) | Plan: detalle y edición | — | 5 |
-| [`021-grupos-chat`](021-grupos-chat/spec.md) | Compartir, grupos y chats | — | 12 |
-| [`022-vaca-gastos`](022-vaca-gastos/spec.md) | Vaca virtual y gastos | — | 4 |
-| [`023-reserva-pago`](023-reserva-pago/spec.md) | Reserva y pago | — | 10 |
-| [`024-mis-planes`](024-mis-planes/spec.md) | Mis planes | — | 2 |
-| [`025-cupones`](025-cupones/spec.md) | Cupones | — | 5 |
-| [`026-dia-del-plan`](026-dia-del-plan/spec.md) | El día del plan | — | 5 |
-| [`027-recuerdos-postales`](027-recuerdos-postales/spec.md) | Recuerdos y postales | — | 13 |
-| [`028-resenas`](028-resenas/spec.md) | Reseñas | — | 8 |
-| [`029-ayuda`](029-ayuda/spec.md) | Ayuda | — | 1 |
-| [`030-negocio-registro`](030-negocio-registro/spec.md) | Negocio: registro | — | 6 |
-| [`031-negocio-panel-reservas`](031-negocio-panel-reservas/spec.md) | Negocio: panel, reservas y check-in | — | 8 |
-| [`032-negocio-resenas`](032-negocio-resenas/spec.md) | Negocio: reseñas y momentos | — | 3 |
-| [`033-negocio-cupones-horas`](033-negocio-cupones-horas/spec.md) | Negocio: cupones y cupo | — | 3 |
-| [`034-negocio-perfil-cobros`](034-negocio-perfil-cobros/spec.md) | Negocio: perfil, fotos y cobros | — | 6 |
-| [`035-ci-cd`](035-ci-cd/spec.md) | CI/CD: gates del pull request | — | — |
+| [`nv-04`](nv-04/spec.md) | Capas, red, tokens, DI, paquetes | Base | — |
+| [`nv-05`](nv-05/spec.md) | Mapa de navegación, flujos de usuario y negocio | — | Todos |
+| [`nv-06`](nv-06/spec.md) | Splash y bienvenida | Sí | 1 |
+| [`nv-07`](nv-07/spec.md) | Iniciar sesión | Sí | 1 |
+| [`nv-08`](nv-08/spec.md) | Recuperar contraseña | Sí | 3 |
+| [`nv-09`](nv-09/spec.md) | Registro con correo | Sí | 1 |
+| [`nv-10`](nv-10/spec.md) | Onboarding de gustos | Sí | 1 |
+| [`nv-11`](nv-11/spec.md) | Permisos en contexto | — | 2 |
+| [`nv-12`](nv-12/spec.md) | Sesión y tokens | Sí | 0 |
+| [`nv-13`](nv-13/spec.md) | Ajustes y cerrar sesión | Sí | 1 |
+| [`nv-14`](nv-14/spec.md) | Perfil, edición e insignias | Sí | 4 |
+| [`nv-15`](nv-15/spec.md) | Privacidad, mis datos y eliminar cuenta | Sí | 2 |
+| [`nv-16`](nv-16/spec.md) | Sin conexión | Sí | 1 |
+| [`nv-17`](nv-17/spec.md) | Inicio y feed | — | 15 |
+| [`nv-18`](nv-18/spec.md) | Notificaciones | — | 4 |
+| [`nv-19`](nv-19/spec.md) | Búsqueda | — | 4 |
+| [`nv-20`](nv-20/spec.md) | Amigos | — | 15 |
+| [`nv-21`](nv-21/spec.md) | Explorar y lugares | — | 8 |
+| [`nv-22`](nv-22/spec.md) | Favoritos | — | 2 |
+| [`nv-23`](nv-23/spec.md) | Crear plan con IA | — | 6 |
+| [`nv-24`](nv-24/spec.md) | Plan: detalle y edición | — | 5 |
+| [`nv-25`](nv-25/spec.md) | Compartir, grupos y chats | — | 12 |
+| [`nv-26`](nv-26/spec.md) | Vaca virtual y gastos | — | 4 |
+| [`nv-27`](nv-27/spec.md) | Reserva y pago | — | 10 |
+| [`nv-28`](nv-28/spec.md) | Mis planes | — | 2 |
+| [`nv-29`](nv-29/spec.md) | Cupones | — | 5 |
+| [`nv-30`](nv-30/spec.md) | El día del plan | — | 5 |
+| [`nv-31`](nv-31/spec.md) | Recuerdos y postales | — | 13 |
+| [`nv-32`](nv-32/spec.md) | Reseñas | — | 8 |
+| [`nv-33`](nv-33/spec.md) | Ayuda | — | 1 |
+| [`nv-34`](nv-34/spec.md) | Negocio: registro | — | 6 |
+| [`nv-35`](nv-35/spec.md) | Negocio: panel, reservas y check-in | — | 8 |
+| [`nv-36`](nv-36/spec.md) | Negocio: reseñas y momentos | — | 3 |
+| [`nv-37`](nv-37/spec.md) | Negocio: cupones y cupo | — | 3 |
+| [`nv-38`](nv-38/spec.md) | Negocio: perfil, fotos y cobros | — | 6 |
+| [`nv-39`](nv-39/spec.md) | CI/CD: gates del pull request | — | — |
 
 Inventario: **162 frames** de pantalla, que son 135 pantallas distintas al agrupar variantes, y 36 anotaciones `label · …` que no son pantallas.
 
@@ -52,23 +52,23 @@ Implementadas el 2026-11-04 y probadas ese día contra staging, con una cuenta d
 
 | Pantalla | Frame | Spec | Endpoints | Estado |
 |---|---|---|---|---|
-| Bienvenida y arranque | `01_Bienvenida` | 002 | `GET /usuarios/yo` (si hay sesión) | ✅ |
-| Iniciar sesión | `03_Login` | 003 | `POST /auth/login`, `GET /usuarios/yo` | ✅ |
-| Registro | `05_Registro` | 005 | `GET /usuarios/correo-disponible`, `POST /usuarios`, `GET /usuarios/yo` | ✅ |
-| Recuperar contraseña | `03_Recuperar` | 004 | `POST /auth/recuperar` | ✅ |
-| Revisa tu correo | `04_RevisaCorreo` | 004 | `POST /auth/recuperar`, `POST /auth/reenviar-verificacion` | ✅ |
-| Gustos | `06_Gustos` | 006 | `PUT /usuarios/yo/gustos`, `PATCH /usuarios/yo/preferencias`, `PATCH /usuarios/yo`, `GET /ciudades/autocompletar` | ✅ |
-| Perfil | `81_Perfil` | 010 | `GET /usuarios/yo` | ✅ |
-| Editar perfil | `82_EditarPerfil`, `84_DatosPers` | 010 | `PATCH /usuarios/yo` con `If-Match`, `GET /ciudades/autocompletar` | ✅ |
-| Ajustes | `85_Ajustes` | 009 | `PATCH /usuarios/yo/preferencias`, `PATCH /usuarios/yo/privacidad`, `POST /auth/logout` | ✅ |
-| Sesiones abiertas | Sin frame | 009 | `GET /auth/sesiones`, `DELETE /auth/sesiones/{id}`, `POST /auth/logout-todos` | ✅ |
-| Privacidad | `28_PrivSocial` | 011 | `PATCH /usuarios/yo/privacidad` | ✅ |
-| Eliminar cuenta | `EliminarCuenta` | 011 | `DELETE /usuarios/yo` | ✅ |
-| Eliminación pendiente | Sin frame | 011 | `POST /usuarios/yo/cancelar-eliminacion`, `POST /auth/logout` | ✅ |
-| Inicio provisional | Parte de `10_Inicio` | 013 | Lee el perfil de Room | Provisional |
-| Sesión y tokens | Sin pantalla | 008 | `POST /auth/refresh` | ✅ |
+| Bienvenida y arranque | `01_Bienvenida` | nv-06 | `GET /usuarios/yo` (si hay sesión) | ✅ |
+| Iniciar sesión | `03_Login` | nv-07 | `POST /auth/login`, `GET /usuarios/yo` | ✅ |
+| Registro | `05_Registro` | nv-09 | `GET /usuarios/correo-disponible`, `POST /usuarios`, `GET /usuarios/yo` | ✅ |
+| Recuperar contraseña | `03_Recuperar` | nv-08 | `POST /auth/recuperar` | ✅ |
+| Revisa tu correo | `04_RevisaCorreo` | nv-08 | `POST /auth/recuperar`, `POST /auth/reenviar-verificacion` | ✅ |
+| Gustos | `06_Gustos` | nv-10 | `PUT /usuarios/yo/gustos`, `PATCH /usuarios/yo/preferencias`, `PATCH /usuarios/yo`, `GET /ciudades/autocompletar` | ✅ |
+| Perfil | `81_Perfil` | nv-14 | `GET /usuarios/yo` | ✅ |
+| Editar perfil | `82_EditarPerfil`, `84_DatosPers` | nv-14 | `PATCH /usuarios/yo` con `If-Match`, `GET /ciudades/autocompletar` | ✅ |
+| Ajustes | `85_Ajustes` | nv-13 | `PATCH /usuarios/yo/preferencias`, `PATCH /usuarios/yo/privacidad`, `POST /auth/logout` | ✅ |
+| Sesiones abiertas | Sin frame | nv-13 | `GET /auth/sesiones`, `DELETE /auth/sesiones/{id}`, `POST /auth/logout-todos` | ✅ |
+| Privacidad | `28_PrivSocial` | nv-15 | `PATCH /usuarios/yo/privacidad` | ✅ |
+| Eliminar cuenta | `EliminarCuenta` | nv-15 | `DELETE /usuarios/yo` | ✅ |
+| Eliminación pendiente | Sin frame | nv-15 | `POST /usuarios/yo/cancelar-eliminacion`, `POST /auth/logout` | ✅ |
+| Inicio provisional | Parte de `10_Inicio` | nv-17 | Lee el perfil de Room | Provisional |
+| Sesión y tokens | Sin pantalla | nv-12 | `POST /auth/refresh` | ✅ |
 
-Pendiente del Sprint 1: `NuevaContrasena` y verificar correo por enlace (D11), Sin conexión (012), Descargar datos y Borrar historial (D35).
+Pendiente del Sprint 1: `NuevaContrasena` y verificar correo por enlace (D11), Sin conexión (nv-16), Descargar datos y Borrar historial (D35).
 
 ## Pantalla → endpoints
 
@@ -76,143 +76,143 @@ Pendiente del Sprint 1: `NuevaContrasena` y verificar correo por enlace (D11), S
 
 | Frame | Spec | Endpoints |
 |---|---|---|
-| `01_Bienvenida` | 002 | `GET /usuarios/yo` |
-| `03_Login` | 003 | `POST /auth/login` |
-| `03_Recuperar` | 004 | `POST /auth/recuperar` |
-| `04_RevisaCorreo` | 004 | `POST /auth/recuperar` |
-| `NuevaContrasena` | 004 | `POST /auth/restablecer` |
-| `05_Registro` | 005 | `GET /usuarios/correo-disponible`<br>`POST /usuarios`<br>`GET /ciudades/autocompletar` |
-| `06_Gustos` | 006 | `PUT /usuarios/yo/gustos`<br>`PATCH /usuarios/yo/preferencias`<br>`GET /ciudades/autocompletar`<br>`PATCH /usuarios/yo` |
-| `08_Permisos` | 007 | `PATCH /usuarios/yo/privacidad` |
-| `06_PermisoSys` | 007 | Pendiente de backend |
-| `85_Ajustes` | 009 | `POST /auth/logout`<br>`PATCH /usuarios/yo/preferencias`<br>`PATCH /usuarios/yo/privacidad`<br>`PATCH /usuarios/yo`<br>`GET /ciudades/autocompletar` |
-| `81_Perfil` | 010 | `GET /usuarios/yo`<br>Parte pendiente de backend |
-| `82_EditarPerfil` | 010 | `PATCH /usuarios/yo`<br>Parte pendiente de backend |
-| `83_Insignias` | 010 | `GET /usuarios/yo`<br>Parte pendiente de backend |
-| `84_DatosPers` | 010 | `PATCH /usuarios/yo`<br>`PUT /usuarios/yo/correo`<br>`PUT /usuarios/yo/telefono`<br>`GET /ciudades/autocompletar`<br>Parte pendiente de backend |
-| `28_PrivSocial` | 011 | `PATCH /usuarios/yo/privacidad`<br>`POST /usuarios/yo/exportar`<br>`DELETE /usuarios/yo/historial`<br>Parte pendiente de backend |
-| `EliminarCuenta` | 011 | `DELETE /usuarios/yo`<br>`POST /usuarios/yo/cancelar-eliminacion`<br>Parte pendiente de backend |
-| `89_SinConexion` | 012 | `GET /health` |
-| `10_Inicio` | 013 | Pendiente de backend |
-| `11_InicioAmigos` | 013 | Pendiente de backend |
-| `12_InicioMas` | 013 | Pendiente de backend |
-| `InicioMas · solicitud enviada` | 013 | Pendiente de backend |
-| `13_Reacciones` | 013 | Pendiente de backend |
-| `Reacciones · solicitud enviada` | 013 | Pendiente de backend |
-| `14_MeApunto` | 013 | Pendiente de backend |
-| `15_Crear` | 013 | Pendiente de backend |
-| `16_Historia` | 013 | Pendiente de backend |
-| `Historia · *` | 013 | Pendiente de backend |
-| `17_PostDetalle` | 013 | Pendiente de backend |
-| `29_PlanAmigo` | 013 | Pendiente de backend |
-| `PlanAmigo · *` | 013 | Pendiente de backend |
-| `18_Notif` | 014 | Pendiente de backend |
-| `Notif · solicitud aceptada` | 014 | Pendiente de backend |
-| `87_PushBloqueo` | 014 | Pendiente de backend |
-| `88_PushBanner` | 014 | Pendiente de backend |
-| `19_Buscar` | 015 | Pendiente de backend |
-| `20_BuscarPersonas` | 015 | Pendiente de backend |
-| `BuscarPersonas · solicitud enviada` | 015 | Pendiente de backend |
-| `21_SinResultados` | 015 | Pendiente de backend |
-| `07_EncuentraAmigos` | 016 | Pendiente de backend |
-| `EncuentraAmigos · solicitud enviada` | 016 | Pendiente de backend |
-| `22_AmigosLista` | 016 | Pendiente de backend |
-| `23_AmigosSolic` | 016 | Pendiente de backend |
-| `24_AgregarAmigo` | 016 | Pendiente de backend |
-| `AgregarAmigo · solicitud enviada` | 016 | Pendiente de backend |
-| `25_MiCodigo` | 016 | `GET /usuarios/yo`<br>Parte pendiente de backend |
-| `26_PerfilAmigo` | 016 | Pendiente de backend |
-| `PerfilAmigo · *` | 016 | Pendiente de backend |
-| `27_AmigoOpc` | 016 | Pendiente de backend |
-| `30_Explorar` | 017 | Pendiente de backend |
-| `31_Filtros` | 017 | Pendiente de backend |
-| `32_ExpMapa` | 017 | Pendiente de backend |
-| `33_Detalle` | 017 | Pendiente de backend |
-| `Detalle · *` | 017 | Pendiente de backend |
-| `34_Sello` | 017 | Pendiente de backend |
-| `35_Favoritos` | 018 | Pendiente de backend |
-| `36_FavVacio` | 018 | Pendiente de backend |
-| `IAPalabra` | 019 | Pendiente de backend |
-| `17_AjustaPlan` | 019 | Pendiente de backend |
-| `Generando *` | 019 | Pendiente de backend |
-| `39_Plan` | 020 | Pendiente de backend |
-| `Plan · *` | 020 | Pendiente de backend |
-| `40_Cambiar` | 020 | Pendiente de backend |
-| `41_AgregarParada` | 020 | Pendiente de backend |
-| `CrearPlan` | 020 | Pendiente de backend |
-| `42_Compartir` | 021 | Pendiente de backend |
-| `43_CrearGrupo` | 021 | Pendiente de backend |
-| `44_MisGrupos` | 021 | Pendiente de backend |
-| `45_GrupoChat` | 021 | Pendiente de backend |
-| `GrupoChat · *` | 021 | Pendiente de backend |
-| `46_Grupo` | 021 | Pendiente de backend |
-| `47_PuntoMedio` | 021 | Pendiente de backend |
-| `48_Votar` | 021 | Pendiente de backend |
-| `ChatAmigo` | 021 | Pendiente de backend |
-| `ChatAmigo · *` | 021 | Pendiente de backend |
-| `InvitarPlan` | 021 | Pendiente de backend |
-| `28_Vaca` | 022 | Pendiente de backend |
-| `Vaca · *` | 022 | Pendiente de backend |
-| `45_AgregarGasto` | 022 | Pendiente de backend |
-| `22_Reserva` | 023 | Pendiente de backend |
-| `35_Pasarela` | 023 | Pendiente de backend |
-| `36_PagoError` | 023 | Pendiente de backend |
-| `23_Confirmacion` | 023 | Pendiente de backend |
-| `25_MisReservas` | 023 | Pendiente de backend |
-| `26_DetReserva` | 023 | Pendiente de backend |
-| `DetReserva · *` | 023 | Pendiente de backend |
-| `27_Cancelar` | 023 | Pendiente de backend |
-| `38_CambiarHora` | 023 | Pendiente de backend |
-| `24_MisPlanes` | 024 | Pendiente de backend |
-| `41_PlanesVacio` | 024 | Pendiente de backend |
-| `29_Cupones` | 025 | Pendiente de backend |
-| `47_DetCupon` | 025 | Pendiente de backend |
-| `DetCupon · *` | 025 | Pendiente de backend |
-| `13_Mapa` | 026 | Pendiente de backend |
-| `14_MapaFull` | 026 | Pendiente de backend |
-| `15_Llegar` | 026 | Pendiente de backend |
-| `18_Navegando` | 026 | Pendiente de backend |
-| `26_CheckinOk` | 026 | Pendiente de backend |
-| `70_CrearPub` | 027 | Pendiente de backend |
-| `71_Camara` | 027 | Pendiente de backend |
-| `72_Postal` | 027 | Pendiente de backend |
-| `73_Album` | 027 | Pendiente de backend |
-| `74_RecPlan` | 027 | Pendiente de backend |
-| `75_PostalVer` | 027 | Pendiente de backend |
-| `PostalVer · *` | 027 | Pendiente de backend |
-| `76_RecVacio` | 027 | Pendiente de backend |
-| `68_PostVisita` | 028 | Pendiente de backend |
-| `69_Publicado` | 028 | Pendiente de backend |
-| `77_ResPend` | 028 | Pendiente de backend |
-| `78_ResCom` | 028 | Pendiente de backend |
-| `79_MisRes` | 028 | Pendiente de backend |
-| `MisRes · *` | 028 | Pendiente de backend |
-| `80_ResLugar` | 028 | Pendiente de backend |
-| `86_Ayuda` | 029 | Pendiente de backend |
-| `42_NegCuenta` | 030 | `POST /usuarios`<br>Parte pendiente de backend |
-| `43_NegRegistro` | 030 | Pendiente de backend |
-| `44_NegUbic` | 030 | Pendiente de backend |
-| `45_NegOper` | 030 | Pendiente de backend |
-| `46_NegVerif` | 030 | Pendiente de backend |
-| `47_NegListo` | 030 | Pendiente de backend |
-| `48_NegPanel` | 031 | Pendiente de backend |
-| `49_NegReservas` | 031 | Pendiente de backend |
-| `50_NegCheckin` | 031 | Pendiente de backend |
-| `NegCheckin · *` | 031 | Pendiente de backend |
-| `56_NegStats` | 031 | Pendiente de backend |
-| `51_NegResenas` | 032 | Pendiente de backend |
-| `52_NegResp` | 032 | Pendiente de backend |
-| `NegMomentos` | 032 | Pendiente de backend |
-| `53_NegCupones` | 033 | Pendiente de backend |
-| `54_NegCrear` | 033 | Pendiente de backend |
-| `55_NegHoras` | 033 | Pendiente de backend |
-| `58_NegPerfil` | 034 | `POST /usuarios/yo/modo`<br>`POST /auth/logout`<br>Parte pendiente de backend |
-| `87_NegGaleria` | 034 | Pendiente de backend |
-| `88_NegAgregarFoto` | 034 | Pendiente de backend |
-| `57_NegCobros` | 034 | Pendiente de backend |
-| `89_NegBanco` | 034 | Pendiente de backend |
-| `90_NegFiscal` | 034 | Pendiente de backend |
-| Sin pantalla (sesión) | 008 | `POST /auth/refresh` |
+| `01_Bienvenida` | nv-06 | `GET /usuarios/yo` |
+| `03_Login` | nv-07 | `POST /auth/login` |
+| `03_Recuperar` | nv-08 | `POST /auth/recuperar` |
+| `04_RevisaCorreo` | nv-08 | `POST /auth/recuperar` |
+| `NuevaContrasena` | nv-08 | `POST /auth/restablecer` |
+| `05_Registro` | nv-09 | `GET /usuarios/correo-disponible`<br>`POST /usuarios`<br>`GET /ciudades/autocompletar` |
+| `06_Gustos` | nv-10 | `PUT /usuarios/yo/gustos`<br>`PATCH /usuarios/yo/preferencias`<br>`GET /ciudades/autocompletar`<br>`PATCH /usuarios/yo` |
+| `08_Permisos` | nv-11 | `PATCH /usuarios/yo/privacidad` |
+| `06_PermisoSys` | nv-11 | Pendiente de backend |
+| `85_Ajustes` | nv-13 | `POST /auth/logout`<br>`PATCH /usuarios/yo/preferencias`<br>`PATCH /usuarios/yo/privacidad`<br>`PATCH /usuarios/yo`<br>`GET /ciudades/autocompletar` |
+| `81_Perfil` | nv-14 | `GET /usuarios/yo`<br>Parte pendiente de backend |
+| `82_EditarPerfil` | nv-14 | `PATCH /usuarios/yo`<br>Parte pendiente de backend |
+| `83_Insignias` | nv-14 | `GET /usuarios/yo`<br>Parte pendiente de backend |
+| `84_DatosPers` | nv-14 | `PATCH /usuarios/yo`<br>`PUT /usuarios/yo/correo`<br>`PUT /usuarios/yo/telefono`<br>`GET /ciudades/autocompletar`<br>Parte pendiente de backend |
+| `28_PrivSocial` | nv-15 | `PATCH /usuarios/yo/privacidad`<br>`POST /usuarios/yo/exportar`<br>`DELETE /usuarios/yo/historial`<br>Parte pendiente de backend |
+| `EliminarCuenta` | nv-15 | `DELETE /usuarios/yo`<br>`POST /usuarios/yo/cancelar-eliminacion`<br>Parte pendiente de backend |
+| `89_SinConexion` | nv-16 | `GET /health` |
+| `10_Inicio` | nv-17 | Pendiente de backend |
+| `11_InicioAmigos` | nv-17 | Pendiente de backend |
+| `12_InicioMas` | nv-17 | Pendiente de backend |
+| `InicioMas · solicitud enviada` | nv-17 | Pendiente de backend |
+| `13_Reacciones` | nv-17 | Pendiente de backend |
+| `Reacciones · solicitud enviada` | nv-17 | Pendiente de backend |
+| `14_MeApunto` | nv-17 | Pendiente de backend |
+| `15_Crear` | nv-17 | Pendiente de backend |
+| `16_Historia` | nv-17 | Pendiente de backend |
+| `Historia · *` | nv-17 | Pendiente de backend |
+| `17_PostDetalle` | nv-17 | Pendiente de backend |
+| `29_PlanAmigo` | nv-17 | Pendiente de backend |
+| `PlanAmigo · *` | nv-17 | Pendiente de backend |
+| `18_Notif` | nv-18 | Pendiente de backend |
+| `Notif · solicitud aceptada` | nv-18 | Pendiente de backend |
+| `87_PushBloqueo` | nv-18 | Pendiente de backend |
+| `88_PushBanner` | nv-18 | Pendiente de backend |
+| `19_Buscar` | nv-19 | Pendiente de backend |
+| `20_BuscarPersonas` | nv-19 | Pendiente de backend |
+| `BuscarPersonas · solicitud enviada` | nv-19 | Pendiente de backend |
+| `21_SinResultados` | nv-19 | Pendiente de backend |
+| `07_EncuentraAmigos` | nv-20 | Pendiente de backend |
+| `EncuentraAmigos · solicitud enviada` | nv-20 | Pendiente de backend |
+| `22_AmigosLista` | nv-20 | Pendiente de backend |
+| `23_AmigosSolic` | nv-20 | Pendiente de backend |
+| `24_AgregarAmigo` | nv-20 | Pendiente de backend |
+| `AgregarAmigo · solicitud enviada` | nv-20 | Pendiente de backend |
+| `25_MiCodigo` | nv-20 | `GET /usuarios/yo`<br>Parte pendiente de backend |
+| `26_PerfilAmigo` | nv-20 | Pendiente de backend |
+| `PerfilAmigo · *` | nv-20 | Pendiente de backend |
+| `27_AmigoOpc` | nv-20 | Pendiente de backend |
+| `30_Explorar` | nv-21 | Pendiente de backend |
+| `31_Filtros` | nv-21 | Pendiente de backend |
+| `32_ExpMapa` | nv-21 | Pendiente de backend |
+| `33_Detalle` | nv-21 | Pendiente de backend |
+| `Detalle · *` | nv-21 | Pendiente de backend |
+| `34_Sello` | nv-21 | Pendiente de backend |
+| `35_Favoritos` | nv-22 | Pendiente de backend |
+| `36_FavVacio` | nv-22 | Pendiente de backend |
+| `IAPalabra` | nv-23 | Pendiente de backend |
+| `17_AjustaPlan` | nv-23 | Pendiente de backend |
+| `Generando *` | nv-23 | Pendiente de backend |
+| `39_Plan` | nv-24 | Pendiente de backend |
+| `Plan · *` | nv-24 | Pendiente de backend |
+| `40_Cambiar` | nv-24 | Pendiente de backend |
+| `41_AgregarParada` | nv-24 | Pendiente de backend |
+| `CrearPlan` | nv-24 | Pendiente de backend |
+| `42_Compartir` | nv-25 | Pendiente de backend |
+| `43_CrearGrupo` | nv-25 | Pendiente de backend |
+| `44_MisGrupos` | nv-25 | Pendiente de backend |
+| `45_GrupoChat` | nv-25 | Pendiente de backend |
+| `GrupoChat · *` | nv-25 | Pendiente de backend |
+| `46_Grupo` | nv-25 | Pendiente de backend |
+| `47_PuntoMedio` | nv-25 | Pendiente de backend |
+| `48_Votar` | nv-25 | Pendiente de backend |
+| `ChatAmigo` | nv-25 | Pendiente de backend |
+| `ChatAmigo · *` | nv-25 | Pendiente de backend |
+| `InvitarPlan` | nv-25 | Pendiente de backend |
+| `28_Vaca` | nv-26 | Pendiente de backend |
+| `Vaca · *` | nv-26 | Pendiente de backend |
+| `45_AgregarGasto` | nv-26 | Pendiente de backend |
+| `22_Reserva` | nv-27 | Pendiente de backend |
+| `35_Pasarela` | nv-27 | Pendiente de backend |
+| `36_PagoError` | nv-27 | Pendiente de backend |
+| `23_Confirmacion` | nv-27 | Pendiente de backend |
+| `25_MisReservas` | nv-27 | Pendiente de backend |
+| `26_DetReserva` | nv-27 | Pendiente de backend |
+| `DetReserva · *` | nv-27 | Pendiente de backend |
+| `27_Cancelar` | nv-27 | Pendiente de backend |
+| `38_CambiarHora` | nv-27 | Pendiente de backend |
+| `24_MisPlanes` | nv-28 | Pendiente de backend |
+| `41_PlanesVacio` | nv-28 | Pendiente de backend |
+| `29_Cupones` | nv-29 | Pendiente de backend |
+| `47_DetCupon` | nv-29 | Pendiente de backend |
+| `DetCupon · *` | nv-29 | Pendiente de backend |
+| `13_Mapa` | nv-30 | Pendiente de backend |
+| `14_MapaFull` | nv-30 | Pendiente de backend |
+| `15_Llegar` | nv-30 | Pendiente de backend |
+| `18_Navegando` | nv-30 | Pendiente de backend |
+| `26_CheckinOk` | nv-30 | Pendiente de backend |
+| `70_CrearPub` | nv-31 | Pendiente de backend |
+| `71_Camara` | nv-31 | Pendiente de backend |
+| `72_Postal` | nv-31 | Pendiente de backend |
+| `73_Album` | nv-31 | Pendiente de backend |
+| `74_RecPlan` | nv-31 | Pendiente de backend |
+| `75_PostalVer` | nv-31 | Pendiente de backend |
+| `PostalVer · *` | nv-31 | Pendiente de backend |
+| `76_RecVacio` | nv-31 | Pendiente de backend |
+| `68_PostVisita` | nv-32 | Pendiente de backend |
+| `69_Publicado` | nv-32 | Pendiente de backend |
+| `77_ResPend` | nv-32 | Pendiente de backend |
+| `78_ResCom` | nv-32 | Pendiente de backend |
+| `79_MisRes` | nv-32 | Pendiente de backend |
+| `MisRes · *` | nv-32 | Pendiente de backend |
+| `80_ResLugar` | nv-32 | Pendiente de backend |
+| `86_Ayuda` | nv-33 | Pendiente de backend |
+| `42_NegCuenta` | nv-34 | `POST /usuarios`<br>Parte pendiente de backend |
+| `43_NegRegistro` | nv-34 | Pendiente de backend |
+| `44_NegUbic` | nv-34 | Pendiente de backend |
+| `45_NegOper` | nv-34 | Pendiente de backend |
+| `46_NegVerif` | nv-34 | Pendiente de backend |
+| `47_NegListo` | nv-34 | Pendiente de backend |
+| `48_NegPanel` | nv-35 | Pendiente de backend |
+| `49_NegReservas` | nv-35 | Pendiente de backend |
+| `50_NegCheckin` | nv-35 | Pendiente de backend |
+| `NegCheckin · *` | nv-35 | Pendiente de backend |
+| `56_NegStats` | nv-35 | Pendiente de backend |
+| `51_NegResenas` | nv-36 | Pendiente de backend |
+| `52_NegResp` | nv-36 | Pendiente de backend |
+| `NegMomentos` | nv-36 | Pendiente de backend |
+| `53_NegCupones` | nv-37 | Pendiente de backend |
+| `54_NegCrear` | nv-37 | Pendiente de backend |
+| `55_NegHoras` | nv-37 | Pendiente de backend |
+| `58_NegPerfil` | nv-38 | `POST /usuarios/yo/modo`<br>`POST /auth/logout`<br>Parte pendiente de backend |
+| `87_NegGaleria` | nv-38 | Pendiente de backend |
+| `88_NegAgregarFoto` | nv-38 | Pendiente de backend |
+| `57_NegCobros` | nv-38 | Pendiente de backend |
+| `89_NegBanco` | nv-38 | Pendiente de backend |
+| `90_NegFiscal` | nv-38 | Pendiente de backend |
+| Sin pantalla (sesión) | nv-12 | `POST /auth/refresh` |
 
 ### Endpoints publicados sin pantalla dibujada
 
@@ -274,7 +274,7 @@ Las dudas siguen abiertas hasta que diseño o backend las confirmen. Mientras ta
 - **D13 · Estados sin frame.** Sin dibujo: login bloqueado (423), correo ya registrado (409), verificación de correo, cuenta con eliminación pendiente, confirmación de cerrar sesión, carga genérica y error genérico. Estas specs los definen con textos propuestos; falta que los valide diseño.
 - **D14 · Términos y aviso de privacidad.** `POST /usuarios` pide `version_terminos`, y no hay endpoint para saber la vigente. Tampoco hay URL ni frame de los textos, ni casilla para `promociones_correo`. Propuesta: versión en `BuildConfig`, `promociones_correo=false` por defecto.
 - **D15 · Cuenta con eliminación pendiente.** El ejemplo solo muestra `estado: "activo"`: falta el valor para pendiente. `DELETE /usuarios/yo` cierra todas las sesiones, así que cancelar exige volver a entrar: hay que confirmar que `/auth/login` funciona en ese estado. **Confirmado en staging el 2026-11-04:** responde 200 y `GET /usuarios/yo` permite mostrar la pantalla de eliminación pendiente.
-- **D16 · Refresh con fallo transitorio.** Constitución §6: "si el refresh falla, se limpia la sesión". `specs/000-arquitectura §3.2` lo interpreta como rechazo del servidor (401/422), no como falta de red. Requiere confirmación.
+- **D16 · Refresh con fallo transitorio.** Constitución §6: "si el refresh falla, se limpia la sesión". `specs/nv-04 §3.2` lo interpreta como rechazo del servidor (401/422), no como falta de red. Requiere confirmación.
 - **D17 · Backend fuera de horario.** Staging se apaga a las 22:00 y los fines de semana. La API local es `http://localhost:8080`, y la constitución prohíbe HTTP en claro. `AGENTS.md` cita HTTPS en `10.0.2.2:8443` con certificado de desarrollo, lo que exige confiar en esa CA solo en debug. Falta acordar cómo.
 - **D18 · Permisos.** `08_Permisos` marca Ubicación como "Necesario", pero la constitución §6 dice que la app funciona sin ella. La navegación y `06_PermisoSys` necesitan ubicación precisa, y `docs/permissions-matrix.md` solo lista `ACCESS_COARSE_LOCATION`. Los contactos (`07`, `24`) usan `READ_CONTACTS`, que tampoco está en la matriz.
 - **D19 · Ciudad al registrarse.** `05_Registro` muestra la ciudad con "Cambiar", pero `POST /usuarios` no la acepta. Propuesta: mandarla después con `PATCH /usuarios/yo` (`ciudad_id`). US-021 la pide en el paso de gustos si no hay ubicación: falta decidir en cuál de los dos va.
@@ -284,7 +284,7 @@ Las dudas siguen abiertas hasta que diseño o backend las confirmen. Mientras ta
 
 ### Proceso
 
-- **D21 · Nombres de carpeta de specs.** La constitución §11 pide `/specs/nv-0X`; el encargo pide `specs/000-…` y `specs/001-…` (formato Spec Kit). Se siguió el encargo, y `nv-00…nv-03` quedan como están. Hay que enmendar §11 o renombrar.
+- **D21 · Nombres de carpeta de specs. Resuelta (2026-11-05).** La constitución §11 pide `/specs/nv-0X`. Se renombró `NNN-nombre` → `nv-(NNN+4)`: `000-arquitectura` → `nv-04`, `001-flujo-general` → `nv-05`, `002…034` → `nv-06…nv-38` y `035-ci-cd` → `nv-39`, y se actualizaron todas las referencias. Cada spec tiene `spec.md`, `plan.md`, `task.md` y `checklists/gates.md`. Choque pendiente con `main`: allí `nv-05` es "Acceso, registro y onboarding" (de Diego), aquí es "Flujo general"; `nv-04` coincide en tema (arquitectura). Se resuelve al fusionar.
 
 ### Resto de la app
 

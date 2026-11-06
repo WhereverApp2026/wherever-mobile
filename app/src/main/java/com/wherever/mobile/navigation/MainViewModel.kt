@@ -26,7 +26,7 @@ enum class RootEvent { SESSION_EXPIRED, DELETION_PENDING }
 private const val STOP_TIMEOUT_MILLIS = 5_000L
 
 /**
- * Decide el primer destino (SessionGate de specs/000-arquitectura §2.4).
+ * Decide el primer destino (SessionGate de specs/nv-04 §2.4).
  * Con sesión entra de inmediato con lo que hay en Room y valida detrás: si el servidor rechaza
  * el refresh, [SessionEvents] lleva a Login.
  */

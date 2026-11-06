@@ -1,6 +1,6 @@
 name: ci-pr
 
-# Spec: specs/035-ci-cd. Sin CD ni publicación (constitución §1 y §8).
+# Spec: specs/nv-39. Sin CD ni publicación (constitución §1 y §8).
 # Sin secretos: solo usa el GITHUB_TOKEN de solo lectura que da Actions.
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
   gates:
     # Orden de constitución §8: deps → build → lint → unit → data → security →
     # ui → critic → routes → sdd → coverage → delta-check → mutation → semgrep →
-    # deps-scan. mutation (Pitest) no está configurado: specs/035-ci-cd §2.6.
+    # deps-scan. mutation (Pitest) no está configurado: specs/nv-39 §2.6.
     name: gates (constitución §8)
     runs-on: ubuntu-latest
     timeout-minutes: 90
@@ -76,7 +76,7 @@ jobs:
         run: ./gradlew ktlintCheck detekt lintDebug
 
       # Unit, Data (MockWebServer), Security (manifiesto, red, tokens) y
-      # Arquitectura viven en el mismo source set: specs/035-ci-cd §2.2.
+      # Arquitectura viven en el mismo source set: specs/nv-39 §2.2.
       - name: "unit · data · security"
         run: ./gradlew testDebugUnitTest
 

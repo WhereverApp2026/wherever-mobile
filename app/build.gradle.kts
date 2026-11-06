@@ -103,7 +103,7 @@ ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
 
-// Cobertura (constitución §7, specs/035-ci-cd §3.3): `koverVerifyDebug` falla bajo el 45 % de líneas.
+// Cobertura (constitución §7, specs/nv-39 §3.3): `koverVerifyDebug` falla bajo el 45 % de líneas.
 kover {
     reports {
         filters {
