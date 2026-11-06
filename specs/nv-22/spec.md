@@ -80,10 +80,10 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 
 ## 7. Plan de entrega
 
-Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas, y los endpoints de "Pendiente de backend". `plan.md` y `task.md` se generan al tomar la spec.
+Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas, y los endpoints de "Pendiente de backend". Ver `plan.md`, `task.md` y `checklists/gates.md`.
 
 ## Aprobación
-- [ ] Revisor 1 — fecha:
+- [ ] Revisor: Jorge — fecha:
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 

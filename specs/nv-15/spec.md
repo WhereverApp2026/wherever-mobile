@@ -111,7 +111,7 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 
 ## 7. Plan de entrega
 
-Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. Ver `plan.md` y `task.md`.
+Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. Ver `plan.md`, `task.md` y `checklists/gates.md`.
 
 ## Implementado (2026-11-04)
 
@@ -147,7 +147,7 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 - Sin probar en dispositivo: Cancelar eliminación: no se pulsó, para no revertir el borrado de la cuenta de prueba.
 
 ## Aprobación
-- [ ] Revisor 1 — fecha:
+- [ ] Revisor: Jorge — fecha:
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 

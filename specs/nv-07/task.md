@@ -7,4 +7,16 @@
 ## T2 — Verificación
 - [x] `assembleDebug`, `testDebugUnitTest`, `ktlintCheck` y `lintDebug` en verde
 - [ ] Recorrido en emulador contra staging
-- [ ] Revisor
+
+## T3 — Pruebas (unitarias, integración y seguridad)
+- [x] Unit: `test/.../feature/auth/ui/AuthViewModelsTest.kt` — `LoginViewModel` con 200, 401, 422, 423, 429 y sin red
+- [x] Unit: `test/.../feature/auth/data/AuthRepositoryImplTest.kt` — login guarda tokens y manda el dispositivo; el fallo no guarda
+- [x] Unit: `test/.../core/common/ValidatorsTest.kt` — correo válido antes de enviar
+- [x] Integración: `test/.../integration/AuthIntegrationTest.kt` — login 200, 401, 422 (campos), 423 y 429 (`Retry-After`) con las respuestas de la doc
+- [x] Seguridad: `test/.../integration/AuthIntegrationTest.kt` — 401 de login no dispara refresh ni guarda tokens
+- [x] Seguridad: `test/.../integration/AuthIntegrationTest.kt` — la contraseña y el correo no aparecen en logs
+- [x] Seguridad: `test/.../feature/auth/ui/AuthViewModelsTest.kt` — no envía con correo inválido; borra la contraseña tras entrar
+- **No hacer**: usar el servidor de staging en las pruebas.
+
+## T4 — Aprobación
+- [ ] Revisor: Jorge

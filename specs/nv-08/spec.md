@@ -96,7 +96,7 @@ Sin entidades. Tokens en `TokenStore`, `usuario` en `UserProfileEntity`.
 
 ## 7. Plan de entrega
 
-Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. Ver `plan.md` y `task.md`.
+Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. Ver `plan.md`, `task.md` y `checklists/gates.md`.
 
 ## Implementado (2026-11-04)
 
@@ -128,7 +128,7 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 - Sin probar en dispositivo: la llegada real del correo (se usó `example.com`), Reenviar y Abrir correo.
 
 ## Aprobación
-- [ ] Revisor 1 — fecha:
+- [ ] Revisor: Jorge — fecha:
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 

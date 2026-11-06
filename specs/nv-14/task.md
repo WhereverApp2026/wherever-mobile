@@ -10,4 +10,16 @@
 ## T2 — Verificación
 - [x] `assembleDebug`, `testDebugUnitTest`, `ktlintCheck` y `lintDebug` en verde
 - [ ] Recorrido en emulador contra staging
-- [ ] Revisor
+
+## T3 — Pruebas (unitarias, integración y seguridad)
+- [x] Unit: `test/.../feature/profile/ui/ProfileViewModelsTest.kt` — perfil, sin red con caché, edición parcial, 409 recarga, 422 bajo el campo
+- [x] Unit: `test/.../feature/profile/data/ProfileRepositoryImplTest.kt` — If-Match con la versión guardada; campos desconocidos no rompen
+- [x] Integración: `test/.../integration/ProfileIntegrationTest.kt` — perfil de la doc en caché; PATCH 200/409/422 y 401 con refresh
+- [ ] Integración: `androidTest/.../integration/ProfileRepositoryRoomTest.kt` — 409 no toca Room; la UI lee de Room (instrumentada)
+- [ ] Integración: `androidTest/.../feature/profile/data/UserProfileDaoTest.kt` — listas y objetos anidados en Room (instrumentada)
+- [x] Seguridad: `test/.../security/PlatformSecurityTest.kt` — la base de datos se excluye de respaldos
+- [x] Seguridad: `test/.../integration/AuthIntegrationTest.kt` — sin datos personales en logs
+- **No hacer**: usar el servidor de staging en las pruebas.
+
+## T4 — Aprobación
+- [ ] Revisor: Jorge

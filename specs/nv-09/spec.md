@@ -101,7 +101,7 @@ Errores con forma `{codigo, mensaje, campos[], traza_id}`, mapeados a `AppError`
 
 ## 7. Plan de entrega
 
-Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. Ver `plan.md` y `task.md`.
+Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. Ver `plan.md`, `task.md` y `checklists/gates.md`.
 
 ## Implementado (2026-11-04)
 
@@ -137,7 +137,7 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 - Sin probar en dispositivo: correo ya registrado (409) y límite de intentos (429).
 
 ## Aprobación
-- [ ] Revisor 1 — fecha:
+- [ ] Revisor: Jorge — fecha:
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 

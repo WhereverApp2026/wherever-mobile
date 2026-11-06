@@ -83,7 +83,7 @@ Errores con forma `{codigo, mensaje, campos[], traza_id}`, mapeados a `AppError`
 
 ## 7. Plan de entrega
 
-Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. Ver `plan.md` y `task.md`.
+Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. Ver `plan.md`, `task.md` y `checklists/gates.md`.
 
 ## Implementado (2026-11-04)
 
@@ -120,7 +120,7 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 - `KeystoreTokenCipher` no tiene prueba automatizada. En el teléfono, la sesión sobrevivió a detener y reabrir la app, lo que ejercita Keystore de verdad.
 
 ## Aprobación
-- [ ] Revisor 1 — fecha:
+- [ ] Revisor: Jorge — fecha:
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 

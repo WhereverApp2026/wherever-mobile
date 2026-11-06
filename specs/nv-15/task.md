@@ -8,4 +8,13 @@
 ## T2 — Verificación
 - [x] `assembleDebug`, `testDebugUnitTest`, `ktlintCheck` y `lintDebug` en verde
 - [ ] Recorrido en emulador contra staging
-- [ ] Revisor
+
+## T3 — Pruebas (unitarias, integración y seguridad)
+- [x] Unit: `test/.../feature/settings/ui/SettingsViewModelsTest.kt` — privacidad parcial, ELIMINAR exacto, eliminar limpia la sesión, cancelar fuera de plazo
+- [x] Integración: `test/.../integration/ProfileIntegrationTest.kt` — privacidad 200, `DELETE /usuarios/yo` 202 y 422, cancelar 409 con respuestas de la doc
+- [x] Seguridad: `test/.../feature/settings/ui/SettingsViewModelsTest.kt` — eliminar limpia la sesión local; el error la conserva
+- [x] Seguridad: `test/.../integration/ProfileIntegrationTest.kt` — confirmación validada (`ELIMINAR`)
+- **No hacer**: usar el servidor de staging en las pruebas.
+
+## T4 — Aprobación
+- [ ] Revisor: Jorge

@@ -10,4 +10,18 @@
 ## T2 — Verificación
 - [x] `assembleDebug`, `testDebugUnitTest`, `ktlintCheck` y `lintDebug` en verde
 - [ ] Recorrido en emulador contra staging
-- [ ] Revisor
+
+## T3 — Pruebas (unitarias, integración y seguridad)
+- [x] Unit: `test/.../core/network/TokenRefreshAuthenticatorTest.kt` — renueva una vez, guarda el refresh rotado, dos 401 → un refresh, 503 conserva la sesión
+- [x] Unit: `test/.../core/network/InterceptorsTest.kt` — Bearer solo con JWT
+- [x] Unit: `test/.../core/security/EncryptedTokensSerializerTest.kt` — cifrado y descifrado de `SessionTokens`
+- [x] Integración: `test/.../integration/AuthIntegrationTest.kt` — 401 → `POST /auth/refresh` (doc) → repite con el token nuevo y guarda el refresh rotado
+- [x] Integración: `test/.../integration/AuthIntegrationTest.kt` — refresh rechazado limpia la sesión; logout 204 limpia tokens, Room y onboarding
+- [x] Seguridad: `test/.../core/security/EncryptedTokensSerializerTest.kt` — tokens nunca en texto plano en disco
+- [x] Seguridad: `test/.../integration/AuthIntegrationTest.kt` — tokens fuera de los logs
+- [x] Seguridad: `test/.../security/PlatformSecurityTest.kt` — sin backup del archivo de sesión
+- [x] Seguridad: `test/.../security/SourceSecurityTest.kt` — tokens solo en el `TokenStore` cifrado con Keystore
+- **No hacer**: usar el servidor de staging en las pruebas.
+
+## T4 — Aprobación
+- [ ] Revisor: Jorge

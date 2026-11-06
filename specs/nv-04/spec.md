@@ -310,7 +310,7 @@ Gates: `CHECKLIST_PR.md`, cobertura ≥ 45 %.
 4. Sprint 1 (`specs/002+`) sobre ese molde.
 
 ## Aprobación
-- [ ] Revisor 1 — fecha: (pendiente de nombre, ver `Memoria.md`)
+- [ ] Revisor: Jorge — fecha:
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución (interpretaciones a confirmar: §3.1 nota del encargo, §3.2 fallo transitorio, §5.1 excepción de stack)
 
