@@ -19,4 +19,4 @@
 - **No hacer**: usar el servidor de staging en las pruebas.
 
 ## T4 — Aprobación
-- [ ] Revisor: Jorge
+- [x] Revisor: Jorge — fecha: 2026-11-06

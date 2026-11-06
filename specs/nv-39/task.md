@@ -16,4 +16,4 @@
 - [ ] **Security**: gitleaks, critic, Semgrep propio y workflow sin `secrets.*`.
 - [ ] **Verificar**: todos los comandos de `plan.md §5` en local; evidencia en `checklists/gates.md`.
 - [ ] Primer run verde en GitHub Actions.
-- [ ] Revisor: Jorge.
+- [x] Revisor: Jorge — fecha: 2026-11-06

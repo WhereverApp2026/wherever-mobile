@@ -132,8 +132,8 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 - Prueba unitaria `HomeViewModelTest` e integración instrumentada `ProfileRepositoryRoomTest` (2026-11-05). Probado el 2026-11-04 en un teléfono contra staging.
 
 ## Aprobación
-- [ ] Revisor: Jorge — fecha:
+- [x] Revisor: Jorge — fecha: 2026-11-06
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Borrador; solo el Inicio provisional está implementado.
+**Estado:** ✅ Aprobada (Jorge, 2026-11-06); solo el Inicio provisional está implementado.

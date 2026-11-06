@@ -21,4 +21,4 @@
 - [ ] Seguridad: Security: la ubicación se usa solo en primer plano; no se escribe histórico de coordenadas en disco ni en logs.
 
 ## T3 — Aprobación
-- [ ] Revisor: Jorge
+- [x] Revisor: Jorge — fecha: 2026-11-06

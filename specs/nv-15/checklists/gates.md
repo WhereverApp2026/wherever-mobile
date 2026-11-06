@@ -1,6 +1,6 @@
 # Checklist — NV-15 — Privacidad, mis datos y eliminar cuenta
 
-> Trazabilidad: `spec §1-§7 ↔ plan §1-§5 ↔ task T1-T4`. Estado: implementada, pendiente de revisor. Evidencia local del 2026-11-05.
+> Trazabilidad: `spec §1-§7 ↔ plan §1-§5 ↔ task T1-T4`. Estado: implementada y aprobada (Jorge, 2026-11-06). Evidencia local del 2026-11-05.
 > Orden CI-PR: deps → build → lint → unit → data → security → ui → critic → routes → sdd → coverage → delta-check → mutation → semgrep → deps-scan.
 
 - [x] `./gradlew assembleDebug` y lint (ktlint, detekt, Android Lint) sin errores
@@ -14,4 +14,4 @@
 - [x] Sin secretos (gitleaks), sin tokens en logs, solo HTTPS
 - [ ] Estados cargando, vacío, error y sin red revisados en emulador
 - [x] `Memoria.md` actualizada, sin secretos
-- [ ] Aprobación: Revisor Jorge (pendiente)
+- [x] Aprobación: Revisor Jorge — 2026-11-06

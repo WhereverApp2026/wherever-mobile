@@ -21,4 +21,4 @@
 - [ ] Seguridad: Security: los gustos usados por la IA no aparecen en logs y viaja `privacidad.aprendizaje_personalizado`.
 
 ## T3 — Aprobación
-- [ ] Revisor: Jorge
+- [x] Revisor: Jorge — fecha: 2026-11-06

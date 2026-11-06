@@ -30,7 +30,7 @@ N/A — sin endpoints nuevos; usa el formato de error y paginación del backend.
 Sin pantallas, sin entidades del producto, sin sincronización en segundo plano real.
 
 ## Aprobación y Control de Cambios
-- **Estado:** 🚧 Borrador sin ejecutar
-- **Revisores:** (pendiente de nombre)
-- **Fecha:** —
+- **Estado:** ✅ Aprobada (Jorge, 2026-11-06)
+- **Revisores:** Jorge
+- **Fecha:** 2026-11-06
 - **Detalle:** especificada; tareas aún sin ejecutar. La evidencia irá en `specs/nv-02/checklists/gates.md` + `Memoria.md`.

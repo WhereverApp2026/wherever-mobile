@@ -21,4 +21,4 @@
 - [ ] Seguridad: Security: la lista de favoritos se borra de Room al cerrar sesión.
 
 ## T3 — Aprobación
-- [ ] Revisor: Jorge
+- [x] Revisor: Jorge — fecha: 2026-11-06

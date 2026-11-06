@@ -21,4 +21,4 @@
 - [ ] Seguridad: Security: un token de consumidor en el panel recibe 403 y no se muestran datos de reservas.
 
 ## T3 — Aprobación
-- [ ] Revisor: Jorge
+- [x] Revisor: Jorge — fecha: 2026-11-06

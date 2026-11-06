@@ -21,4 +21,4 @@
 - [ ] Seguridad: Security: el reporte de problema no incluye datos personales automáticos.
 
 ## T3 — Aprobación
-- [ ] Revisor: Jorge
+- [x] Revisor: Jorge — fecha: 2026-11-06

@@ -39,7 +39,7 @@ Base técnica común que cualquier funcionalidad reutiliza: proyecto que compila
 Sin onboarding, planes, amigos, mapa ni reservas; sin FCM real ni Maps real (solo dependencias y canal de notificación declarados); sin analítica.
 
 ## Aprobación y Control de Cambios
-- **Estado:** 🚧 Borrador sin ejecutar
-- **Revisores:** (pendiente de nombre)
-- **Fecha:** —
+- **Estado:** ✅ Aprobada (Jorge, 2026-11-06)
+- **Revisores:** Jorge
+- **Fecha:** 2026-11-06
 - **Detalle:** especificada; tareas aún sin ejecutar. La evidencia irá en `specs/nv-01/checklists/gates.md` + `Memoria.md`.

@@ -21,4 +21,4 @@
 - [ ] Seguridad: Security: la búsqueda de personas respeta `buscable_por_telefono` y no registra correos ni teléfonos en logs.
 
 ## T3 — Aprobación
-- [ ] Revisor: Jorge
+- [x] Revisor: Jorge — fecha: 2026-11-06

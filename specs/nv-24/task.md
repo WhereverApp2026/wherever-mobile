@@ -21,4 +21,4 @@
 - [ ] Seguridad: Security: editar un plan ajeno recibe 403 del servidor y la app no aplica el cambio localmente.
 
 ## T3 — Aprobación
-- [ ] Revisor: Jorge
+- [x] Revisor: Jorge — fecha: 2026-11-06

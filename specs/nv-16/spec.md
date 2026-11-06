@@ -91,8 +91,8 @@ Lee entidades de plan y reserva cuando existan.
 Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas. Ver `plan.md`, `task.md` y `checklists/gates.md`.
 
 ## Aprobación
-- [ ] Revisor: Jorge — fecha:
+- [x] Revisor: Jorge — fecha: 2026-11-06
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Borrador.
+**Estado:** ✅ Aprobada (Jorge, 2026-11-06).

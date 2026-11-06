@@ -21,4 +21,4 @@
 - [ ] Seguridad: Security: el código del cupón no aparece en logs.
 
 ## T3 — Aprobación
-- [ ] Revisor: Jorge
+- [x] Revisor: Jorge — fecha: 2026-11-06

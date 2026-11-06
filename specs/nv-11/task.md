@@ -21,4 +21,4 @@
 - [ ] Seguridad: Security: el manifiesto declara solo los permisos de la matriz.
 
 ## T3 — Aprobación
-- [ ] Revisor: Jorge
+- [x] Revisor: Jorge — fecha: 2026-11-06

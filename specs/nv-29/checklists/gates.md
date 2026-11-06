@@ -1,6 +1,6 @@
 # Checklist — NV-29 — Cupones
 
-> Trazabilidad: `spec §1-§7 ↔ plan §1-§5 ↔ task T1-T3`. Estado: Borrador sin código.
+> Trazabilidad: `spec §1-§7 ↔ plan §1-§5 ↔ task T1-T3`. Estado: aprobada (Jorge, 2026-11-06), sin código.
 > Orden CI-PR: deps → build → lint → unit → data → security → ui → critic → routes → sdd → coverage → delta-check → mutation → semgrep → deps-scan.
 
 - [ ] `./gradlew assembleDebug` y lint (ktlint, detekt, Android Lint) sin errores
@@ -13,4 +13,4 @@
 - [ ] Sin secretos, sin tokens en logs, solo HTTPS
 - [ ] Estados cubiertos: cargando, vacío, error, sin red
 - [ ] `Memoria.md` actualizada, sin secretos
-- [ ] Aprobación: Revisor Jorge (pendiente)
+- [x] Aprobación: Revisor Jorge — 2026-11-06

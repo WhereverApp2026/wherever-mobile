@@ -30,7 +30,7 @@ N/A — verificación manual de estructura + `ConfigTest` (3): `local.properties
 Sin `Google Play, MobSF, Macrobenchmark, gate de mutación, Crashlytics` — van como deuda documentada, no verde falso. Sin pantallas del producto.
 
 ## Aprobación y Control de Cambios
-- **Estado:** 🚧 Borrador sin ejecutar
-- **Revisores:** (pendiente de nombre)
-- **Fecha:** —
+- **Estado:** ✅ Aprobada (Jorge, 2026-11-06)
+- **Revisores:** Jorge
+- **Fecha:** 2026-11-06
 - **Detalle:** especificada; tareas aún sin ejecutar. La evidencia irá en `specs/nv-00/checklists/gates.md` + `Memoria.md`.

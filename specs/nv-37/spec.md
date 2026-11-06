@@ -97,8 +97,8 @@ Caché de cupones y cupos.
 Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas, y los endpoints de "Pendiente de backend". Ver `plan.md`, `task.md` y `checklists/gates.md`.
 
 ## Aprobación
-- [ ] Revisor: Jorge — fecha:
+- [x] Revisor: Jorge — fecha: 2026-11-06
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Borrador.
+**Estado:** ✅ Aprobada (Jorge, 2026-11-06).

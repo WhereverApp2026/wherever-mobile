@@ -21,4 +21,4 @@
 - [ ] Seguridad: Security: el texto de la reseña y los datos del autor no aparecen en logs antes de publicar.
 
 ## T3 — Aprobación
-- [ ] Revisor: Jorge
+- [x] Revisor: Jorge — fecha: 2026-11-06

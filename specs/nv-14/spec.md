@@ -156,8 +156,8 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 - Sin probar en dispositivo: el conflicto 409 y `UserProfileDaoTest`, que sigue sin correr. La app sí usó Room real en el teléfono.
 
 ## Aprobación
-- [ ] Revisor: Jorge — fecha:
+- [x] Revisor: Jorge — fecha: 2026-11-06
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Implementada y probada en un teléfono, sin revisor.
+**Estado:** ✅ Implementada, probada en un teléfono y aprobada (Jorge, 2026-11-06).

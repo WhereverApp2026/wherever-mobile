@@ -21,4 +21,4 @@
 - [ ] Seguridad: Security: no queda histórico de ubicación en disco ni en logs.
 
 ## T3 — Aprobación
-- [ ] Revisor: Jorge
+- [x] Revisor: Jorge — fecha: 2026-11-06

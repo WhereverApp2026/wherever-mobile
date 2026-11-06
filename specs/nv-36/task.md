@@ -21,4 +21,4 @@
 - [ ] Seguridad: Security: los datos del cliente en la reseña no aparecen en logs.
 
 ## T3 — Aprobación
-- [ ] Revisor: Jorge
+- [x] Revisor: Jorge — fecha: 2026-11-06

@@ -21,4 +21,4 @@
 - [ ] Seguridad: Security: el QR guardado vive en almacenamiento privado y se borra al cerrar sesión (verificación sobre el archivo en disco).
 
 ## T3 — Aprobación
-- [ ] Revisor: Jorge
+- [x] Revisor: Jorge — fecha: 2026-11-06

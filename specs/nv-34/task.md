@@ -22,4 +22,4 @@
 - [ ] Seguridad: Security: CLABE fuera de logs y de Room.
 
 ## T3 — Aprobación
-- [ ] Revisor: Jorge
+- [x] Revisor: Jorge — fecha: 2026-11-06

@@ -137,8 +137,8 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 - Sin probar en dispositivo: correo ya registrado (409) y límite de intentos (429).
 
 ## Aprobación
-- [ ] Revisor: Jorge — fecha:
+- [x] Revisor: Jorge — fecha: 2026-11-06
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Implementada y probada en un teléfono, sin revisor.
+**Estado:** ✅ Implementada, probada en un teléfono y aprobada (Jorge, 2026-11-06).

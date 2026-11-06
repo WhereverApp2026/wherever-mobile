@@ -136,8 +136,8 @@ Sin persistencia nueva. Artefactos: reportes Gradle/Kover, el XML de cobertura q
 Slice de infraestructura, sin pantallas: `scripts → .semgrep → workflow → spec → evidencia local`. Implementa la parte de CI de `nv-03`. Ver `plan.md`, `task.md` y `checklists/gates.md`. El tag se corta cuando el workflow esté en verde en GitHub.
 
 ## Aprobación
-- [ ] Revisor: Jorge — fecha:
+- [x] Revisor: Jorge — fecha: 2026-11-06
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Borrador implementado; pendiente de la firma del revisor y del primer run en GitHub.
+**Estado:** ✅ Implementada y aprobada (Jorge, 2026-11-06).

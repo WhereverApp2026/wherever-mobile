@@ -1,6 +1,6 @@
 # Checklist — nv-39 CI/CD: gates del push y del pull request
 
-> Trazabilidad: `spec §2.1-§6 ↔ plan §3-§5 ↔ task T1-T3`. Estado: Borrador implementado. Evidencia local del 2026-11-05 (Windows, JDK 17).
+> Trazabilidad: `spec §2.1-§6 ↔ plan §3-§5 ↔ task T1-T3`. Estado: implementada y aprobada (Jorge, 2026-11-06). Evidencia local del 2026-11-05 (Windows, JDK 17).
 
 - [x] `ci-pr.yml` en orden de constitución §8, en cada `push` y `pull_request`; YAML válido (`yaml.safe_load`)
 - [x] `./gradlew assembleDebug` sin errores; paso de artefacto `wherever-debug-apk`
@@ -15,4 +15,4 @@
 - [x] `critic-guardrails.sh → PASS`, `check_routes.sh → OK`, `check_strings.sh → OK`, `check_specs.sh → SPECS-OK`, `check_sdd.sh → SDD-OK`
 - [x] Sin CD ni publicación; Dependabot semanal
 - [ ] Primer run verde en GitHub Actions
-- [ ] Aprobación firmada: Revisor Jorge (pendiente)
+- [x] Aprobación firmada: Revisor Jorge — 2026-11-06

@@ -22,4 +22,4 @@
 - [ ] Seguridad: Security: no hay datos bancarios ni de tarjeta en los gastos y su cuerpo no se registra en logs.
 
 ## T3 — Aprobación
-- [ ] Revisor: Jorge
+- [x] Revisor: Jorge — fecha: 2026-11-06

@@ -120,8 +120,8 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 - `KeystoreTokenCipher` no tiene prueba automatizada. En el teléfono, la sesión sobrevivió a detener y reabrir la app, lo que ejercita Keystore de verdad.
 
 ## Aprobación
-- [ ] Revisor: Jorge — fecha:
+- [x] Revisor: Jorge — fecha: 2026-11-06
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Implementada y probada en un teléfono, sin revisor.
+**Estado:** ✅ Implementada, probada en un teléfono y aprobada (Jorge, 2026-11-06).

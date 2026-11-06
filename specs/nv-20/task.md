@@ -21,4 +21,4 @@
 - [ ] Seguridad: Security: los contactos no viajan en claro ni se registran en logs (hash o no envío, según el backend).
 
 ## T3 — Aprobación
-- [ ] Revisor: Jorge
+- [x] Revisor: Jorge — fecha: 2026-11-06

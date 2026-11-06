@@ -102,10 +102,12 @@
 - Decisión: `Dispatchers.IO` vive en `core/common/DefaultDispatcherProvider.kt`; `AppModule` solo lo instancia. Porqué: es la convención que la regla espera y deja un único sitio que nombra el despachador.
 - A evitar: portar reglas de Konsist de otra rama sin correr `testDebugUnitTest` antes del push; los paquetes y nombres de archivo no son los mismos.
 
+## Specs firmadas (2026-11-06)
+- Estado: Jorge firmó como revisor las 40 specs (`nv-00…nv-39`) en `spec/035-ci-cd`: línea de revisor en `spec.md`, `task.md` y `checklists/gates.md`, y **Estado** pasado a aprobada. Las casillas "CHECKLIST_PR.md OK" y "Sin conflicto con constitución" de cada spec siguen sin marcar: son comprobaciones aparte.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).
-- Firma de Jorge como revisor en cada spec (`docs/revision-jorge.md`).
 - Exclusión de Composables en Kover y numeración frente a `main`.
 - Dudas de la maqueta frente a la API: `specs/README.md`.
 

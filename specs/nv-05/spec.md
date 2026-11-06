@@ -281,8 +281,8 @@ Sin modelo propio. Ver cada spec.
 Documento de referencia. Se actualiza cuando una spec cambie la navegación. Orden sugerido para el Sprint 1: `nv-12`, `nv-06`, `nv-07`, `nv-09`, `nv-08`, `nv-10`, `nv-16`, `nv-13`, `nv-14`, `nv-15`.
 
 ## Aprobación
-- [ ] Revisor: Jorge — fecha:
+- [x] Revisor: Jorge — fecha: 2026-11-06
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Borrador.
+**Estado:** ✅ Aprobada (Jorge, 2026-11-06).

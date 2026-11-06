@@ -30,7 +30,7 @@ N/A — sin contratos nuevos.
 Sin umbral de mutación bloqueante, sin MobSF, sin Macrobenchmark, sin análisis de imágenes.
 
 ## Aprobación y Control de Cambios
-- **Estado:** 🚧 Borrador sin ejecutar
-- **Revisores:** (pendiente de nombre)
-- **Fecha:** —
+- **Estado:** ✅ Aprobada (Jorge, 2026-11-06)
+- **Revisores:** Jorge
+- **Fecha:** 2026-11-06
 - **Detalle:** especificada; tareas aún sin ejecutar. La evidencia irá en `specs/nv-03/checklists/gates.md` + `Memoria.md`.

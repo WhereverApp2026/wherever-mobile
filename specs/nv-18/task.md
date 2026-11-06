@@ -21,4 +21,4 @@
 - [ ] Seguridad: Security: el payload del push no lleva datos sensibles y `google-services.json` no está en el repositorio.
 
 ## T3 — Aprobación
-- [ ] Revisor: Jorge
+- [x] Revisor: Jorge — fecha: 2026-11-06

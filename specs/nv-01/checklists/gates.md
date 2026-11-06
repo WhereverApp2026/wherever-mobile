@@ -1,6 +1,6 @@
 # Checklist — nv-01 Foundation: proyecto, tema, navegación, red segura y datos locales
 
-> Trazabilidad: `spec R1-R6 ↔ plan §3-§5 ↔ task T1-T6`. Estado: Borrador sin ejecutar.
+> Trazabilidad: `spec R1-R6 ↔ plan §3-§5 ↔ task T1-T6`. Estado: aprobada (Jorge, 2026-11-06).
 
 - [ ] Proyecto compila y abre `home` (R1, R3)
 - [ ] Tema y componentes base (R2)
@@ -12,4 +12,4 @@
 - [ ] `routes.md`, `permissions-matrix.md`, `masvs-checklist.md` creados
 - [ ] ktlint, detekt y Lint sin errores
 - [ ] Todas las suites de la spec verdes
-- [ ] Aprobación firmada: (pendiente de revisor)
+- [x] Aprobación firmada: Revisor Jorge — 2026-11-06

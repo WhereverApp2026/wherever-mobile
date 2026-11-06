@@ -138,8 +138,8 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 - Sin probar en dispositivo: elegir ciudad, porque el catálogo sigue vacío (D38), y las claves distintas de `tacos`, `cafes` y `aire_libre`.
 
 ## Aprobación
-- [ ] Revisor: Jorge — fecha:
+- [x] Revisor: Jorge — fecha: 2026-11-06
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** 🚧 Implementada y probada en un teléfono, sin revisor.
+**Estado:** ✅ Implementada, probada en un teléfono y aprobada (Jorge, 2026-11-06).
