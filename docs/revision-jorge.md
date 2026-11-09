@@ -34,7 +34,10 @@ Para repetir a partir del lunes 08:00: las tres rutas, el login y el flujo de cu
 
 1. **Gustos con alergias dará 422.** El backend exige `privacidad.datos_sensibles` para guardar `alergias` (nv-15). La app envía `alergias`, pero `PrivacyDto` no tiene ese campo y no hay interruptor. Afecta a US-022 (Alexander). Cambiar la UI requiere spec, así que no se tocó.
 2. **Amigos (US-232/233): Pendiente de backend.** Ninguna rama del backend tiene rutas de amigos; solo existe `codigo_amigo` en el perfil. No se crearon pantallas, spec nueva ni contratos; `nv-20` registra el cotejo.
-3. **Tus firmas del 6 de noviembre siguen puestas** en `nv-00…nv-39` (`dea2af0`). No las quité porque las pediste entonces. Si quieres volver a `- [ ] Revisor: Jorge — fecha:`, dímelo. Toqué el texto de `nv-04` (URL) y `nv-20` (cotejo), ya firmadas.
+3. **Tus firmas del 2026-11-06 se quedan como están** en `nv-00…nv-39` (`dea2af0`). **`nv-04` y `nv-20` cambiaron después de la firma y tienes que volver a revisarlas:**
+   - `nv-04/spec.md`: URL de staging por la de CloudFront.
+   - `nv-04/plan.md`: ruta de `ArchitectureTest` (`arch/`) y `Dispatchers` solo en `core/common/DefaultDispatcherProvider`.
+   - `nv-20/spec.md`: cotejo del 2026-11-08 en "Pendiente de backend".
 4. **La URL de CloudFront cambia si se recrea la distribución** (nv-12 del backend): habría que recompilar.
 
 ## D. Integración a `main`
