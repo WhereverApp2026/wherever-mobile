@@ -1,6 +1,30 @@
+# Revisión para Jorge — integración a `main` del 2026-11-09
+
+> Autorizada por Jorge. Todo entró por PR con CI en verde; las firmas del 2026-11-06 no cambiaron.
+
+| PR | Rama | Merge | CI |
+|---|---|---|---|
+| [#3](https://github.com/WhereverApp2026/wherever-mobile/pull/3) | `spec/035-ci-cd` (incluye `spec/arquitectura`) | `8d5bb01` | ✅ corridas de `b63e6e9` |
+| [#13](https://github.com/WhereverApp2026/wherever-mobile/pull/13) | `feat/api-cloudfront` | `c56da67` | ✅ corridas de `c388808`, y `main` en verde en la [corrida 42580739220](https://github.com/WhereverApp2026/wherever-mobile/actions/runs/42580739220) |
+
+- **Respaldo:** etiqueta `respaldo-main-2026-11-09` en el `main` anterior (`9026c50`).
+- **Cambios de la integración:** un solo `ArchitectureTest` en `arch/` (14 reglas). `Dispatchers` solo en `DefaultDispatcherProvider`. Paso de CI que libera disco antes del emulador: faltaban 30 MB para `userdata`.
+- **Reintentos de CI:** 3 fallos por 504 al descargar Gradle, un JAR de Kotlin y gitleaks. Se relanzaron sin cambiar código. Gitleaks no había llegado a ejecutarse en esa corrida y pasó al relanzar.
+- **Verificación local en `main`:** `assembleDebug` correcto. Antes del PR #13, 152 pruebas verdes y todas las compuertas.
+
+**Pendiente:**
+- [ ] Prueba real con el backend encendido (L-V desde las 08:00): `/health`, `/ready`, `/api/v1/ping`, login con correo inexistente y flujo de cuenta en dispositivo.
+- [ ] Volver a revisar `nv-04` y `nv-20` (§C.3).
+- [ ] Decidir el consentimiento `datos_sensibles` (US-022): Gustos con alergias da 422.
+- [ ] Amigos US-232/233: Pendiente de backend.
+- [ ] `main` sigue sin protección de rama, y la constitución §8 la pide. Activarla requiere permisos de administrador.
+- [ ] 9 PR de Dependabot abiertos (#4 a #12), sin revisar; varios son saltos de versión mayor.
+
+---
+
 # Revisión para Jorge — actualización del 2026-11-08 (noche)
 
-> Rama `feat/api-cloudfront`, creada desde `spec/035-ci-cd`. Sin merge a `main` y sin firmas nuevas.
+> Rama `feat/api-cloudfront`, creada desde `spec/035-ci-cd`. Sin firmas nuevas. Su integración está en la sección anterior.
 
 ## A. Qué hicieron los demás
 
