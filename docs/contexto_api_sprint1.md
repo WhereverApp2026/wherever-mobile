@@ -22,7 +22,7 @@ Meta del Sprint 1: cuenta y acceso funcionando de punta a punta en el teléfono 
 | US-017 Editar perfil (Should) | Sin asignar | 82_EditarPerfil, 84_DatosPers | Cambios se guardan al instante; cambiar correo pide verificación; tema Claro, Oscuro o Automático. |
 | US-001 Splash | Osmar | 01_Bienvenida | SplashScreen API; 0.8 a 2 s; manda a Bienvenida, Inicio (sesión válida), Login (sesión vencida) o Sin conexión con Reintentar. |
 
-Fuera de alcance por ahora: US-232/233 (amigos) no tiene endpoints publicados todavía; Google Sign-In (POST /auth/google) está diferido.
+Fuera de alcance por ahora: US-232/233 (amigos) es **Pendiente de backend**: sin rutas en ninguna rama de `wherever-backend` (cotejo del 2026-11-08, abajo); Google Sign-In (POST /auth/google) está diferido.
 
 
 Fuente: documentación del equipo de backend (artifact "Wherever API v1 para front"). Los valores son ejemplos; los nombres y tipos de campo son los reales.
@@ -31,8 +31,8 @@ Fuente: documentación del equipo de backend (artifact "Wherever API v1 para fro
 
 ### Reglas generales
 
-- Base staging: `https://18-227-230-50.sslip.io` · Local: `http://localhost:8080` · Prefijo: `/api/v1`
-- Staging se apaga diario a las 22:00 y enciende lunes a viernes a las 08:00 (hora del centro de México). Fines de semana usar la API local.
+- Base staging: `https://d302bvc0018nfp.cloudfront.net` · Local: `http://localhost:8080` · Prefijo: `/api/v1`
+- Staging se apaga diario a las 22:00 y enciende lunes a viernes a las 08:00 (hora del centro de México). Fines de semana usar la API local. Con las instancias apagadas, CloudFront y el balanceador siguen respondiendo: cualquier ruta da **503 con cuerpo HTML** (no el error JSON de la API).
 - Rutas con JWT: `Authorization: Bearer <access_token>`. El access token dura 15 min (`expira_en`). Con 401, llamar a `/auth/refresh` una vez y repetir la petición.
 - El refresh token dura 30 días y ROTA: guardar siempre el nuevo. Reusar uno viejo cierra todas las sesiones del dispositivo.
 - JSON en snake_case y en español, fechas ISO 8601 UTC, `Content-Type: application/json`, cuerpo máximo 10 MB. Cada respuesta trae `X-Request-Id`.
@@ -40,6 +40,17 @@ Fuente: documentación del equipo de backend (artifact "Wherever API v1 para fro
 - Cuenta con eliminación pendiente: solo responden `GET /usuarios/yo`, cancelar eliminación y logout; lo demás da 403.
 - Enlaces de correo (verificar, restablecer, exportación) traen el token en el fragmento `#token=XYZ`; la app lo manda en el cuerpo.
 - Pendiente: `POST /auth/google` (diferido).
+
+### Cotejo con el backend (2026-11-08, `wherever-backend` `main` = `f79917e`)
+
+- **Rutas nuevas: ninguna** frente a este documento (comparado con `docs/endpoints.md` y las rutas en `internal/`). Fuera de `/docs` y `/openapi.json` (solo dev) y `/probe/*` (ocultas en AWS), todas las rutas están aquí.
+- **Amigos (US-232/233): Pendiente de backend.** Ninguna rama tiene rutas de búsqueda de personas, solicitudes o lista de amigos. Solo existe `codigo_amigo` en el perfil, generado sin uso (nv-05 del backend: "sin amigos").
+- **Cambios de contrato sin ruta nueva:**
+  - `privacidad.datos_sensibles` (booleano) es campo nuevo en `PATCH /usuarios/yo/privacidad` y en el perfil.
+  - `alergias` no vacío en `PUT /usuarios/yo/gustos` exige ese consentimiento: sin él, 422 en el campo `alergias`. Retirarlo borra las alergias guardadas, y sin él el perfil devuelve `alergias` vacío.
+  - Las respuestas pueden llegar comprimidas (`Accept-Encoding: gzip`), salvo `/auth` y `POST /usuarios`.
+  - Login: 5 fallos del mismo correo, exista o no, dan 423 con minutos restantes.
+  - En errores, `detalle` existe solo fuera de producción y sin `HIDE_INTERNALS=true`; el servidor de AWS no lo manda.
 
 ### Forma de los errores
 
@@ -740,6 +751,7 @@ Errores: 400 solicitud_invalida, 401 no_autenticado, 409 conflicto, 422 validaci
 - `categorias`: de 3 a 10, sin repetir.
 - `presupuesto_max` ≥ `presupuesto_min` (enteros, MXN).
 - `restricciones`: hasta 10. `alergias`: texto de hasta 200.
+- `alergias` no vacío exige `privacidad.datos_sensibles` en `true`; si no, 422 en el campo `alergias`.
 
 Request:
 
