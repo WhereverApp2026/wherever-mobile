@@ -90,6 +90,15 @@ jobs:
           tar -xzf "/tmp/$tarball" -C /tmp gitleaks
           /tmp/gitleaks git . --config .gitleaks.toml --redact --no-banner --exit-code 1
 
+      # El emulador necesita ~7,4 GB para userdata y el runner puede quedar justo. Solo quita SDK
+      # preinstalados que este job no usa; Java, Python y Android SDK se conservan.
+      - name: Liberar disco para el emulador
+        run: |
+          df -h /
+          sudo rm -rf /usr/share/dotnet /usr/local/.ghcup /opt/ghc /usr/share/swift \
+            /usr/local/share/boost /opt/hostedtoolcache/CodeQL
+          df -h /
+
       - name: KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
