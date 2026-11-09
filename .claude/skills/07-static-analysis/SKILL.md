@@ -7,7 +7,7 @@ description: ktlint, detekt, Android Lint y Semgrep
 > Rector: `.specify/memory/constitution.md`. Ante conflicto, manda la constitución.
 
 ## What I do
-- Reglas como error; Semgrep con `.semgrep/semgrep.yaml` `[planificado nv-03]`.
+- Reglas como error; Semgrep con `.semgrep/semgrep.yaml`.
 
 ## Cuando usarme
 Antes de cada PR.

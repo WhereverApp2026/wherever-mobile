@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
+# Puerta crítica B1-B4 (constitución §2, §6) para esta rama:
+# NetworkModule vive en core/di y RedactedLogging entra por debugLogging().
 set -euo pipefail
+export LC_ALL=C
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
@@ -20,13 +23,25 @@ SCAN_PATHS=(
     settings.gradle.kts
     local.properties.example
 )
+existing=()
+for path in "${SCAN_PATHS[@]}"; do
+    [ -e "$path" ] && existing+=("$path")
+done
 
-secret_hits="$(
-    grep -RInEi \
-        '(AIza[0-9A-Za-z_-]{35}|ghp_[0-9A-Za-z]{36}|sk-[0-9A-Za-z]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----|(password|passwd|client[_-]?secret|api[_-]?key)[[:space:]]*[:=][[:space:]]*["'"'"'][^"'"'"']{6,}["'"'"'])' \
-        "${SCAN_PATHS[@]}" 2>/dev/null || true
+# Claves reales (API, tokens, llaves privadas): en todo el repo, tests incluidos.
+KEY_PATTERN='(AIza[0-9A-Za-z_-]{35}|ghp_[0-9A-Za-z]{36}|sk-[0-9A-Za-z]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----)'
+# Credenciales hardcodeadas: solo fuera de los juegos de pruebas, donde un
+# password de fixture (p. ej. TEST_PASSWORD) no es un secreto.
+CRED_PATTERN='(password|passwd|client[_-]?secret|api[_-]?key)[[:space:]]*[:=][[:space:]]*["'"'"'][^"'"'"']{6,}["'"'"']'
+
+key_hits="$(grep -RInEi "$KEY_PATTERN" "${existing[@]}" 2>/dev/null || true)"
+[ -z "$key_hits" ] || fail "B1 posibles claves: $key_hits"
+
+cred_hits="$(
+    grep -RInEi "$CRED_PATTERN" "${existing[@]}" 2>/dev/null \
+        | grep -vE '^[^:]+/src/(test|androidTest)/' || true
 )"
-[ -z "$secret_hits" ] || fail "B1 posibles secretos: $secret_hits"
+[ -z "$cred_hits" ] || fail "B1 posibles secretos: $cred_hits"
 
 if git ls-files --error-unmatch local.properties >/dev/null 2>&1; then
     fail "B1 local.properties no debe estar versionado"
@@ -38,26 +53,56 @@ fi
 token_logs="$(grep -RInE 'Log\.[a-zA-Z]+\([^)]*(token|accessToken|refreshToken|Authorization)' app/src/main/java 2>/dev/null || true)"
 [ -z "$token_logs" ] || fail "B2 tokens en logs: $token_logs"
 
-NETWORK_MODULE="app/src/main/java/com/wherever/mobile/core/network/NetworkModule.kt"
+NETWORK_MODULE="app/src/main/java/com/wherever/mobile/core/di/NetworkModule.kt"
 [ -f "$NETWORK_MODULE" ] || fail "B3 falta $NETWORK_MODULE"
 
-order="$(grep -oE 'addInterceptor\([A-Za-z]+\)' "$NETWORK_MODULE" | tr '\n' ' ')"
-expected="addInterceptor(requestIdInterceptor) addInterceptor(authHeaderInterceptor) addInterceptor(redactedLoggingInterceptor) "
-[ "$order" = "$expected" ] || fail "B3 orden de interceptores alterado: $order"
+client="$(awk '/fun provideClient\(/{f=1} f{print} f&&/fun provideRetrofit/{exit}' "$NETWORK_MODULE")"
+[ -n "$client" ] || fail "B3 no se encontró provideClient"
 
-grep -q 'authenticator(tokenAuthenticator)' "$NETWORK_MODULE" || fail "B3 falta el Authenticator en OkHttp"
+position() {
+    printf '%s\n' "$client" | grep -n "$1" | head -n 1 | cut -d: -f1 || true
+}
+request_id="$(position 'RequestIdInterceptor(')"
+auth_header="$(position 'AuthHeaderInterceptor(')"
+redacted="$(position 'debugLogging()')"
+authenticator="$(position 'authenticator(TokenRefreshAuthenticator')"
 
-for config in \
-    app/src/main/res/xml/network_security_config.xml \
-    app/src/debug/res/xml/network_security_config.xml; do
-    [ -f "$config" ] || fail "B3 falta $config"
-    grep -q 'cleartextTrafficPermitted="false"' "$config" || fail "B3 HTTP en claro permitido en $config"
-done
+[ -n "$request_id" ] || fail "B3 cliente autenticado sin RequestIdInterceptor"
+[ -n "$auth_header" ] || fail "B3 cliente autenticado sin AuthHeaderInterceptor"
+[ -n "$redacted" ] || fail "B3 cliente autenticado sin RedactedLogging (debugLogging)"
+[ -n "$authenticator" ] || fail "B3 falta el Authenticator en OkHttp"
 
-grep -q 'certificates src="user"' app/src/debug/res/xml/network_security_config.xml || fail "B3 debug no confía en la CA de desarrollo"
-grep -q 'debug-overrides' app/src/debug/res/xml/network_security_config.xml || fail "B3 CA de usuario fuera de debug-overrides"
-if grep -q 'certificates src="user"' app/src/main/res/xml/network_security_config.xml; then
+if [ "$request_id" -lt "$auth_header" ] && [ "$auth_header" -lt "$redacted" ] && [ "$redacted" -lt "$authenticator" ]; then
+    :
+else
+    fail "B3 orden alterado (RequestId → AuthHeader → RedactedLogging → Authenticator): $request_id $auth_header $redacted $authenticator"
+fi
+
+refresh="$(awk '/fun provideRefreshClient\(/{f=1} f{print} f&&/fun provideRefreshApi/{exit}' "$NETWORK_MODULE")"
+[ -n "$refresh" ] || fail "B3 no se encontró provideRefreshClient"
+printf '%s' "$refresh" | grep -q 'RequestIdInterceptor(' || fail "B3 refresh client sin RequestIdInterceptor"
+if printf '%s' "$refresh" | grep -qE 'AuthHeaderInterceptor|authenticator\('; then
+    fail "B3 refresh client con AuthHeader o Authenticator: recursión al renovar"
+fi
+
+MAIN_CFG="app/src/main/res/xml/network_security_config.xml"
+[ -f "$MAIN_CFG" ] || fail "B3 falta $MAIN_CFG"
+grep -q 'cleartextTrafficPermitted="false"' "$MAIN_CFG" || fail "B3 HTTP en claro permitido en $MAIN_CFG"
+grep -q 'certificates src="system"' "$MAIN_CFG" || fail "B3 release sin CA del sistema en $MAIN_CFG"
+if grep -q 'certificates src="user"' "$MAIN_CFG"; then
     fail "B3 CA de usuario en release"
+fi
+
+MANIFEST="app/src/main/AndroidManifest.xml"
+[ -f "$MANIFEST" ] || fail "B3 falta $MANIFEST"
+grep -q 'android:allowBackup="false"' "$MANIFEST" || fail "B3 allowBackup no es false en $MANIFEST"
+
+DEBUG_CFG="app/src/debug/res/xml/network_security_config.xml"
+if [ -d app/src/debug ]; then
+    [ -f "$DEBUG_CFG" ] || fail "B3 falta $DEBUG_CFG"
+    grep -q 'cleartextTrafficPermitted="false"' "$DEBUG_CFG" || fail "B3 HTTP en claro permitido en $DEBUG_CFG"
+    grep -q 'debug-overrides' "$DEBUG_CFG" || fail "B3 CA de usuario fuera de debug-overrides"
+    grep -q 'certificates src="user"' "$DEBUG_CFG" || fail "B3 debug no confía en la CA de desarrollo"
 fi
 
 "$ROOT/scripts/check_routes.sh" >/dev/null || fail "B4 rutas sin fila en docs/routes.md"

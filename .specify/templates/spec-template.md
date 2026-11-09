@@ -1,40 +1,29 @@
 # Spec Template — nv-0X (7 secciones + Aprobación)
 
 > Constitución: `.specify/memory/constitution.md` §11. Sin cambio de contrato con la API sin spec.
-> Formato único vigente: `Contexto → Requisitos → Diseño → Contratos → Tests → Criterios → Límites → Aprobación`.
-> Toda referencia a un artefacto que aún no existe se marca `[planificado nv-0X]`; si existe, no lleva marca.
 
-## Contexto
-<!-- Qué cubre, qué no, y de qué spec depende. -->
+## 1. Objetivo
+<!-- Qué funcionalidad o slice cubre. Filosofía 00+01+02+03+04 liberable. -->
 
-## Requisitos
-1. R1 — ...
-2. R2 — ...
+## 2. Alcance / No-alcance
+<!-- In: spec→datos→dominio→ViewModel→UI→tests→gates→tag. Out: lo que esta spec no toca. -->
 
-## Diseño
-### Modelo de datos (si aplica)
-<!-- Entidades Room, DAOs, esquema exportado, migraciones, DTO y mapeos. -->
+## 3. Contratos (API y navegación)
+<!-- Endpoints que consume (enlazar el backend), rutas de navegación en docs/routes.md, errores {codigo,mensaje,campos[]} → AppError. -->
 
-### Seguridad y privacidad (si aplica)
+## 4. Modelo de datos
+<!-- Entidades Room, DAOs, esquema exportado, migración, DTO de red, mapeos. -->
+
+## 5. Seguridad y privacidad
 <!-- Tokens, permisos, red, datos locales, MASVS. -->
 
-### Otros componentes
-<!-- Paquetes, tipos, flujo DTO → Mapper → Entity → Domain → UiState, decisiones. -->
+## 6. Tests / Gates
+<!-- Obligatorias: Unit, Data (integración: Room en memoria + MockWebServer) y Security (const. §7). Opcionales: UI, Arquitectura. Cobertura ≥45%. Verificado por scripts/check_specs.sh. -->
 
-## Contratos
-<!-- Endpoints, rutas de docs/routes.md, errores {codigo,mensaje,campos[]} → AppError. -->
+## 7. Plan de entrega
+<!-- assembleDebug/Release, verificación manual en emulador, tag vX.Y.Z-featN. -->
 
-## Tests
-<!-- Unit, Data, Security, UI, Arquitectura. Cobertura 45 % provisional. Nombres y conteos. -->
-
-## Criterios
-<!-- Condiciones verificables con comando o evidencia. -->
-
-## Límites
-<!-- Fuera de alcance; deuda diferida con motivo. Sin pantallas de producto en nv-00…nv-04. -->
-
-## Aprobación y Control de Cambios
-- **Estado:** Borrador / Especificada / Aprobada / En ejecución / Cerrada
-- **Revisores:** (pendiente de nombre)
-- **Fecha:** —
-- **Detalle:** evidencia en `checklists/gates.md` + `Memoria.md`.
+## Aprobación
+- [ ] Revisor 1 — fecha:
+- [ ] CHECKLIST_PR.md OK
+- [ ] Sin conflicto con constitución

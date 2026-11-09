@@ -1,14 +1,12 @@
 ---
-version: 1.1.0
+version: 1.0.0
 ratified: 2026-10-28
-last_amended: 2026-10-29
+last_amended: 2026-10-28
 status: borrador (pendiente de firma del revisor)
 source_of_truth: .specify/memory/constitution.md
 mirror: ./constitution.md
 methodology: SDD
 ---
-
-> v1.1.0 (2026-10-29): tag unificado `vX.Y.Z-featN`, Pitest advisory, aclaración de identificadores de contrato, `minSdk`/`targetSdk`, cobertura provisional, Dependabot y `check_sdd.sh`.
 
 # Constitución — Wherever Móvil
 
@@ -45,11 +43,10 @@ methodology: SDD
 | Notificaciones | Firebase Cloud Messaging |
 | Seguridad | Android Keystore + almacenamiento cifrado; `networkSecurityConfig` solo HTTPS |
 | Tests | JUnit, MockK, Turbine, MockWebServer, Compose Testing, Konsist |
-| Calidad | ktlint, detekt, Android Lint, Kover, Semgrep, OWASP Dependency-Check, Pitest (mutación advisory) |
+| Calidad | ktlint, detekt, Android Lint, Kover, Semgrep, OWASP Dependency-Check |
 | Build y CI | Gradle Kotlin DSL + catálogo de versiones; GitHub Actions solo `ci-pr.yml`, sin deploy |
 
 No se agregan librerías sin evaluar licencia, mantenimiento y seguridad. Regla de excepción en `nv-00`.
-Versiones: `minSdk 26`; `compileSdk`/`targetSdk` se fijan en `nv-01` con la última estable y se registran en `AGENTS.md`. Las licencias de fuentes, mapas y catálogos se anotan en `Memoria.md` antes de incorporarlos.
 
 ## 4. Arquitectura
 
@@ -59,7 +56,6 @@ Versiones: `minSdk 26`; `compileSdk`/`targetSdk` se fijan en `nv-01` con la últ
 - Rutas de navegación tipadas, registradas en `docs/routes.md`.
 - Diseño: Azul Ruta `#2455E8`, Tinta `#10243B`, Atardecer `#FF7A3D`, Menta `#12A37F`, Dorado `#F2B531`, Niebla `#F4F7FC`; fuentes DM Sans y Sora; un solo botón principal naranja por pantalla.
 - Errores de la API `{ codigo, mensaje, campos[] }` se mapean a `AppError`. Paginación por cursor `PageResult{items, siguienteCursor, limite}`.
-- Los campos del contrato JSON conservan el nombre del backend (`codigo`, `mensaje`, `campos`, `siguienteCursor`); los identificadores Kotlin internos van en inglés (`errorCode`, `message`, `fields`, `nextCursor`).
 
 ## 5. Código y UI
 
@@ -73,9 +69,8 @@ Versiones: `minSdk 26`; `compileSdk`/`targetSdk` se fijan en `nv-01` con la últ
 ## 6. Seguridad y privacidad (DevSecOps)
 
 - Tokens cifrados con Keystore; nunca en logs, `SharedPreferences` sin cifrar ni respaldos (`allowBackup=false` o reglas explícitas).
-- `networkSecurityConfig`: solo HTTPS; sin certificados confiados a ciegas. En debug se puede confiar únicamente en una CA de desarrollo mediante un `networkSecurityConfig` de debug; release no confía en certificados de desarrollo.
+- `networkSecurityConfig`: solo HTTPS; sin certificados confiados a ciegas.
 - Sin llaves de API ni `google-services.json` en el repositorio (`local.properties` y secretos de CI).
-- Dependabot se configura en `.github/dependabot.yml` `[planificado nv-03]`.
 - Permisos (ubicación, cámara, notificaciones) en contexto; la app funciona si se niegan.
 - Aviso de privacidad visible y opción de eliminar la cuenta (posterior).
 - El `Authenticator` reintenta una sola vez; si el refresh falla, se limpia la sesión.
@@ -85,15 +80,15 @@ Versiones: `minSdk 26`; `compileSdk`/`targetSdk` se fijan en `nv-01` con la últ
 ## 7. Testing y QA
 
 - Suites: `Unit` (ViewModel, repositorio, interceptores), `Data` (Room en memoria + MockWebServer), `Security` (manifiesto, red, almacenamiento), `UI` (Compose Testing) y `Arquitectura` (Konsist). Mutación y rendimiento son nightly u opcionales.
-- Cobertura `≥ 45 %` con `scripts/check_coverage.sh --min 45` `[planificado nv-03]` (Kover); único bloqueo de cobertura hoy. El 45 % es provisional hasta la primera medición real y se revisa en `Memoria.md`.
-- Puerta incremental advisory (`nv-03`): `scripts/check_delta_coverage.py --min 80 --advisory` `[planificado nv-03]` + mutación enfocada con Pitest sobre lo cambiado (`continue-on-error`) `[planificado nv-03]`. Cualquier alternativa a Pitest exige excepción documentada.
+- Cobertura `≥ 45 %` con `scripts/check_coverage.sh --min 45` (Kover); único bloqueo de cobertura hoy.
+- Puerta incremental advisory (`nv-03`): `scripts/check_delta_coverage.py --min 80 --advisory` + mutación enfocada con Pitest sobre lo cambiado (`continue-on-error`).
 - Un test que depende del reloj o del orden no es un test: se inyectan dispatchers y relojes.
 
 ## 8. CI y release manual
 
 - Orden CI-PR: `deps → build → lint → unit → data → security → ui → critic → routes → sdd → coverage → delta-check → mutation → semgrep → deps-scan`, con `--no-build` cuando aplique.
-- Sin CD. Release manual: `./gradlew assembleRelease` + tag `vX.Y.Z-featN`; firma y publicación se especifican en una spec posterior (sin firma automática).
-- `CHECKLIST_PR.md` obligatorio. 1 revisor. `main` protegida. Dependabot activo mediante `.github/dependabot.yml` `[planificado nv-03]`.
+- Sin CD. Release manual: `./gradlew assembleRelease` + firma con keystore local + tag `vX.Y.Z-(feature)N`.
+- `CHECKLIST_PR.md` obligatorio. 1 revisor. `main` protegida.
 - YAML validado con `yaml.safe_load`.
 
 ## 9. Observabilidad mínima
@@ -106,6 +101,4 @@ Versiones: `minSdk 26`; `compileSdk`/`targetSdk` se fijan en `nv-01` con la últ
 
 ## 11. Gobernanza SDD
 
-- Specs en `/specs/nv-0X` con la plantilla canónica de 7 secciones + Aprobación (`Contexto → Requisitos → Diseño → Contratos → Tests → Criterios → Límites → Aprobación`). Sin cambio de contrato con la API sin spec. `AGENTS.md` dice cómo; la constitución dice qué no se negocia.
-- `scripts/check_sdd.sh` `[planificado nv-01]` valida plantilla, secciones, aprobación y referencias. Toda referencia a un artefacto aún no creado se marca `[planificado nv-0X]`; si existe, no lleva marca.
-- Cada fase y sus skills principales se declaran en `AGENTS.md` §11; toda skill incluye una sección `Verify`.
+- Specs en `/specs/nv-0X` con plantilla de 7 secciones + Aprobación. Sin cambio de contrato con la API sin spec. `AGENTS.md` dice cómo; la constitución dice qué no se negocia.

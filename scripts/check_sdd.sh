@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
+# Puerta SDD: artefactos vivos, secciones de las specs de fase nv-*,
+# sin marcadores sin issue y AGENTS.md al día. Constitución §11.
 set -euo pipefail
+export LC_ALL=C
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
@@ -26,6 +29,12 @@ for phase_dir in specs/nv-*; do
     for file in spec.md plan.md task.md checklists/gates.md; do
         [ -f "$phase_dir/$file" ] || fail "$phase sin $file"
     done
+
+    # nv-04 en adelante siguen spec-template.md: sus secciones las revisa check_specs.sh.
+    number="${phase##*nv-}"
+    if [ "$((10#$number))" -ge 4 ]; then
+        continue
+    fi
 
     for section in \
         '## Contexto' \

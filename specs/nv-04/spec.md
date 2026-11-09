@@ -1,149 +1,317 @@
-# NV-04 — Arquitectura de la aplicación móvil
+# NV-04 — Arquitectura de Wherever Móvil
 
-## Contexto
-Arquitectura de producto que se apoya en la base de `nv-01`, el molde de `nv-02` y la puerta de calidad de `nv-03`: módulos, MVVM, navegación, datos offline, contratos REST, autenticación, seguridad, UX y matriz de pruebas. No implementa pantallas ni código; las funcionalidades y pantallas llegan desde `nv-05+`; auth/onboarding ya está especificado en `specs/nv-05/spec.md`. **Depende de**: nv-03.
+> Rector: `.specify/memory/constitution.md` (manda ante conflicto). Plantilla: `.specify/templates/spec-template.md`.
+> Consolida en un solo lugar lo que `nv-00`, `nv-01` y `nv-02` fijan por separado, y lo aterriza a la API v1 real (`docs/contexto_api_sprint1.md`).
+> Convención de esta spec: **[Constitución §n]** = no negociable. **[Decisión propuesta]** = la constitución no lo define; se propone con su porqué y queda abierto a revisión.
 
-La maqueta Figma fue inventariada en `docs/figma-inventory.md`: 158 pantallas/estados y 36 etiquetas que confirman los 11 módulos. Este spec fija la arquitectura por módulos y deja los flujos de pantalla para las specs de `nv-05+`, que partirán del inventario. El backend Golang no está disponible: los contratos de §Contratos son propuestas y no se consideran definitivos hasta su OpenAPI.
+## 1. Objetivo
 
-## Requisitos
-1. R1 — Fijar el mapa de 11 módulos de producto y sus paquetes `feature/<nombre>`, con reglas de dependencia verificables: `feature → core` y contratos de navegación; nunca `feature → feature`, `core → feature` ni `ui → data`.
-2. R2 — Fijar el contrato MVVM por feature: un `UiState` por pantalla, `StateFlow`, eventos de una sola vez, Composable sin lógica de negocio, ViewModel sin Retrofit/Room y repositorio como interfaz de dominio.
-3. R3 — Fijar la navegación tipada por grafos de módulo, con auth gate, destinos iniciales y deep links; las rutas reales de pantalla se registran en `docs/routes.md` al crear cada spec (auth ya en `nv-05`; resto `[planificado nv-06+]`).
-4. R4 — Fijar la arquitectura offline-first: Room como fuente de verdad, propiedad de tablas por feature, flujo `DTO → Mapper → Entity → Domain → UiState`, caché, paginación por cursor, sincronización y migraciones explícitas sin `fallbackToDestructiveMigration`.
-5. R5 — Fijar las convenciones de contrato REST del cliente y el catálogo propuesto de grupos de endpoints por módulo, marcados como pendientes del backend Golang; ningún endpoint es definitivo hasta la revisión de OpenAPI.
-6. R6 — Fijar autenticación y sesión: tokens cifrados con Keystore, refresh único ante 401, logout/reset, permisos en contexto y degradación funcional si se niegan; refresh real en `nv-05` y FCM, mapas, cámara y medios como interfaces diferidas `[planificado nv-06+]`.
-7. R7 — Fijar las reglas transversales de UX: design system, textos en `strings.xml`, accesibilidad, estados de carga/vacío/error/sin red, formatos de fecha/moneda y observabilidad con `request_id` y logs redactados.
-8. R8 — Fijar la matriz de pruebas y los gates para `nv-05+`: Arquitectura, Unit, Data, Security, UI, contratos y migraciones; cobertura global del 45 % provisional y evidencia SDD por feature.
+Definir capas, patrón, navegación, estado, red, almacenamiento de tokens, inyección de dependencias, paquetes y convenciones para que cada funcionalidad (`specs/002+`) se construya igual y salga liberable.
 
-## Diseño
+La app **solo habla con la API v1** (backend Go, staging `https://18-227-230-50.sslip.io`, prefijo `/api/v1`). Nunca se conecta a MongoDB ni a ninguna otra base del backend.
 
-### Mapa de módulos y propiedad
-| Módulo Figma | Paquete | Flujo principal | Contratos propuestos |
-|---|---|---|---|
-| Acceso y registro | `feature/auth` | Bienvenida, login, registro, recuperación | `/auth/*` |
-| Inicio, feed y notificaciones | `feature/feed` | Feed, historias, detalle, notificaciones | `/feed`, `/posts`, `/stories`, `/notifications` |
-| Amigos | `feature/friends` | Búsqueda, solicitudes, QR, privacidad | `/friends`, `/friend-requests`, `/me/qr`, `/me/privacy` |
-| Explorar y lugares | `feature/explore` | Lugares, mapa, favoritos y sello | `/places`, `/categories`, `/favorites` |
-| Crear plan con IA | `feature/plans` | Crear, ajustar y unirse a plan | `/plans`, `/plans/ai` |
-| Compartir, grupos y chats | `feature/social` | Invitar, grupos, chat, votos, vaca | `/groups`, `/chats`, `/plans/{id}/chat`, `/plans/{id}/split`, `/plans/{id}/votes` |
-| Reserva, pago y mis planes | `feature/booking` | Reserva, pago, cupones, mis planes | `/bookings`, `/payments`, `/me/plans`, `/me/reservations`, `/coupons` |
-| El día del plan | `feature/dayof` | Ruta, llegada, navegación, check-in | `/plans/{id}/live`, `/checkins` |
-| Recuerdos y reseñas | `feature/memories` | Fotos, postales, recuerdos, reseñas | `/plans/{id}/memories`, `/reviews`, `/me/reviews`, `/places/{id}/reviews` |
-| Perfil, ajustes y estados | `feature/profile` | Perfil, insignias, ajustes, estados | `/me`, `/me/settings`, `/me/badges` |
-| Negocio | `feature/business` | Panel y gestión de negocio | `/business/*` |
+## 2. Alcance / No-alcance
 
-Paquetes compartidos: los de `nv-01` (`core/designsystem`, `core/network`, `core/database`, `core/security`, `core/sync`, `core/notifications`, `core/di`) más `core/common`, `core/data` y `core/ui` de `nv-02`. Los modelos compartidos entre features viven en `core/common/model`; no se crea una capa de casos de uso salvo que una feature lo justifique en su spec.
+**In:** decisiones de arquitectura, estructura de paquetes y convenciones. El proyecto Gradle mínimo y la pantalla `home` vacía (`nv-01` R1-R3).
 
-### Reglas de dependencia
-- `app` compone `navigation`, features y módulos `core`; no contiene lógica de negocio.
-- `feature/<nombre>` puede depender de `core/*` y de los contratos de `navigation`; no puede depender de otra feature.
-- Dentro de una feature: `ui → domain`; `data → domain`; `ui` no conoce `data`, Retrofit ni Room.
-- `core/*` no depende de `feature/*`; `core/common/model` no depende de Android.
-- La composición de dependencias se hace con Hilt; prohibido el acceso directo a implementaciones desde la UI.
+**Out:** FCM y mapas reales. La cadena de red, `TokenStore`, Room y las primeras pantallas se implementaron el 2026-11-04 (ver `specs/README.md`).
 
-### Contrato MVVM por feature
-```text
-Composable → ViewModel → Repository (interfaz de domain)
-                              ↓
-                    RepositoryImpl (data)
-                       ↓             ↓
-                     Room         Retrofit
+### 2.1 Capas y patrón
+
+**[Constitución §3-§4]** MVVM: `ViewModel → Repository → Room / Retrofit`. Room es la fuente de verdad: la red actualiza Room y la UI lee de Room. Los Composables solo pintan y envían eventos.
+
+```mermaid
+flowchart TB
+  subgraph UI["ui (feature/*/ui)"]
+    C["Composable<br/>pinta UiState, emite eventos"]
+    VM["ViewModel<br/>StateFlow de UiState + eventos únicos"]
+  end
+  subgraph DOM["domain (feature/*/domain)"]
+    M["Modelos de dominio<br/>interfaz del repositorio<br/>casos de uso solo si hay lógica compartida"]
+  end
+  subgraph DATA["data (feature/*/data)"]
+    R["RepositoryImpl"]
+    MAP["Mappers<br/>DTO, Entity, Domain"]
+  end
+  subgraph CORE["core/*"]
+    DB[("Room<br/>core/database")]
+    NET["Retrofit + OkHttp<br/>core/network"]
+    SEC["TokenStore<br/>DataStore + Keystore<br/>core/security"]
+    SYNC["WorkManager<br/>core/sync"]
+    DS["Tema y componentes<br/>core/designsystem"]
+  end
+  API{{"API v1 Wherever<br/>/api/v1"}}
+
+  C -->|eventos| VM
+  VM -->|UiState| C
+  VM --> M
+  R -.implementa.-> M
+  R --> MAP
+  R --> DB
+  R --> NET
+  SYNC --> R
+  NET --> SEC
+  NET --> API
+  C --> DS
 ```
-- `UiState` inmutable por pantalla; el ViewModel lo expone con `StateFlow` y emite eventos de una sola vez.
-- Los Composables solo pintan y envían eventos; no calculan reglas de negocio.
-- Los DTO viven en `data`; los mappers convierten a entidad Room y a modelo de dominio. La UI nunca consume DTO ni entidad.
-- El repositorio devuelve `Result<T>`/`PageResult<T>` de `nv-02`; los errores se mapean a `AppError`.
 
-### Navegación
-| Grafo | Rutas raíz previstas | Notas |
-|---|---|---|
-| `auth` | `auth/*` | Bienvenida, login, registro y recuperación; fuera del shell principal |
-| `feed` | `feed`, `feed/{id}`, `notifications` | Inicio autenticado |
-| `friends` | `friends/*` | Búsqueda y solicitudes |
-| `explore` | `explore`, `places/{id}` | Mapa y lugares |
-| `plans` | `plans/*` | Crear, ajustar y detalle |
-| `social` | `groups/*`, `chats/{id}` | Grupos e invitaciones |
-| `booking` | `bookings/*` | Reserva, pago y mis planes |
-| `dayof` | `dayof/{planId}` | Itinerario y llegada |
-| `memories` | `memories/*` | Recuerdos y reseñas |
-| `profile` | `profile/*` | Perfil y ajustes |
-| `business` | `business/*` | Rol de negocio |
+Regla de dependencia: `ui → domain ← data`. `ui` no importa `data`, Retrofit ni Room; `domain` no importa Android. La comprueba Konsist (`nv-02`).
 
-Las rutas concretas y sus parámetros se agregan a `docs/routes.md` con cada spec de pantalla; las de auth ya están en `nv-05` y el resto `[planificado nv-06+]`. Los deep links no llevan tokens ni datos sensibles, salvo el código de reset de un solo uso documentado en `nv-05`. El auth gate decide entre `auth/*` y el shell principal.
+**[Decisión propuesta] Módulo Gradle único `app`, capas por paquete.** Porqué: `nv-01` R1 pide "módulo `app`"; con un equipo pequeño la multimodularización no compensa todavía, y Konsist da la misma garantía de capas. Se reevalúa cuando se mida el tiempo de compilación (constitución §2.5).
 
-### Datos y offline
-- Room es la fuente de verdad; cada feature declara sus entidades, DAOs y migraciones. La base de datos es única y su esquema se exporta en `app/schemas`.
-- Cada feature es dueña de sus tablas; las lecturas cruzadas usan IDs estables y modelos de `core/common/model`, no joins entre features.
-- Política de caché por recurso: se muestra lo último válido de Room, se refresca al abrir o al hacer pull-to-refresh y se marca el estado offline. Las escrituras offline se limitan a las que el backend pueda reconciliar; el resto se bloquea con mensaje.
-- Sincronización: carga inicial, refresco por pantalla y trabajos programados `[planificado nv-06+]`; reintentos con backoff y sin duplicados. El conflicto por defecto es server-wins con versión/fecha del servidor.
-- Paginación por cursor `PageResult{items, siguienteCursor, limite}` con límite máximo 50; sin offset.
-- Migraciones explícitas y probadas con `MigrationTestHelper`; prohibido `fallbackToDestructiveMigration`.
+**[Decisión propuesta] Casos de uso opcionales.** El ViewModel llama al repositorio; solo se crea caso de uso si la lógica se repite entre pantallas. Porqué: la constitución define `ViewModel → Repository`; una capa obligatoria sería pura indirección.
 
-### Autenticación, sesión y permisos
-- Tokens en `TokenStore` cifrado con Keystore; el access token nunca se registra en logs ni se guarda en texto plano.
-- `Authenticator` reintenta una sola vez con el refresh real de `nv-05`; si el servidor rechaza, limpia sesión y navega a `auth/*`; si falla la red, conserva sesión y muestra sin conexión.
-- Logout revoca/localiza la sesión, limpia tokens, cancela trabajos y reinicia el grafo.
-- Permisos en contexto: notificaciones, ubicación y cámara se piden al usar la función; la app funciona si se niegan. La matriz vive en `docs/permissions-matrix.md`.
-- FCM, Maps, cámara y subida de medios se consumen tras interfaces; sus implementaciones reales quedan para `nv-06+` `[planificado nv-06]`.
+### 2.2 Flujo de datos
 
-### UX, design system y observabilidad
-- Colores, tipografía, formas y componentes solo desde `core/designsystem`; textos visibles en `strings.xml`.
-- Cada pantalla cubre carga, contenido, vacío, error y sin red; un solo botón principal naranja por pantalla.
-- Accesibilidad: contraste suficiente, áreas táctiles de 48 dp, `contentDescription` en iconos informativos.
-- Fechas ISO-8601 en el contrato; la UI las formatea en la zona del dispositivo. Moneda y locale se confirman con el backend.
-- Logs con `request_id` y redacción; sin Crashlytics ni analítica en esta etapa.
+```mermaid
+sequenceDiagram
+  participant U as Composable
+  participant V as ViewModel
+  participant R as Repository
+  participant D as Room
+  participant A as API v1
+  U->>V: evento (abrir pantalla)
+  V->>R: observe()
+  R->>D: Flow de entidades
+  D-->>V: datos en caché
+  V-->>U: UiState con datos (o Loading si no hay)
+  V->>R: refresh()
+  R->>A: GET
+  alt 2xx
+    A-->>R: DTO
+    R->>D: upsert (transacción)
+    D-->>V: emite de nuevo
+    V-->>U: UiState actualizado
+  else error o sin red
+    A-->>R: AppError
+    R-->>V: Result.Failure
+    V-->>U: conserva datos + aviso, o Error si no hay caché
+  end
+```
 
-## Contratos
-Convenciones del cliente, todas propuestas y pendientes del backend Golang:
-- Base `API_BASE_URL` + `/api/v1`; autenticación `Authorization: Bearer <access>`.
-- Errores `{codigo, mensaje, campos[]}` → `AppError` (`Network`, `Timeout`, `Unauthorized`, `Validation`, `RateLimited`, `Server`, `Unknown`).
-- Paginación `{items, siguienteCursor, limite}` con límite máximo 50.
-- `Idempotency-Key` en POST de creación, reserva y pago; el backend debe confirmar soporte.
-- Fechas ISO-8601 UTC; identificadores opacos en rutas; sin datos sensibles en query strings.
-- Subida de medios, transporte de chat y creación de plan con IA quedan como interfaces `[planificado nv-12]`; no se asume multipart, WebSocket ni streaming.
+**Excepción a Room como fuente de verdad [Decisión propuesta]:** las respuestas que son acciones y no datos reutilizables (`/auth/*`, `correo-disponible`, `ciudades/autocompletar`) no pasan por Room. Porqué: no hay nada que mostrar sin red, y credenciales o tokens jamás deben llegar a una tabla. El perfil de `GET /usuarios/yo` sí se persiste; `usuario` de las respuestas de sesión no, porque está incompleto.
 
-| Grupo | Prefijo propuesto | Feature | Estado |
+### 2.3 Estado
+
+- **[Constitución §4]** Un `UiState` por pantalla, expuesto con `StateFlow`.
+- **[nv-02]** `UiState` y `BaseViewModel` en `core/ui`; eventos de una sola vez (navegar, snackbar) por canal aparte.
+- **[Constitución §2.4]** Toda pantalla con datos cubre cargando, vacío, error y sin red.
+- **[Decisión propuesta]** Formularios: `data class <Pantalla>UiState(campos, errores por campo, enviando)`, no la forma sellada. Porqué: un formulario conserva lo escrito durante envío y error; un `sealed` lo perdería.
+- **[Decisión propuesta]** Eventos con `Channel<UiEvent>(BUFFERED)` expuesto como `Flow`. Porqué: `SharedFlow` sin réplica los pierde si no hay colector durante un cambio de configuración.
+
+### 2.4 Navegación
+
+- **[Constitución §4]** Navigation Compose con rutas tipadas, registradas en `docs/routes.md`.
+- **[Decisión propuesta]** Rutas como `@Serializable object/data class` (API de Navigation 2.8+). Porqué: es lo que da tipado real y kotlinx.serialization ya es parte del stack.
+- **[Decisión propuesta]** Grafos anidados por contexto: `auth`, `onboarding`, `consumer` (con barra inferior) y `business`. El destino inicial lo decide un `SessionGate` observando sesión y `modo_actual`. Porqué: limpia la pila al entrar o salir de sesión y aísla el lado negocio.
+- **[Decisión propuesta]** Un 401 definitivo emite por `SessionEvents` y la raíz navega a Login recordando el destino pendiente (US-013). Porqué: el `Authenticator` no conoce la UI.
+- **[Constitución §6]** Sin parámetros sensibles en rutas. El token de `#token=XYZ` se lee del `Intent`, va al `ViewModel` y al cuerpo de la petición; nunca entra en una ruta ni en logs.
+
+## 3. Contratos (API y navegación)
+
+### 3.1 Cliente HTTP
+
+**[Constitución §3-§4]** Retrofit + OkHttp + kotlinx.serialization. Cadena fija y en este orden, con `Authenticator` aparte:
+
+```
+RequestId → AuthHeader → RedactedLogging   +   Authenticator (solo refresh)
+```
+
+| Pieza | Responsabilidad |
+|---|---|
+| `RequestIdInterceptor` | Agrega `X-Request-Id` (UUID). Se loguea junto con el de la respuesta. |
+| `AuthHeaderInterceptor` | Agrega `Authorization: Bearer <access_token>` si hay token y la ruta no es pública. |
+| `RedactedLoggingInterceptor` | Solo en debug. Redacta `Authorization` y los cuerpos de `/auth/*` y `/usuarios` (`password`, `*_token`, `token`, `telefono`). |
+| `TokenRefreshAuthenticator` | Ante 401, renueva una sola vez y repite la petición. |
+
+> **Nota sobre el encargo:** se pidió "un interceptor que agregue Bearer y haga refresh". La constitución §4 separa ambas cosas: interceptor para la cabecera y `Authenticator` para el refresh. Manda la constitución; el comportamiento pedido es el mismo.
+
+**[Decisión propuesta] Detalles del cliente**
+- Base: `BuildConfig.API_BASE_URL`, con barra final. `/health` y `/ready` viven fuera del prefijo y se declaran con ruta absoluta.
+- `Json { ignoreUnknownKeys = true; explicitNulls = false }`. Porqué: la API agrega campos ("con más módulos aparecen más claves") y varios son `null`.
+- DTO en inglés con `@SerialName("campo_real")`. Porqué: inglés en código (§5), JSON en español.
+- Timeouts provisionales: conexión 10 s, lectura y escritura 15 s (fail-fast, §2.4). Se ajustan al medir (§2.5).
+- Cada POST que abre sesión manda `dispositivo` (`modelo`, `sistema`, `app_version`) desde un `DeviceInfoProvider`.
+
+### 3.2 Refresh de token
+
+La API **rota** el refresh token y **reusar uno viejo cierra todas las sesiones**. Por eso dos peticiones que reciben 401 a la vez no pueden refrescar por separado. Esto es lo más delicado de la capa de red.
+
+```mermaid
+sequenceDiagram
+  participant O as OkHttp (petición X)
+  participant A as TokenRefreshAuthenticator
+  participant T as TokenStore
+  participant B as POST /auth/refresh
+  O->>A: 401
+  alt priorResponse no es null, o la petición no llevaba Bearer
+    A-->>O: null, no reintenta
+  else primer 401 con Bearer
+    A->>A: toma el lock
+    A->>T: token actual
+    alt ya cambió respecto al de la petición
+      A-->>O: repite con el token nuevo, sin refrescar
+    else sigue igual
+      A->>B: refresh_token (cliente sin Authenticator)
+      alt 200
+        B-->>A: access y refresh nuevos
+        A->>T: guarda ambos antes de soltar el lock
+        A-->>O: repite con el token nuevo
+      else 401 o 422, rechazo definitivo
+        A->>T: clear()
+        A-->>O: null + evento SesiónTerminada
+      else red, 429 o 503, fallo transitorio
+        A-->>O: null, conserva la sesión
+      end
+    end
+  end
+```
+
+- **Un solo intento [Constitución §6]**: `response.priorResponse != null` corta el ciclo.
+- **Lock único [Decisión propuesta]**: serializa los refresh; quien espera compara su token con el actual y reutiliza el nuevo. Porqué: evita el reuso del refresh token.
+- **Cliente aparte para `/auth/refresh` [Decisión propuesta]**: sin `AuthHeader` ni `Authenticator`, con `RequestId` y logging redactado. Porqué: evita recursión.
+- **Login con clave errónea no refresca**: `/auth/login` responde 401 sin haber llevado Bearer, y ese 401 llega a la UI tal cual.
+- **Fallo transitorio [Decisión propuesta, requiere confirmación]**: la constitución §6 dice "si el refresh falla, se limpia la sesión". Se interpreta "falla" como **rechazo del servidor** (401/422). Sin red o con staging apagado no se cierra la sesión. Porqué: offline primero (§2.1), y staging se apaga todas las noches: cerrar sesión ahí expulsaría al usuario sin motivo.
+
+### 3.3 Errores
+
+**[Constitución §4]** La forma `{ codigo, mensaje, campos[] }` se mapea a `AppError`. La API agrega `traza_id`. `AppError` conserva los nombres de `nv-01` y **[Decisión propuesta]** agrega los casos que la API distingue y la UI trata distinto.
+
+```kotlin
+@Serializable
+data class ApiErrorDto(
+    @SerialName("codigo") val code: String,
+    @SerialName("mensaje") val message: String,
+    @SerialName("campos") val fields: List<FieldErrorDto> = emptyList(),
+    @SerialName("traza_id") val traceId: String? = null,
+)
+```
+
+| HTTP | `codigo` | `AppError` | UI |
 |---|---|---|---|
-| Autenticación | `/auth` | `auth` | Propuesto; contratos y refresh real en `nv-05` |
-| Feed, historias y avisos | `/feed`, `/posts`, `/stories`, `/notifications` | `feed` | Propuesto |
-| Amigos y privacidad | `/friends`, `/friend-requests`, `/me/qr`, `/me/privacy` | `friends` | Propuesto |
-| Lugares y favoritos | `/places`, `/categories`, `/favorites` | `explore` | Propuesto |
-| Planes | `/plans`, `/plans/ai` | `plans` | Propuesto; IA `[planificado nv-08]` |
-| Social, grupos y chat | `/groups`, `/chats`, `/plans/{id}/chat`, `/plans/{id}/split`, `/plans/{id}/votes` | `social` | Propuesto; chat `[planificado nv-12]` |
-| Reservas, pagos y cupones | `/bookings`, `/payments`, `/me/plans`, `/me/reservations`, `/coupons` | `booking` | Propuesto; pago `[planificado nv-09]` |
-| Día del plan | `/plans/{id}/live`, `/checkins` | `dayof` | Propuesto |
-| Recuerdos y reseñas | `/plans/{id}/memories`, `/reviews`, `/me/reviews`, `/places/{id}/reviews` | `memories` | Propuesto |
-| Perfil e insignias | `/me`, `/me/settings`, `/me/badges` | `profile` | Propuesto |
-| Negocio | `/business/*` | `business` | Propuesto |
+| 400 | `solicitud_invalida` | `Unknown` | Error genérico; indica bug: se loguea con `traza_id` |
+| 401 | `no_autenticado` | `Unauthorized` | Tras el refresh: a Login. En login: "correo o contraseña incorrectos" |
+| 403 | `prohibido` | `Forbidden` | Mensaje; si la cuenta tiene eliminación pendiente, a esa pantalla |
+| 404 | `no_encontrado` | `NotFound` | Estado vacío o mensaje |
+| 409 | `conflicto` | `Conflict` | Según pantalla: correo ya existe; perfil desactualizado → recargar |
+| 410 | `vencido` | `Gone` | Enlace vencido; pedir otro |
+| 422 | `validacion` | `Validation(campos)` | Error bajo cada campo |
+| 423 | `bloqueado` | `Locked` | Login bloqueado 15 min |
+| 429 | `demasiadas_peticiones` | `RateLimited(retryAfter)` | Cuenta atrás con `Retry-After` |
+| 503 | `no_disponible` | `Server` | Reintentar |
+| 5xx sin cuerpo válido | — | `Server` | Reintentar |
+| Sin conexión / DNS | — | `Network` | Estado sin red |
+| Tiempo agotado | — | `Timeout` | Reintentar |
+| Cuerpo ilegible | — | `Unknown` | Error genérico |
 
-Rutas: ver `docs/routes.md`. Inventario: ver `docs/figma-inventory.md`. Permisos: ver `docs/permissions-matrix.md`. Seguridad: ver `docs/masvs-checklist.md`. Un cambio de contrato con la API exige spec y revisión; estos grupos no autorizan implementación ni pruebas contra el backend.
+- Reglas: el `codigo` decide la lógica, no el texto de `mensaje`. `traza_id` se conserva en `AppError`. **La UI muestra el `mensaje` de la API** (encargo del 2026-11-04), con mayúscula inicial, y usa `strings.xml` si no hay mensaje (sin red, tiempo agotado) o si la pantalla pide un texto concreto (423 en login, 409 en perfil). `campos[].mensaje` va bajo su campo.
+- **[Decisión propuesta]** El mapeo vive en una sola función `safeApiCall { }` de `core/network` que devuelve `Result<T>`. Porqué: un `CallAdapter` propio agrega magia sin ventaja, y esto es trivial de probar con MockWebServer.
 
-## Tests
-En `nv-04` no hay pruebas ejecutables: es una spec documental. La matriz obligatoria para `nv-05+` es:
-- Arquitectura (Konsist) 8: dependencias entre features, `core` sin features, ViewModel sin Retrofit/Room, Composable sin repositorio, rutas tipadas, textos fuera de `strings.xml`, sin `Dispatchers.IO` fijo y DTO fuera de UI.
-- Unit: ViewModel, repositorio y mappers por feature; estados y eventos con Turbine.
-- Data: Room en memoria, DAOs, paginación y migraciones con `MigrationTestHelper`; MockWebServer para cada endpoint.
-- Security: manifiesto, `networkSecurityConfig`, `TokenStore` y ausencia de tokens en logs.
-- UI: Compose Testing por pantalla, búsqueda por `testTag` o texto de `strings.xml`.
-- Contratos: un caso por grupo de endpoint (11) con fixtures; sin backend real.
-- Cobertura global ≥ 45 % con `scripts/check_coverage.sh` `[planificado nv-03]`.
+### 3.4 Otros contratos transversales
 
-## Criterios
-- `docs/architecture.md` existe y cubre los 11 módulos, dependencias, MVVM, navegación, datos, auth y contratos.
-- `docs/figma-inventory.md` cubre los 158 frames y los 11 módulos; las variantes están agrupadas y los solapamientos documentados.
-- Las reglas R1-R8 están mapeadas en `plan.md`, `task.md` y `checklists/gates.md`.
-- No hay referencias a `nv-04` como funcionalidad o pantalla; auth está especificado en `nv-05` y las demás implementaciones apuntan a `nv-06+` `[planificado nv-06]`.
-- Los contratos están marcados como propuestos y pendientes del backend; no se declaran definitivos.
-- `AGENTS.md`, `README.md`, `CLAUDE.md` y `Memoria.md` reflejan la nueva fase y el mapa `nv-04` arquitectura / `nv-05+` producto.
-- `docs/routes.md`, `docs/permissions-matrix.md` y `docs/masvs-checklist.md` quedan alineados.
-- `git diff --check` sin errores y revisión manual de las 8 secciones.
-- `scripts/check_sdd.sh` `[planificado nv-01]` se ejecutará cuando exista; hoy la evidencia es la revisión manual.
+- **Concurrencia del perfil**: `PATCH /usuarios/yo` exige `If-Match: "<version>"`. Con 409: "tus datos cambiaron en otro dispositivo" y se vuelve a pedir el perfil.
+- **Cuenta con eliminación pendiente**: solo responden `GET /usuarios/yo`, cancelar eliminación y logout; lo demás da 403. El `SessionGate` lo detecta con `estado`/`eliminar_en`.
+- **Enlaces de correo**: traen `#token=XYZ` en el fragmento. La app lo extrae y lo manda en el cuerpo.
+- **Paginación**: `PageResult{items, siguienteCursor, limite}` **[Constitución §4]**. Ningún endpoint publicado en v1 pagina aún.
+- **Rutas**: `docs/routes.md`. **Permisos**: `docs/permissions-matrix.md`.
 
-## Límites
-Sin pantallas, código Kotlin, tests ejecutables, CI, scripts, FCM real, Maps real, cámara, pagos, chat en tiempo real ni IA implementada. Sin contratos definitivos con el backend Golang. Sin analítica ni Crashlytics. La validación visual de la maqueta y los flujos de pantalla quedan para `nv-05+`; auth ya está especificado en `nv-05` y el resto en `nv-06+` `[planificado nv-06]`.
+## 4. Modelo de datos
 
-## Aprobación y Control de Cambios
-- **Estado:** 🚧 Borrador con evidencia (documental; sin código)
-- **Revisores:** (pendiente de nombre)
-- **Fecha:** 2026-11-02
-- **Detalle:** especificada y verificada documentalmente; sin código, tests ni pantallas. Incluye el inventario de 158 frames en `docs/figma-inventory.md`. La evidencia está en `specs/nv-04/checklists/gates.md` + `Memoria.md`.
+`DTO → Mapper → Entity (Room) → Domain → UiState` **[nv-02]**.
+
+- **[Constitución §5]** Room con esquemas exportados en `app/schemas` y migraciones explícitas, sin `fallbackToDestructiveMigration`.
+- Una `WhereverDatabase` en `core/database`; cada feature aporta entidades y DAOs.
+- **[Decisión propuesta]** `UserProfileEntity` es la primera entidad real (Sprint 1), con `version` para `If-Match`. Los objetos anidados (`gustos`, `preferencias`, `privacidad`) van con `@Embedded`. Porqué: el backend siempre los manda juntos y no se consultan por separado.
+- **[nv-02]** `AppError`, `Result` y `PageResult` en `core/common`.
+
+## 5. Seguridad y privacidad
+
+### 5.1 Tokens: DataStore + Keystore
+
+**[Constitución §6]** Tokens cifrados con Keystore, jamás en logs, `SharedPreferences` sin cifrar ni respaldos. **US-013** pide DataStore + Keystore.
+
+**[Decisión propuesta] Diseño de `TokenStore`** (interfaz con `reset()`, `nv-01`):
+- `DataStore<EncryptedTokens>` con `Serializer` propio que cifra todo el archivo.
+- AES-256-GCM con clave de `AndroidKeyStore` (alias `wherever_tokens_v1`), IV aleatorio por escritura guardado junto al texto cifrado. Sin autenticación biométrica, para poder refrescar en segundo plano.
+- Contenido: `access_token`, `refresh_token`, `expira_en`.
+- Si no se puede descifrar (clave perdida, restauración): `CorruptionHandler` devuelve vacío, lo que equivale a sesión vencida y lleva a Login.
+- Porqué DataStore + Keystore y no `EncryptedSharedPreferences`: esa API de `security-crypto` está obsoleta, y US-013 pide DataStore. Porqué sin Tink: la API de Keystore basta (MASVS CRYPTO: sin cripto propia, solo APIs de plataforma) y no agrega dependencias.
+- **Excepción de stack** (constitución §3, regla de `nv-00`): `androidx.datastore` no está en la tabla. Licencia Apache 2.0, mantenida por Google. La pide US-013. Lo mismo para `androidx.core:core-splashscreen` (US-001). También `androidx.compose.material:material-icons-core`, para los íconos de la maqueta, y `androidx.hilt:hilt-lifecycle-viewmodel-compose`, para `hiltViewModel()`: Apache 2.0, de Google.
+
+### 5.2 Red y plataforma
+
+- **[Constitución §6]** `network_security_config.xml`: `cleartextTrafficPermitted="false"`, confía solo en CA del sistema.
+- **[Constitución §6]** `allowBackup="false"` con `dataExtractionRules` que excluyen todo.
+- Sin llaves en el repositorio: `API_BASE_URL` por `local.properties`/`BuildConfig`. `google-services.json` fuera de Git.
+- `R8` en release (`docs/masvs-checklist.md`).
+- **Logout (US-019)**: `POST /auth/logout`, luego `TokenStore.clear()` y borrado de tablas personales de Room, aunque la llamada falle.
+
+### 5.3 Inyección de dependencias
+
+**[Constitución §2.3, §3]** Hilt; sin estado oculto.
+
+**[Decisión propuesta]** Módulos en `core/di`: `DispatchersModule`, `ClockModule`, `NetworkModule`, `DatabaseModule`, `SecurityModule`. Cada feature declara el suyo en `feature/<nombre>/data/di` con `@Binds` de repositorios. Calificadores `@AuthenticatedClient` y `@RefreshClient` para los dos OkHttp. `DispatcherProvider` y `Clock` se inyectan siempre.
+
+### 5.4 Paquetes
+
+Raíz: `com.wherever.mobile` **[Decisión propuesta]**.
+
+```
+com.wherever.mobile
+├── WhereverApp.kt            # @HiltAndroidApp
+├── MainActivity.kt
+├── navigation/               # NavHost, rutas tipadas, SessionGate
+├── core/
+│   ├── common/               # Result, AppError, PageResult, DispatcherProvider
+│   ├── data/                 # BaseRepository (nv-02)
+│   ├── ui/                   # UiState, BaseViewModel (nv-02)
+│   ├── designsystem/         # Color, Type, Theme, componentes base
+│   ├── network/              # Retrofit, interceptores, Authenticator, safeApiCall
+│   ├── database/             # WhereverDatabase, convertidores
+│   ├── security/             # TokenStore y su implementación
+│   ├── sync/                 # WorkManager
+│   ├── notifications/        # Canal y FCM
+│   └── di/                   # Módulos de Hilt
+└── feature/<nombre>/
+    ├── ui/                   # Screen, ViewModel, UiState
+    ├── domain/               # Modelos, interfaz del repositorio
+    └── data/                 # RepositoryImpl, Api, Dto, Entity, Dao, Mapper
+```
+
+### 5.5 Convenciones
+
+**[Constitución §5]** Inglés en código y paquetes, comentarios y textos en español, todo texto visible en `strings.xml`. Colores y tipografías solo desde `core/designsystem`. Complejidad detekt ≤ 15. Áreas táctiles de 48 dp. Un solo botón principal naranja por pantalla.
+
+**[Decisión propuesta]** Nombres: `<Pantalla>Screen`, `<Pantalla>ViewModel`, `<Pantalla>UiState`, `<Recurso>Api`, `<Recurso>Dto`, `<Recurso>Entity`, `<Recurso>Dao`, `<Recurso>Repository` e `<Recurso>RepositoryImpl`. `testTag` en estilo `pantalla_elemento`. Strings con prefijo de pantalla: `login_title`. Porqué: Konsist puede comprobar los sufijos y `check_strings.sh` agrupa por prefijo.
+
+## 6. Tests / Gates
+
+Suites de la constitución §7. Mínimos de esta arquitectura, además de los conteos de `nv-01`/`nv-02`:
+
+| Suite | Caso |
+|---|---|
+| Unit | 401 con refresh OK → repite con el token nuevo; 401 tras reintento → no hay segundo refresh |
+| Unit | Dos 401 simultáneos → **un solo** `POST /auth/refresh` (protege contra el reuso) |
+| Unit | Refresh 401 → limpia sesión y emite evento; refresh con red caída o 503 → conserva sesión |
+| Unit | 401 de login (sin Bearer) → no intenta refresh |
+| Unit | Mapeo de cada `codigo` a `AppError`, cuerpo ilegible → `Unknown`, `Retry-After` → `RateLimited` |
+| Data | `safeApiCall` con MockWebServer; `If-Match` y 409 del perfil |
+| Security | Manifiesto (`allowBackup`, sin HTTP en claro); logging sin `Authorization` ni `password` |
+| Security | `TokenStore`: el archivo en disco no contiene el token en claro; descifrado fallido → vacío |
+| Arquitectura | Konsist: regla de capas, sufijos, sin `Dispatchers.IO` fijo, sin Retrofit en ViewModel |
+
+Gates: `CHECKLIST_PR.md`, cobertura ≥ 45 %.
+
+## 7. Plan de entrega
+
+1. Spec aprobada → `specs/nv-04/plan.md`.
+2. Proyecto Gradle con pantalla `home` y `assembleDebug` verde.
+3. Ejecutar `nv-01` (red, `TokenStore`, Room) y `nv-02` (molde) con esta spec como referencia.
+4. Sprint 1 (`specs/002+`) sobre ese molde.
+
+## Aprobación
+- [x] Revisor: Jorge — fecha: 2026-11-06
+- [ ] CHECKLIST_PR.md OK
+- [ ] Sin conflicto con constitución (interpretaciones a confirmar: §3.1 nota del encargo, §3.2 fallo transitorio, §5.1 excepción de stack)
+
+**Estado:** ✅ Aprobada (Jorge, 2026-11-06).

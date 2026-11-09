@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
+# Comprueba strings.xml: referencias definidas, sin duplicados y sin texto
+# hardcodeado en la UI (constitución §5).
 set -euo pipefail
+export LC_ALL=C
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"

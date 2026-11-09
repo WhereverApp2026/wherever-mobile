@@ -1,147 +1,132 @@
 package com.wherever.mobile.feature.auth.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
-import com.wherever.mobile.core.designsystem.components.WhereverPrimaryButton
-import com.wherever.mobile.feature.auth.domain.AuthField
-import com.wherever.mobile.feature.auth.ui.components.AuthErrorBanner
-import com.wherever.mobile.feature.auth.ui.components.AuthFooterAction
-import com.wherever.mobile.feature.auth.ui.components.AuthHeader
-import com.wherever.mobile.feature.auth.ui.components.AuthTextField
+import com.wherever.mobile.core.designsystem.BackCircleButton
+import com.wherever.mobile.core.designsystem.ErrorBanner
+import com.wherever.mobile.core.designsystem.FormScreen
+import com.wherever.mobile.core.designsystem.LabeledTextField
+import com.wherever.mobile.core.designsystem.LogoMark
+import com.wherever.mobile.core.designsystem.TitleBlock
+import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
+import com.wherever.mobile.core.designsystem.WhereverTextLink
+import com.wherever.mobile.core.designsystem.WhereverTheme
+import com.wherever.mobile.core.ui.formatCountdown
+import com.wherever.mobile.feature.auth.domain.PostAuthDestination
 
+/** 03_Login */
 @Composable
-fun LoginScreen(
-    onLoggedIn: () -> Unit,
+fun LoginRoute(
     onBack: () -> Unit,
-    onCreateAccount: () -> Unit,
     onForgotPassword: () -> Unit,
-    onResetPassword: () -> Unit,
+    onCreateAccount: () -> Unit,
+    onLoggedIn: (PostAuthDestination) -> Unit,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    LaunchedEffect(viewModel) {
-        viewModel.events.collect { event ->
-            if (event is LoginEvent.Success) onLoggedIn()
-        }
-    }
+    LaunchedEffect(viewModel) { viewModel.destinations.collect(onLoggedIn) }
     LoginContent(
         state = state,
         onEmailChange = viewModel::onEmailChange,
+        onEmailBlur = viewModel::onEmailBlur,
         onPasswordChange = viewModel::onPasswordChange,
-        onTogglePassword = viewModel::togglePasswordVisibility,
         onSubmit = viewModel::submit,
         onBack = onBack,
-        onCreateAccount = onCreateAccount,
         onForgotPassword = onForgotPassword,
-        onResetPassword = onResetPassword
+        onCreateAccount = onCreateAccount
     )
 }
 
 @Composable
-fun LoginContent(
+private fun LoginContent(
     state: LoginUiState,
     onEmailChange: (String) -> Unit,
+    onEmailBlur: () -> Unit,
     onPasswordChange: (String) -> Unit,
-    onTogglePassword: () -> Unit,
     onSubmit: () -> Unit,
     onBack: () -> Unit,
-    onCreateAccount: () -> Unit,
     onForgotPassword: () -> Unit,
-    onResetPassword: () -> Unit
+    onCreateAccount: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+    FormScreen(
+        footer = {
+            val waiting = state.retryAfterSeconds > 0
+            WhereverPrimaryButton(
+                text = if (waiting) {
+                    stringResource(R.string.common_wait, formatCountdown(state.retryAfterSeconds))
+                } else {
+                    stringResource(R.string.login_submit)
+                },
+                onClick = onSubmit,
+                enabled = state.canSubmit,
+                loading = state.submitting,
+                tag = "login_submit"
+            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = stringResource(R.string.login_no_account),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                WhereverTextLink(stringResource(R.string.login_create_account), onCreateAccount)
+            }
+        }
     ) {
-        AuthHeader(
-            title = stringResource(R.string.auth_login_title),
-            subtitle = stringResource(R.string.auth_login_subtitle),
-            onBack = onBack
+        BackCircleButton(onClick = onBack)
+        LogoMark()
+        TitleBlock(stringResource(R.string.login_title), subtitle = stringResource(R.string.login_subtitle))
+        LabeledTextField(
+            label = stringResource(R.string.field_email),
+            value = state.email,
+            onValueChange = onEmailChange,
+            placeholder = stringResource(R.string.field_email_placeholder),
+            leadingIcon = Icons.Filled.Email,
+            error = state.emailError?.asString(),
+            onBlur = onEmailBlur,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            tag = "login_email"
         )
-        LoginForm(
-            state = state,
-            onEmailChange = onEmailChange,
-            onPasswordChange = onPasswordChange,
-            onTogglePassword = onTogglePassword,
-            onSubmit = onSubmit
+        LabeledTextField(
+            label = stringResource(R.string.field_password),
+            value = state.password,
+            onValueChange = onPasswordChange,
+            placeholder = stringResource(R.string.login_password_placeholder),
+            leadingIcon = Icons.Filled.Lock,
+            error = state.passwordError?.asString(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            visualTransformation = PasswordVisualTransformation(),
+            tag = "login_password"
         )
-        AuthFooterAction(
-            text = stringResource(R.string.auth_no_account),
-            actionText = stringResource(R.string.auth_action_create_account),
-            onClick = onCreateAccount
-        )
-        AuthFooterAction(
-            text = stringResource(R.string.auth_forgot_password),
-            actionText = stringResource(R.string.auth_action_recover),
-            onClick = onForgotPassword
-        )
-        AuthFooterAction(
-            text = stringResource(R.string.auth_has_code),
-            actionText = stringResource(R.string.auth_action_reset),
-            onClick = onResetPassword
-        )
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+            WhereverTextLink(stringResource(R.string.login_forgot), onForgotPassword)
+        }
+        state.error?.let { ErrorBanner(it.asString()) }
     }
 }
 
+@Preview
 @Composable
-private fun LoginForm(
-    state: LoginUiState,
-    onEmailChange: (String) -> Unit,
-    onPasswordChange: (String) -> Unit,
-    onTogglePassword: () -> Unit,
-    onSubmit: () -> Unit
-) {
-    AuthTextField(
-        label = stringResource(R.string.auth_field_email),
-        value = state.email,
-        onValueChange = onEmailChange,
-        keyboardType = KeyboardType.Email,
-        error = state.fieldErrors[AuthField.EMAIL],
-        testTag = "login_email"
-    )
-    AuthTextField(
-        label = stringResource(R.string.auth_field_password),
-        value = state.password,
-        onValueChange = onPasswordChange,
-        keyboardType = KeyboardType.Password,
-        imeAction = ImeAction.Done,
-        isPassword = true,
-        passwordVisible = state.passwordVisible,
-        onTogglePassword = onTogglePassword,
-        error = state.fieldErrors[AuthField.PASSWORD],
-        testTag = "login_password"
-    )
-    AuthErrorBanner(error = state.error)
-    WhereverPrimaryButton(
-        text = if (state.isLoading) {
-            stringResource(R.string.auth_action_loading)
-        } else {
-            stringResource(R.string.auth_action_sign_in)
-        },
-        onClick = onSubmit,
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag("login_submit"),
-        enabled = !state.isLoading
-    )
+private fun LoginPreview() {
+    WhereverTheme(darkTheme = false) {
+        LoginContent(LoginUiState(email = "tu@ejemplo.com"), {}, {}, {}, {}, {}, {}, {})
+    }
 }

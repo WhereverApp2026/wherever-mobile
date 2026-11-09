@@ -1,1 +1,1 @@
-# Sin reglas de ofuscación específicas en nv-01.
+# Reglas propias de R8. Las librerías del stack traen las suyas.

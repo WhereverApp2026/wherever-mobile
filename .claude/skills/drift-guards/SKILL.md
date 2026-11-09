@@ -7,7 +7,7 @@ description: Evitar que la doc se aleje del código
 > Rector: `.specify/memory/constitution.md`. Ante conflicto, manda la constitución.
 
 ## What I do
-- `check_sdd.sh`, `check_routes.sh`, `check_strings.sh` `[planificado nv-01]`.
+- `check_sdd.sh`, `check_routes.sh`, `check_strings.sh`.
 
 ## Cuando usarme
 Antes del PR.

@@ -7,8 +7,7 @@ description: Estrategia de pruebas y umbrales
 > Rector: `.specify/memory/constitution.md`. Ante conflicto, manda la constitución.
 
 ## What I do
-- Unit, Data, Security, UI, Arquitectura. Cobertura ≥45 % provisional hasta la primera medición.
-- Room real en memoria + MockWebServer; sin repositorios simulados en pruebas de datos.
+- Unit, Data, Security, UI, Arquitectura. Cobertura ≥45 %.
 
 ## Cuando usarme
 Planear pruebas de una spec.

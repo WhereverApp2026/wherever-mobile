@@ -1,0 +1,20 @@
+# Reglas propias de Wherever (constitución §6). Se suman a `--config=auto`.
+# Prohibiciones que ya son regla en AGENTS.md y en las specs.
+rules:
+  - id: wherever-no-destructive-migration
+    languages: [kotlin]
+    severity: ERROR
+    message: >-
+      fallbackToDestructiveMigration está prohibido: Room es la fuente de
+      verdad y las migraciones deben ser explícitas (constitución §5).
+    pattern: fallbackToDestructiveMigration(...)
+
+  - id: wherever-no-cleartext-http
+    languages: [kotlin]
+    severity: ERROR
+    message: >-
+      URL http:// en claro: la constitución §6 exige solo HTTPS.
+    pattern-regex: 'http://'
+    paths:
+      include:
+        - /app/src/main/java/**

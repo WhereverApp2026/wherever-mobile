@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Wherever" parent="android:style/Theme.Material.Light.NoActionBar">
+    <style name="Theme.Wherever" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:windowBackground">@color/wherever_mist</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:fontFamily">@font/dm_sans</item>
+    </style>
+
+    <style name="Theme.Wherever.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/wherever_route_blue</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.Wherever</item>
     </style>
 </resources>

@@ -1,67 +1,49 @@
 package com.wherever.mobile.core.designsystem
 
 import androidx.compose.material3.Typography
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import com.wherever.mobile.R
 
-val DmSans = FontFamily(
-    Font(R.font.dm_sans, FontWeight.Normal),
-    Font(R.font.dm_sans, FontWeight.Medium),
-    Font(R.font.dm_sans, FontWeight.SemiBold),
-    Font(R.font.dm_sans, FontWeight.Bold)
+@OptIn(ExperimentalTextApi::class)
+private fun variableFont(resId: Int, weight: FontWeight) = Font(
+    resId = resId,
+    weight = weight,
+    variationSettings = FontVariation.Settings(FontVariation.weight(weight.weight))
 )
 
-val Sora = FontFamily(
-    Font(R.font.sora, FontWeight.Normal),
-    Font(R.font.sora, FontWeight.SemiBold),
-    Font(R.font.sora, FontWeight.Bold)
+/** Sora: títulos. */
+val SoraFamily = FontFamily(
+    variableFont(R.font.sora, FontWeight.SemiBold),
+    variableFont(R.font.sora, FontWeight.Bold)
 )
+
+/** DM Sans: cuerpo y controles. */
+val DmSansFamily = FontFamily(
+    variableFont(R.font.dm_sans, FontWeight.Normal),
+    variableFont(R.font.dm_sans, FontWeight.Medium),
+    variableFont(R.font.dm_sans, FontWeight.SemiBold)
+)
+
+private val base = Typography()
 
 val WhereverTypography = Typography(
-    displayLarge = TextStyle(
-        fontFamily = Sora,
-        fontWeight = FontWeight.Bold,
-        fontSize = 40.sp,
-        lineHeight = 48.sp
-    ),
-    headlineLarge = TextStyle(
-        fontFamily = Sora,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 30.sp,
-        lineHeight = 38.sp
-    ),
-    headlineMedium = TextStyle(
-        fontFamily = Sora,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 24.sp,
-        lineHeight = 32.sp
-    ),
-    titleLarge = TextStyle(
-        fontFamily = Sora,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 20.sp,
-        lineHeight = 28.sp
-    ),
-    bodyLarge = TextStyle(
-        fontFamily = DmSans,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp
-    ),
-    bodyMedium = TextStyle(
-        fontFamily = DmSans,
-        fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        lineHeight = 20.sp
-    ),
-    labelLarge = TextStyle(
-        fontFamily = DmSans,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 14.sp,
-        lineHeight = 20.sp
-    )
+    displayLarge = base.displayLarge.copy(fontFamily = SoraFamily),
+    displayMedium = base.displayMedium.copy(fontFamily = SoraFamily),
+    displaySmall = base.displaySmall.copy(fontFamily = SoraFamily),
+    headlineLarge = base.headlineLarge.copy(fontFamily = SoraFamily, fontWeight = FontWeight.Bold),
+    headlineMedium = base.headlineMedium.copy(fontFamily = SoraFamily, fontWeight = FontWeight.Bold),
+    headlineSmall = base.headlineSmall.copy(fontFamily = SoraFamily, fontWeight = FontWeight.SemiBold),
+    titleLarge = base.titleLarge.copy(fontFamily = SoraFamily, fontWeight = FontWeight.SemiBold),
+    titleMedium = base.titleMedium.copy(fontFamily = SoraFamily, fontWeight = FontWeight.SemiBold),
+    titleSmall = base.titleSmall.copy(fontFamily = SoraFamily, fontWeight = FontWeight.SemiBold),
+    bodyLarge = base.bodyLarge.copy(fontFamily = DmSansFamily),
+    bodyMedium = base.bodyMedium.copy(fontFamily = DmSansFamily),
+    bodySmall = base.bodySmall.copy(fontFamily = DmSansFamily),
+    labelLarge = base.labelLarge.copy(fontFamily = DmSansFamily, fontWeight = FontWeight.SemiBold),
+    labelMedium = base.labelMedium.copy(fontFamily = DmSansFamily, fontWeight = FontWeight.Medium),
+    labelSmall = base.labelSmall.copy(fontFamily = DmSansFamily, fontWeight = FontWeight.Medium)
 )

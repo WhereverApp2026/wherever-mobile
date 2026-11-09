@@ -1,17 +1,8 @@
 package com.wherever.mobile.core.common
 
-import javax.inject.Inject
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import kotlin.coroutines.CoroutineContext
 
+/** Se inyecta para no fijar dispatchers en la lógica (constitución §5). */
 interface DispatcherProvider {
-    val io: CoroutineDispatcher
-    val default: CoroutineDispatcher
-    val main: CoroutineDispatcher
-}
-
-class DefaultDispatcherProvider @Inject constructor() : DispatcherProvider {
-    override val io: CoroutineDispatcher = Dispatchers.IO
-    override val default: CoroutineDispatcher = Dispatchers.Default
-    override val main: CoroutineDispatcher = Dispatchers.Main
+    val io: CoroutineContext
 }

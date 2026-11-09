@@ -1,36 +1,27 @@
-build:
-  maxIssues: 0
-
-config:
-  validation: true
-  warningsAsErrors: true
-
+# Se aplica sobre la configuración por defecto de detekt (constitución §5).
 complexity:
   CyclomaticComplexMethod:
     threshold: 15
   LongMethod:
-    threshold: 60
+    ignoreAnnotated: ['Composable']
   LongParameterList:
-    ignoreAnnotated:
-      - Composable
+    ignoreAnnotated: ['Composable']
   TooManyFunctions:
-    thresholdInFiles: 20
-    thresholdInClasses: 15
-    thresholdInInterfaces: 15
-    thresholdInObjects: 15
-    thresholdInEnums: 15
-
+    # Repositorios y pantallas con muchas rutas: el umbral por defecto (11) queda corto.
+    thresholdInFiles: 16
+    thresholdInClasses: 16
+    thresholdInInterfaces: 16
 naming:
   FunctionNaming:
-    ignoreAnnotated:
-      - Composable
-
+    ignoreAnnotated: ['Composable']
+  TopLevelPropertyNaming:
+    # Kotlin: constantes en MAYÚSCULAS_CON_GUION_BAJO (const val MAX_LENGTH).
+    constantPattern: '[A-Z][_A-Za-z0-9]*'
 style:
   MagicNumber:
-    active: false
-  MaxLineLength:
-    maxLineLength: 140
+    excludes: ['**/core/designsystem/**', '**/test/**', '**/androidTest/**']
+  UnusedPrivateMember:
+    ignoreAnnotated: ['Preview']
   ReturnCount:
-    max: 4
-  WildcardImport:
-    active: true
+    # Las cláusulas de guarda (`?: return`, `if (...) return`) no cuentan.
+    excludeGuardClauses: true

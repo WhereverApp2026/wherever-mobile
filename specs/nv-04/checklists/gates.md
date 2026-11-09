@@ -1,23 +1,17 @@
-# Checklist — nv-04 Arquitectura de la aplicación móvil
+# Checklist — NV-04 — Arquitectura de Wherever Móvil
 
-> Trazabilidad: `spec R1-R8 → plan §3-§5 → task T1-T6`. Estado: Borrador con evidencia; aprobación pendiente.
+> Trazabilidad: `spec §1-§7 ↔ plan §1-§5 ↔ task T1-T4`. Estado: implementada y aprobada (Jorge, 2026-11-06). Evidencia local del 2026-11-05.
+> Orden CI-PR: deps → build → lint → unit → data → security → ui → critic → routes → sdd → coverage → delta-check → mutation → semgrep → deps-scan.
 
-- [x] Los 11 módulos y sus paquetes `feature/*` están documentados (R1)
-- [x] Reglas de dependencia y plantilla MVVM por feature documentadas (R1, R2)
-- [x] `UiState`/`StateFlow`/eventos y límites ViewModel-Composable definidos (R2)
-- [x] Grafos de navegación, auth gate y deep links definidos; rutas reales diferidas a `nv-05+` (R3)
-- [x] Room fuente de verdad, propiedad de tablas, caché, paginación y sync definidos (R4)
-- [x] Migraciones explícitas y prohibición de `fallbackToDestructiveMigration` (R4)
-- [x] Convenciones REST y 11 grupos propuestos, pendientes del backend Golang (R5)
-- [x] Auth con Keystore, refresh único, logout/reset y permisos en contexto (R6)
-- [x] FCM, Maps, cámara y medios como interfaces diferidas `[planificado nv-06]` (R6)
-- [x] Design system, `strings.xml`, estados, accesibilidad y observabilidad (R7)
-- [x] Matriz de pruebas R8 y cobertura ≥45 % definidas para `nv-05+` (R8)
-- [x] `docs/architecture.md` creado y enlazado desde la spec
-- [x] `docs/figma-inventory.md` cubre 158 frames, 11 módulos y solapamientos
-- [x] `AGENTS.md`, `README.md`, `CLAUDE.md` y `Memoria.md` actualizados
-- [x] `docs/routes.md`, `docs/permissions-matrix.md` y `docs/masvs-checklist.md` alineados
-- [x] Sin referencias a `nv-04` como pantalla o implementación
-- [x] `git diff --check` sin errores
-- [x] Revisión manual SDD realizada; `scripts/check_sdd.sh` queda para `nv-01` `[planificado nv-01]`
-- [ ] Aprobación firmada: (pendiente de revisor)
+- [x] `./gradlew assembleDebug` y lint (ktlint, detekt, Android Lint) sin errores
+- [x] Unitarias verdes (ver `plan.md §3`)
+- [x] Integración JVM verde: MockWebServer con respuestas de `docs/contexto_api_sprint1.md`, sin staging
+- [ ] Integración instrumentada (Room real): compila; sin correr en local por falta de emulador o teléfono (`docs/revision-jorge.md`)
+- [x] Seguridad verde; MASVS: AUTH, CODE, CRYPTO, NETWORK, PLATFORM, STORAGE
+- [x] `docs/routes.md` actualizado y enlazado desde la spec
+- [x] Cobertura ≥45% (`scripts/check_coverage.sh --min 45`)
+- [x] Puerta incremental advisory: delta informa sin bloquear
+- [x] Sin secretos (gitleaks), sin tokens en logs, solo HTTPS
+- [ ] Estados cargando, vacío, error y sin red revisados en emulador
+- [x] `Memoria.md` actualizada, sin secretos
+- [x] Aprobación: Revisor Jorge — 2026-11-06

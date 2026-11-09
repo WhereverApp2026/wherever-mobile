@@ -16,4 +16,4 @@ Antes de etiquetar.
 - Salirse de la constitución o añadir pantallas del producto en `nv-00…nv-03`.
 
 ## Verify
-`scripts/critic-guardrails.sh → PASS` `[planificado nv-01]`.
+`scripts/critic-guardrails.sh → PASS`.

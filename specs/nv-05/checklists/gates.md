@@ -1,27 +1,17 @@
-# Checklist - nv-05 Acceso, registro y onboarding
+# Checklist — NV-05 — Flujo general
 
-> Trazabilidad: `spec R1-R11 → plan §3-§5 → task T0-T8`. Estado 2026-11-04: auth y onboarding R5-R8 implementados y verificados; aprobación de revisor abierta.
-> Los checks de requisitos acreditan que el requisito está **especificado**, no necesariamente implementado. La implementación se marca por separado.
+> Trazabilidad: `spec §1-§7 ↔ plan §1-§5 ↔ task T1-T4`. Estado: implementada y aprobada (Jorge, 2026-11-06). Evidencia local del 2026-11-05.
+> Orden CI-PR: deps → build → lint → unit → data → security → ui → critic → routes → sdd → coverage → delta-check → mutation → semgrep → deps-scan.
 
-- [x] R1 - Bienvenida/auth gate definidos e implementados con reanudación de onboarding.
-- [x] R2 - Login email/contraseña, errores, 429 y Google diferido implementados.
-- [x] R3 - Registro, términos, política, 409 y verificación de correo implementados.
-- [x] R4 - Recuperación genérica, reenvío, código manual y reset implementados.
-- [x] R5 - Preferencias de onboarding implementadas con guardado y omisión.
-- [x] R6 - Racional y permiso de ubicación implementados; denegar continúa.
-- [x] R7 - Sugerencias y solicitud de amigos implementadas con estados vacío/enviado.
-- [x] R8 - Notificaciones y cámara informativa implementadas; permisos opcionales.
-- [x] R9 - `TokenStore`, refresh único, rotación, sesión offline y limpieza implementados.
-- [x] R10 - 14 rutas tipadas auth implementadas; salida a `home` sigue `[planificado nv-06]`.
-- [x] R11 - Tests, documentación viva y gates de auth ejecutados; cobertura pendiente.
-- [x] Frames auth y onboarding cubiertos (preferencias, ubicación, amigos, permisos).
-- [x] Rutas reales verificadas; respuestas exitosas de onboarding pendientes de OpenAPI.
-- [x] `docs/routes.md` contiene las 14 rutas auth/onboarding implementadas.
-- [x] `docs/permissions-matrix.md` actualizado con ubicación, notificaciones y cámara informativa.
-- [ ] `README.md`, `CLAUDE.md`, `CHECKLIST_PR.md` y `docs/figma-inventory.md` reconciliados.
-- [x] `git diff --check` sin errores (solo avisos de fin de línea si aplica).
-- [x] Implementación auth R1-R4/R9-R10 verificada con APK y emulador.
-- [x] Tests JVM 75 + instrumentados 17 verdes; 0 fallos.
-- [x] `assembleDebug`/lint/ktlint/detekt sin errores; cobertura ≥45 % pendiente `[planificado nv-03]`.
-- [x] Onboarding R5-R8 implementado y probado.
-- [ ] `MigrationTestHelper` de `1→2`, enmienda constitucional `1.2.0`, cobertura y aprobación firmada de revisor.
+- [x] `./gradlew assembleDebug` y lint (ktlint, detekt, Android Lint) sin errores
+- [x] Unitarias verdes (ver `plan.md §3`)
+- [x] Integración JVM verde: MockWebServer con respuestas de `docs/contexto_api_sprint1.md`, sin staging
+- [ ] Integración instrumentada (Room real): compila; sin correr en local por falta de emulador o teléfono (`docs/revision-jorge.md`)
+- [x] Seguridad verde; MASVS: AUTH, PLATFORM
+- [x] `docs/routes.md` actualizado y enlazado desde la spec
+- [x] Cobertura ≥45% (`scripts/check_coverage.sh --min 45`)
+- [x] Puerta incremental advisory: delta informa sin bloquear
+- [x] Sin secretos (gitleaks), sin tokens en logs, solo HTTPS
+- [ ] Estados cargando, vacío, error y sin red revisados en emulador
+- [x] `Memoria.md` actualizada, sin secretos
+- [x] Aprobación: Revisor Jorge — 2026-11-06

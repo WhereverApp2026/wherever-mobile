@@ -1,23 +1,20 @@
 ---
 name: 05-offline-sync
-description: Room fuente de verdad y WorkManager (nv-05+)
+description: Room fuente de verdad y WorkManager
 ---
 # 05-offline-sync
 
-> Rector: `.specify/memory/constitution.md`. Fase: `nv-01` (Room base) / `nv-05+` (sync real).
+> Rector: `.specify/memory/constitution.md`. Ante conflicto, manda la constitución.
 
 ## What I do
-- `nv-01`: Room vacío con esquema exportado y política de migraciones; sin sync real.
-- `nv-05+`: trabajos de sincronización con reintentos y WorkManager.
-- Room como fuente de verdad: la red actualiza Room y la UI lee de Room.
+- Esquema exportado, migraciones explícitas.
+- Trabajos de sincronización con reintentos.
 
 ## Cuando usarme
-Datos locales y sincronización.
+Datos locales y sync.
 
 ## No hacer
-- `fallbackToDestructiveMigration`.
-- Sync real o WorkManager en `nv-01` sin spec.
-- Repositorios simulados en pruebas de datos.
+- Salirse de la constitución o añadir pantallas del producto en `nv-00…nv-03`.
 
 ## Verify
-`MigrationTestHelper` verde; sin migración destructiva; sync real solo en `nv-05+`.
+`MigrationTestHelper` verde; sin `fallbackToDestructiveMigration`.

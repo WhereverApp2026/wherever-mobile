@@ -3,20 +3,16 @@ package com.wherever.mobile.core.network
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class RedactedLoggingInterceptor(private val logger: HttpLogger) : Interceptor {
-
+/**
+ * Registra método, ruta sin parámetros, estado y `request_id`.
+ * Nunca cabeceras, parámetros ni cuerpos: ahí viajan tokens, contraseñas y correos (constitución §9).
+ */
+class RedactedLoggingInterceptor(private val log: (String) -> Unit) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
-        val requestId = request.header(RequestIdInterceptor.REQUEST_ID_HEADER).orEmpty()
-        logger.log(
-            "request ${request.method} ${HttpLogSanitizer.sanitize(request.url)} " +
-                "requestId=$requestId"
-        )
+        val line = "${request.method} ${request.url.encodedPath} request_id=${request.header(HEADER_REQUEST_ID)}"
         val response = chain.proceed(request)
-        logger.log(
-            "response ${response.code} ${HttpLogSanitizer.sanitize(request.url)} " +
-                "requestId=$requestId"
-        )
+        log("$line -> ${response.code} server_id=${response.header(HEADER_REQUEST_ID)}")
         return response
     }
 }

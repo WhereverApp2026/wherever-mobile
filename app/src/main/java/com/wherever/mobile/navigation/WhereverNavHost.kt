@@ -1,222 +1,161 @@
 package com.wherever.mobile.navigation
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavGraphBuilder
+import androidx.compose.runtime.LaunchedEffect
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.wherever.mobile.BuildConfig
-import com.wherever.mobile.feature.auth.data.RegistrationOutcome
-import com.wherever.mobile.feature.auth.domain.OnboardingStep
-import com.wherever.mobile.feature.auth.ui.AuthGateScreen
-import com.wherever.mobile.feature.auth.ui.AuthGateViewModel
-import com.wherever.mobile.feature.auth.ui.FriendsScreen
-import com.wherever.mobile.feature.auth.ui.LocationScreen
-import com.wherever.mobile.feature.auth.ui.LoginScreen
-import com.wherever.mobile.feature.auth.ui.OnboardingStartScreen
-import com.wherever.mobile.feature.auth.ui.PermissionsScreen
-import com.wherever.mobile.feature.auth.ui.PreferencesScreen
-import com.wherever.mobile.feature.auth.ui.RecoverScreen
-import com.wherever.mobile.feature.auth.ui.RecoverSentScreen
-import com.wherever.mobile.feature.auth.ui.RegisterScreen
-import com.wherever.mobile.feature.auth.ui.ResetPasswordScreen
-import com.wherever.mobile.feature.auth.ui.SessionsScreen
-import com.wherever.mobile.feature.auth.ui.VerifyEmailScreen
+import com.wherever.mobile.core.designsystem.SystemBarIcons
+import com.wherever.mobile.feature.auth.domain.PostAuthDestination
+import com.wherever.mobile.feature.auth.ui.CheckEmailMode
+import com.wherever.mobile.feature.auth.ui.CheckEmailRoute as CheckEmailScreen
+import com.wherever.mobile.feature.auth.ui.LoginRoute as LoginScreen
+import com.wherever.mobile.feature.auth.ui.RecoverRoute as RecoverScreen
+import com.wherever.mobile.feature.auth.ui.RegisterRoute as RegisterScreen
 import com.wherever.mobile.feature.auth.ui.WelcomeScreen
-import com.wherever.mobile.ui.debug.DebugConnectionScreen
-import com.wherever.mobile.ui.home.HomeScreen
+import com.wherever.mobile.feature.home.ui.HomeRouteScreen
+import com.wherever.mobile.feature.profile.ui.EditProfileRoute as EditProfileScreen
+import com.wherever.mobile.feature.profile.ui.ProfileRoute as ProfileScreen
+import com.wherever.mobile.feature.settings.ui.DeleteAccountRoute as DeleteAccountScreen
+import com.wherever.mobile.feature.settings.ui.DeletionPendingRoute as DeletionPendingScreen
+import com.wherever.mobile.feature.settings.ui.PrivacyRoute as PrivacyScreen
+import com.wherever.mobile.feature.settings.ui.SessionsRoute as SessionsScreen
+import com.wherever.mobile.feature.settings.ui.SettingsNavigation
+import com.wherever.mobile.feature.settings.ui.SettingsRoute as SettingsScreen
+import com.wherever.mobile.feature.tastes.ui.TastesRoute as TastesScreen
+import kotlinx.coroutines.flow.Flow
 
-@Suppress("FunctionNaming")
 @Composable
-fun WhereverNavHost(
-    navController: NavHostController = rememberNavController(),
-    startDestination: Any = AuthGateRoute,
-    debugScreen: @Composable () -> Unit = { DebugConnectionScreen() }
-) {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        NavHost(
-            navController = navController,
-            startDestination = startDestination
-        ) {
-            authEntryDestinations(navController)
-            authRegistrationDestinations(navController)
-            authRecoveryDestinations(navController)
-            authSessionDestinations(navController)
-            onboardingDestinations(navController)
-            composable<HomeRoute> {
-                HomeScreen()
+fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>) {
+    val navController = rememberNavController()
+    LaunchedEffect(navController) {
+        rootEvents.collect { event ->
+            when (event) {
+                RootEvent.SESSION_EXPIRED -> navController.navigate(LoginRoute) { clearStack(navController) }
+                RootEvent.DELETION_PENDING -> navController.navigate(DeletionPendingRoute) { clearStack(navController) }
             }
-            if (BuildConfig.DEBUG) {
-                composable<DebugConnectionRoute> {
-                    debugScreen()
+        }
+    }
+    val destination = navController.currentBackStackEntryAsState().value?.destination
+    SystemBarIcons(
+        lightStatusIcons = destination?.hasRoute<WelcomeRoute>() == true || destination?.hasRoute<HomeRoute>() == true
+    )
+    val startRoute: Any = when (start) {
+        StartDestination.WELCOME -> WelcomeRoute
+        StartDestination.HOME -> HomeRoute
+        StartDestination.DELETION_PENDING -> DeletionPendingRoute
+    }
+    NavHost(navController = navController, startDestination = startRoute) {
+        composable<WelcomeRoute> {
+            WelcomeScreen(
+                onCreateAccount = { navController.navigate(RegisterRoute) },
+                onHaveAccount = { navController.navigate(LoginRoute) }
+            )
+        }
+        composable<LoginRoute> {
+            LoginScreen(
+                onBack = {
+                    // Tras cerrar sesión, Login es la raíz de la pila.
+                    if (!navController.popBackStack()) navController.navigate(WelcomeRoute)
+                },
+                onForgotPassword = { navController.navigate(RecoverRoute) },
+                onCreateAccount = { navController.navigate(RegisterRoute) },
+                onLoggedIn = { destination ->
+                    val route: Any = when (destination) {
+                        PostAuthDestination.HOME -> HomeRoute
+                        PostAuthDestination.TASTES -> TastesRoute()
+                        PostAuthDestination.DELETION_PENDING -> DeletionPendingRoute
+                    }
+                    navController.navigate(route) { clearStack(navController) }
                 }
-            }
+            )
+        }
+        composable<RegisterRoute> {
+            RegisterScreen(
+                onBack = { navController.popBackStack() },
+                onRegistered = { navController.navigate(TastesRoute()) { clearStack(navController) } }
+            )
+        }
+        composable<RecoverRoute> {
+            RecoverScreen(
+                onBack = { navController.popBackStack() },
+                onSent = { email ->
+                    navController.navigate(CheckEmailRoute(CheckEmailMode.RECOVERY.name, email))
+                }
+            )
+        }
+        composable<CheckEmailRoute> { CheckEmailScreen(onBack = { navController.popBackStack() }) }
+        composable<TastesRoute> {
+            TastesScreen(
+                onBack = { navController.popBackStack() },
+                onFinished = {
+                    if (navController.previousBackStackEntry != null) {
+                        navController.popBackStack()
+                    } else {
+                        navController.navigate(HomeRoute) { clearStack(navController) }
+                    }
+                }
+            )
+        }
+        composable<HomeRoute> { HomeRouteScreen(onProfile = { navController.navigate(ProfileRoute) }) }
+        composable<ProfileRoute> {
+            ProfileScreen(
+                onHome = { navController.popBackStack(HomeRoute, inclusive = false) },
+                onEdit = { navController.navigate(EditProfileRoute) },
+                onSettings = { navController.navigate(SettingsRoute) },
+                onVerifyEmail = { email ->
+                    navController.navigate(CheckEmailRoute(CheckEmailMode.VERIFICATION.name, email))
+                }
+            )
+        }
+        composable<EditProfileRoute> {
+            EditProfileScreen(
+                onBack = { navController.popBackStack() },
+                onTastes = { navController.navigate(TastesRoute(fromSettings = true)) },
+                onPrivacy = { navController.navigate(PrivacyRoute) },
+                onDeleteAccount = { navController.navigate(DeleteAccountRoute) }
+            )
+        }
+        composable<SettingsRoute> {
+            SettingsScreen(
+                SettingsNavigation(
+                    onBack = { navController.popBackStack() },
+                    onPersonalData = { navController.navigate(EditProfileRoute) },
+                    onTastes = { navController.navigate(TastesRoute(fromSettings = true)) },
+                    onSessions = { navController.navigate(SessionsRoute) },
+                    onPrivacy = { navController.navigate(PrivacyRoute) },
+                    onLoggedOut = { navController.navigate(LoginRoute) { clearStack(navController) } }
+                )
+            )
+        }
+        composable<SessionsRoute> {
+            SessionsScreen(
+                onBack = { navController.popBackStack() },
+                onAllClosed = { navController.navigate(LoginRoute) { clearStack(navController) } }
+            )
+        }
+        composable<PrivacyRoute> { PrivacyScreen(onBack = { navController.popBackStack() }) }
+        composable<DeleteAccountRoute> {
+            DeleteAccountScreen(
+                onBack = { navController.popBackStack() },
+                onDeleted = { navController.navigate(LoginRoute) { clearStack(navController) } }
+            )
+        }
+        composable<DeletionPendingRoute> {
+            DeletionPendingScreen(
+                onCancelled = { navController.navigate(HomeRoute) { clearStack(navController) } },
+                onLoggedOut = { navController.navigate(LoginRoute) { clearStack(navController) } }
+            )
         }
     }
 }
 
-private fun NavGraphBuilder.authEntryDestinations(navController: NavHostController) {
-    composable<AuthGateRoute> {
-        val viewModel: AuthGateViewModel = hiltViewModel()
-        val state by viewModel.state.collectAsStateWithLifecycle()
-        AuthGateScreen(
-            state = state,
-            onUnauthenticated = {
-                navController.navigate(AuthWelcomeRoute) {
-                    popUpTo<AuthGateRoute> { inclusive = true }
-                }
-            },
-            onAuthenticated = {
-                navController.navigate(AuthOnboardingRoute) {
-                    popUpTo<AuthGateRoute> { inclusive = true }
-                }
-            }
-        )
-    }
-    composable<AuthWelcomeRoute> {
-        WelcomeScreen(
-            onCreateAccount = { navController.navigate(AuthRegisterRoute) },
-            onSignIn = { navController.navigate(AuthLoginRoute) }
-        )
-    }
-    composable<AuthLoginRoute> {
-        LoginScreen(
-            onLoggedIn = {
-                navController.navigate(AuthOnboardingRoute) {
-                    popUpTo<AuthWelcomeRoute> { inclusive = true }
-                }
-            },
-            onBack = { navController.popBackStack() },
-            onCreateAccount = { navController.navigate(AuthRegisterRoute) },
-            onForgotPassword = { navController.navigate(AuthRecoverRoute) },
-            onResetPassword = { navController.navigate(AuthRecoverResetRoute) }
-        )
-    }
-}
-
-private fun NavGraphBuilder.authRegistrationDestinations(navController: NavHostController) {
-    composable<AuthRegisterRoute> {
-        RegisterScreen(
-            onRegistered = { outcome ->
-                val destination = when (outcome) {
-                    RegistrationOutcome.SESSION_CREATED -> AuthOnboardingRoute
-                    RegistrationOutcome.VERIFICATION_REQUIRED -> AuthVerifyEmailRoute
-                }
-                navController.navigate(destination) {
-                    popUpTo<AuthRegisterRoute> { inclusive = true }
-                }
-            },
-            onBack = { navController.popBackStack() },
-            onSignIn = { navController.navigate(AuthLoginRoute) }
-        )
-    }
-    composable<AuthVerifyEmailRoute> {
-        VerifyEmailScreen(
-            onVerified = { navController.navigateToLoginFromAuthFlow() },
-            onBack = { navController.navigateToLoginFromAuthFlow() }
-        )
-    }
-}
-
-private fun NavGraphBuilder.authRecoveryDestinations(navController: NavHostController) {
-    composable<AuthRecoverRoute> {
-        RecoverScreen(
-            onSent = { navController.navigate(AuthRecoverSentRoute) },
-            onBack = { navController.popBackStack() },
-            onOpenReset = { navController.navigate(AuthRecoverResetRoute) }
-        )
-    }
-    composable<AuthRecoverSentRoute> {
-        RecoverSentScreen(
-            onOpenReset = { navController.navigate(AuthRecoverResetRoute) },
-            onBackToLogin = { navController.navigateToLoginFromAuthFlow() }
-        )
-    }
-    composable<AuthRecoverResetRoute> {
-        ResetPasswordScreen(
-            onReset = { navController.navigateToLoginFromAuthFlow() },
-            onBack = { navController.popBackStack() }
-        )
-    }
-}
-
-private fun NavGraphBuilder.authSessionDestinations(navController: NavHostController) {
-    composable<AuthSessionsRoute> {
-        SessionsScreen(
-            onSessionExpired = { navController.navigateToWelcome() },
-            onLoggedOut = { navController.navigateToWelcome() }
-        )
-    }
-}
-
-private fun NavGraphBuilder.onboardingDestinations(navController: NavHostController) {
-    composable<AuthOnboardingRoute> {
-        OnboardingStartScreen(
-            onStep = { step ->
-                val destination = onboardingDestination(step)
-                if (destination == null) {
-                    navController.navigateToSessionsFromOnboarding()
-                } else {
-                    navController.navigate(destination)
-                }
-            }
-        )
-    }
-    composable<AuthRegisterPreferencesRoute> {
-        PreferencesScreen(
-            onContinue = { navController.navigate(AuthRegisterLocationRoute) }
-        )
-    }
-    composable<AuthRegisterLocationRoute> {
-        LocationScreen(
-            onContinue = { navController.navigate(AuthRegisterFriendsRoute) }
-        )
-    }
-    composable<AuthRegisterFriendsRoute> {
-        FriendsScreen(
-            onContinue = { navController.navigate(AuthRegisterPermissionsRoute) }
-        )
-    }
-    composable<AuthRegisterPermissionsRoute> {
-        PermissionsScreen(
-            onComplete = { navController.navigateToSessionsFromOnboarding() }
-        )
-    }
-}
-
-private fun onboardingDestination(step: OnboardingStep): Any? = when (step) {
-    OnboardingStep.REGISTER, OnboardingStep.PREFERENCES -> AuthRegisterPreferencesRoute
-    OnboardingStep.LOCATION -> AuthRegisterLocationRoute
-    OnboardingStep.FRIENDS -> AuthRegisterFriendsRoute
-    OnboardingStep.PERMISSIONS -> AuthRegisterPermissionsRoute
-    OnboardingStep.COMPLETE -> null
-}
-
-private fun NavHostController.navigateToSessionsFromOnboarding() {
-    navigate(AuthSessionsRoute) {
-        popUpTo(graph.id) { inclusive = true }
-    }
-}
-
-private fun NavHostController.navigateToLoginFromAuthFlow() {
-    navigate(AuthLoginRoute) {
-        popUpTo<AuthWelcomeRoute>()
-    }
-}
-
-private fun NavHostController.navigateToWelcome() {
-    navigate(AuthWelcomeRoute) {
-        popUpTo(graph.id) { inclusive = true }
-    }
+/** Al entrar o salir de sesión no debe quedar nada atrás. */
+private fun NavOptionsBuilder.clearStack(navController: NavHostController) {
+    popUpTo(navController.graph.id) { inclusive = true }
+    launchSingleTop = true
 }

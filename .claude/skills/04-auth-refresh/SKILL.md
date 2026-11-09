@@ -1,23 +1,20 @@
 ---
 name: 04-auth-refresh
-description: Flujo completo de refresh (nv-05+); en nv-01 solo interfaz y Authenticator de un reintento
+description: Sesión y renovación de token
 ---
 # 04-auth-refresh
 
-> Rector: `.specify/memory/constitution.md`. Fase: `nv-01` (interfaz) / `nv-05+` (flujo real).
+> Rector: `.specify/memory/constitution.md`. Ante conflicto, manda la constitución.
 
 ## What I do
-- `nv-01`: interfaz `TokenRefresher`, `Authenticator` con un solo reintento y doble controlado; si falla, sesión limpia.
-- `nv-05+`: contrato real de refresh con el backend y flujo de sesión completo.
-- Sin tokens en logs ni almacenamiento sin cifrar.
+- Diseño del flujo de refresh con el backend.
+- Sin implementarlo en esta etapa.
 
 ## Cuando usarme
-Diseñar autenticación o tocar la sesión.
+Spec de autenticación (nv-04+).
 
 ## No hacer
-- Implementar refresh real en `nv-01` sin spec ni contrato.
-- Más de un reintento automático.
-- Referenciar el endpoint de refresh sin `[planificado nv-05]`.
+- Salirse de la constitución o añadir pantallas del producto en `nv-00…nv-03`.
 
 ## Verify
-401 → un solo intento; si falla, sesión limpia. Spec aprobada antes de codificar el flujo real.
+Spec aprobada antes de codificar.

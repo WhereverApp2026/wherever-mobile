@@ -1,32 +1,29 @@
-# NV-04 — Arquitectura de la aplicación móvil
+# NV-04 — Arquitectura de Wherever Móvil
 
-## T1 — Módulos, dependencias y MVVM (R1, R2)
-- **Crear**: mapa de los 11 módulos en `docs/architecture.md`; reglas de dependencia y plantilla de feature en `specs/nv-04/spec.md`.
-- **Verificar**: los 11 paquetes `feature/*` están cubiertos y las reglas prohíben `feature → feature`, `core → feature` y `ui → data`.
-- **No hacer**: crear paquetes, código ni Gradle.
+## T1 — Spec de arquitectura
+- **Crear**: `spec.md`, `plan.md`, `task.md`, `checklists/gates.md`.
+- **Verificar**: las decisiones que no vienen de la constitución están marcadas como "Decisión propuesta".
 
-## T2 — Navegación (R3)
-- **Crear**: grafos de navegación y rutas raíz en `specs/nv-04/spec.md` y `docs/architecture.md`; nota de rutas reales en `docs/routes.md`.
-- **Verificar**: cada módulo tiene grafo, auth gate y deep links sin datos sensibles.
-- **No hacer**: registrar pantallas concretas ni parámetros definitivos.
+## T2 — Proyecto Gradle
+- **Crear**: proyecto completo con pantalla `home` mínima.
+- **Verificar**: `gradlew.bat assembleDebug`.
+- **No hacer**: pantallas del producto ni implementar la red (`nv-01`).
 
-## T3 — Datos, offline y sincronización (R4)
-- **Crear**: arquitectura Room/MVVM, propiedad de tablas, caché, paginación, sync, conflictos y migraciones en `specs/nv-04/spec.md`.
-- **Verificar**: Room es fuente de verdad; `PageResult` límite 50; sin migración destructiva; flujo DTO→Entity→Domain→UiState documentado.
-- **No hacer**: entidades, DAOs, base de datos ni migraciones reales.
+## T3 — Pruebas (unitarias, integración y seguridad)
+- [x] Unit: `test/.../core/network/SafeApiCallTest.kt` — cada `codigo` de la API → `AppError`, `Retry-After`, cuerpo ilegible
+- [x] Unit: `test/.../core/network/InterceptorsTest.kt` — Bearer solo en rutas con JWT y `request_id` en cada petición
+- [x] Unit: `test/.../core/network/TokenRefreshAuthenticatorTest.kt` — 401 → un solo refresh, refresh rotado, dos 401 simultáneos
+- [x] Unit: `test/.../core/common/ValidatorsTest.kt` — validaciones comunes
+- [x] Integración: `test/.../integration/AuthIntegrationTest.kt` — cadena de red real con respuestas de la doc: 401 con refresh y refresh rechazado
+- [x] Integración: `test/.../integration/ProfileIntegrationTest.kt` — `If-Match`, 409, 422 y 401 con refresh en `PATCH /usuarios/yo`
+- [ ] Integración: `androidTest/.../integration/ProfileRepositoryRoomTest.kt` — Room real + MockWebServer por HTTPS local (instrumentada)
+- [ ] Integración: `androidTest/.../feature/profile/data/UserProfileDaoTest.kt` — DAO con Room real (instrumentada)
+- [x] Seguridad: `test/.../core/security/EncryptedTokensSerializerTest.kt` — el archivo cifrado no contiene los tokens en claro
+- [x] Seguridad: `test/.../security/PlatformSecurityTest.kt` — sin backup, solo HTTPS, solo CA del sistema, componentes no exportados, permisos mínimos
+- [x] Seguridad: `test/.../security/SourceSecurityTest.kt` — sin secretos ni URLs fijas; tokens solo cifrados; logs solo en el interceptor redactado
+- [x] Seguridad: `test/.../integration/AuthIntegrationTest.kt` — logs de red sin tokens, contraseñas ni correos
+- [x] Seguridad: `test/.../core/network/TokenRefreshAuthenticatorTest.kt` — refresh rechazado limpia la sesión
+- **No hacer**: usar el servidor de staging en las pruebas.
 
-## T4 — Contratos REST y backend Golang (R5)
-- **Crear**: convenciones y catálogo propuesto de 11 grupos de endpoints en `specs/nv-04/spec.md`; resumen en `docs/architecture.md`.
-- **Verificar**: todos los grupos están marcados como propuestos/pendientes de OpenAPI; auth, errores, cursor e idempotencia documentados.
-- **No hacer**: declarar endpoints definitivos, generar OpenAPI ni escribir clientes Retrofit.
-
-## T5 — Auth, seguridad, UX y observabilidad (R6, R7)
-- **Crear**: flujo de sesión/refresh, permisos, design system, estados, accesibilidad, formatos y logs en `specs/nv-04/spec.md`.
-- **Verificar**: Keystore, refresh único, degradación sin permisos, `strings.xml`, 48 dp, `request_id` y logs redactados.
-- **No hacer**: implementar FCM, Maps, cámara, pagos, chat, IA ni analítica.
-
-## T6 — Calidad, documentación y referencias (R8)
-- **Crear**: matriz de pruebas R8, gates de `nv-04` e inventario visual en `docs/figma-inventory.md`.
-- **Actualizar**: `AGENTS.md`, `README.md`, `CLAUDE.md`, `Memoria.md`, `specs/nv-01/*`, `docs/*` y `.claude/*` para que `nv-04` sea arquitectura y `nv-05+` producto.
-- **Verificar**: 8 secciones, R1-R8 trazados, 11 módulos, `git diff --check` limpio y sin `nv-04` asociado a implementación.
-- **No hacer**: tests ejecutables, CI, scripts ni pantallas.
+## T4 — Aprobación
+- [x] Revisor: Jorge — fecha: 2026-11-06

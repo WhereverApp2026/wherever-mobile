@@ -2,50 +2,48 @@ package com.wherever.mobile.navigation
 
 import kotlinx.serialization.Serializable
 
+// Rutas tipadas. Cada una tiene su fila en docs/routes.md (constitución §4).
+
+@Serializable
+data object WelcomeRoute
+
+@Serializable
+data object LoginRoute
+
+@Serializable
+data object RegisterRoute
+
+@Serializable
+data object RecoverRoute
+
+/** `mode` y `email` los lee CheckEmailViewModel de SavedStateHandle por su nombre. */
+@Serializable
+data class CheckEmailRoute(val mode: String, val email: String)
+
+/** `fromSettings` lo lee TastesViewModel de SavedStateHandle por su nombre. */
+@Serializable
+data class TastesRoute(val fromSettings: Boolean = false)
+
 @Serializable
 data object HomeRoute
 
 @Serializable
-data object DebugConnectionRoute
+data object ProfileRoute
 
 @Serializable
-data object AuthGateRoute
+data object EditProfileRoute
 
 @Serializable
-data object AuthWelcomeRoute
+data object SettingsRoute
 
 @Serializable
-data object AuthLoginRoute
+data object SessionsRoute
 
 @Serializable
-data object AuthRegisterRoute
+data object PrivacyRoute
 
 @Serializable
-data object AuthRecoverRoute
+data object DeleteAccountRoute
 
 @Serializable
-data object AuthRecoverSentRoute
-
-@Serializable
-data object AuthRecoverResetRoute
-
-@Serializable
-data object AuthVerifyEmailRoute
-
-@Serializable
-data object AuthSessionsRoute
-
-@Serializable
-data object AuthOnboardingRoute
-
-@Serializable
-data object AuthRegisterPreferencesRoute
-
-@Serializable
-data object AuthRegisterLocationRoute
-
-@Serializable
-data object AuthRegisterFriendsRoute
-
-@Serializable
-data object AuthRegisterPermissionsRoute
+data object DeletionPendingRoute
