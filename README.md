@@ -23,7 +23,7 @@ App Android en Kotlin + Jetpack Compose para Wherever, desarrollada con **Spec D
 
 Índice, tabla de pantallas y endpoints, y dudas abiertas: [`specs/README.md`](specs/README.md).
 
-Estado: pantallas del Sprint 1 en `specs/README.md`. Las suites de calidad de `nv-02` y `nv-03` siguen **sin ejecutar**. Staging se apaga de 22:00 a 08:00 y en fines de semana.
+Estado: pantallas del Sprint 1 en `specs/README.md`. Las suites de calidad de `nv-02` y `nv-03` siguen **sin ejecutar**. Staging (`https://d302bvc0018nfp.cloudfront.net`) se apaga de 22:00 a 08:00 y en fines de semana; apagado responde 503.
 
 ## Compilar
 Requisitos: Android Studio con Android SDK (API 36; Gradle descarga las Build-Tools que falten si las licencias están aceptadas), y `JAVA_HOME` apuntando a un JDK, por ejemplo el de Android Studio (`<Android Studio>/jbr`).

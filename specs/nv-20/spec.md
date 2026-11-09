@@ -80,7 +80,7 @@ Errores con forma `{codigo, mensaje, campos[], traza_id}`, mapeados a `AppError`
 
 ### Pendiente de backend
 
-Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
+Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato. Cotejado el 2026-11-08 con todas las ramas de `wherever-backend` (`main` = `f79917e`): sin rutas de amigos; solo existe `codigo_amigo` en el perfil. Implementación bloqueada hasta que existan.
 
 - Solicitudes: enviar, aceptar, rechazar, cancelar.
 - Lista de amigos y sugerencias.

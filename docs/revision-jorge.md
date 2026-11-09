@@ -1,3 +1,53 @@
+# Revisión para Jorge — actualización del 2026-11-08 (noche)
+
+> Rama `feat/api-cloudfront`, creada desde `spec/035-ci-cd`. Sin merge a `main` y sin firmas nuevas.
+
+## A. Qué hicieron los demás
+
+| Quién | Dónde | Qué | Valoración |
+|---|---|---|---|
+| Nadie | `wherever-mobile`, desde el 2026-11-06 | Solo hay 4 commits, todos tuyos de la madrugada del 6: `7394f99`, `3b9a22e`, `d3aa814`, `dea2af0`. Sin ramas nuevas | — |
+| Diego (noche del 5) | `spec/035-ci-cd`: `1762ca6`, `483dcb0`, `9efafd2` | Merge de `main` con `-X ours`, triaje de 96 archivos en `docs/reconciliacion-main.md` y `ArchitectureTest` con Konsist | Respeta `nv-XX` y la constitución. `9efafd2` se subió sin correrlo y rompió el run #11; lo arregló `d3aa814`. `ThemeAndStateTest`, `NavigationTest` y `EncryptedTokenStoreTest` de §3 siguen sin portar |
+| Osmar (6 nov) | `wherever-backend`: nv-12, nv-13, nv-14, nv-15 | Dos APIs tras balanceador y CloudFront; retira Caddy y sslip.io | No toca este repo. Introduce el cambio de contrato de §C |
+
+**CI: no verificado.** La API y la web de GitHub dan 404 sin sesión a `wherever-mobile` y `wherever-backend`, y aquí no hay `gh`. Lo último confirmado es la corrida #5 (`eaf3fdb`) en verde. Si el repo volvió a privado, el paso `ui` puede fallar por falta de `/dev/kvm` (lección del 2026-11-06).
+
+## B. Verificaciones de `feat/api-cloudfront`
+
+| Verificación | Resultado |
+|---|---|
+| `ktlintCheck`, `detekt`, `lintDebug`, `assembleDebug` (JDK 17) | ✅ |
+| `testDebugUnitTest` | ✅ 144 pruebas, 0 fallos |
+| `koverVerifyDebug` | ✅ 71,97 % |
+| critic, routes, strings, specs, sdd, coverage | ✅ |
+| `BuildConfig.API_BASE_URL` | ✅ `https://d302bvc0018nfp.cloudfront.net/api/v1/` |
+| Certificado HTTPS | ✅ `*.cloudfront.net`, Amazon, vence 2027-03-10, TLS 1.3, verifica con openssl. `network_security_config` solo admite CA del sistema; falta confirmarlo en un dispositivo |
+| `GET /health`, `/ready`, `/api/v1/ping` | ❌ **503** del balanceador (23:45 y 23:53 del domingo) |
+| Login con correo inexistente | ❌ **503**: no se pudo comprobar el error documentado (`401 no_autenticado`) |
+| Flujo real en dispositivo | ⏭️ **No corrido**: `adb devices` vacío y backend apagado |
+
+El 503 coincide con el horario: nv-12 §11 del backend y su Terraform mantienen apagado diario a las 22:00 y encendido L-V a las 08:00. Por eso **la nota de horario no se quitó**: se actualizó con la URL nueva y con el 503 en HTML. La app lo trata como `AppError.Server` y conserva la sesión; ya hay pruebas de ambos casos.
+
+Para repetir a partir del lunes 08:00: las tres rutas, el login y el flujo de cuenta. Hay un AVD `Pixel_8` (API 36) con WHPX que sirve si no conectas teléfono.
+
+## C. Hallazgos que necesitan decisión
+
+1. **Gustos con alergias dará 422.** El backend exige `privacidad.datos_sensibles` para guardar `alergias` (nv-15). La app envía `alergias`, pero `PrivacyDto` no tiene ese campo y no hay interruptor. Afecta a US-022 (Alexander). Cambiar la UI requiere spec, así que no se tocó.
+2. **Amigos (US-232/233): Pendiente de backend.** Ninguna rama del backend tiene rutas de amigos; solo existe `codigo_amigo` en el perfil. No se crearon pantallas, spec nueva ni contratos; `nv-20` registra el cotejo.
+3. **Tus firmas del 2026-11-06 se quedan como están** en `nv-00…nv-39` (`dea2af0`). **`nv-04` y `nv-20` cambiaron después de la firma y tienes que volver a revisarlas:**
+   - `nv-04/spec.md`: URL de staging por la de CloudFront.
+   - `nv-04/plan.md`: ruta de `ArchitectureTest` (`arch/`) y `Dispatchers` solo en `core/common/DefaultDispatcherProvider`.
+   - `nv-20/spec.md`: cotejo del 2026-11-08 en "Pendiente de backend".
+4. **La URL de CloudFront cambia si se recrea la distribución** (nv-12 del backend): habría que recompilar.
+
+## D. Integración a `main`
+
+1. **`spec/arquitectura` → `spec/035-ci-cd`**: trae `7394f99` (acciones fijadas por SHA; en 035 hay 0 fijadas) y `3b9a22e` (reglas Konsist). La simulación de merge no da conflictos, pero deja dos `ArchitectureTest` (`arch/` y `architecture/`): conviene unificarlos.
+2. **PR #3 `spec/035-ci-cd` → `main`**: `main` ya es ancestro, así que entra sin conflictos.
+3. **PR `feat/api-cloudfront` → `main`**, después del #3. Antes conviene verificar la API con el backend encendido.
+
+---
+
 # Revisión para Jorge — trabajo del 2026-11-05 (noche)
 
 > Rama `spec/arquitectura` (no estaba fusionada en `main`, así que se siguió en ella). Push hecho; **sin pull request**.

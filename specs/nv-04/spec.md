@@ -8,7 +8,7 @@
 
 Definir capas, patrón, navegación, estado, red, almacenamiento de tokens, inyección de dependencias, paquetes y convenciones para que cada funcionalidad (`specs/002+`) se construya igual y salga liberable.
 
-La app **solo habla con la API v1** (backend Go, staging `https://18-227-230-50.sslip.io`, prefijo `/api/v1`). Nunca se conecta a MongoDB ni a ninguna otra base del backend.
+La app **solo habla con la API v1** (backend Go, staging `https://d302bvc0018nfp.cloudfront.net`, prefijo `/api/v1`). Nunca se conecta a MongoDB ni a ninguna otra base del backend.
 
 ## 2. Alcance / No-alcance
 

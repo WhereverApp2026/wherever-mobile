@@ -105,6 +105,15 @@
 ## Specs firmadas (2026-11-06)
 - Estado: Jorge firmó como revisor las 40 specs (`nv-00…nv-39`) en `spec/035-ci-cd`: línea de revisor en `spec.md`, `task.md` y `checklists/gates.md`, y **Estado** pasado a aprobada. Las casillas "CHECKLIST_PR.md OK" y "Sin conflicto con constitución" de cada spec siguen sin marcar: son comprobaciones aparte.
 
+## API en CloudFront y cotejo con el backend (2026-11-08)
+- Estado: rama `feat/api-cloudfront` desde `spec/035-ci-cd`, con URL `https://d302bvc0018nfp.cloudfront.net/api/v1/`. Verificado: `ktlintCheck`, `detekt`, `lintDebug`, `testDebugUnitTest` (144), `koverVerifyDebug` (71,97 %), `assembleDebug` y puertas de scripts. Sin verificar: `/health`, `/ready`, `/ping`, login y flujo real (503, backend apagado por horario; sin dispositivo). CI sin ver: GitHub da 404 sin sesión. Detalle en `docs/revision-jorge.md`.
+- Decisión: se conserva la nota de apagado 22:00/08:00 y se añade el 503 en HTML. Porqué: nv-12 §11 del backend y su Terraform mantienen el horario.
+- Decisión: US-232/233 quedan "Pendiente de backend", sin pantallas. Porqué: ninguna rama de `wherever-backend` (`main` = `f79917e`) tiene rutas de amigos.
+- Decisión: no se implementa `datos_sensibles` en esta rama. Porqué: requiere spec y UI de consentimiento (US-010/US-022).
+- Pendiente: Gustos con alergias dará 422 contra el backend actual.
+- A evitar: leer un 503 de CloudFront como fallo de la app; fuera de horario el balanceador responde HTML.
+- A recordar: `git add` del `gradle.properties` local arrastra `org.gradle.tooling.parallel`, que no es parte de ningún cambio; preparar solo la línea que toca.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).
