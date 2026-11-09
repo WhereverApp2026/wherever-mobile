@@ -19,7 +19,7 @@
 - `test/.../core/network/InterceptorsTest.kt` — Bearer solo en rutas con JWT y `request_id` en cada petición
 - `test/.../core/network/TokenRefreshAuthenticatorTest.kt` — 401 → un solo refresh, refresh rotado, dos 401 simultáneos
 - `test/.../core/common/ValidatorsTest.kt` — validaciones comunes
-- `test/.../architecture/ArchitectureTest.kt` — Konsist: `ui → domain ← data`, sufijos de nombre (§ nombres), ViewModels con Hilt y estado mutable privado, `Dispatchers` solo en `core/di`
+- `test/.../arch/ArchitectureTest.kt` — Konsist: `ui → domain ← data`, sufijos de nombre (§ nombres), ViewModels con Hilt y estado mutable privado, `Dispatchers` solo en `core/common/DefaultDispatcherProvider`
 
 ### Integración (MockWebServer con respuestas de `docs/contexto_api_sprint1.md`; Room real instrumentada; sin staging)
 - `test/.../integration/AuthIntegrationTest.kt` — cadena de red real con respuestas de la doc: 401 con refresh y refresh rechazado
