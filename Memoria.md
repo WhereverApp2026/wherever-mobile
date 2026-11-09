@@ -114,6 +114,15 @@
 - A evitar: leer un 503 de CloudFront como fallo de la app; fuera de horario el balanceador responde HTML.
 - A recordar: `git add` del `gradle.properties` local arrastra `org.gradle.tooling.parallel`, que no es parte de ningún cambio; preparar solo la línea que toca.
 
+## Integración a main (2026-11-09)
+- Estado: `main` = `c56da67`, con `spec/arquitectura`, `spec/035-ci-cd` (PR #3) y `feat/api-cloudfront` (PR #13). CI de `main` en verde. Etiqueta de respaldo: `respaldo-main-2026-11-09`. Pendientes en `docs/revision-jorge.md`.
+- Decisión: un solo `ArchitectureTest`, en `arch/`, y `Dispatchers` permitido solo en `DefaultDispatcherProvider`. Porqué: la regla de `spec/arquitectura` (solo `core/di`) chocaba con `d3aa814`.
+- Decisión: paso de CI que borra SDK sin uso antes del emulador. Porqué: faltaban 30 MB para `userdata`; libera unos 14 GB y no toca las pruebas.
+- A evitar: diagnosticar "Timeout waiting for emulator to boot" como KVM sin leer el `FATAL` del emulador al inicio del paso.
+- A evitar: tocar una regla de arquitectura sin correrla con el código de la rama destino.
+- A recordar: los 504 al descargar (Gradle, GitHub Releases) se relanzan sin cambiar código; primero se lee el log, porque un fallo en el paso gitleaks puede ser solo la descarga.
+- A recordar: `gh` está en `C:\Program Files\GitHub CLI` y puede no estar en el `PATH` de la herramienta. El repo es privado, y `/dev/kvm` siguió disponible en el runner.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).
