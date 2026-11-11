@@ -31,6 +31,8 @@ fun AppError.toUiText(): UiText {
         when (this) {
             AppError.Network -> R.string.error_network
             AppError.Timeout -> R.string.error_timeout
+            AppError.SecureConnection -> R.string.error_secure_connection
+            AppError.InvalidResponse -> R.string.error_invalid_response
             is AppError.Server -> R.string.error_server
             is AppError.RateLimited -> R.string.error_rate_limited
             else -> R.string.error_unknown

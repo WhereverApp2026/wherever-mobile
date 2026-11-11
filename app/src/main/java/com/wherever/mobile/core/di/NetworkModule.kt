@@ -21,8 +21,9 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
-private const val CONNECT_TIMEOUT_SECONDS = 10L
-private const val IO_TIMEOUT_SECONDS = 15L
+// Datos móviles: el primer handshake con CloudFront puede tardar varios segundos (specs/nv-40).
+internal const val CONNECT_TIMEOUT_SECONDS = 15L
+internal const val IO_TIMEOUT_SECONDS = 30L
 private const val LOG_TAG = "WhereverNet"
 
 @Module
