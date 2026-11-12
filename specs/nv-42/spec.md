@@ -31,7 +31,7 @@ En Registro, el calendario de fecha de nacimiento dejaba escoger días del futur
 
 Sin cambios. `POST /api/v1/usuarios` sigue enviando `fecha_nacimiento` en AAAA-MM-DD. Sin rutas nuevas.
 
-**Cotejo con staging:** pendiente. Se prueba con el backend encendido (L-V 08:00-22:00, hora de México). Si `POST /usuarios` con fecha futura no responde 422 en `fecha_nacimiento`, se anota aquí con su `traza_id`.
+**Cotejo con staging (2026-11-12):** `POST /usuarios` con fecha futura responde 422 `validacion` con `campos[fecha_nacimiento]` = "debes tener 18 años o más (fecha AAAA-MM-DD)".
 
 ## 4. Modelo de datos
 

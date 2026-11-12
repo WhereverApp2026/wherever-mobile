@@ -1,5 +1,6 @@
 package com.wherever.mobile.feature.profile.data
 
+import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -32,7 +33,8 @@ data class PrivacyEntity(
     val personalizedLearning: Boolean,
     val mood: Boolean,
     val usageData: Boolean,
-    val searchableByPhone: Boolean
+    val searchableByPhone: Boolean,
+    @ColumnInfo(defaultValue = "0") val sensitiveData: Boolean
 )
 
 @Entity(tableName = "user_profile")

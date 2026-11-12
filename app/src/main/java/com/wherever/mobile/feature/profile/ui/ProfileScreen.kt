@@ -185,7 +185,7 @@ private fun ProfilePreview() {
                     null,
                     NotificationSettings(true, true, true, true, false)
                 ),
-                privacy = Privacy(true, true, false, true, false),
+                privacy = Privacy(true, true, false, true, false, false),
                 points = 50,
                 level = "Explorador",
                 weekStreak = 0,

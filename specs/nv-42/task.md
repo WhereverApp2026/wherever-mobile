@@ -9,9 +9,9 @@
 
 ## T2 — Verificación
 - [x] Compuertas locales con JDK 17, una por una (2026-11-12): `ktlintCheck`, `detekt`, `lintDebug`, `testDebugUnitTest` (190), `koverVerifyDebug` (73,32 %), `assembleDebug`, `assembleRelease`; `assembleDebugAndroidTest` compila y los scripts de puerta pasan.
-- [ ] CI del PR en verde (incluye la prueba de UI en emulador).
+- [x] CI del PR #17 en verde (incluye la prueba de UI en emulador).
 - [ ] En el celular: los días futuros salen grises y no se pueden tocar; el calendario abre en hace 18 años.
-- [ ] Contra staging (L-V 08:00-22:00): `POST /usuarios` con fecha futura responde 422 en `fecha_nacimiento`; si no, anotar el `traza_id` en `spec.md` §3.
+- [x] Contra staging (2026-11-12): `POST /usuarios` con fecha futura responde 422 en `fecha_nacimiento`.
 
 ## T3 — Pruebas (unitarias, integración, seguridad y UI)
 - [x] Unit: `BirthDateValidatorTest`, `BirthDateBoundsTest`, `AuthViewModelsTest`

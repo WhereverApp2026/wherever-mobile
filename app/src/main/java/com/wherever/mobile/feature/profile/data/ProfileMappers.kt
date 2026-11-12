@@ -25,7 +25,8 @@ fun PreferencesDto.toEntity() = PreferencesEntity(
     notifPromotions = notifications.promotions
 )
 
-fun PrivacyDto.toEntity() = PrivacyEntity(location, personalizedLearning, mood, usageData, searchableByPhone)
+fun PrivacyDto.toEntity() =
+    PrivacyEntity(location, personalizedLearning, mood, usageData, searchableByPhone, sensitiveData)
 
 fun UserProfileDto.toEntity() = UserProfileEntity(
     id = id,
@@ -71,7 +72,8 @@ fun UserProfileEntity.toDomain() = UserProfile(
         privacy.personalizedLearning,
         privacy.mood,
         privacy.usageData,
-        privacy.searchableByPhone
+        privacy.searchableByPhone,
+        privacy.sensitiveData
     ),
     points = points,
     level = level,
@@ -93,4 +95,5 @@ fun PreferencesPatch.toDto(): PreferencesPatchDto {
     )
 }
 
-fun PrivacyPatch.toDto() = PrivacyPatchDto(location, personalizedLearning, mood, usageData, searchableByPhone)
+fun PrivacyPatch.toDto() =
+    PrivacyPatchDto(location, personalizedLearning, mood, usageData, searchableByPhone, sensitiveData)

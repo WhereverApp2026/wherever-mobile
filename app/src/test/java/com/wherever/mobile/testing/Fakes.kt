@@ -69,42 +69,48 @@ class FakeUserProfileDao : UserProfileDao {
     }
 }
 
-fun sampleProfile(version: Long = 3, name: String = "Ana López", tastes: Tastes? = null, deleteAt: String? = null) =
-    UserProfile(
-        id = "u1",
-        name = name,
-        email = "ana@ejemplo.com",
-        emailVerified = false,
-        mode = "explorar",
-        city = null,
-        tastes = tastes,
-        preferences = Preferences(
-            mobility = "a_pie",
-            theme = "sistema",
-            units = "km",
-            quietFrom = null,
-            quietTo = null,
-            notifications = NotificationSettings(
-                reservations = true,
-                coupons = true,
-                groups = true,
-                reviews = true,
-                promotions = false
-            )
-        ),
-        privacy = Privacy(
-            location = true,
-            personalizedLearning = true,
-            mood = false,
-            usageData = true,
-            searchableByPhone = false
-        ),
-        points = 50,
-        level = "Explorador",
-        weekStreak = 0,
-        deleteAt = deleteAt,
-        version = version
-    )
+fun sampleProfile(
+    version: Long = 3,
+    name: String = "Ana López",
+    tastes: Tastes? = null,
+    deleteAt: String? = null,
+    sensitiveData: Boolean = false
+) = UserProfile(
+    id = "u1",
+    name = name,
+    email = "ana@ejemplo.com",
+    emailVerified = false,
+    mode = "explorar",
+    city = null,
+    tastes = tastes,
+    preferences = Preferences(
+        mobility = "a_pie",
+        theme = "sistema",
+        units = "km",
+        quietFrom = null,
+        quietTo = null,
+        notifications = NotificationSettings(
+            reservations = true,
+            coupons = true,
+            groups = true,
+            reviews = true,
+            promotions = false
+        )
+    ),
+    privacy = Privacy(
+        location = true,
+        personalizedLearning = true,
+        mood = false,
+        usageData = true,
+        searchableByPhone = false,
+        sensitiveData = sensitiveData
+    ),
+    points = 50,
+    level = "Explorador",
+    weekStreak = 0,
+    deleteAt = deleteAt,
+    version = version
+)
 
 /** Repositorio programable para probar ViewModels con respuestas falsas. */
 class FakeProfileRepository(initial: UserProfile? = null) : ProfileRepository {
@@ -125,6 +131,9 @@ class FakeProfileRepository(initial: UserProfile? = null) : ProfileRepository {
     val cityQueries = mutableListOf<String>()
     val deleteConfirmations = mutableListOf<String>()
 
+    /** Orden de las llamadas de escritura, para probar qué ruta va primero. */
+    val calls = mutableListOf<String>()
+
     override fun observeProfile(): Flow<UserProfile?> = profile
 
     override suspend fun refresh(): Result<UserProfile> {
@@ -142,6 +151,7 @@ class FakeProfileRepository(initial: UserProfile? = null) : ProfileRepository {
 
     override suspend fun updateTastes(tastes: Tastes): Result<Unit> {
         savedTastes += tastes
+        calls += "gustos"
         return tastesResult
     }
 
@@ -152,6 +162,7 @@ class FakeProfileRepository(initial: UserProfile? = null) : ProfileRepository {
 
     override suspend fun updatePrivacy(patch: PrivacyPatch): Result<Unit> {
         privacyPatches += patch
+        calls += "privacidad"
         return privacyResult
     }
 
