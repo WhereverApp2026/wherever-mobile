@@ -148,6 +148,14 @@
 - A evitar: `addMigrations(*arreglo)`, porque detekt marca `SpreadOperator`. Pasar cada migración por nombre.
 - A recordar: un campo nuevo en una entidad de Room necesita `@ColumnInfo(defaultValue = …)` igual al `DEFAULT` de la migración, o `runMigrationsAndValidate` falla al comparar esquemas.
 
+## Presupuesto con barra y cantidad manual (2026-11-12)
+- Estado: rama `feat/presupuesto-manual`, `specs/nv-44`. Gustos tiene la barra (libre, paso de $50 al soltar) y los campos Mínimo/Máximo sincronizados; `BudgetValidator` valida vacío, $0 a $50,000 y mínimo ≤ máximo; el 422 sale bajo su campo. Verificado con JDK 17, una compuerta por vez: ktlint, detekt, lint, 230 pruebas, cobertura 75,44 %, `assembleDebugAndroidTest`, `assembleRelease`, scripts y Semgrep. `BudgetSectionTest` 6/6 en el teléfono de Jorge.
+- Decisión (Jorge, 2026-11-13): cada paso en su rama desde `main` actualizado y su PR; sin push directo a `main`, y el merge lo hace Jorge en GitHub. Revierte la idea del 2026-11-12 de trabajar directo en `main`.
+- Decisión: lo escrito a mano no se redondea y una cantidad mayor de $1000 deja la barra al tope sin recortar lo escrito. Porqué: la barra solo es un atajo visual; la API acepta cualquier entero con max ≥ min.
+- Decisión: tope de $50,000 solo en la app. Porqué: la API no lo pide; evita errores de dedo.
+- A evitar: dejar una clase auxiliar (`BudgetActions`) en un archivo con otro nombre; detekt marca `MatchingDeclarationName`.
+- A recordar: las pruebas instrumentadas pueden correr en el teléfono de Jorge por USB (`ANDROID_SERIAL`) en lugar del emulador, que consume mucha memoria en este equipo.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

@@ -176,8 +176,8 @@ class ProfileViewModelsTest {
     fun `gustos arranca con presupuesto de 150 a 300`() = runTest {
         val viewModel = tastes()
         runCurrent()
-        assertEquals(150, viewModel.state.value.budgetMin)
-        assertEquals(300, viewModel.state.value.budgetMax)
+        assertEquals(150, viewModel.state.value.budget.min)
+        assertEquals(300, viewModel.state.value.budget.max)
     }
 
     @Test
@@ -185,7 +185,8 @@ class ProfileViewModelsTest {
         val viewModel = tastes()
         runCurrent()
         listOf("tacos", "cafes", "museos").forEach(viewModel::toggleCategory)
-        viewModel.onBudgetChange(100, 500)
+        viewModel.onBudgetMinChange("100")
+        viewModel.onBudgetMaxChange("500")
         viewModel.toggleRestriction("vegetariano")
         viewModel.onAllergiesEnabled(true)
         viewModel.onAllergiesChange(" nueces ")
