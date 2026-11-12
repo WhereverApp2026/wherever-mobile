@@ -104,6 +104,8 @@
     <string name="tastes_allergies_chip">Alergias</string>
     <string name="tastes_allergies_label">¿A qué tienes alergia?</string>
     <string name="tastes_allergies_placeholder">Ej. nueces</string>
+    <string name="tastes_allergies_consent">Acepto que Wherever guarde mis alergias. Son un dato de salud y puedo retirar este permiso en Privacidad.</string>
+    <string name="tastes_allergies_consent_required">Marca la casilla para guardar tus alergias</string>
     <string name="tastes_skip">Omitir por ahora</string>
     <string name="taste_tacos">🌮 Tacos</string>
     <string name="taste_cafes">☕ Café</string>
@@ -199,6 +201,11 @@
     <string name="privacy_usage_detail">Nos ayudan a mejorar la app</string>
     <string name="privacy_searchable">Buscable por teléfono</string>
     <string name="privacy_searchable_detail">Quien tenga tu número podrá encontrarte</string>
+    <string name="privacy_sensitive">Datos sensibles</string>
+    <string name="privacy_sensitive_detail">Guardar tus alergias en Tus gustos</string>
+    <string name="privacy_sensitive_off_title">¿Retirar el permiso?</string>
+    <string name="privacy_sensitive_off_message">Se borrarán las alergias que guardaste en Tus gustos.</string>
+    <string name="privacy_sensitive_off_confirm">Retirar</string>
 
     <!-- EliminarCuenta -->
     <string name="delete_account_title">¿Eliminar tu cuenta?</string>

@@ -189,6 +189,7 @@ class ProfileViewModelsTest {
         viewModel.toggleRestriction("vegetariano")
         viewModel.onAllergiesEnabled(true)
         viewModel.onAllergiesChange(" nueces ")
+        viewModel.onAllergiesConsentChange(true)
         viewModel.onMobilityChange("auto")
         viewModel.onCitySelect(CitySuggestion("c1", "Guadalajara", "Jalisco"))
 

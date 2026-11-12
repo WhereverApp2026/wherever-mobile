@@ -34,7 +34,9 @@ data class Privacy(
     val personalizedLearning: Boolean,
     val mood: Boolean,
     val usageData: Boolean,
-    val searchableByPhone: Boolean
+    val searchableByPhone: Boolean,
+    /** Permiso expreso para guardar alergias (dato de salud). Sin él, el backend no las guarda. */
+    val sensitiveData: Boolean
 )
 
 data class UserProfile(
@@ -69,5 +71,6 @@ data class PrivacyPatch(
     val personalizedLearning: Boolean? = null,
     val mood: Boolean? = null,
     val usageData: Boolean? = null,
-    val searchableByPhone: Boolean? = null
+    val searchableByPhone: Boolean? = null,
+    val sensitiveData: Boolean? = null
 )

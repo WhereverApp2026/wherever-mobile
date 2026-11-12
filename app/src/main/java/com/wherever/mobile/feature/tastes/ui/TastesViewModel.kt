@@ -3,6 +3,7 @@ package com.wherever.mobile.feature.tastes.ui
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wherever.mobile.R
 import com.wherever.mobile.core.common.AppError
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.ui.UiText
@@ -10,6 +11,7 @@ import com.wherever.mobile.core.ui.toUiText
 import com.wherever.mobile.feature.auth.domain.AuthRepository
 import com.wherever.mobile.feature.profile.domain.CitySuggestion
 import com.wherever.mobile.feature.profile.domain.PreferencesPatch
+import com.wherever.mobile.feature.profile.domain.PrivacyPatch
 import com.wherever.mobile.feature.profile.domain.ProfileRepository
 import com.wherever.mobile.feature.profile.domain.Tastes
 import com.wherever.mobile.feature.profile.domain.UserProfile
@@ -42,12 +44,21 @@ data class TastesUiState(
     val restrictions: Set<String> = emptySet(),
     val allergiesEnabled: Boolean = false,
     val allergies: String = "",
+    /** Casilla de consentimiento expreso para guardar alergias (nv-43). */
+    val allergiesConsent: Boolean = false,
+    /** El perfil ya tiene `datos_sensibles = true`: no hace falta volver a enviarlo. */
+    val consentSaved: Boolean = false,
+    val consentError: UiText? = null,
     val city: CitySearchState = CitySearchState(),
     val saving: Boolean = false,
     val error: UiText? = null
 ) {
     val canSubmit: Boolean
         get() = categories.size in TASTES_MIN..TASTES_MAX && !saving
+
+    /** Alergias que de verdad se van a enviar: vacías si el chip está apagado. */
+    val allergiesToSave: String
+        get() = if (allergiesEnabled) allergies.trim() else ""
 }
 
 @Suppress("TooManyFunctions") // Un evento de UI por control del formulario de Gustos.
@@ -84,6 +95,8 @@ class TastesViewModel @Inject constructor(
             restrictions = tastes?.restrictions?.toSet() ?: current.restrictions,
             allergies = tastes?.allergies ?: current.allergies,
             allergiesEnabled = !tastes?.allergies.isNullOrBlank(),
+            allergiesConsent = profile.privacy.sensitiveData,
+            consentSaved = profile.privacy.sensitiveData,
             mobility = profile.preferences.mobility.takeIf { tastes != null },
             city = profile.city?.let { CitySearchState(query = it.name, selectedId = it.id) } ?: current.city
         )
@@ -110,6 +123,9 @@ class TastesViewModel @Inject constructor(
 
     fun onAllergiesChange(value: String) = mutableState.update { it.copy(allergies = value.take(ALLERGIES_MAX)) }
 
+    fun onAllergiesConsentChange(checked: Boolean) =
+        mutableState.update { it.copy(allergiesConsent = checked, consentError = null) }
+
     fun onCityQueryChange(query: String) = citySearch.onQueryChange(query)
 
     fun onCitySelect(city: CitySuggestion) = citySearch.onSelect(city)
@@ -124,7 +140,11 @@ class TastesViewModel @Inject constructor(
     fun submit() {
         val current = state.value
         if (!current.canSubmit) return
-        mutableState.update { it.copy(saving = true, error = null) }
+        if (current.allergiesToSave.isNotEmpty() && !current.allergiesConsent) {
+            mutableState.update { it.copy(consentError = UiText.Res(R.string.tastes_allergies_consent_required)) }
+            return
+        }
+        mutableState.update { it.copy(saving = true, error = null, consentError = null) }
         viewModelScope.launch {
             when (val failure = save(current)) {
                 null -> {
@@ -136,17 +156,25 @@ class TastesViewModel @Inject constructor(
         }
     }
 
-    /** Tres rutas en orden. Son idempotentes: reintentar tras un fallo no duplica nada. */
-    @Suppress("ReturnCount") // Corta en el primer fallo; cada return es la salida de una ruta.
+    /**
+     * Hasta cuatro rutas en orden. Son idempotentes: reintentar tras un fallo no duplica nada.
+     * El permiso de datos sensibles va antes que los gustos, porque sin él el backend rechaza `alergias` (422).
+     */
     private suspend fun save(state: TastesUiState): AppError? {
         val tastes = Tastes(
             categories = state.categories.toList(),
             budgetMin = state.budgetMin,
             budgetMax = state.budgetMax,
             restrictions = state.restrictions.toList(),
-            allergies = if (state.allergiesEnabled) state.allergies.trim() else ""
+            allergies = state.allergiesToSave
         )
-        val tasteError = (profileRepository.updateTastes(tastes) as? Result.Failure)?.error
+        val consentError = if (tastes.allergies.isNotEmpty() && !state.consentSaved) {
+            (profileRepository.updatePrivacy(PrivacyPatch(sensitiveData = true)) as? Result.Failure)?.error
+        } else {
+            null
+        }
+        if (consentError == null && tastes.allergies.isNotEmpty()) mutableState.update { it.copy(consentSaved = true) }
+        val tasteError = consentError ?: (profileRepository.updateTastes(tastes) as? Result.Failure)?.error
         val prefsError = tasteError ?: state.mobility?.let { mobility ->
             (profileRepository.updatePreferences(PreferencesPatch(mobility = mobility)) as? Result.Failure)?.error
         }

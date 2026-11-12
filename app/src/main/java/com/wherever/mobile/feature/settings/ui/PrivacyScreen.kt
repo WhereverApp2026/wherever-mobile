@@ -6,6 +6,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
+import com.wherever.mobile.core.designsystem.ConfirmDialog
 import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.LoadingState
@@ -65,6 +66,23 @@ fun PrivacyRoute(onBack: () -> Unit, viewModel: PrivacyViewModel = hiltViewModel
                 enabled = enabled,
                 tag = "privacy_searchable"
             )
+            ToggleRow(
+                title = stringResource(R.string.privacy_sensitive),
+                subtitle = stringResource(R.string.privacy_sensitive_detail),
+                checked = privacy.sensitiveData,
+                onCheckedChange = viewModel::onSensitiveDataChange,
+                enabled = enabled,
+                tag = "privacy_sensitive"
+            )
         }
+    }
+    if (state.confirmSensitiveOff) {
+        ConfirmDialog(
+            title = stringResource(R.string.privacy_sensitive_off_title),
+            message = stringResource(R.string.privacy_sensitive_off_message),
+            confirmText = stringResource(R.string.privacy_sensitive_off_confirm),
+            onConfirm = viewModel::confirmSensitiveOff,
+            onDismiss = viewModel::dismissSensitiveOff
+        )
     }
 }

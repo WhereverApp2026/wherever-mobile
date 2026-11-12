@@ -1,3 +1,19 @@
+# Revisión para Jorge — paso 2 del 2026-11-12: consentimiento de datos sensibles (nv-43)
+
+> Rama `fix/datos-sensibles`, PR a `main` sin merge. Sale de `fix/fecha-nacimiento`: hasta el merge del PR #17, este PR también muestra sus commits. Spec `specs/nv-43` sin firmar.
+
+- **Qué cambia:** en Gustos, al activar Alergias aparece la casilla "Acepto que Wherever guarde mis alergias…". Si no la marcas, no se guarda nada y la app te pide marcarla. Al guardar, primero se da el permiso (`datos_sensibles`) y después se envían los gustos: así ya no sale el 422. En Privacidad hay un interruptor nuevo, "Datos sensibles"; si lo apagas con alergias guardadas, un aviso te dice que se borran.
+- **Base de datos:** Room pasa a la versión 2, con una migración que conserva el perfil guardado. Su prueba corre en el emulador de CI.
+- **Compuertas locales (JDK 17, una por una):** ktlint, detekt, lint, 205 pruebas (15 nuevas), cobertura 74,23 %, `assembleDebug`, `assembleRelease`, la APK de pruebas instrumentadas compila, scripts de puerta y Semgrep sin hallazgos.
+
+**Para probar en el celular (con staging encendido):**
+- [ ] Instala encima de la versión anterior, sin desinstalar: la sesión y el perfil siguen ahí.
+- [ ] Gustos → activa Alergias, escribe "nueces" y guarda sin marcar la casilla: aparece "Marca la casilla para guardar tus alergias".
+- [ ] Marca la casilla y guarda: se guarda sin error. Al volver a Gustos, la casilla y "nueces" siguen ahí.
+- [ ] Privacidad → apaga "Datos sensibles": sale el aviso. Al confirmar, en Gustos ya no hay alergias.
+
+---
+
 # Revisión para Jorge — paso 1 del 2026-11-12: fecha de nacimiento (nv-42)
 
 > Rama `fix/fecha-nacimiento`, PR a `main` sin merge. Spec `specs/nv-42` sin firmar.
@@ -35,7 +51,7 @@
 **Pendiente:**
 - [ ] Prueba real con el backend encendido: `/health`, `/ready`, `/api/v1/ping` y login con correo inexistente ya dan lo esperado (2026-11-12, ver paso 1). Falta el flujo de cuenta en dispositivo.
 - [ ] Volver a revisar `nv-04` y `nv-20` (§C.3).
-- [ ] Decidir el consentimiento `datos_sensibles` (US-022): Gustos con alergias da 422.
+- [x] Consentimiento `datos_sensibles` (US-022): casilla en Gustos más interruptor en Privacidad (nv-43, paso 2 del 2026-11-12).
 - [ ] Amigos US-232/233: Pendiente de backend.
 - [ ] `main` sigue sin protección de rama, y la constitución §8 la pide. Activarla requiere permisos de administrador.
 - [ ] 9 PR de Dependabot abiertos (#4 a #12), sin revisar; varios son saltos de versión mayor.

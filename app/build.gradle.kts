@@ -88,6 +88,9 @@ android {
         buildConfig = true
     }
 
+    // MigrationTestHelper lee los esquemas exportados de Room como assets de androidTest (AGENTS.md §7).
+    sourceSets.getByName("androidTest").assets.srcDir("$projectDir/schemas")
+
     lint {
         warningsAsErrors = true
         abortOnError = true
@@ -196,6 +199,7 @@ dependencies {
     androidTestImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.okhttp.mockwebserver)
     androidTestImplementation(libs.okhttp.tls)
+    androidTestImplementation(libs.androidx.room.testing)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.test.manifest)

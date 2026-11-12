@@ -1,0 +1,214 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "d197b4f4027daccf0aa0654350ca7cf8",
+    "entities": [
+      {
+        "tableName": "user_profile",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `email` TEXT NOT NULL, `emailVerified` INTEGER NOT NULL, `mode` TEXT NOT NULL, `points` INTEGER NOT NULL, `level` TEXT NOT NULL, `weekStreak` INTEGER NOT NULL, `deleteAt` TEXT, `version` INTEGER NOT NULL, `city_id` TEXT, `city_name` TEXT, `tastes_categories` TEXT, `tastes_budgetMin` INTEGER, `tastes_budgetMax` INTEGER, `tastes_restrictions` TEXT, `tastes_allergies` TEXT, `pref_mobility` TEXT NOT NULL, `pref_theme` TEXT NOT NULL, `pref_units` TEXT NOT NULL, `pref_quietFrom` TEXT, `pref_quietTo` TEXT, `pref_notifReservations` INTEGER NOT NULL, `pref_notifCoupons` INTEGER NOT NULL, `pref_notifGroups` INTEGER NOT NULL, `pref_notifReviews` INTEGER NOT NULL, `pref_notifPromotions` INTEGER NOT NULL, `priv_location` INTEGER NOT NULL, `priv_personalizedLearning` INTEGER NOT NULL, `priv_mood` INTEGER NOT NULL, `priv_usageData` INTEGER NOT NULL, `priv_searchableByPhone` INTEGER NOT NULL, `priv_sensitiveData` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "emailVerified",
+            "columnName": "emailVerified",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mode",
+            "columnName": "mode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "points",
+            "columnName": "points",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "level",
+            "columnName": "level",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weekStreak",
+            "columnName": "weekStreak",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deleteAt",
+            "columnName": "deleteAt",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "version",
+            "columnName": "version",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "city.id",
+            "columnName": "city_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "city.name",
+            "columnName": "city_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "tastes.categories",
+            "columnName": "tastes_categories",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "tastes.budgetMin",
+            "columnName": "tastes_budgetMin",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "tastes.budgetMax",
+            "columnName": "tastes_budgetMax",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "tastes.restrictions",
+            "columnName": "tastes_restrictions",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "tastes.allergies",
+            "columnName": "tastes_allergies",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "preferences.mobility",
+            "columnName": "pref_mobility",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "preferences.theme",
+            "columnName": "pref_theme",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "preferences.units",
+            "columnName": "pref_units",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "preferences.quietFrom",
+            "columnName": "pref_quietFrom",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "preferences.quietTo",
+            "columnName": "pref_quietTo",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "preferences.notifReservations",
+            "columnName": "pref_notifReservations",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "preferences.notifCoupons",
+            "columnName": "pref_notifCoupons",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "preferences.notifGroups",
+            "columnName": "pref_notifGroups",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "preferences.notifReviews",
+            "columnName": "pref_notifReviews",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "preferences.notifPromotions",
+            "columnName": "pref_notifPromotions",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "privacy.location",
+            "columnName": "priv_location",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "privacy.personalizedLearning",
+            "columnName": "priv_personalizedLearning",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "privacy.mood",
+            "columnName": "priv_mood",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "privacy.usageData",
+            "columnName": "priv_usageData",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "privacy.searchableByPhone",
+            "columnName": "priv_searchableByPhone",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "privacy.sensitiveData",
+            "columnName": "priv_sensitiveData",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd197b4f4027daccf0aa0654350ca7cf8')"
+    ]
+  }
+}

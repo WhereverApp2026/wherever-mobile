@@ -110,7 +110,7 @@
 - Decisión: se conserva la nota de apagado 22:00/08:00 y se añade el 503 en HTML. Porqué: nv-12 §11 del backend y su Terraform mantienen el horario.
 - Decisión: US-232/233 quedan "Pendiente de backend", sin pantallas. Porqué: ninguna rama de `wherever-backend` (`main` = `f79917e`) tiene rutas de amigos.
 - Decisión: no se implementa `datos_sensibles` en esta rama. Porqué: requiere spec y UI de consentimiento (US-010/US-022).
-- Pendiente: Gustos con alergias dará 422 contra el backend actual.
+- Pendiente: Gustos con alergias dará 422 contra el backend actual. **Resuelto 2026-11-12 en nv-43** (consentimiento de datos sensibles).
 - A evitar: leer un 503 de CloudFront como fallo de la app; fuera de horario el balanceador responde HTML.
 - A recordar: `git add` del `gradle.properties` local arrastra `org.gradle.tooling.parallel`, que no es parte de ningún cambio; preparar solo la línea que toca.
 
@@ -140,6 +140,13 @@
 - Decisión: Compose Testing (`ui-test-junit4`, `ui-test-manifest`) entra en `androidTest`. Porqué: ya estaba en el catálogo y en el stack (constitución §3), pero no se usaba.
 - A evitar: `LocalDate.EPOCH` y otras APIs de `java.time` que llegaron en API 34; con minSdk 26, lint las marca `NewApi` y la app se cae en teléfonos viejos. Usar `LocalDate.ofEpochDay(0)`.
 - A recordar: en las pruebas de UI, un día del `DatePicker` se busca por su descripción (esqueleto `yMMMMEEEEd` en UTC y el idioma del dispositivo), no por el número del día, que la librería oculta de la semántica.
+
+## Consentimiento de datos sensibles (2026-11-12)
+- Estado: rama `fix/datos-sensibles` (sale de `fix/fecha-nacimiento`, PR #17), `specs/nv-43`. Gustos pide una casilla de consentimiento expreso al escribir alergias y manda `PATCH privacidad {datos_sensibles: true}` antes de `PUT gustos`. Privacidad tiene el interruptor "Datos sensibles"; si hay alergias guardadas, retirarlo pide confirmación. Room pasa a la versión 2 con `MIGRATION_1_2`. Verificado con JDK 17, una compuerta por vez: ktlint, detekt, lint, 205 pruebas, cobertura 74,23 %, `assembleDebug`, `assembleDebugAndroidTest`, `assembleRelease`, scripts y Semgrep. Sin verificar: `MigrationTest` en emulador (corre en CI) y el guardado real contra staging.
+- Decisión (Jorge): casilla en Gustos más interruptor en Privacidad. Porqué: las alergias son un dato de salud, y la LFPDPPP pide consentimiento expreso para datos sensibles; deducirlo del chip de Alergias no lo es.
+- Decisión: el `PATCH` de privacidad solo se manda si hay alergias y el perfil no tenía el permiso, y su fallo corta el guardado. Porqué: sin el permiso, el `PUT` de gustos daría 422; y así reintentar no repite el `PATCH`.
+- A evitar: `addMigrations(*arreglo)`, porque detekt marca `SpreadOperator`. Pasar cada migración por nombre.
+- A recordar: un campo nuevo en una entidad de Room necesita `@ColumnInfo(defaultValue = …)` igual al `DEFAULT` de la migración, o `runMigrationsAndValidate` falla al comparar esquemas.
 
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).

@@ -25,6 +25,7 @@ import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.ChipGroup
 import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.FormScreen
+import com.wherever.mobile.core.designsystem.LabeledCheckbox
 import com.wherever.mobile.core.designsystem.LabeledTextField
 import com.wherever.mobile.core.designsystem.RouteBlue
 import com.wherever.mobile.core.designsystem.SelectChip
@@ -95,6 +96,7 @@ fun TastesRoute(onBack: () -> Unit, onFinished: () -> Unit, viewModel: TastesVie
             onMobility = viewModel::onMobilityChange,
             onAllergiesEnabled = viewModel::onAllergiesEnabled,
             onAllergies = viewModel::onAllergiesChange,
+            onAllergiesConsent = viewModel::onAllergiesConsentChange,
             onCityQuery = viewModel::onCityQueryChange,
             onCitySelect = viewModel::onCitySelect,
             onSubmit = viewModel::submit,
@@ -111,6 +113,7 @@ private data class TastesActions(
     val onMobility: (String) -> Unit,
     val onAllergiesEnabled: (Boolean) -> Unit,
     val onAllergies: (String) -> Unit,
+    val onAllergiesConsent: (Boolean) -> Unit,
     val onCityQuery: (String) -> Unit,
     val onCitySelect: (CitySuggestion) -> Unit,
     val onSubmit: () -> Unit,
@@ -171,9 +174,33 @@ private fun TastesContent(state: TastesUiState, actions: TastesActions) {
                 supporting = stringResource(R.string.common_char_count, state.allergies.length, ALLERGIES_MAX),
                 tag = "tastes_allergies"
             )
+            AllergiesConsent(state, actions.onAllergiesConsent)
         }
         CityField(state.city, actions.onCityQuery, actions.onCitySelect, tag = "tastes_city")
         state.error?.let { ErrorBanner(it.asString()) }
+    }
+}
+
+/** Consentimiento expreso para un dato de salud (nv-43): casilla aparte, nunca implícita. */
+@Composable
+private fun AllergiesConsent(state: TastesUiState, onChange: (Boolean) -> Unit) {
+    Column {
+        LabeledCheckbox(state.allergiesConsent, onChange, tag = "tastes_allergies_consent") {
+            Text(
+                text = stringResource(R.string.tastes_allergies_consent),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(start = 4.dp)
+            )
+        }
+        state.consentError?.let {
+            Text(
+                text = it.asString(),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.testTag("tastes_allergies_consent_error")
+            )
+        }
     }
 }
 
@@ -238,7 +265,7 @@ private fun TastesPreview() {
     WhereverTheme(darkTheme = false) {
         TastesContent(
             TastesUiState(categories = setOf("tacos", "cafes")),
-            TastesActions({}, {}, { _, _ -> }, {}, {}, {}, {}, {}, {}, {}, {})
+            TastesActions({}, {}, { _, _ -> }, {}, {}, {}, {}, {}, {}, {}, {}, {})
         )
     }
 }

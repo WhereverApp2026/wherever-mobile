@@ -49,7 +49,8 @@ data class PrivacyDto(
     @SerialName("aprendizaje_personalizado") val personalizedLearning: Boolean = false,
     @SerialName("estado_animo") val mood: Boolean = false,
     @SerialName("datos_uso") val usageData: Boolean = false,
-    @SerialName("buscable_por_telefono") val searchableByPhone: Boolean = false
+    @SerialName("buscable_por_telefono") val searchableByPhone: Boolean = false,
+    @SerialName("datos_sensibles") val sensitiveData: Boolean = false
 )
 
 @Serializable
@@ -97,7 +98,8 @@ data class PrivacyPatchDto(
     @SerialName("aprendizaje_personalizado") val personalizedLearning: Boolean? = null,
     @SerialName("estado_animo") val mood: Boolean? = null,
     @SerialName("datos_uso") val usageData: Boolean? = null,
-    @SerialName("buscable_por_telefono") val searchableByPhone: Boolean? = null
+    @SerialName("buscable_por_telefono") val searchableByPhone: Boolean? = null,
+    @SerialName("datos_sensibles") val sensitiveData: Boolean? = null
 )
 
 @Serializable

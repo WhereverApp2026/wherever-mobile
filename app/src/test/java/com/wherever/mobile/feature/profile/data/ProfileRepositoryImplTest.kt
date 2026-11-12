@@ -12,6 +12,7 @@ import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -22,15 +23,21 @@ class ProfileRepositoryImplTest {
     private val dao = FakeUserProfileDao()
     private lateinit var repository: ProfileRepositoryImpl
 
-    private fun profileJson(version: Int = 3, name: String = "Ana López") = """
+    private fun profileJson(
+        version: Int = 3,
+        name: String = "Ana López",
+        allergies: String = "",
+        sensitiveData: Boolean = false
+    ) = """
         {"id":"u1","nombre":"$name","correo":"ana@ejemplo.com","correo_verificado":true,"foto_url":"",
         "codigo_amigo":"K7M2Q9XA","roles":["consumidor"],"modo_actual":"explorar",
         "ciudad":{"id":"c1","nombre":"Guadalajara"},
-        "gustos":{"categorias":["cafes"],"presupuesto_min":100,"presupuesto_max":500,"restricciones":[],"alergias":""},
+        "gustos":{"categorias":["cafes"],"presupuesto_min":100,"presupuesto_max":500,"restricciones":[],"alergias":"$allergies"},
         "preferencias":{"movilidad_default":"a_pie","tema":"sistema","unidades":"km","horario_silencioso":null,
         "notificaciones":{"reservas":true,"cupones":true,"grupos":true,"resenas":true,"promociones":false}},
         "privacidad":{"ubicacion":true,"aprendizaje_personalizado":true,"estado_animo":false,"datos_uso":true,
-        "buscable_por_telefono":false,"version_terminos":"2026-10","fecha_aceptacion":"x","promociones_correo":false},
+        "buscable_por_telefono":false,"version_terminos":"2026-10","fecha_aceptacion":"x","promociones_correo":false,
+        "datos_sensibles":$sensitiveData},
         "telefono_registrado":false,"puntos":50,"nivel":"Explorador","racha_semanas":0,"estado":"activo",
         "eliminar_en":null,"version":$version,"creado_en":"x","actualizado_en":"x"}
     """.trimIndent()
@@ -145,6 +152,33 @@ class ProfileRepositoryImplTest {
         repository.updatePrivacy(PrivacyPatch(searchableByPhone = true))
 
         assertEquals("""{"buscable_por_telefono":true}""", server.takeRequest().body?.utf8())
+    }
+
+    @Test
+    fun `datos sensibles llegan del perfil y quedan en Room`() = runTest {
+        respond(200, profileJson(allergies = "nueces", sensitiveData = true))
+
+        val result = repository.refresh() as Result.Success
+
+        assertTrue(result.data.privacy.sensitiveData)
+        assertEquals("nueces", result.data.tastes?.allergies)
+        assertTrue(dao.state.value?.privacy?.sensitiveData == true)
+    }
+
+    @Test
+    fun `retirar datos sensibles manda false y Room queda sin alergias`() = runTest {
+        respond(200, profileJson(allergies = "nueces", sensitiveData = true))
+        repository.refresh()
+        server.takeRequest()
+        respond(200, """{"ubicacion":true,"datos_sensibles":false}""")
+        respond(200, profileJson(allergies = "", sensitiveData = false))
+
+        val result = repository.updatePrivacy(PrivacyPatch(sensitiveData = false))
+
+        assertEquals(Result.Success(Unit), result)
+        assertEquals("""{"datos_sensibles":false}""", server.takeRequest().body?.utf8())
+        assertFalse(dao.state.value?.privacy?.sensitiveData ?: true)
+        assertEquals("", dao.state.value?.tastes?.allergies)
     }
 
     @Test

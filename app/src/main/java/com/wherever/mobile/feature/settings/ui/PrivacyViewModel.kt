@@ -16,7 +16,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-data class PrivacyUiState(val privacy: Privacy? = null, val saving: Boolean = false, val error: UiText? = null)
+data class PrivacyUiState(
+    val privacy: Privacy? = null,
+    /** Hay alergias guardadas: retirar el permiso de datos sensibles las borra (nv-43). */
+    val hasAllergies: Boolean = false,
+    val confirmSensitiveOff: Boolean = false,
+    val saving: Boolean = false,
+    val error: UiText? = null
+)
 
 @HiltViewModel
 class PrivacyViewModel @Inject constructor(private val repository: ProfileRepository) : ViewModel() {
@@ -26,10 +33,28 @@ class PrivacyViewModel @Inject constructor(private val repository: ProfileReposi
     init {
         viewModelScope.launch {
             repository.observeProfile().collect { profile ->
-                mutableState.update { it.copy(privacy = profile?.privacy) }
+                mutableState.update {
+                    it.copy(privacy = profile?.privacy, hasAllergies = !profile?.tastes?.allergies.isNullOrBlank())
+                }
             }
         }
     }
+
+    /** Apagar con alergias guardadas pide confirmación antes de enviar, porque el backend las borra. */
+    fun onSensitiveDataChange(enabled: Boolean) {
+        if (!enabled && state.value.hasAllergies) {
+            mutableState.update { it.copy(confirmSensitiveOff = true) }
+        } else {
+            update(PrivacyPatch(sensitiveData = enabled))
+        }
+    }
+
+    fun confirmSensitiveOff() {
+        mutableState.update { it.copy(confirmSensitiveOff = false) }
+        update(PrivacyPatch(sensitiveData = false))
+    }
+
+    fun dismissSensitiveOff() = mutableState.update { it.copy(confirmSensitiveOff = false) }
 
     fun update(patch: PrivacyPatch) {
         mutableState.update { it.copy(saving = true, error = null) }
