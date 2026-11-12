@@ -42,6 +42,20 @@ android {
         buildConfigField("String", "TERMS_VERSION", "\"2026-10\"")
     }
 
+    // Firma de release solo por variables de entorno; sin ellas el APK sale sin firmar (specs/nv-41).
+    // El keystore y sus contraseñas nunca entran al repositorio (constitución §6).
+    val releaseKeystore = System.getenv("WHEREVER_KEYSTORE_PATH")
+    signingConfigs {
+        if (releaseKeystore != null) {
+            create("release") {
+                storeFile = file(releaseKeystore)
+                storePassword = System.getenv("WHEREVER_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("WHEREVER_KEY_ALIAS")
+                keyPassword = System.getenv("WHEREVER_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         debug {
             buildConfigField(
@@ -54,6 +68,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.findByName("release")
             buildConfigField(
                 "String",
                 "API_BASE_URL",

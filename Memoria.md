@@ -123,6 +123,14 @@
 - A recordar: los 504 al descargar (Gradle, GitHub Releases) se relanzan sin cambiar código; primero se lee el log, porque un fallo en el paso gitleaks puede ser solo la descarga.
 - A recordar: `gh` está en `C:\Program Files\GitHub CLI` y puede no estar en el `PATH` de la herramienta. El repo es privado, y `/dev/kvm` siguió disponible en el runner.
 
+## Identificador y build de release (2026-11-11)
+- Estado: rama `chore/application-id`, `specs/nv-41`. `applicationId`/`namespace` = `com.wherever.mobile` confirmados (sin cambios); firma de release por `WHEREVER_KEYSTORE_PATH`/`_PASSWORD`/`WHEREVER_KEY_ALIAS`/`WHEREVER_KEY_PASSWORD`. Verificado con JDK 17: `ktlintCheck`, `detekt`, `lintDebug`, `testDebugUnitTest` (158), `koverVerifyDebug`, `assembleDebug`, scripts de puerta, `assembleRelease` sin variables (APK sin firmar) y con keystore de prueba (`apksigner verify` OK). Sin verificar: APK de release en teléfono contra staging (sin dispositivo).
+- Decisión: sin variables de firma, `assembleRelease` sale sin firmar en vez de fallar. Porqué: CI y otros equipos compilan release sin el keystore.
+- Riesgo: R8 de AGP 9.0.1 avisa "error occurred when parsing kotlin metadata" con Kotlin 2.4.21. No rompe el build; probar login y perfil con el APK de release antes de publicar.
+- A recordar: el JDK 17 descargado no trae `keytool`; usar el de `Android Studio/jbr/bin`.
+- Estado (2026-11-12): `main` (nv-40, PR #15) integrado en `chore/application-id` sin conflictos. Puertas otra vez en verde con JDK 17, en tres partes: (1) `assembleDebug ktlintCheck detekt lintDebug`; (2) `testDebugUnitTest koverVerify` con 173 pruebas y 0 fallos; (3) scripts de puerta (critic PASS, SDD-OK, SPECS-OK con 38 specs, routes OK, strings OK, cobertura 73,08 %) y `assembleRelease` con APK sin firmar.
+- A evitar: correr todas las puertas en una sola invocación de Gradle en este equipo, porque Claude Code la mata por falta de memoria. Correrlas por partes con `--max-workers=2`, y `assembleRelease` con `--no-daemon --max-workers=1`.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).
