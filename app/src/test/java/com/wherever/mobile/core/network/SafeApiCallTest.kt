@@ -1,12 +1,23 @@
 package com.wherever.mobile.core.network
 
+import com.wherever.mobile.R
 import com.wherever.mobile.core.common.AppError
 import com.wherever.mobile.core.common.FieldError
 import com.wherever.mobile.core.common.Result
+import com.wherever.mobile.core.ui.UiText
+import com.wherever.mobile.core.ui.toUiText
 import com.wherever.mobile.testing.testRetrofit
+import java.io.IOException
+import java.net.ConnectException
+import java.net.NoRouteToHostException
+import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import java.net.UnknownServiceException
+import javax.net.ssl.SSLHandshakeException
+import javax.net.ssl.SSLPeerUnverifiedException
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.SerializationException
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
 import org.junit.After
@@ -96,9 +107,11 @@ class SafeApiCallTest {
     }
 
     @Test
-    fun `respuesta 200 ilegible es Unknown`() = runTest {
+    fun `respuesta 200 ilegible es InvalidResponse y no Sin conexion`() = runTest {
         server.enqueue(MockResponse.Builder().code(200).body("""{"otro":1}""").build())
-        assertTrue(failure() is AppError.Unknown)
+        assertEquals(AppError.InvalidResponse, failure())
+        server.enqueue(MockResponse.Builder().code(200).body("<html>CloudFront</html>").build())
+        assertEquals(AppError.InvalidResponse, failure())
     }
 
     @Test
@@ -111,5 +124,61 @@ class SafeApiCallTest {
             Result.Failure(AppError.Timeout),
             safeApiCall<Unit> { throw SocketTimeoutException() }
         )
+    }
+
+    @Test
+    fun `solo las fallas de red reales son Sin conexion (nv-40)`() = runTest {
+        listOf(
+            UnknownHostException("d302bvc0018nfp.cloudfront.net"),
+            ConnectException("Failed to connect"),
+            NoRouteToHostException(),
+            SocketException("Connection reset"),
+            IOException("unexpected end of stream")
+        ).forEach { exception ->
+            assertEquals(
+                exception.javaClass.simpleName,
+                Result.Failure(AppError.Network),
+                safeApiCall<Unit> { throw exception }
+            )
+        }
+    }
+
+    @Test
+    fun `TLS, cleartext y parseo tienen su propio error (nv-40)`() = runTest {
+        val cases = listOf(
+            SSLHandshakeException("Chain validation failed") to AppError.SecureConnection,
+            SSLPeerUnverifiedException("Hostname not verified") to AppError.SecureConnection,
+            UnknownServiceException("CLEARTEXT communication not permitted") to AppError.SecureConnection,
+            SerializationException("Unexpected JSON token") to AppError.InvalidResponse
+        )
+        cases.forEach { (exception, expected) ->
+            val result = safeApiCall<Unit> { throw exception }
+            assertEquals(exception.javaClass.simpleName, Result.Failure(expected), result)
+        }
+    }
+
+    @Test
+    fun `cada tipo de error muestra su propio mensaje (nv-40)`() {
+        val messages = mapOf(
+            AppError.Network to R.string.error_network,
+            AppError.Timeout to R.string.error_timeout,
+            AppError.SecureConnection to R.string.error_secure_connection,
+            AppError.InvalidResponse to R.string.error_invalid_response,
+            AppError.Server() to R.string.error_server,
+            AppError.RateLimited() to R.string.error_rate_limited,
+            AppError.Unknown() to R.string.error_unknown
+        )
+        messages.forEach { (error, id) -> assertEquals(error.toString(), UiText.Res(id), error.toUiText()) }
+        assertEquals("Los mensajes no se repiten", messages.size, messages.values.toSet().size)
+    }
+
+    @Test
+    fun `falla TLS en otra ruta, suprimida o como causa, es SecureConnection`() = runTest {
+        val refusedThenTls = ConnectException("::1 refused").apply { addSuppressed(SSLHandshakeException("cert")) }
+        val wrapped = IOException("route failed", SSLPeerUnverifiedException("host"))
+        assertEquals(Result.Failure(AppError.SecureConnection), safeApiCall<Unit> { throw refusedThenTls })
+        assertEquals(Result.Failure(AppError.SecureConnection), safeApiCall<Unit> { throw wrapped })
+        val timeoutThenRefused = SocketTimeoutException().apply { addSuppressed(ConnectException()) }
+        assertEquals(Result.Failure(AppError.Timeout), safeApiCall<Unit> { throw timeoutThenRefused })
     }
 }

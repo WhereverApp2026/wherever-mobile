@@ -17,6 +17,8 @@
     <!-- Errores -->
     <string name="error_network">Sin conexión. Revisa tu internet e inténtalo de nuevo.</string>
     <string name="error_timeout">El servidor tardó demasiado. Inténtalo de nuevo.</string>
+    <string name="error_secure_connection">No se pudo establecer una conexión segura con el servidor. Revisa la fecha y hora del teléfono o prueba otra red.</string>
+    <string name="error_invalid_response">El servidor respondió algo inesperado. Inténtalo de nuevo más tarde.</string>
     <string name="error_server">El servidor no está disponible por ahora. Inténtalo más tarde.</string>
     <string name="error_rate_limited">Demasiados intentos. Espera un momento.</string>
     <string name="error_unknown">Algo salió mal. Inténtalo de nuevo.</string>
