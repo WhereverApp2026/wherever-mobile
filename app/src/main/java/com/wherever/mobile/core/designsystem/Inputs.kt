@@ -33,6 +33,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -54,6 +56,9 @@ fun LabeledTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     trailingContent: (@Composable () -> Unit)? = null,
+    prefix: String? = null,
+    /** Lo que lee TalkBack del campo; si falta, solo lee la etiqueta de arriba y el texto. */
+    accessibilityLabel: String? = null,
     tag: String = ""
 ) {
     var wasFocused by remember { mutableStateOf(false) }
@@ -71,6 +76,7 @@ fun LabeledTextField(
                 { Icon(it, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant) }
             },
             trailingIcon = trailingContent,
+            prefix = prefix?.let { { Text(it) } },
             keyboardOptions = keyboardOptions,
             visualTransformation = visualTransformation,
             textStyle = MaterialTheme.typography.bodyLarge,
@@ -83,6 +89,7 @@ fun LabeledTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .testTag(tag)
+                .then(accessibilityLabel?.let { Modifier.semantics { contentDescription = it } } ?: Modifier)
                 .onFocusChanged { focus ->
                     if (wasFocused && !focus.isFocused) onBlur()
                     wasFocused = focus.isFocused

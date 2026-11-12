@@ -7,6 +7,7 @@ import com.wherever.mobile.R
 import com.wherever.mobile.core.common.AppError
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.ui.UiText
+import com.wherever.mobile.core.ui.fieldErrors
 import com.wherever.mobile.core.ui.toUiText
 import com.wherever.mobile.feature.auth.domain.AuthRepository
 import com.wherever.mobile.feature.profile.domain.CitySuggestion
@@ -28,18 +29,20 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+private const val FIELD_BUDGET_MIN = "presupuesto_min"
+private const val FIELD_BUDGET_MAX = "presupuesto_max"
+
 const val TASTES_MIN = 3
 const val TASTES_MAX = 10
 const val ALLERGIES_MAX = 200
-const val BUDGET_LIMIT = 1000
-private const val BUDGET_MIN_DEFAULT = 150
-private const val BUDGET_MAX_DEFAULT = 300
 
 data class TastesUiState(
     val fromSettings: Boolean = false,
     val categories: Set<String> = emptySet(),
-    val budgetMin: Int = BUDGET_MIN_DEFAULT,
-    val budgetMax: Int = BUDGET_MAX_DEFAULT,
+    val budget: BudgetForm = BudgetForm(),
+    /** Mensajes del 422 de la API en `presupuesto_min` / `presupuesto_max`; se borran al editar el campo. */
+    val budgetMinError: UiText? = null,
+    val budgetMaxError: UiText? = null,
     val mobility: String? = null,
     val restrictions: Set<String> = emptySet(),
     val allergiesEnabled: Boolean = false,
@@ -54,7 +57,7 @@ data class TastesUiState(
     val error: UiText? = null
 ) {
     val canSubmit: Boolean
-        get() = categories.size in TASTES_MIN..TASTES_MAX && !saving
+        get() = categories.size in TASTES_MIN..TASTES_MAX && budget.isValid && !saving
 
     /** Alergias que de verdad se van a enviar: vacías si el chip está apagado. */
     val allergiesToSave: String
@@ -90,8 +93,7 @@ class TastesViewModel @Inject constructor(
         val tastes = profile.tastes
         current.copy(
             categories = tastes?.categories?.toSet() ?: current.categories,
-            budgetMin = tastes?.budgetMin ?: current.budgetMin,
-            budgetMax = tastes?.budgetMax ?: current.budgetMax,
+            budget = tastes?.let { BudgetForm.of(it.budgetMin, it.budgetMax) } ?: current.budget,
             restrictions = tastes?.restrictions?.toSet() ?: current.restrictions,
             allergies = tastes?.allergies ?: current.allergies,
             allergiesEnabled = !tastes?.allergies.isNullOrBlank(),
@@ -115,7 +117,23 @@ class TastesViewModel @Inject constructor(
         it.copy(restrictions = if (key in it.restrictions) it.restrictions - key else it.restrictions + key)
     }
 
-    fun onBudgetChange(min: Int, max: Int) = mutableState.update { it.copy(budgetMin = min, budgetMax = max) }
+    fun onBudgetMinChange(text: String) =
+        mutableState.update { it.copy(budget = it.budget.withMinText(text), budgetMinError = null) }
+
+    fun onBudgetMaxChange(text: String) =
+        mutableState.update { it.copy(budget = it.budget.withMaxText(text), budgetMaxError = null) }
+
+    /** Un error de la API se borra solo en el extremo que se movió. */
+    fun onBudgetSlide(start: Float, end: Float) = mutableState.update { current ->
+        val budget = current.budget.slide(start, end)
+        current.copy(
+            budget = budget,
+            budgetMinError = current.budgetMinError.takeIf { budget.minText == current.budget.minText },
+            budgetMaxError = current.budgetMaxError.takeIf { budget.maxText == current.budget.maxText }
+        )
+    }
+
+    fun onBudgetSlideFinished() = mutableState.update { it.copy(budget = it.budget.finishSlide()) }
 
     fun onMobilityChange(key: String) = mutableState.update { it.copy(mobility = key) }
 
@@ -144,15 +162,32 @@ class TastesViewModel @Inject constructor(
             mutableState.update { it.copy(consentError = UiText.Res(R.string.tastes_allergies_consent_required)) }
             return
         }
-        mutableState.update { it.copy(saving = true, error = null, consentError = null) }
+        mutableState.update {
+            it.copy(saving = true, error = null, consentError = null, budgetMinError = null, budgetMaxError = null)
+        }
         viewModelScope.launch {
             when (val failure = save(current)) {
                 null -> {
                     mutableState.update { it.copy(saving = false) }
                     eventChannel.send(Unit)
                 }
-                else -> mutableState.update { it.copy(saving = false, error = failure.toUiText()) }
+                else -> onFailure(failure)
             }
+        }
+    }
+
+    /** Un 422 en el presupuesto va bajo su campo; cualquier otro error, en el banner. */
+    private fun onFailure(failure: AppError) {
+        val fields = failure.fieldErrors()
+        val minError = fields[FIELD_BUDGET_MIN]
+        val maxError = fields[FIELD_BUDGET_MAX]
+        mutableState.update {
+            it.copy(
+                saving = false,
+                budgetMinError = minError,
+                budgetMaxError = maxError,
+                error = failure.toUiText().takeIf { minError == null && maxError == null }
+            )
         }
     }
 
@@ -163,8 +198,9 @@ class TastesViewModel @Inject constructor(
     private suspend fun save(state: TastesUiState): AppError? {
         val tastes = Tastes(
             categories = state.categories.toList(),
-            budgetMin = state.budgetMin,
-            budgetMax = state.budgetMax,
+            // `canSubmit` ya exige un presupuesto válido: los dos textos son enteros.
+            budgetMin = state.budget.min ?: 0,
+            budgetMax = state.budget.max ?: 0,
             restrictions = state.restrictions.toList(),
             allergies = state.allergiesToSave
         )

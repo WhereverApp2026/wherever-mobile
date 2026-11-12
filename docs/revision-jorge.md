@@ -1,10 +1,25 @@
+# Revisión para Jorge — paso 3 del 2026-11-12: presupuesto con barra y cantidad manual (nv-44)
+
+> Rama `feat/presupuesto-manual`, PR a `main` sin merge. Spec `specs/nv-44` sin firmar.
+
+- **Qué cambia:** en Gustos, "Gasto por salida" tiene la barra y, debajo, dos campos "Mínimo" y "Máximo". La barra se arrastra libre y queda en pasos de $50 al soltarla; lo que escribes mueve la barra y no se redondea. Más de $1000 deja la barra al tope pero se guarda lo escrito (tope de la app: $50,000). Errores bajo el campo: vacío, fuera de rango y mínimo mayor que el máximo; con error, Continuar/Guardar se deshabilita. Un 422 de la API sale bajo su campo.
+- **Compuertas locales (JDK 17, una por una):** ktlint, detekt, lint, 230 pruebas (25 nuevas), cobertura 75,44 %, `assembleDebugAndroidTest`, `assembleRelease`, scripts de puerta y Semgrep sin hallazgos. `BudgetSectionTest` 6/6 en tu teléfono.
+
+**Para probar en el celular (con staging encendido):**
+- [ ] Gustos → arrastra la barra: los campos cambian y al soltar quedan en múltiplos de $50.
+- [ ] Escribe 2500 en Máximo: la barra queda al tope y arriba dice "$… – $1000 o más". Guarda y vuelve: sigue 2500.
+- [ ] Escribe un Mínimo mayor que el Máximo: aparece "El mínimo no puede ser mayor que el máximo" y Guardar se deshabilita.
+- [ ] Pega "1,500.75 MXN" en Mínimo: queda 1500.
+
+---
+
 # Revisión para Jorge — paso 2 del 2026-11-12: consentimiento de datos sensibles (nv-43)
 
 > Rama `fix/datos-sensibles`, PR a `main` sin merge. Sale de `fix/fecha-nacimiento`: hasta el merge del PR #17, este PR también muestra sus commits. Spec `specs/nv-43` sin firmar.
 
 - **Qué cambia:** en Gustos, al activar Alergias aparece la casilla "Acepto que Wherever guarde mis alergias…". Si no la marcas, no se guarda nada y la app te pide marcarla. Al guardar, primero se da el permiso (`datos_sensibles`) y después se envían los gustos: así ya no sale el 422. En Privacidad hay un interruptor nuevo, "Datos sensibles"; si lo apagas con alergias guardadas, un aviso te dice que se borran.
 - **Base de datos:** Room pasa a la versión 2, con una migración que conserva el perfil guardado. Su prueba corre en el emulador de CI.
-- **Compuertas locales (JDK 17, una por una):** ktlint, detekt, lint, 205 pruebas (15 nuevas), cobertura 74,23 %, `assembleDebug`, `assembleRelease`, la APK de pruebas instrumentadas compila, scripts de puerta y Semgrep sin hallazgos.
+- **Compuertas locales (JDK 17, una por una):** ktlint, detekt, lint, 205 pruebas (15 nuevas), cobertura 74,23 %, `assembleDebug`, `assembleRelease`, la APK de pruebas instrumentadas compila, scripts de puerta y Semgrep sin hallazgos. `BudgetSectionTest` 6/6 en tu teléfono.
 
 **Para probar en el celular (con staging encendido):**
 - [ ] Instala encima de la versión anterior, sin desinstalar: la sesión y el perfil siguen ahí.

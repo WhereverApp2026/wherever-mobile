@@ -3,13 +3,8 @@ package com.wherever.mobile.feature.tastes.ui
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RangeSlider
-import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,7 +22,6 @@ import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.LabeledCheckbox
 import com.wherever.mobile.core.designsystem.LabeledTextField
-import com.wherever.mobile.core.designsystem.RouteBlue
 import com.wherever.mobile.core.designsystem.SelectChip
 import com.wherever.mobile.core.designsystem.StepHeader
 import com.wherever.mobile.core.designsystem.TitleBlock
@@ -38,9 +32,6 @@ import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.feature.auth.ui.ONBOARDING_STEPS
 import com.wherever.mobile.feature.profile.domain.CitySuggestion
 import com.wherever.mobile.feature.profile.ui.CityField
-import kotlin.math.roundToInt
-
-private const val BUDGET_STEP = 50
 
 private data class TasteOption(val key: String, @param:StringRes val label: Int)
 
@@ -92,7 +83,12 @@ fun TastesRoute(onBack: () -> Unit, onFinished: () -> Unit, viewModel: TastesVie
         actions = TastesActions(
             onCategory = viewModel::toggleCategory,
             onRestriction = viewModel::toggleRestriction,
-            onBudget = viewModel::onBudgetChange,
+            budget = BudgetActions(
+                onMin = viewModel::onBudgetMinChange,
+                onMax = viewModel::onBudgetMaxChange,
+                onSlide = viewModel::onBudgetSlide,
+                onSlideFinished = viewModel::onBudgetSlideFinished
+            ),
             onMobility = viewModel::onMobilityChange,
             onAllergiesEnabled = viewModel::onAllergiesEnabled,
             onAllergies = viewModel::onAllergiesChange,
@@ -109,7 +105,7 @@ fun TastesRoute(onBack: () -> Unit, onFinished: () -> Unit, viewModel: TastesVie
 private data class TastesActions(
     val onCategory: (String) -> Unit,
     val onRestriction: (String) -> Unit,
-    val onBudget: (Int, Int) -> Unit,
+    val budget: BudgetActions,
     val onMobility: (String) -> Unit,
     val onAllergiesEnabled: (Boolean) -> Unit,
     val onAllergies: (String) -> Unit,
@@ -147,7 +143,14 @@ private fun TastesContent(state: TastesUiState, actions: TastesActions) {
         Section(stringResource(R.string.tastes_section_mobility)) {
             OptionChips(MOBILITY, setOfNotNull(state.mobility), actions.onMobility, "tastes_mobility_")
         }
-        BudgetSection(state, actions.onBudget)
+        Section(stringResource(R.string.tastes_section_budget)) {
+            BudgetSection(
+                form = state.budget,
+                actions = actions.budget,
+                minApiError = state.budgetMinError?.asString(),
+                maxApiError = state.budgetMaxError?.asString()
+            )
+        }
         Section(stringResource(R.string.tastes_section_restrictions)) {
             ChipGroup {
                 RESTRICTIONS.forEach { option ->
@@ -231,41 +234,13 @@ private fun OptionChips(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun BudgetSection(state: TastesUiState, onBudget: (Int, Int) -> Unit) {
-    val maxLabel = if (state.budgetMax >= BUDGET_LIMIT) {
-        stringResource(R.string.tastes_budget_max_open)
-    } else {
-        state.budgetMax.toString()
-    }
-    Section(stringResource(R.string.tastes_section_budget)) {
-        Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp)) {
-            Text(
-                text = stringResource(R.string.tastes_budget_range, state.budgetMin, maxLabel),
-                style = MaterialTheme.typography.bodyLarge
-            )
-        }
-        RangeSlider(
-            value = state.budgetMin.toFloat()..state.budgetMax.toFloat(),
-            onValueChange = { range ->
-                onBudget(range.start.roundToInt(), range.endInclusive.roundToInt())
-            },
-            valueRange = 0f..BUDGET_LIMIT.toFloat(),
-            steps = BUDGET_LIMIT / BUDGET_STEP - 1,
-            colors = SliderDefaults.colors(thumbColor = RouteBlue, activeTrackColor = RouteBlue),
-            modifier = Modifier.testTag("tastes_budget")
-        )
-    }
-}
-
 @Preview
 @Composable
 private fun TastesPreview() {
     WhereverTheme(darkTheme = false) {
         TastesContent(
             TastesUiState(categories = setOf("tacos", "cafes")),
-            TastesActions({}, {}, { _, _ -> }, {}, {}, {}, {}, {}, {}, {}, {}, {})
+            TastesActions({}, {}, BudgetActions({}, {}, { _, _ -> }, {}), {}, {}, {}, {}, {}, {}, {}, {}, {})
         )
     }
 }

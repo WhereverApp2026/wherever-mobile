@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.wherever.mobile.R
 import com.wherever.mobile.core.common.AppError
+import com.wherever.mobile.core.common.FieldError
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.ui.UiText
 import com.wherever.mobile.feature.profile.domain.PrivacyPatch
@@ -44,6 +45,92 @@ class TastesViewModelTest {
         onAllergiesEnabled(true)
         onAllergiesChange(text)
     }
+
+    // Presupuesto (nv-44)
+
+    @Test
+    fun `con un error de presupuesto no se puede continuar`() = runTest {
+        val viewModel = viewModel()
+        assertTrue(viewModel.state.value.canSubmit)
+
+        viewModel.onBudgetMinChange("")
+        assertFalse(viewModel.state.value.canSubmit)
+
+        viewModel.onBudgetMinChange("500")
+        viewModel.onBudgetMaxChange("300")
+        assertFalse(viewModel.state.value.canSubmit)
+
+        viewModel.onBudgetMaxChange("60000")
+        assertFalse(viewModel.state.value.canSubmit)
+
+        viewModel.submit()
+        advanceUntilIdle()
+        assertTrue(profiles.calls.isEmpty())
+    }
+
+    @Test
+    fun `desde Ajustes carga el presupuesto guardado`() = runTest {
+        profiles.profile.value = sampleProfile(
+            tastes = Tastes(listOf("tacos", "cafes", "museos"), 250, 2500, emptyList(), "")
+        )
+        val viewModel = TastesViewModel(SavedStateHandle(mapOf("fromSettings" to true)), profiles, auth)
+        runCurrent()
+
+        assertEquals("250", viewModel.state.value.budget.minText)
+        assertEquals("2500", viewModel.state.value.budget.maxText)
+        assertEquals(1000f, viewModel.state.value.budget.sliderEnd)
+    }
+
+    @Test
+    fun `se guardan los enteros escritos, aunque pasen de 1000`() = runTest {
+        val viewModel = viewModel()
+        viewModel.onBudgetMinChange(" 0120 ")
+        viewModel.onBudgetMaxChange("2,500")
+
+        viewModel.finished.test {
+            viewModel.submit()
+            awaitItem()
+        }
+
+        assertEquals(120, profiles.savedTastes.single().budgetMin)
+        assertEquals(2500, profiles.savedTastes.single().budgetMax)
+    }
+
+    @Test
+    fun `barra y soltar dejan pasos de 50 en el estado`() = runTest {
+        val viewModel = viewModel()
+        viewModel.onBudgetSlide(150f, 712f)
+        assertEquals("712", viewModel.state.value.budget.maxText)
+
+        viewModel.onBudgetSlideFinished()
+
+        assertEquals("700", viewModel.state.value.budget.maxText)
+    }
+
+    @Test
+    fun `422 en presupuesto va bajo el campo y se borra al editarlo`() = runTest {
+        profiles.tastesResult = Result.Failure(
+            AppError.Validation(
+                listOf(FieldError("presupuesto_max", "debe ser mayor o igual que presupuesto_min")),
+                apiMessage = "datos inválidos"
+            )
+        )
+        val viewModel = viewModel()
+
+        viewModel.submit()
+        advanceUntilIdle()
+
+        assertEquals(
+            UiText.Plain("Debe ser mayor o igual que presupuesto_min"),
+            viewModel.state.value.budgetMaxError
+        )
+        assertNull(viewModel.state.value.error)
+
+        viewModel.onBudgetMaxChange("400")
+        assertNull(viewModel.state.value.budgetMaxError)
+    }
+
+    // Alergias (nv-43)
 
     @Test
     fun `alergias sin la casilla no envian nada y piden marcarla`() = runTest {
