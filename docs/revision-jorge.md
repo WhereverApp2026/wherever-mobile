@@ -13,8 +13,8 @@
 - [ ] De noche (después de las 18:00 en México, cuando en UTC ya es mañana), hoy se sigue pudiendo escoger y mañana no.
 
 **Pendiente:**
-- [ ] Prueba de UI (`BirthDatePickerTest`) en el emulador de CI.
-- [ ] Contra staging (L-V 08:00-22:00): registro con fecha futura, para ver que el backend responde 422 en `fecha_nacimiento`.
+- [x] Prueba de UI (`BirthDatePickerTest`) en el emulador de CI: verde en el PR #17.
+- [x] Contra staging (2026-11-12, 12:15): registro con fecha futura → **422** `validacion` con campo `fecha_nacimiento` ("debes tener 18 años o más"), el campo que mapea `RegisterViewModel`. Se mandó con contraseña inválida a propósito para no crear cuenta. De paso: `/health`, `/ready` y `/api/v1/ping` → 200; login con correo inexistente → 401 `no_autenticado`.
 
 ---
 
@@ -33,7 +33,7 @@
 - **Verificación local en `main`:** `assembleDebug` correcto. Antes del PR #13, 152 pruebas verdes y todas las compuertas.
 
 **Pendiente:**
-- [ ] Prueba real con el backend encendido (L-V desde las 08:00): `/health`, `/ready`, `/api/v1/ping`, login con correo inexistente y flujo de cuenta en dispositivo.
+- [ ] Prueba real con el backend encendido: `/health`, `/ready`, `/api/v1/ping` y login con correo inexistente ya dan lo esperado (2026-11-12, ver paso 1). Falta el flujo de cuenta en dispositivo.
 - [ ] Volver a revisar `nv-04` y `nv-20` (§C.3).
 - [ ] Decidir el consentimiento `datos_sensibles` (US-022): Gustos con alergias da 422.
 - [ ] Amigos US-232/233: Pendiente de backend.
