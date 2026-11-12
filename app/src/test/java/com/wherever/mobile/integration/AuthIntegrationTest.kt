@@ -140,6 +140,24 @@ class AuthIntegrationTest {
     }
 
     @Test
+    fun `registro 422 en fecha_nacimiento llega como error de ese campo`() = runTest {
+        val registration = Registration("Ana López", "2027-01-01", "ana@ejemplo.com", TEST_PASSWORD, true)
+        server.reply(
+            422,
+            ApiDoc.error(422, "datos inválidos", mapOf("fecha_nacimiento" to "debes ser mayor de 18 años"))
+        )
+
+        val error = (repository.register(registration) as Result.Failure).error
+
+        assertTrue(error is AppError.Validation)
+        val field = (error as AppError.Validation).fields.single()
+        assertEquals("fecha_nacimiento", field.field)
+        assertEquals("debes ser mayor de 18 años", field.message)
+        assertTrue(server.takeRequest().body!!.utf8().contains("\"fecha_nacimiento\":\"2027-01-01\""))
+        assertNull(tokenStore.tokens)
+    }
+
+    @Test
     fun `recuperar 202 sin cuerpo y 429 con Retry-After`() = runTest {
         server.reply(202)
         server.reply(429, ApiDoc.error(429, "espera antes de reenviar"), "Retry-After" to "45")

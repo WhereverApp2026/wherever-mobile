@@ -34,6 +34,8 @@
     <string name="validation_email">Revisa el correo</string>
     <string name="validation_password">Mínimo 8 caracteres, con una letra y un número</string>
     <string name="validation_adult">Debes ser mayor de 18 años</string>
+    <string name="validation_birth_date_future">La fecha no puede ser posterior a hoy</string>
+    <string name="validation_birth_date_too_old">Revisa el año de nacimiento</string>
     <string name="city_placeholder">Escribe tu ciudad</string>
     <string name="city_no_results">No encontramos esa ciudad</string>
     <string name="city_suggestion">%1$s, %2$s</string>
