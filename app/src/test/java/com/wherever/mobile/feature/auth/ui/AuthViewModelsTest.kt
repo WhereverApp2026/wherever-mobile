@@ -14,6 +14,7 @@ import com.wherever.mobile.testing.TEST_PASSWORD
 import java.time.Clock
 import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.ZoneOffset
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceTimeBy
@@ -157,6 +158,49 @@ class AuthViewModelsTest {
 
         viewModel.onPasswordChange("corta")
         assertEquals(UiText.Res(R.string.validation_password), viewModel.state.value.passwordError)
+    }
+
+    @Test
+    fun `registro distingue fecha futura, demasiado vieja y menor de edad`() = runTest {
+        val viewModel = filledRegister()
+
+        viewModel.onBirthDateChange(LocalDate.of(2026, 11, 5))
+        assertEquals(UiText.Res(R.string.validation_birth_date_future), viewModel.state.value.birthDateError)
+        assertFalse(viewModel.state.value.canSubmit)
+
+        viewModel.onBirthDateChange(LocalDate.of(1925, 11, 4))
+        assertEquals(UiText.Res(R.string.validation_birth_date_too_old), viewModel.state.value.birthDateError)
+        assertFalse(viewModel.state.value.canSubmit)
+
+        viewModel.onBirthDateChange(LocalDate.of(2008, 11, 5))
+        assertEquals(UiText.Res(R.string.validation_adult), viewModel.state.value.birthDateError)
+        assertFalse(viewModel.state.value.canSubmit)
+
+        viewModel.onBirthDateChange(LocalDate.of(2008, 11, 4))
+        assertNull(viewModel.state.value.birthDateError)
+        assertTrue(viewModel.state.value.canSubmit)
+    }
+
+    @Test
+    fun `registro toma hoy en la zona del reloj, no en UTC`() = runTest {
+        val mexico = ZoneId.of("America/Mexico_City")
+        // 23:30 del 12 en México = 05:30 del 13 en UTC.
+        val viewModel = RegisterViewModel(repository, Clock.fixed(Instant.parse("2026-11-13T05:30:00Z"), mexico))
+
+        assertEquals(LocalDate.of(2026, 11, 12), viewModel.state.value.today)
+        viewModel.onBirthDateChange(LocalDate.of(2026, 11, 13))
+        assertEquals(UiText.Res(R.string.validation_birth_date_future), viewModel.state.value.birthDateError)
+    }
+
+    @Test
+    fun `registro no envia una fecha futura`() = runTest {
+        val viewModel = filledRegister()
+        viewModel.onBirthDateChange(LocalDate.of(2027, 1, 1))
+
+        viewModel.submit()
+        advanceUntilIdle()
+
+        assertTrue(repository.registrations.isEmpty())
     }
 
     @Test

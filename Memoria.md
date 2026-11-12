@@ -130,6 +130,16 @@
 - A recordar: el JDK 17 descargado no trae `keytool`; usar el de `Android Studio/jbr/bin`.
 - Estado (2026-11-12): `main` (nv-40, PR #15) integrado en `chore/application-id` sin conflictos. Puertas otra vez en verde con JDK 17, en tres partes: (1) `assembleDebug ktlintCheck detekt lintDebug`; (2) `testDebugUnitTest koverVerify` con 173 pruebas y 0 fallos; (3) scripts de puerta (critic PASS, SDD-OK, SPECS-OK con 38 specs, routes OK, strings OK, cobertura 73,08 %) y `assembleRelease` con APK sin firmar.
 - A evitar: correr todas las puertas en una sola invocación de Gradle en este equipo, porque Claude Code la mata por falta de memoria. Correrlas por partes con `--max-workers=2`, y `assembleRelease` con `--no-daemon --max-workers=1`.
+- Estado (2026-11-12): nv-41 integrado en `main` por el PR #16 (`3dbe85d`, merge manual de Jorge). La CI de `main` (corrida 43178363977) está en verde. Pendiente: probar el APK de release en un teléfono contra staging, sobre todo login y perfil, por el aviso de R8.
+- A recordar: el modo automático bloquea `gh pr merge` sin revisión, así que el merge lo hace Jorge desde GitHub.
+
+## Fecha de nacimiento sin fechas futuras (2026-11-12)
+- Estado: rama `fix/fecha-nacimiento`, `specs/nv-42`. El calendario de Registro solo deja escoger entre hoy hace 100 años y hoy (`SelectableDates`) y abre en hace 18 años. `validateBirthDate` da tres mensajes: fecha futura, demasiado vieja y menor de edad. Verificado con JDK 17, una compuerta por vez: ktlint, detekt, lint, 190 pruebas, cobertura 73,32 %, `assembleDebug`, `assembleRelease` y `assembleDebugAndroidTest`. Sin verificar: la prueba de UI en emulador (corre en CI) y el 422 contra staging (backend apagado de madrugada).
+- Decisión: "hoy" sale del `Clock` inyectado en la zona del teléfono y se pasa a medianoche UTC para el calendario (`BirthDateBounds`). Porqué: Material 3 representa cada día como medianoche UTC, y comparar con la hora UTC actual dejaría escoger mañana de noche en México.
+- Decisión: el límite de 100 años es solo de la app. Porqué: la doc de la API pide 18+ y AAAA-MM-DD, nada más.
+- Decisión: Compose Testing (`ui-test-junit4`, `ui-test-manifest`) entra en `androidTest`. Porqué: ya estaba en el catálogo y en el stack (constitución §3), pero no se usaba.
+- A evitar: `LocalDate.EPOCH` y otras APIs de `java.time` que llegaron en API 34; con minSdk 26, lint las marca `NewApi` y la app se cae en teléfonos viejos. Usar `LocalDate.ofEpochDay(0)`.
+- A recordar: en las pruebas de UI, un día del `DatePicker` se busca por su descripción (esqueleto `yMMMMEEEEd` en UTC y el idioma del dispositivo), no por el número del día, que la librería oculta de la semántica.
 
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).

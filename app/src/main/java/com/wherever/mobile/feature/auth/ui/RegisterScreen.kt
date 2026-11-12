@@ -14,6 +14,7 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -24,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -41,13 +43,11 @@ import com.wherever.mobile.core.designsystem.TitleBlock
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.core.ui.formatCountdown
-import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-private const val OLDEST_YEAR_RANGE = 100
 private val DISPLAY_DATE: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+private val PREVIEW_TODAY: LocalDate = LocalDate.parse("2026-11-12")
 
 /** 05_Registro */
 @Composable
@@ -159,7 +159,7 @@ private fun RegisterContent(
     }
     if (showDatePicker) {
         BirthDatePicker(
-            maxYear = state.maxBirthYear,
+            today = state.today,
             onDismiss = { showDatePicker = false },
             onPicked = {
                 onBirthDateChange(it)
@@ -169,27 +169,41 @@ private fun RegisterContent(
     }
 }
 
+/** Solo deja tocar días entre hace 100 años y hoy; los futuros salen deshabilitados (nv-42). */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun BirthDatePicker(maxYear: Int, onDismiss: () -> Unit, onPicked: (LocalDate) -> Unit) {
-    val pickerState = rememberDatePickerState(yearRange = (maxYear - OLDEST_YEAR_RANGE)..maxYear)
+internal fun BirthDatePicker(
+    today: LocalDate,
+    onDismiss: () -> Unit,
+    onPicked: (LocalDate) -> Unit,
+    initialDisplayedMonthMillis: Long = BirthDateBounds(today).initialDisplayedMonthMillis
+) {
+    val bounds = remember(today) { BirthDateBounds(today) }
+    val pickerState = rememberDatePickerState(
+        initialDisplayedMonthMillis = initialDisplayedMonthMillis,
+        yearRange = bounds.yearRange,
+        selectableDates = remember(bounds) {
+            object : SelectableDates {
+                override fun isSelectableDate(utcTimeMillis: Long) = bounds.isSelectable(utcTimeMillis)
+
+                override fun isSelectableYear(year: Int) = bounds.isSelectableYear(year)
+            }
+        }
+    )
     DatePickerDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
             TextButton(
                 enabled = pickerState.selectedDateMillis != null,
-                onClick = {
-                    pickerState.selectedDateMillis?.let {
-                        onPicked(Instant.ofEpochMilli(it).atZone(ZoneOffset.UTC).toLocalDate())
-                    }
-                }
+                onClick = { pickerState.selectedDateMillis?.let { onPicked(it.toPickerDate()) } },
+                modifier = Modifier.testTag("birth_date_accept")
             ) {
                 Text(stringResource(R.string.common_accept))
             }
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } }
     ) {
-        DatePicker(state = pickerState)
+        DatePicker(state = pickerState, modifier = Modifier.testTag("birth_date_picker"))
     }
 }
 
@@ -197,6 +211,6 @@ private fun BirthDatePicker(maxYear: Int, onDismiss: () -> Unit, onPicked: (Loca
 @Composable
 private fun RegisterPreview() {
     WhereverTheme(darkTheme = false) {
-        RegisterContent(RegisterUiState(maxBirthYear = 2026), {}, {}, {}, {}, {}, {}, {}, {})
+        RegisterContent(RegisterUiState(today = PREVIEW_TODAY), {}, {}, {}, {}, {}, {}, {}, {})
     }
 }

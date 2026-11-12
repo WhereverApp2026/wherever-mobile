@@ -1,3 +1,23 @@
+# Revisión para Jorge — paso 1 del 2026-11-12: fecha de nacimiento (nv-42)
+
+> Rama `fix/fecha-nacimiento`, PR a `main` sin merge. Spec `specs/nv-42` sin firmar.
+
+- **Qué cambia:** el calendario de Registro deshabilita los días futuros, no baja de hace 100 años y abre en hace 18 años. El código valida también la fecha, con mensajes distintos para fecha futura, demasiado vieja y menor de edad. "Hoy" sale del reloj inyectado, en la zona del teléfono.
+- **Corregido de paso:** `LocalDate.EPOCH` (API 34) habría tirado la app en Android 8 a 13; lint lo marcó.
+- **Compuertas locales (JDK 17, una por una):** ktlint, detekt, lint, 190 pruebas (17 nuevas), cobertura 73,32 %, `assembleDebug`, `assembleRelease`, y la prueba de UI compila.
+
+**Para probar en el celular:**
+- [ ] En Registro, abre el calendario: empieza en el mes de hace 18 años.
+- [ ] Avanza hasta el mes actual: los días después de hoy salen grises y no se pueden tocar. Hoy sí.
+- [ ] Escoge una fecha de hace menos de 18 años: aparece "Debes ser mayor de 18 años".
+- [ ] De noche (después de las 18:00 en México, cuando en UTC ya es mañana), hoy se sigue pudiendo escoger y mañana no.
+
+**Pendiente:**
+- [ ] Prueba de UI (`BirthDatePickerTest`) en el emulador de CI.
+- [ ] Contra staging (L-V 08:00-22:00): registro con fecha futura, para ver que el backend responde 422 en `fecha_nacimiento`.
+
+---
+
 # Revisión para Jorge — integración a `main` del 2026-11-09
 
 > Autorizada por Jorge. Todo entró por PR con CI en verde; las firmas del 2026-11-06 no cambiaron.

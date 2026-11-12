@@ -1,19 +1,12 @@
 package com.wherever.mobile.core.common
 
-import com.wherever.mobile.feature.auth.domain.isAdult
 import com.wherever.mobile.feature.auth.domain.isValidName
-import java.time.Clock
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneOffset
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ValidatorsTest {
-    private val clock = Clock.fixed(Instant.parse("2026-11-04T12:00:00Z"), ZoneOffset.UTC)
-
     @Test
     fun `contrasena de 8 a 128 con letra y numero`() {
         assertTrue(isValidPassword("abcdefg1"))
@@ -28,12 +21,6 @@ class ValidatorsTest {
         assertTrue(isValidName("Al"))
         assertFalse(isValidName("A"))
         assertFalse(isValidName("x".repeat(41)))
-    }
-
-    @Test
-    fun `mayoria de edad justo en el cumpleanos 18`() {
-        assertTrue(isAdult(LocalDate.of(2008, 11, 4), clock))
-        assertFalse(isAdult(LocalDate.of(2008, 11, 5), clock))
     }
 
     @Test

@@ -13,9 +13,10 @@ import com.wherever.mobile.core.ui.fieldErrors
 import com.wherever.mobile.core.ui.launchCountdown
 import com.wherever.mobile.core.ui.toUiText
 import com.wherever.mobile.feature.auth.domain.AuthRepository
+import com.wherever.mobile.feature.auth.domain.BirthDateIssue
 import com.wherever.mobile.feature.auth.domain.Registration
-import com.wherever.mobile.feature.auth.domain.isAdult
 import com.wherever.mobile.feature.auth.domain.isValidName
+import com.wherever.mobile.feature.auth.domain.validateBirthDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.Clock
 import java.time.LocalDate
@@ -46,7 +47,8 @@ data class RegisterUiState(
     val submitting: Boolean = false,
     val retryAfterSeconds: Long = 0,
     val isFormValid: Boolean = false,
-    val maxBirthYear: Int = 0
+    /** "Hoy" según el reloj inyectado; acota el calendario (nv-42). */
+    val today: LocalDate = LocalDate.ofEpochDay(0)
 ) {
     val canSubmit: Boolean
         get() = isFormValid &&
@@ -59,7 +61,7 @@ data class RegisterUiState(
 @HiltViewModel
 class RegisterViewModel @Inject constructor(private val repository: AuthRepository, private val clock: Clock) :
     ViewModel() {
-    private val mutableState = MutableStateFlow(RegisterUiState(maxBirthYear = LocalDate.now(clock).year))
+    private val mutableState = MutableStateFlow(RegisterUiState(today = LocalDate.now(clock)))
     val state: StateFlow<RegisterUiState> = mutableState.asStateFlow()
 
     private val eventChannel = Channel<Unit>(Channel.BUFFERED)
@@ -74,7 +76,7 @@ class RegisterViewModel @Inject constructor(private val repository: AuthReposito
     }
 
     fun onBirthDateChange(value: LocalDate) = change {
-        copy(birthDate = value, birthDateError = if (isAdult(value, clock)) null else UNDERAGE)
+        copy(birthDate = value, birthDateError = validateBirthDate(value, clock)?.toUiText())
     }
 
     fun onEmailChange(value: String) {
@@ -176,13 +178,21 @@ class RegisterViewModel @Inject constructor(private val repository: AuthReposito
         next.copy(
             isFormValid = isValidName(next.name) &&
                 birthDate != null &&
-                isAdult(birthDate, clock) &&
+                validateBirthDate(birthDate, clock) == null &&
                 isValidEmail(next.email) &&
                 isValidPassword(next.password)
         )
     }
 
+    private fun BirthDateIssue.toUiText(): UiText = when (this) {
+        BirthDateIssue.FUTURE -> FUTURE_BIRTH_DATE
+        BirthDateIssue.TOO_OLD -> TOO_OLD_BIRTH_DATE
+        BirthDateIssue.UNDERAGE -> UNDERAGE
+    }
+
     private companion object {
+        val FUTURE_BIRTH_DATE = UiText.Res(R.string.validation_birth_date_future)
+        val TOO_OLD_BIRTH_DATE = UiText.Res(R.string.validation_birth_date_too_old)
         val INVALID_NAME = UiText.Res(R.string.validation_name)
         val UNDERAGE = UiText.Res(R.string.validation_adult)
         val INVALID_EMAIL = UiText.Res(R.string.validation_email)
