@@ -128,6 +128,8 @@
 - Decisión: sin variables de firma, `assembleRelease` sale sin firmar en vez de fallar. Porqué: CI y otros equipos compilan release sin el keystore.
 - Riesgo: R8 de AGP 9.0.1 avisa "error occurred when parsing kotlin metadata" con Kotlin 2.4.21. No rompe el build; probar login y perfil con el APK de release antes de publicar.
 - A recordar: el JDK 17 descargado no trae `keytool`; usar el de `Android Studio/jbr/bin`.
+- Estado (2026-11-12): `main` (nv-40, PR #15) integrado en `chore/application-id` sin conflictos. Puertas otra vez en verde con JDK 17, en tres partes: (1) `assembleDebug ktlintCheck detekt lintDebug`; (2) `testDebugUnitTest koverVerify` con 173 pruebas y 0 fallos; (3) scripts de puerta (critic PASS, SDD-OK, SPECS-OK con 38 specs, routes OK, strings OK, cobertura 73,08 %) y `assembleRelease` con APK sin firmar.
+- A evitar: correr todas las puertas en una sola invocación de Gradle en este equipo, porque Claude Code la mata por falta de memoria. Correrlas por partes con `--max-workers=2`, y `assembleRelease` con `--no-daemon --max-workers=1`.
 
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
