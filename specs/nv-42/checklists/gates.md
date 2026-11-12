@@ -6,7 +6,7 @@
 - [x] `testDebugUnitTest` verde (Unit, Data, Security, Arquitectura): 190
 - [x] `koverVerifyDebug` ≥45%: 73,32 %
 - [x] `assembleDebug` y `assembleRelease`
-- [ ] Prueba de UI (`BirthDatePickerTest`) verde en CI
+- [x] Prueba de UI (`BirthDatePickerTest`) verde en CI (PR #17)
 - [x] Textos en `strings.xml`; sin rutas nuevas
 - [x] `Memoria.md` y `docs/revision-jorge.md` actualizados
 - [ ] Aprobación: Revisor Jorge — fecha:
