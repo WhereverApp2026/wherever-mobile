@@ -72,7 +72,8 @@ android {
             buildConfigField(
                 "String",
                 "API_BASE_URL",
-                "\"${checkedApiBaseUrl(configuredApiBaseUrl ?: "https://example.invalid/api/v1/")}\""
+                // Sin URL de producción todavía: release usa la de staging, igual que debug (specs/nv-40).
+                "\"${checkedApiBaseUrl(configuredApiBaseUrl ?: stagingApiBaseUrl)}\""
             )
         }
     }
@@ -186,6 +187,7 @@ dependencies {
     testImplementation(libs.turbine)
     testImplementation(libs.konsist)
     testImplementation(libs.okhttp.mockwebserver)
+    testImplementation(libs.okhttp.tls)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.konsist)
 
