@@ -10,13 +10,13 @@
 - [x] Pulido: "Cerrar sesión" en gris, engrane con borde y nombre en negrita.
 
 ## T2 — Verificación
-- [x] Compuertas locales con JDK 17, una por una (2026-11-13): `ktlintCheck`, `detekt`, `lintDebug`, `testDebugUnitTest` (239), `koverVerifyDebug` (75,27 %), `assembleDebug`, `assembleDebugAndroidTest`, `assembleRelease`, scripts de puerta y Semgrep.
+- [x] Compuertas locales con JDK 17, una por una (2026-11-13): `ktlintCheck`, `detekt`, `lintDebug`, `testDebugUnitTest` (240), `koverVerifyDebug` (75,27 %), `assembleDebug`, `assembleDebugAndroidTest`, `assembleRelease`, scripts de puerta y Semgrep.
 - [x] Pesos de fuente medidos en el teléfono de Jorge antes del cambio: Sora 600 y 700 daban el mismo ancho.
 - [ ] Pruebas de UI (`SafeNavigationUiTest`, `MotionComponentsTest`, `TypographyWeightTest`) en la CI del PR.
 - [ ] En el teléfono: transiciones, doble toque y atrás predictivo a mano.
 
 ## T3 — Pruebas (unitarias, integración, UI y seguridad)
-- [x] Unit: `MotionTest` (5), `SafeNavigationTest` (4)
+- [x] Unit: `MotionTest` (6), `SafeNavigationTest` (4)
 - [x] Integración: sin superficie nueva
 - [x] UI: `SafeNavigationUiTest` (3), `MotionComponentsTest` (3), `TypographyWeightTest` (2)
 - [x] Seguridad: sin superficie nueva

@@ -21,7 +21,7 @@
 
 ## 3. Pruebas
 ### Unitarias
-- `test/.../core/designsystem/MotionTest.kt` (5)
+- `test/.../core/designsystem/MotionTest.kt` (6)
 - `test/.../navigation/SafeNavigationTest.kt` (4)
 
 ### Integración

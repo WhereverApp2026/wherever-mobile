@@ -11,7 +11,7 @@
 - **Doble toque:** un toque solo navega si la pantalla está al frente y quieta, así que ya no se abre la misma pantalla dos veces ni se regresa dos. Lo que llega de la API (sesión iniciada, cuenta borrada…) navega aunque la app esté en segundo plano; si se descartara, la pantalla se quedaría atorada.
 - **Fuentes:** los títulos salían todos en peso 400, porque Android ignoraba el peso de la fuente variable. Ahora cada peso es un archivo estático (OFL).
 - **Pulido:** "Cerrar sesión" en gris (85_Ajustes), engrane de Perfil en círculo blanco con borde y nombre en negrita (81_Perfil).
-- **Compuertas locales (JDK 17, una por una):** ktlint, detekt, lint, 239 pruebas (9 nuevas), cobertura 75,27 %, `assembleDebug`, `assembleDebugAndroidTest`, `assembleRelease`, scripts de puerta y Semgrep sin hallazgos. Las 8 pruebas de UI nuevas corren en la CI del PR.
+- **Compuertas locales (JDK 17, una por una):** ktlint, detekt, lint, 240 pruebas (10 nuevas), cobertura 75,27 %, `assembleDebug`, `assembleDebugAndroidTest`, `assembleRelease`, scripts de puerta y Semgrep sin hallazgos. Las 8 pruebas de UI nuevas corren en la CI del PR.
 
 **Para probar en el celular:**
 - [ ] Perfil → Ajustes → Sesiones y regresa: cada pantalla entra desde la derecha y sale hacia la derecha.
