@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ícono pequeño del push: el pin del launcher, blanco sobre transparente (Android lo tiñe). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="56"
+    android:viewportHeight="56">
+    <group
+        android:translateX="-26"
+        android:translateY="-26">
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M54,30c-10.5,0 -19,8.5 -19,19c0,14 19,29 19,29s19,-15 19,-29c0,-10.5 -8.5,-19 -19,-19zM54,56a7,7 0,1 1,0 -14a7,7 0,0 1,0 14z" />
+    </group>
+</vector>

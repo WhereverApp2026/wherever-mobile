@@ -12,6 +12,7 @@ import com.wherever.mobile.feature.auth.domain.Registration
 import com.wherever.mobile.feature.profile.data.ProfileRepositoryImpl
 import com.wherever.mobile.feature.profile.data.UsersApi
 import com.wherever.mobile.testing.ApiDoc
+import com.wherever.mobile.testing.FakeDeviceRegistration
 import com.wherever.mobile.testing.FakeTokenStore
 import com.wherever.mobile.testing.FakeUserProfileDao
 import com.wherever.mobile.testing.RealNetwork
@@ -53,6 +54,7 @@ class AuthIntegrationTest {
     private val tokenStore = FakeTokenStore()
     private val dao = FakeUserProfileDao()
     private val onboarding = MemoryOnboarding()
+    private val devices = FakeDeviceRegistration(tokenStore)
     private lateinit var network: RealNetwork
     private lateinit var repository: AuthRepositoryImpl
 
@@ -69,7 +71,8 @@ class AuthIntegrationTest {
             profileRepository = ProfileRepositoryImpl(network.retrofit.create(UsersApi::class.java), dao),
             profileDao = dao,
             onboarding = onboarding,
-            deviceInfo = { DeviceInfo("Pixel 8", "Android 15", "0.1.0") }
+            deviceInfo = { DeviceInfo("Pixel 8", "Android 15", "0.1.0") },
+            deviceRegistration = devices
         )
     }
 

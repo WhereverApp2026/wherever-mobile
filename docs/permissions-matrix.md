@@ -5,7 +5,7 @@
 | Permiso | Cuándo se pide | Sin el permiso | Spec |
 |---|---|---|---|
 | `INTERNET` | siempre (normal) | — | nv-01 |
-| `POST_NOTIFICATIONS` | al activar avisos (Android 13+) | la app funciona; no hay push | nv-01 (canal) / posterior |
+| `POST_NOTIFICATIONS` | al llegar a Inicio con sesión (Android 13+) | la app funciona; no hay push | nv-46 |
 | `ACCESS_COARSE_LOCATION` | al usar “cerca de mí” | se elige la ciudad a mano | posterior |
 | `CAMERA` | al escanear QR o tomar foto | opción oculta o galería | posterior |
 

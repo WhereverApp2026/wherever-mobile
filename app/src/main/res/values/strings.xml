@@ -14,6 +14,12 @@
     <string name="tab_home">Inicio</string>
     <string name="tab_profile">Perfil</string>
 
+    <!-- Notificaciones push (specs/nv-46) -->
+    <string name="notifications_channel_general">Avisos</string>
+    <string name="notifications_channel_general_description">Solicitudes de amistad, invitaciones a planes y votaciones.</string>
+    <string name="notifications_default_title">Wherever</string>
+    <string name="notifications_default_body">Tienes un aviso nuevo.</string>
+
     <!-- Errores -->
     <string name="error_network">Sin conexión. Revisa tu internet e inténtalo de nuevo.</string>
     <string name="error_timeout">El servidor tardó demasiado. Inténtalo de nuevo.</string>
