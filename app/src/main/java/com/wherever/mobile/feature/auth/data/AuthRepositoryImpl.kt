@@ -18,7 +18,9 @@ import com.wherever.mobile.feature.profile.data.UserProfileDao
 import com.wherever.mobile.feature.profile.domain.ProfileRepository
 import javax.inject.Inject
 
-@Suppress("TooManyFunctions") // Una función por endpoint de la API (docs/contexto_api_sprint1.md).
+// TooManyFunctions: una función por endpoint de la API (docs/contexto_api_sprint1.md).
+// LongParameterList: cada parámetro es un colaborador que inyecta Hilt; agruparlos escondería las dependencias.
+@Suppress("TooManyFunctions", "LongParameterList")
 class AuthRepositoryImpl @Inject constructor(
     private val api: AuthApi,
     private val tokenStore: TokenStore,

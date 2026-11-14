@@ -37,19 +37,33 @@ sealed interface PushDestination {
          */
         fun from(data: Map<String, String?>): PushDestination? {
             val type = data[KEY_TYPE]?.trim()?.takeIf { it.isNotEmpty() } ?: return null
-            fun id(key: String) = data[key]?.trim()?.takeIf { it.length <= MAX_ID_LENGTH && ID_PATTERN.matches(it) }
-            val userId = id(KEY_USER_ID)
-            val groupId = id(KEY_GROUP_ID)
-            val planId = id(KEY_PLAN_ID)
-            val voteId = id(KEY_VOTE_ID)
-            return when (type) {
-                "solicitud_amistad" -> userId?.let { FriendRequest(it) }
-                "amistad_aceptada" -> userId?.let { FriendAccepted(it) }
-                "invitacion_plan" -> if (groupId != null || planId != null) PlanInvitation(groupId, planId) else null
-                "votacion_abierta" -> voteId?.let { VoteOpened(groupId, it) }
-                "votacion_cerrada" -> voteId?.let { VoteClosed(groupId, it) }
-                else -> null
-            } ?: Notifications
+            return destinationFor(type, PushIds(data)) ?: Notifications
+        }
+
+        private fun destinationFor(type: String, ids: PushIds): PushDestination? = when (type) {
+            "solicitud_amistad" -> ids.user?.let { FriendRequest(it) }
+            "amistad_aceptada" -> ids.user?.let { FriendAccepted(it) }
+            "invitacion_plan" -> planInvitation(ids)
+            "votacion_abierta" -> ids.vote?.let { VoteOpened(ids.group, it) }
+            "votacion_cerrada" -> ids.vote?.let { VoteClosed(ids.group, it) }
+            else -> null
+        }
+
+        /** Basta con uno de los dos ids para saber qué plan abrir. */
+        private fun planInvitation(ids: PushIds): PushDestination? =
+            PlanInvitation(ids.group, ids.plan).takeIf { ids.group != null || ids.plan != null }
+
+        /** Ids ya validados; uno vacío, largo o con caracteres raros queda en `null`. */
+        private class PushIds(data: Map<String, String?>) {
+            val user = valid(data[KEY_USER_ID])
+            val group = valid(data[KEY_GROUP_ID])
+            val plan = valid(data[KEY_PLAN_ID])
+            val vote = valid(data[KEY_VOTE_ID])
+
+            private fun valid(raw: String?): String? {
+                val id = raw?.trim() ?: return null
+                return id.takeIf { it.length <= MAX_ID_LENGTH && ID_PATTERN.matches(it) }
+            }
         }
     }
 }

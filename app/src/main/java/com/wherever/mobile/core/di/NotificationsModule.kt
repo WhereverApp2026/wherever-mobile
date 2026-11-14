@@ -2,9 +2,9 @@ package com.wherever.mobile.core.di
 
 import com.wherever.mobile.core.notifications.DeviceRegistration
 import com.wherever.mobile.core.notifications.DeviceRegistrationImpl
-import com.wherever.mobile.core.notifications.DevicesApi
 import com.wherever.mobile.core.notifications.FirebasePushTokenSource
 import com.wherever.mobile.core.notifications.PushTokenSource
+import com.wherever.mobile.core.notifications.data.DevicesApi
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

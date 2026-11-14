@@ -2,7 +2,7 @@ package com.wherever.mobile.integration
 
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.notifications.DeviceRegistrationImpl
-import com.wherever.mobile.core.notifications.DevicesApi
+import com.wherever.mobile.core.notifications.data.DevicesApi
 import com.wherever.mobile.core.security.SessionTokens
 import com.wherever.mobile.testing.FakeTokenStore
 import com.wherever.mobile.testing.RealNetwork
@@ -72,7 +72,10 @@ class DevicesIntegrationTest {
 
     @Test
     fun `onNewToken manda el token nuevo igual, en segundo plano`() = runTest {
-        val registration = signedIn()
+        // Con `backgroundScope`, advanceUntilIdle() no corre la tarea: deja de avanzar si solo quedan tareas de fondo.
+        // Con el scope del test, la corre y runTest espera a que termine.
+        val registration = registration(this)
+        tokenStore.tokens = SessionTokens("access", "refresh", "2026-11-14T15:15:00Z")
         server.reply(204)
 
         registration.registerInBackground("token-nuevo")

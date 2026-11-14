@@ -4,7 +4,7 @@
 
 ## 1. Mapeo
 - `gradle/libs.versions.toml`, `build.gradle.kts`, `app/build.gradle.kts`: plugin google-services 4.6.0 (se aplica solo con `app/google-services.json`), BoM 35.2.0 y `firebase-messaging`
-- `core/notifications/DevicesApi.kt`: `PUT`/`DELETE dispositivos` con cuerpo
+- `core/notifications/data/DevicesApi.kt`: `PUT`/`DELETE dispositivos` con cuerpo
 - `core/notifications/DeviceRegistration.kt`: registro y baja; sin sesión o sin token no llama
 - `core/notifications/PushTokenSource.kt`, `FirebasePushTokenSource.kt`: token de FCM o `null`
 - `core/notifications/PushDestination.kt`: `data.tipo` + ids → destino

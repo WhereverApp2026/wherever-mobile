@@ -3,6 +3,10 @@ package com.wherever.mobile.core.notifications
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.di.ApplicationScope
 import com.wherever.mobile.core.network.safeApiCall
+import com.wherever.mobile.core.notifications.data.DevicesApi
+import com.wherever.mobile.core.notifications.data.PLATFORM_ANDROID
+import com.wherever.mobile.core.notifications.data.RegisterDeviceDto
+import com.wherever.mobile.core.notifications.data.UnregisterDeviceDto
 import com.wherever.mobile.core.security.TokenStore
 import javax.inject.Inject
 import javax.inject.Singleton
