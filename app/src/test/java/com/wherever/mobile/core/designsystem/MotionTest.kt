@@ -5,6 +5,7 @@ import androidx.compose.animation.ExitTransition
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -48,5 +49,13 @@ class MotionTest {
         assertTrue(WhereverMotion.CONTENT_MS < WhereverMotion.NAV_MS)
         assertTrue(WhereverMotion.SHORT_MS < WhereverMotion.CONTENT_MS)
         assertTrue(WhereverMotion.RESULT_SCALE in 0.9f..0.95f)
+    }
+
+    @Test
+    fun `phase changes never animate size, so the old phase leaves at once`() {
+        // `togetherWith` trae un resorte de tamaño por defecto; con él, LOADING seguía a la vista (CI del PR #21).
+        assertNull(crossfade(enabled = false, durationMs = WhereverMotion.CONTENT_MS).sizeTransform)
+        assertNull(crossfade(enabled = true, durationMs = WhereverMotion.CONTENT_MS).sizeTransform)
+        assertNull(noMotion().sizeTransform)
     }
 }

@@ -14,7 +14,7 @@ Al cambiar de pantalla, la nueva aparecía de golpe, y un doble toque podía abr
   - Al regresar, ocurre lo contrario.
   - Revisa tu correo y Eliminación pendiente aparecen con fundido y una escala de 0.92 a 1.
 - **Atrás predictivo**: `android:enableOnBackInvokedCallback="true"`, con `tools:targetApi="33"` (lint `UnusedAttribute` con minSdk 26).
-- **Fases de la pantalla** (`PhaseCrossfade`): fundido de 220 ms entre cargando, error y contenido en Perfil, Editar perfil, Ajustes, Sesiones y Privacidad. Solo se anima cuando cambia la fase, no con cada dato nuevo.
+- **Fases de la pantalla** (`PhaseCrossfade`): fundido de 220 ms entre cargando, error y contenido en Perfil, Editar perfil, Ajustes, Sesiones y Privacidad. Solo se anima cuando cambia la fase, no con cada dato nuevo, y no se anima el tamaño: el `SizeTransform` que `togetherWith` trae por defecto dejaba a la vista la fase anterior aunque las animaciones estuvieran apagadas.
 - **Botones**: el texto y el indicador de carga cambian con fundido y escala (150 ms).
 - **Errores de campo** (`FieldErrorText`): el error aparece y se va con animación (150 ms) y mantiene el texto mientras se cierra. Lo usan `LabeledTextField` y el aviso de consentimiento de Gustos.
 - **Animaciones apagadas**: con la escala del animador del sistema en 0, todo cambia sin animación (`LocalMotionEnabled`).
@@ -46,7 +46,7 @@ Sin datos nuevos ni permisos. Las fuentes nuevas son OFL, igual que las anterior
 ## 6. Tests / Gates
 
 - **Unit:**
-  - `test/.../core/designsystem/MotionTest.kt` (5): regla de animaciones apagadas, transiciones `None` sin animación, transiciones reales con animación, y el orden de duraciones y la escala.
+  - `test/.../core/designsystem/MotionTest.kt` (6): regla de animaciones apagadas, transiciones `None` sin animación, transiciones reales con animación, el orden de duraciones y la escala, y el cambio de fase sin animación de tamaño.
   - `test/.../navigation/SafeNavigationTest.kt` (4): solo `RESUMED` navega por toque; un resultado navega si su pantalla sigue arriba, y se ignora si ya navegó o la pila está vacía.
 - **Data:** sin superficie nueva (no cambian repositorios ni la API). Las suites `integration/*` siguen verdes.
 - **UI:**

@@ -125,11 +125,19 @@ object NavMotion {
 /** Fases de una pantalla que carga datos. */
 enum class ScreenPhase { LOADING, ERROR, CONTENT }
 
-private fun crossfade(enabled: Boolean, durationMs: Int): ContentTransform = if (enabled) {
-    fadeIn(tween(durationMs, easing = WhereverMotion.Standard)) togetherWith
-        fadeOut(tween(durationMs, easing = WhereverMotion.Standard))
+/** Sin animación: `togetherWith` trae un resorte de tamaño que dejaría el contenido anterior a la vista. */
+internal fun noMotion(): ContentTransform =
+    ContentTransform(EnterTransition.None, ExitTransition.None, sizeTransform = null)
+
+/** Solo fundido: sin `SizeTransform`, la pantalla no se estira ni se recorta al cambiar de fase. */
+internal fun crossfade(enabled: Boolean, durationMs: Int): ContentTransform = if (enabled) {
+    ContentTransform(
+        targetContentEnter = fadeIn(tween(durationMs, easing = WhereverMotion.Standard)),
+        initialContentExit = fadeOut(tween(durationMs, easing = WhereverMotion.Standard)),
+        sizeTransform = null
+    )
 } else {
-    EnterTransition.None togetherWith ExitTransition.None
+    noMotion()
 }
 
 /** Fundido entre cargando, error y contenido. Solo anima cuando cambia la fase, no con cada dato. */
@@ -158,7 +166,7 @@ internal fun LoadingSwap(loading: Boolean, content: @Composable (Boolean) -> Uni
                     )
                     .togetherWith(fadeOut(tween(WhereverMotion.SHORT_MS)))
             } else {
-                EnterTransition.None togetherWith ExitTransition.None
+                noMotion()
             }
         },
         label = "loading"
