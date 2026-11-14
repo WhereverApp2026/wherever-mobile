@@ -156,6 +156,13 @@
 - A evitar: dejar una clase auxiliar (`BudgetActions`) en un archivo con otro nombre; detekt marca `MatchingDeclarationName`.
 - A recordar: las pruebas instrumentadas pueden correr en el teléfono de Jorge por USB (`ANDROID_SERIAL`) en lugar del emulador, que consume mucha memoria en este equipo.
 
+## Transiciones entre pantallas y pulido de UI (2026-11-13)
+- Estado: rama `feat/transiciones-ui`, `specs/nv-45`. `core/designsystem/Motion.kt` concentra duraciones, curvas, transiciones del `NavHost`, `PhaseCrossfade`, `LoadingSwap` y `AnimatedFieldError`. `navigation/SafeNavigation.kt` guarda cada navegación. Fuentes estáticas por peso. Verificado con JDK 17, una compuerta por vez: ktlint, detekt, lint, 239 pruebas, cobertura 75,27 %, `assembleDebug`, `assembleDebugAndroidTest`, `assembleRelease`, scripts y Semgrep. Sin correr en local: las 8 pruebas de UI nuevas (van a la CI).
+- Decisión: los toques navegan solo desde `RESUMED` (`navigateFrom`/`popFrom`), y los resultados de la API si la pantalla sigue arriba de la pila (`navigateOnResult`/`popOnResult`). Porqué: los eventos se recogen con `LaunchedEffect`, que sigue activo en segundo plano. Con la guarda de `RESUMED`, un login terminado con la app en segundo plano se perdía y la pantalla se quedaba atorada.
+- Decisión: Sora y DM Sans como archivos estáticos por peso (fontTools, OFL). Porqué: en el teléfono, la fuente variable con `FontVariation` dibujaba todos los pesos en 400; se midió con una prueba instrumentada.
+- A evitar: `android:enableOnBackInvokedCallback` sin `tools:targetApi="33"`, porque lint marca `UnusedAttribute` con minSdk 26.
+- A recordar: el teléfono de Jorge rechaza `input tap` de `adb` y, a veces, la instalación de la APK de pruebas (`INSTALL_FAILED_USER_RESTRICTED`); hay que aceptar en pantalla.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

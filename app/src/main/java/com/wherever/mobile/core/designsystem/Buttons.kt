@@ -14,7 +14,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -57,10 +56,12 @@ fun WhereverPrimaryButton(
         ),
         modifier = modifier.fillMaxWidth().height(ButtonHeight).testTag(tag)
     ) {
-        if (loading) {
-            CircularProgressIndicator(modifier = Modifier.size(22.dp), color = Ink, strokeWidth = 2.dp)
-        } else {
-            ButtonContent(text, icon)
+        LoadingSwap(loading) { showSpinner ->
+            if (showSpinner) {
+                CircularProgressIndicator(modifier = Modifier.size(22.dp), color = Ink, strokeWidth = 2.dp)
+            } else {
+                ButtonContent(text, icon)
+            }
         }
     }
 }
@@ -104,17 +105,30 @@ fun WhereverDangerButton(
         colors = ButtonDefaults.buttonColors(containerColor = Danger, contentColor = Color.White),
         modifier = modifier.fillMaxWidth().height(ButtonHeight).testTag(tag)
     ) {
-        if (loading) {
-            CircularProgressIndicator(modifier = Modifier.size(22.dp), color = Color.White, strokeWidth = 2.dp)
-        } else {
-            ButtonContent(text, null)
+        LoadingSwap(loading) { showSpinner ->
+            if (showSpinner) {
+                CircularProgressIndicator(modifier = Modifier.size(22.dp), color = Color.White, strokeWidth = 2.dp)
+            } else {
+                ButtonContent(text, null)
+            }
         }
     }
 }
 
 @Composable
-fun WhereverTextLink(text: String, onClick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true) {
-    TextButton(onClick = onClick, enabled = enabled, modifier = modifier.height(48.dp)) {
+fun WhereverTextLink(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    color: Color = MaterialTheme.colorScheme.primary
+) {
+    TextButton(
+        onClick = onClick,
+        enabled = enabled,
+        colors = ButtonDefaults.textButtonColors(contentColor = color),
+        modifier = modifier.height(48.dp)
+    ) {
         Text(text = text, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
     }
 }
@@ -135,10 +149,20 @@ fun BackCircleButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     }
 }
 
+/** Ícono en círculo blanco con borde, como el engrane y la campana de 81_Perfil. */
 @Composable
 fun CircleIconButton(icon: ImageVector, description: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    IconButton(onClick = onClick, modifier = modifier.size(48.dp)) {
-        Icon(icon, contentDescription = description, tint = MaterialTheme.colorScheme.onSurface)
+    OutlinedIconButton(
+        onClick = onClick,
+        shape = CircleShape,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        colors = IconButtonDefaults.outlinedIconButtonColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        ),
+        modifier = modifier.size(48.dp)
+    ) {
+        Icon(icon, contentDescription = description)
     }
 }
 

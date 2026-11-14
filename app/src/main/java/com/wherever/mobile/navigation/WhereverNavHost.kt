@@ -9,6 +9,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.wherever.mobile.core.designsystem.LocalMotionEnabled
+import com.wherever.mobile.core.designsystem.NavMotion
 import com.wherever.mobile.core.designsystem.SystemBarIcons
 import com.wherever.mobile.feature.auth.domain.PostAuthDestination
 import com.wherever.mobile.feature.auth.ui.CheckEmailMode
@@ -49,106 +51,124 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>) {
         StartDestination.HOME -> HomeRoute
         StartDestination.DELETION_PENDING -> DeletionPendingRoute
     }
-    NavHost(navController = navController, startDestination = startRoute) {
-        composable<WelcomeRoute> {
+    val motion = LocalMotionEnabled.current
+    NavHost(
+        navController = navController,
+        startDestination = startRoute,
+        enterTransition = { NavMotion.forwardEnter(motion) },
+        exitTransition = { NavMotion.forwardExit(motion) },
+        popEnterTransition = { NavMotion.backEnter(motion) },
+        popExitTransition = { NavMotion.backExit(motion) }
+    ) {
+        composable<WelcomeRoute> { e ->
             WelcomeScreen(
-                onCreateAccount = { navController.navigate(RegisterRoute) },
-                onHaveAccount = { navController.navigate(LoginRoute) }
+                onCreateAccount = { navController.navigateFrom(e, RegisterRoute) },
+                onHaveAccount = { navController.navigateFrom(e, LoginRoute) }
             )
         }
-        composable<LoginRoute> {
+        composable<LoginRoute> { e ->
             LoginScreen(
                 onBack = {
                     // Tras cerrar sesión, Login es la raíz de la pila.
-                    if (!navController.popBackStack()) navController.navigate(WelcomeRoute)
+                    if (e.isActive() && !navController.popBackStack()) navController.navigate(WelcomeRoute)
                 },
-                onForgotPassword = { navController.navigate(RecoverRoute) },
-                onCreateAccount = { navController.navigate(RegisterRoute) },
+                onForgotPassword = { navController.navigateFrom(e, RecoverRoute) },
+                onCreateAccount = { navController.navigateFrom(e, RegisterRoute) },
                 onLoggedIn = { destination ->
                     val route: Any = when (destination) {
                         PostAuthDestination.HOME -> HomeRoute
                         PostAuthDestination.TASTES -> TastesRoute()
                         PostAuthDestination.DELETION_PENDING -> DeletionPendingRoute
                     }
-                    navController.navigate(route) { clearStack(navController) }
+                    navController.navigateOnResult(e, route) { clearStack(navController) }
                 }
             )
         }
-        composable<RegisterRoute> {
+        composable<RegisterRoute> { e ->
             RegisterScreen(
-                onBack = { navController.popBackStack() },
-                onRegistered = { navController.navigate(TastesRoute()) { clearStack(navController) } }
+                onBack = { navController.popFrom(e) },
+                onRegistered = { navController.navigateOnResult(e, TastesRoute()) { clearStack(navController) } }
             )
         }
-        composable<RecoverRoute> {
+        composable<RecoverRoute> { e ->
             RecoverScreen(
-                onBack = { navController.popBackStack() },
+                onBack = { navController.popFrom(e) },
                 onSent = { email ->
-                    navController.navigate(CheckEmailRoute(CheckEmailMode.RECOVERY.name, email))
+                    navController.navigateOnResult(e, CheckEmailRoute(CheckEmailMode.RECOVERY.name, email))
                 }
             )
         }
-        composable<CheckEmailRoute> { CheckEmailScreen(onBack = { navController.popBackStack() }) }
-        composable<TastesRoute> {
+        composable<CheckEmailRoute>(
+            enterTransition = { NavMotion.resultEnter(motion) },
+            exitTransition = { NavMotion.resultExit(motion) },
+            popEnterTransition = { NavMotion.resultEnter(motion) },
+            popExitTransition = { NavMotion.resultExit(motion) }
+        ) { e -> CheckEmailScreen(onBack = { navController.popFrom(e) }) }
+        composable<TastesRoute> { e ->
             TastesScreen(
-                onBack = { navController.popBackStack() },
+                onBack = { navController.popFrom(e) },
                 onFinished = {
                     if (navController.previousBackStackEntry != null) {
-                        navController.popBackStack()
+                        navController.popOnResult(e)
                     } else {
-                        navController.navigate(HomeRoute) { clearStack(navController) }
+                        navController.navigateOnResult(e, HomeRoute) { clearStack(navController) }
                     }
                 }
             )
         }
-        composable<HomeRoute> { HomeRouteScreen(onProfile = { navController.navigate(ProfileRoute) }) }
-        composable<ProfileRoute> {
+        composable<HomeRoute> { e -> HomeRouteScreen(onProfile = { navController.navigateFrom(e, ProfileRoute) }) }
+        composable<ProfileRoute> { e ->
             ProfileScreen(
-                onHome = { navController.popBackStack(HomeRoute, inclusive = false) },
-                onEdit = { navController.navigate(EditProfileRoute) },
-                onSettings = { navController.navigate(SettingsRoute) },
+                onHome = { if (e.isActive()) navController.popBackStack(HomeRoute, inclusive = false) },
+                onEdit = { navController.navigateFrom(e, EditProfileRoute) },
+                onSettings = { navController.navigateFrom(e, SettingsRoute) },
                 onVerifyEmail = { email ->
-                    navController.navigate(CheckEmailRoute(CheckEmailMode.VERIFICATION.name, email))
+                    navController.navigateFrom(e, CheckEmailRoute(CheckEmailMode.VERIFICATION.name, email))
                 }
             )
         }
-        composable<EditProfileRoute> {
+        composable<EditProfileRoute> { e ->
             EditProfileScreen(
-                onBack = { navController.popBackStack() },
-                onTastes = { navController.navigate(TastesRoute(fromSettings = true)) },
-                onPrivacy = { navController.navigate(PrivacyRoute) },
-                onDeleteAccount = { navController.navigate(DeleteAccountRoute) }
+                onBack = { navController.popFrom(e) },
+                onTastes = { navController.navigateFrom(e, TastesRoute(fromSettings = true)) },
+                onPrivacy = { navController.navigateFrom(e, PrivacyRoute) },
+                onDeleteAccount = { navController.navigateFrom(e, DeleteAccountRoute) }
             )
         }
-        composable<SettingsRoute> {
+        composable<SettingsRoute> { e ->
             SettingsScreen(
                 SettingsNavigation(
-                    onBack = { navController.popBackStack() },
-                    onPersonalData = { navController.navigate(EditProfileRoute) },
-                    onTastes = { navController.navigate(TastesRoute(fromSettings = true)) },
-                    onSessions = { navController.navigate(SessionsRoute) },
-                    onPrivacy = { navController.navigate(PrivacyRoute) },
-                    onLoggedOut = { navController.navigate(LoginRoute) { clearStack(navController) } }
+                    onBack = { navController.popFrom(e) },
+                    onPersonalData = { navController.navigateFrom(e, EditProfileRoute) },
+                    onTastes = { navController.navigateFrom(e, TastesRoute(fromSettings = true)) },
+                    onSessions = { navController.navigateFrom(e, SessionsRoute) },
+                    onPrivacy = { navController.navigateFrom(e, PrivacyRoute) },
+                    onLoggedOut = { navController.navigateOnResult(e, LoginRoute) { clearStack(navController) } }
                 )
             )
         }
-        composable<SessionsRoute> {
+        composable<SessionsRoute> { e ->
             SessionsScreen(
-                onBack = { navController.popBackStack() },
-                onAllClosed = { navController.navigate(LoginRoute) { clearStack(navController) } }
+                onBack = { navController.popFrom(e) },
+                onAllClosed = { navController.navigateOnResult(e, LoginRoute) { clearStack(navController) } }
             )
         }
-        composable<PrivacyRoute> { PrivacyScreen(onBack = { navController.popBackStack() }) }
-        composable<DeleteAccountRoute> {
+        composable<PrivacyRoute> { e -> PrivacyScreen(onBack = { navController.popFrom(e) }) }
+        composable<DeleteAccountRoute> { e ->
             DeleteAccountScreen(
-                onBack = { navController.popBackStack() },
-                onDeleted = { navController.navigate(LoginRoute) { clearStack(navController) } }
+                onBack = { navController.popFrom(e) },
+                onDeleted = { navController.navigateOnResult(e, LoginRoute) { clearStack(navController) } }
             )
         }
-        composable<DeletionPendingRoute> {
+        composable<DeletionPendingRoute>(
+            enterTransition = { NavMotion.resultEnter(motion) },
+            exitTransition = { NavMotion.resultExit(motion) },
+            popEnterTransition = { NavMotion.resultEnter(motion) },
+            popExitTransition = { NavMotion.resultExit(motion) }
+        ) { e ->
             DeletionPendingScreen(
-                onCancelled = { navController.navigate(HomeRoute) { clearStack(navController) } },
-                onLoggedOut = { navController.navigate(LoginRoute) { clearStack(navController) } }
+                onCancelled = { navController.navigateOnResult(e, HomeRoute) { clearStack(navController) } },
+                onLoggedOut = { navController.navigateOnResult(e, LoginRoute) { clearStack(navController) } }
             )
         }
     }

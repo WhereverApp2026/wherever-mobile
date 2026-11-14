@@ -71,7 +71,11 @@ fun WhereverTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composab
         typography = WhereverTypography
     ) {
         // Sin esto, el texto fuera de un Surface sale negro también en tema oscuro.
-        CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onBackground, content = content)
+        CompositionLocalProvider(
+            LocalContentColor provides MaterialTheme.colorScheme.onBackground,
+            LocalMotionEnabled provides rememberSystemMotionEnabled(),
+            content = content
+        )
     }
 }
 

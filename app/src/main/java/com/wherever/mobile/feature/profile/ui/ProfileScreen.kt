@@ -36,6 +36,8 @@ import com.wherever.mobile.core.designsystem.InitialAvatar
 import com.wherever.mobile.core.designsystem.Ink
 import com.wherever.mobile.core.designsystem.LoadingState
 import com.wherever.mobile.core.designsystem.MainTab
+import com.wherever.mobile.core.designsystem.PhaseCrossfade
+import com.wherever.mobile.core.designsystem.ScreenPhase
 import com.wherever.mobile.core.designsystem.StatusPill
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.WhereverBottomBar
@@ -63,21 +65,29 @@ fun ProfileRoute(
     ) { padding ->
         val profile = state.profile
         val modifier = Modifier.padding(bottom = padding.calculateBottomPadding())
-        when {
-            profile != null -> ProfileContent(
-                profile = profile,
-                errorBanner = { state.error?.let { ErrorBanner(it.asString()) } },
-                onEdit = onEdit,
-                onSettings = onSettings,
-                onVerifyEmail = { onVerifyEmail(profile.email) },
-                modifier = modifier
-            )
-            state.loading -> LoadingState(modifier)
-            else -> ErrorState(
-                message = state.error?.asString().orEmpty(),
-                onRetry = viewModel::refresh,
-                modifier = modifier
-            )
+        val phase = when {
+            profile != null -> ScreenPhase.CONTENT
+            state.loading -> ScreenPhase.LOADING
+            else -> ScreenPhase.ERROR
+        }
+        PhaseCrossfade(phase) { shown ->
+            val current = state.profile
+            when {
+                shown == ScreenPhase.CONTENT && current != null -> ProfileContent(
+                    profile = current,
+                    errorBanner = { state.error?.let { ErrorBanner(it.asString()) } },
+                    onEdit = onEdit,
+                    onSettings = onSettings,
+                    onVerifyEmail = { onVerifyEmail(current.email) },
+                    modifier = modifier
+                )
+                shown == ScreenPhase.ERROR -> ErrorState(
+                    message = state.error?.asString().orEmpty(),
+                    onRetry = viewModel::refresh,
+                    modifier = modifier
+                )
+                else -> LoadingState(modifier)
+            }
         }
     }
 }
@@ -102,6 +112,7 @@ private fun ProfileContent(
                 Text(
                     text = profile.name,
                     style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.testTag("profile_name")
                 )
                 Text(

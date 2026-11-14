@@ -24,6 +24,8 @@ import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.LoadingState
 import com.wherever.mobile.core.designsystem.NavRow
+import com.wherever.mobile.core.designsystem.PhaseCrossfade
+import com.wherever.mobile.core.designsystem.ScreenPhase
 import com.wherever.mobile.core.designsystem.SegmentedControl
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.ToggleRow
@@ -48,11 +50,14 @@ fun SettingsRoute(navigation: SettingsNavigation, viewModel: SettingsViewModel =
     val state by viewModel.state.collectAsStateWithLifecycle()
     var confirmLogout by remember { mutableStateOf(false) }
     LaunchedEffect(viewModel) { viewModel.loggedOut.collect { navigation.onLoggedOut() } }
-    val profile = state.profile
-    if (profile == null || state.loggingOut) {
-        LoadingState()
-    } else {
-        SettingsContent(state, profile, viewModel, navigation, onLogout = { confirmLogout = true })
+    val loading = state.profile == null || state.loggingOut
+    PhaseCrossfade(if (loading) ScreenPhase.LOADING else ScreenPhase.CONTENT) { phase ->
+        val profile = state.profile
+        if (phase == ScreenPhase.LOADING || profile == null) {
+            LoadingState()
+        } else {
+            SettingsContent(state, profile, viewModel, navigation, onLogout = { confirmLogout = true })
+        }
     }
     if (confirmLogout) {
         ConfirmDialog(
@@ -121,7 +126,12 @@ private fun SettingsContent(
             )
         }
         Box(modifier = Modifier.fillMaxWidth().padding(top = 8.dp), contentAlignment = Alignment.Center) {
-            WhereverTextLink(stringResource(R.string.settings_logout), onLogout)
+            // 85_Ajustes: "Cerrar sesión" va en gris, no en azul de enlace.
+            WhereverTextLink(
+                stringResource(R.string.settings_logout),
+                onLogout,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }

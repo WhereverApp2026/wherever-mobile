@@ -10,20 +10,39 @@ import com.wherever.mobile.core.designsystem.ConfirmDialog
 import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.LoadingState
+import com.wherever.mobile.core.designsystem.PhaseCrossfade
+import com.wherever.mobile.core.designsystem.ScreenPhase
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.ToggleRow
 import com.wherever.mobile.core.designsystem.TopTitleRow
+import com.wherever.mobile.feature.profile.domain.Privacy
 import com.wherever.mobile.feature.profile.domain.PrivacyPatch
 
 /** 28_PrivSocial con los interruptores que sí existen en la API (duda D04). */
 @Composable
 fun PrivacyRoute(onBack: () -> Unit, viewModel: PrivacyViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val privacy = state.privacy
-    if (privacy == null) {
-        LoadingState()
-        return
+    PhaseCrossfade(if (state.privacy == null) ScreenPhase.LOADING else ScreenPhase.CONTENT) { phase ->
+        val privacy = state.privacy
+        if (phase == ScreenPhase.LOADING || privacy == null) {
+            LoadingState()
+        } else {
+            PrivacyContent(state, privacy, viewModel, onBack)
+        }
     }
+    if (state.confirmSensitiveOff) {
+        ConfirmDialog(
+            title = stringResource(R.string.privacy_sensitive_off_title),
+            message = stringResource(R.string.privacy_sensitive_off_message),
+            confirmText = stringResource(R.string.privacy_sensitive_off_confirm),
+            onConfirm = viewModel::confirmSensitiveOff,
+            onDismiss = viewModel::dismissSensitiveOff
+        )
+    }
+}
+
+@Composable
+private fun PrivacyContent(state: PrivacyUiState, privacy: Privacy, viewModel: PrivacyViewModel, onBack: () -> Unit) {
     val enabled = !state.saving
     FormScreen {
         TopTitleRow(stringResource(R.string.privacy_title), onBack)
@@ -75,14 +94,5 @@ fun PrivacyRoute(onBack: () -> Unit, viewModel: PrivacyViewModel = hiltViewModel
                 tag = "privacy_sensitive"
             )
         }
-    }
-    if (state.confirmSensitiveOff) {
-        ConfirmDialog(
-            title = stringResource(R.string.privacy_sensitive_off_title),
-            message = stringResource(R.string.privacy_sensitive_off_message),
-            confirmText = stringResource(R.string.privacy_sensitive_off_confirm),
-            onConfirm = viewModel::confirmSensitiveOff,
-            onDismiss = viewModel::dismissSensitiveOff
-        )
     }
 }

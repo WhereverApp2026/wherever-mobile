@@ -95,20 +95,14 @@ fun LabeledTextField(
                     wasFocused = focus.isFocused
                 }
         )
-        val note = error ?: supporting
-        if (note != null) {
+        if (supporting != null && error == null) {
             Text(
-                text = note,
+                text = supporting,
                 style = MaterialTheme.typography.bodySmall,
-                color = if (error !=
-                    null
-                ) {
-                    MaterialTheme.colorScheme.error
-                } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant
-                }
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
+        FieldErrorText(error)
     }
 }
 
@@ -205,5 +199,20 @@ fun LabeledCheckbox(
             modifier = Modifier.testTag(tag)
         )
         label()
+    }
+}
+
+/** Error bajo un campo: aparece y se va con animación, y conserva el texto mientras se cierra. */
+@Composable
+fun FieldErrorText(error: String?, modifier: Modifier = Modifier) {
+    val last = remember { mutableStateOf(error) }
+    if (error != null) last.value = error
+    AnimatedFieldError(visible = error != null) {
+        Text(
+            text = last.value.orEmpty(),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.error,
+            modifier = modifier
+        )
     }
 }
