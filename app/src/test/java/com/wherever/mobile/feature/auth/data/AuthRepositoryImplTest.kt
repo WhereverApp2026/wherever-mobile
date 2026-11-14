@@ -10,6 +10,7 @@ import com.wherever.mobile.feature.auth.domain.Registration
 import com.wherever.mobile.feature.profile.data.UserProfileDto
 import com.wherever.mobile.feature.profile.data.toEntity
 import com.wherever.mobile.feature.profile.domain.Tastes
+import com.wherever.mobile.testing.FakeDeviceRegistration
 import com.wherever.mobile.testing.FakeProfileRepository
 import com.wherever.mobile.testing.FakeTokenStore
 import com.wherever.mobile.testing.FakeUserProfileDao
@@ -49,6 +50,7 @@ class AuthRepositoryImplTest {
     private val profiles = FakeProfileRepository()
     private val dao = FakeUserProfileDao()
     private val onboarding = FakeOnboarding()
+    private val devices = FakeDeviceRegistration(tokenStore)
     private lateinit var repository: AuthRepositoryImpl
 
     private val tokensJson = """
@@ -65,7 +67,8 @@ class AuthRepositoryImplTest {
             profileRepository = profiles,
             profileDao = dao,
             onboarding = onboarding,
-            deviceInfo = { DeviceInfo("Pixel 8", "Android 15", "0.1.0") }
+            deviceInfo = { DeviceInfo("Pixel 8", "Android 15", "0.1.0") },
+            deviceRegistration = devices
         )
     }
 
@@ -88,6 +91,16 @@ class AuthRepositoryImplTest {
         val body = server.takeRequest().body?.utf8().orEmpty()
         assertTrue(body.contains(""""correo":"ana@ejemplo.com""""))
         assertTrue(body.contains(""""modelo":"Pixel 8""""))
+        assertEquals(listOf("registerInBackground"), devices.calls)
+    }
+
+    @Test
+    fun `login fallido no registra el telefono para push`() = runTest {
+        respond(401)
+
+        repository.login("a@b.co", TEST_PASSWORD)
+
+        assertTrue(devices.calls.isEmpty())
     }
 
     @Test
@@ -143,6 +156,28 @@ class AuthRepositoryImplTest {
         assertNull(tokenStore.tokens)
         assertNull(dao.state.value)
         assertTrue(onboarding.cleared)
+    }
+
+    @Test
+    fun `logout quita el telefono del push antes de cerrar la sesion`() = runTest {
+        tokenStore.tokens = SessionTokens("a", "r", "x")
+        respond(204)
+
+        repository.logout()
+
+        assertEquals(listOf("unregister"), devices.calls)
+        assertEquals(true, devices.unregisteredWithSession)
+    }
+
+    @Test
+    fun `logout-todos quita el telefono del push con la sesion abierta`() = runTest {
+        tokenStore.tokens = SessionTokens("a", "r", "x")
+        respond(204)
+
+        repository.logoutAll()
+
+        assertEquals(listOf("unregister"), devices.calls)
+        assertEquals(true, devices.unregisteredWithSession)
     }
 
     @Test

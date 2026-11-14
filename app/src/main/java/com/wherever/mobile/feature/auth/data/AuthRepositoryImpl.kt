@@ -5,6 +5,7 @@ import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.common.map
 import com.wherever.mobile.core.network.AuthTokensDto
 import com.wherever.mobile.core.network.safeApiCall
+import com.wherever.mobile.core.notifications.DeviceRegistration
 import com.wherever.mobile.core.security.SessionTokens
 import com.wherever.mobile.core.security.TokenStore
 import com.wherever.mobile.feature.auth.domain.ActiveSession
@@ -24,7 +25,8 @@ class AuthRepositoryImpl @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val profileDao: UserProfileDao,
     private val onboarding: OnboardingPreferences,
-    private val deviceInfo: DeviceInfoProvider
+    private val deviceInfo: DeviceInfoProvider,
+    private val deviceRegistration: DeviceRegistration
 ) : AuthRepository {
     override suspend fun hasSession(): Boolean = tokenStore.current() != null
 
@@ -73,11 +75,16 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun closeSession(id: String): Result<Unit> = safeApiCall { api.closeSession(id) }
 
     override suspend fun logout() {
+        // Antes del logout: quitar el teléfono necesita el JWT. Si falla, igual se cierra la sesión.
+        deviceRegistration.unregister()
         safeApiCall { api.logout() }
         clearLocalSession()
     }
 
-    override suspend fun logoutAll(): Result<Unit> = safeApiCall { api.logoutAll() }.map { clearLocalSession() }
+    override suspend fun logoutAll(): Result<Unit> {
+        deviceRegistration.unregister()
+        return safeApiCall { api.logoutAll() }.map { clearLocalSession() }
+    }
 
     override suspend fun clearLocalSession() {
         tokenStore.clear()
@@ -89,8 +96,10 @@ class AuthRepositoryImpl @Inject constructor(
         profileDao.get()?.let { onboarding.markTastesSkipped(it.id) }
     }
 
+    /** Guarda la sesión y, sin esperar, liga el teléfono para recibir push (specs/nv-46). */
     private suspend fun save(tokens: AuthTokensDto) {
         tokenStore.save(SessionTokens(tokens.accessToken, tokens.refreshToken, tokens.expiresAt))
+        deviceRegistration.registerInBackground()
     }
 
     /** Si el perfil no llega (sin red), entra a Inicio y lo pide después. */

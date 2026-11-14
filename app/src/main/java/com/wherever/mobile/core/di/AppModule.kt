@@ -13,6 +13,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.time.Clock
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -20,6 +22,12 @@ object AppModule {
     @Provides
     @Singleton
     fun provideDispatchers(): DispatcherProvider = DefaultDispatcherProvider()
+
+    @Provides
+    @Singleton
+    @ApplicationScope
+    fun provideApplicationScope(dispatchers: DispatcherProvider): CoroutineScope =
+        CoroutineScope(SupervisorJob() + dispatchers.io)
 
     @Provides
     @Singleton
