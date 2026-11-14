@@ -1,3 +1,27 @@
+# Revisión para Jorge — paso 3 del 2026-11-13: transiciones entre pantallas y pulido de UI (nv-45)
+
+> Rama `feat/transiciones-ui`, PR a `main` sin merge. Spec `specs/nv-45` sin firmar.
+
+- **Qué cambia:**
+  - Al avanzar, la pantalla nueva entra desde la derecha; al regresar, ocurre lo contrario (300 ms).
+  - Revisa tu correo y Eliminación pendiente aparecen con fundido y una escala ligera.
+  - El paso de cargando a contenido es un fundido. Los errores de campo y el indicador de los botones aparecen con animación.
+  - Si apagas las animaciones en el teléfono, todo cambia sin animación.
+  - Se activa el atrás predictivo.
+- **Doble toque:** un toque solo navega si la pantalla está al frente y quieta, así que ya no se abre la misma pantalla dos veces ni se regresa dos. Lo que llega de la API (sesión iniciada, cuenta borrada…) navega aunque la app esté en segundo plano; si se descartara, la pantalla se quedaría atorada.
+- **Fuentes:** los títulos salían todos en peso 400, porque Android ignoraba el peso de la fuente variable. Ahora cada peso es un archivo estático (OFL).
+- **Pulido:** "Cerrar sesión" en gris (85_Ajustes), engrane de Perfil en círculo blanco con borde y nombre en negrita (81_Perfil).
+- **Compuertas locales (JDK 17, una por una):** ktlint, detekt, lint, 240 pruebas (10 nuevas), cobertura 75,27 %, `assembleDebug`, `assembleDebugAndroidTest`, `assembleRelease`, scripts de puerta y Semgrep sin hallazgos. Las 8 pruebas de UI nuevas corren en la CI del PR.
+
+**Para probar en el celular:**
+- [ ] Perfil → Ajustes → Sesiones y regresa: cada pantalla entra desde la derecha y sale hacia la derecha.
+- [ ] Toca dos veces rápido "Ajustes" en Perfil: se abre una sola vez. Toca dos veces atrás: regresa una sola vez.
+- [ ] Desliza desde el borde para regresar: se ve la pantalla anterior mientras deslizas.
+- [ ] Los títulos (Sora) se ven en negrita.
+- [ ] Opciones de desarrollador → "Escala de animación" en 0: los cambios son inmediatos.
+
+---
+
 # Revisión para Jorge — paso 3 del 2026-11-12: presupuesto con barra y cantidad manual (nv-44)
 
 > Rama `feat/presupuesto-manual`, PR a `main` sin merge. Spec `specs/nv-44` sin firmar.

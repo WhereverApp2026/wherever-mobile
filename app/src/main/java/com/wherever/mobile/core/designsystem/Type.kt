@@ -1,31 +1,26 @@
 package com.wherever.mobile.core.designsystem
 
 import androidx.compose.material3.Typography
-import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 import com.wherever.mobile.R
 
-@OptIn(ExperimentalTextApi::class)
-private fun variableFont(resId: Int, weight: FontWeight) = Font(
-    resId = resId,
-    weight = weight,
-    variationSettings = FontVariation.Settings(FontVariation.weight(weight.weight))
-)
+// Fuentes estáticas, una por peso, sacadas de las variables con fontTools (OFL).
+// Con la fuente variable y FontVariation, Android dibujaba todo en peso 400 (specs/nv-45 §2).
 
 /** Sora: títulos. */
 val SoraFamily = FontFamily(
-    variableFont(R.font.sora, FontWeight.SemiBold),
-    variableFont(R.font.sora, FontWeight.Bold)
+    Font(R.font.sora_semibold, FontWeight.SemiBold),
+    Font(R.font.sora_bold, FontWeight.Bold)
 )
 
-/** DM Sans: cuerpo y controles. */
+/** DM Sans (tamaño óptico 14): cuerpo y controles. */
 val DmSansFamily = FontFamily(
-    variableFont(R.font.dm_sans, FontWeight.Normal),
-    variableFont(R.font.dm_sans, FontWeight.Medium),
-    variableFont(R.font.dm_sans, FontWeight.SemiBold)
+    Font(R.font.dm_sans_regular, FontWeight.Normal),
+    Font(R.font.dm_sans_medium, FontWeight.Medium),
+    Font(R.font.dm_sans_semibold, FontWeight.SemiBold),
+    Font(R.font.dm_sans_bold, FontWeight.Bold)
 )
 
 private val base = Typography()

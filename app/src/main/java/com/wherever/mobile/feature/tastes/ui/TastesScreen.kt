@@ -19,6 +19,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.ChipGroup
 import com.wherever.mobile.core.designsystem.ErrorBanner
+import com.wherever.mobile.core.designsystem.FieldErrorText
 import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.LabeledCheckbox
 import com.wherever.mobile.core.designsystem.LabeledTextField
@@ -196,14 +197,10 @@ private fun AllergiesConsent(state: TastesUiState, onChange: (Boolean) -> Unit) 
                 modifier = Modifier.padding(start = 4.dp)
             )
         }
-        state.consentError?.let {
-            Text(
-                text = it.asString(),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.testTag("tastes_allergies_consent_error")
-            )
-        }
+        FieldErrorText(
+            error = state.consentError?.asString(),
+            modifier = Modifier.testTag("tastes_allergies_consent_error")
+        )
     }
 }
 

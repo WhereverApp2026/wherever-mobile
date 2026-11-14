@@ -26,6 +26,8 @@ import com.wherever.mobile.core.designsystem.InitialAvatar
 import com.wherever.mobile.core.designsystem.LabeledTextField
 import com.wherever.mobile.core.designsystem.LoadingState
 import com.wherever.mobile.core.designsystem.NavRow
+import com.wherever.mobile.core.designsystem.PhaseCrossfade
+import com.wherever.mobile.core.designsystem.ScreenPhase
 import com.wherever.mobile.core.designsystem.StatusPill
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
@@ -44,20 +46,22 @@ fun EditProfileRoute(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(viewModel) { viewModel.saved.collect { onBack() } }
-    if (state.loading) {
-        LoadingState()
-    } else {
-        EditProfileContent(
-            state = state,
-            onNameChange = viewModel::onNameChange,
-            onCityQuery = viewModel::onCityQueryChange,
-            onCitySelect = viewModel::onCitySelect,
-            onSave = viewModel::save,
-            onCancel = onBack,
-            onTastes = onTastes,
-            onPrivacy = onPrivacy,
-            onDeleteAccount = onDeleteAccount
-        )
+    PhaseCrossfade(if (state.loading) ScreenPhase.LOADING else ScreenPhase.CONTENT) { phase ->
+        if (phase == ScreenPhase.LOADING) {
+            LoadingState()
+        } else {
+            EditProfileContent(
+                state = state,
+                onNameChange = viewModel::onNameChange,
+                onCityQuery = viewModel::onCityQueryChange,
+                onCitySelect = viewModel::onCitySelect,
+                onSave = viewModel::save,
+                onCancel = onBack,
+                onTastes = onTastes,
+                onPrivacy = onPrivacy,
+                onDeleteAccount = onDeleteAccount
+            )
+        }
     }
 }
 
