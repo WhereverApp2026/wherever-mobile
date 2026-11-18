@@ -3,6 +3,7 @@ package com.wherever.mobile.feature.home.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wherever.mobile.core.common.Result
+import com.wherever.mobile.core.location.FallbackPoint
 import com.wherever.mobile.core.location.GeoPoint
 import com.wherever.mobile.core.location.LocationPermissionPreferences
 import com.wherever.mobile.core.location.LocationProvider
@@ -52,7 +53,8 @@ class HomeViewModel @Inject constructor(
     private val repository: HomeRepository,
     private val profiles: ProfileRepository,
     private val location: LocationProvider,
-    private val permissionPrefs: LocationPermissionPreferences
+    private val permissionPrefs: LocationPermissionPreferences,
+    @FallbackPoint private val fallback: GeoPoint
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(HomeUiState())
     val state: StateFlow<HomeUiState> = mutableState.asStateFlow()
@@ -143,7 +145,8 @@ class HomeViewModel @Inject constructor(
         loadJob = viewModelScope.launch {
             val near: GeoPoint? = location.current()
             val company = state.value.company
-            when (val result = repository.feed(near, company)) {
+            // Sin ubicación, la zona de respaldo: `GET /inicio` da 422 sin lat y lng.
+            when (val result = repository.feed(near ?: fallback, company)) {
                 is Result.Success -> mutableState.update {
                     it.copy(
                         loading = false,
