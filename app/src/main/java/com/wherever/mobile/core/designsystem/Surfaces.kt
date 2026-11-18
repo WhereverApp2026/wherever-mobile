@@ -25,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -230,14 +231,21 @@ fun ErrorState(message: String, onRetry: () -> Unit, modifier: Modifier = Modifi
     }
 }
 
-enum class MainTab { HOME, PROFILE }
+enum class MainTab { HOME, EXPLORE, PROFILE }
 
-/** Barra provisional: solo las pestañas que ya existen (ver specs/README.md, D22). */
+/** Pestañas principales que ya existen (ver specs/README.md, D22). */
 @Composable
-fun WhereverBottomBar(selected: MainTab, onHome: () -> Unit, onProfile: () -> Unit, modifier: Modifier = Modifier) {
+fun WhereverBottomBar(selected: MainTab, onSelect: (MainTab) -> Unit, modifier: Modifier = Modifier) {
     NavigationBar(containerColor = MaterialTheme.colorScheme.surface, modifier = modifier.navigationBarsPadding()) {
-        BarItem(selected == MainTab.HOME, Icons.Filled.Home, stringResource(R.string.tab_home), onHome)
-        BarItem(selected == MainTab.PROFILE, Icons.Filled.Person, stringResource(R.string.tab_profile), onProfile)
+        BarItem(selected == MainTab.HOME, Icons.Filled.Home, stringResource(R.string.tab_home)) {
+            onSelect(MainTab.HOME)
+        }
+        BarItem(selected == MainTab.EXPLORE, Icons.Filled.Search, stringResource(R.string.tab_explore)) {
+            onSelect(MainTab.EXPLORE)
+        }
+        BarItem(selected == MainTab.PROFILE, Icons.Filled.Person, stringResource(R.string.tab_profile)) {
+            onSelect(MainTab.PROFILE)
+        }
     }
 }
 

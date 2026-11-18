@@ -47,3 +47,14 @@ data object DeleteAccountRoute
 
 @Serializable
 data object DeletionPendingRoute
+
+/** `query` y `category` los lee ExploreViewModel de SavedStateHandle por su nombre. */
+@Serializable
+data class ExploreRoute(val query: String = "", val category: String = "")
+
+/** `id` y `origin` (busqueda, inicio, mapa, plan_ia o cupon) los lee PlaceDetailViewModel. */
+@Serializable
+data class PlaceRoute(val id: String, val origin: String = "")
+
+@Serializable
+data object FavoritesRoute

@@ -42,7 +42,11 @@ class SourceSecurityTest {
     @Test
     fun `los tokens solo se guardan cifrados en core security`() {
         val prefsUsers = sources.filter { it.readText().contains("getSharedPreferences") }
-        assertEquals(listOf("SharedOnboardingPreferences.kt"), prefsUsers.map { it.name })
+        // nv-47: AndroidLocationProvider guarda cuántas veces se negó el permiso (un entero, sin datos personales).
+        assertEquals(
+            listOf("AndroidLocationProvider.kt", "SharedOnboardingPreferences.kt"),
+            prefsUsers.map { it.name }.sorted()
+        )
         assertEquals(
             "SharedPreferences solo guarda marcas booleanas",
             emptyList<String>(),

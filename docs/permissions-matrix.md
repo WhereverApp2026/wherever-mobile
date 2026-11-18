@@ -6,7 +6,7 @@
 |---|---|---|---|
 | `INTERNET` | siempre (normal) | — | nv-01 |
 | `POST_NOTIFICATIONS` | al activar avisos (Android 13+) | la app funciona; no hay push | nv-01 (canal) / posterior |
-| `ACCESS_COARSE_LOCATION` | al usar “cerca de mí” | se elige la ciudad a mano | posterior |
+| `ACCESS_COARSE_LOCATION` | en Inicio, tras la tarjeta que explica para qué (US-004); solo aproximada y mientras se usa la app | recomendaciones generales; tras 2 rechazos solo un aviso que abre Ajustes (US-009) | nv-47 |
 | `CAMERA` | al escanear QR o tomar foto | opción oculta o galería | posterior |
 
 Medir antes de agregar un permiso nuevo; cada uno exige fila aquí (principio empírico §2.5).

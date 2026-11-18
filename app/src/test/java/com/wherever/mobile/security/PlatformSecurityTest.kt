@@ -80,6 +80,7 @@ class PlatformSecurityTest {
     fun `permisos minimos`() {
         val nodes = manifest.getElementsByTagName("uses-permission")
         val permissions = (0 until nodes.length).map { (nodes.item(it) as Element).android("name") }
-        assertEquals(listOf("android.permission.INTERNET"), permissions)
+        // nv-47: ubicación solo aproximada (US-004); la precisa nunca se pide (docs/permissions-matrix.md).
+        assertEquals(listOf("android.permission.INTERNET", "android.permission.ACCESS_COARSE_LOCATION"), permissions)
     }
 }

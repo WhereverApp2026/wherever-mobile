@@ -2,6 +2,7 @@ package com.wherever.mobile.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
@@ -10,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.wherever.mobile.core.designsystem.LocalMotionEnabled
+import com.wherever.mobile.core.designsystem.MainTab
 import com.wherever.mobile.core.designsystem.NavMotion
 import com.wherever.mobile.core.designsystem.SystemBarIcons
 import com.wherever.mobile.feature.auth.domain.PostAuthDestination
@@ -19,7 +21,11 @@ import com.wherever.mobile.feature.auth.ui.LoginRoute as LoginScreen
 import com.wherever.mobile.feature.auth.ui.RecoverRoute as RecoverScreen
 import com.wherever.mobile.feature.auth.ui.RegisterRoute as RegisterScreen
 import com.wherever.mobile.feature.auth.ui.WelcomeScreen
+import com.wherever.mobile.feature.home.ui.HomeNavigation
 import com.wherever.mobile.feature.home.ui.HomeRouteScreen
+import com.wherever.mobile.feature.places.ui.ExploreRoute as ExploreScreen
+import com.wherever.mobile.feature.places.ui.FavoritesRoute as FavoritesScreen
+import com.wherever.mobile.feature.places.ui.PlaceDetailRoute as PlaceDetailScreen
 import com.wherever.mobile.feature.profile.ui.EditProfileRoute as EditProfileScreen
 import com.wherever.mobile.feature.profile.ui.ProfileRoute as ProfileScreen
 import com.wherever.mobile.feature.settings.ui.DeleteAccountRoute as DeleteAccountScreen
@@ -116,11 +122,34 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>) {
                 }
             )
         }
-        composable<HomeRoute> { e -> HomeRouteScreen(onProfile = { navController.navigateFrom(e, ProfileRoute) }) }
+        composable<HomeRoute> { e ->
+            HomeRouteScreen(
+                HomeNavigation(
+                    onTab = { navController.openTab(e, it) },
+                    onSearch = { navController.navigateFrom(e, ExploreRoute()) },
+                    onCategory = { navController.navigateFrom(e, ExploreRoute(category = it)) },
+                    onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "inicio")) }
+                )
+            )
+        }
+        composable<ExploreRoute> { e ->
+            ExploreScreen(
+                onTab = { navController.openTab(e, it) },
+                onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "busqueda")) }
+            )
+        }
+        composable<PlaceRoute> { e -> PlaceDetailScreen(onBack = { navController.popFrom(e) }) }
+        composable<FavoritesRoute> { e ->
+            FavoritesScreen(
+                onBack = { navController.popFrom(e) },
+                onPlace = { navController.navigateFrom(e, PlaceRoute(it)) }
+            )
+        }
         composable<ProfileRoute> { e ->
             ProfileScreen(
-                onHome = { if (e.isActive()) navController.popBackStack(HomeRoute, inclusive = false) },
+                onTab = { navController.openTab(e, it) },
                 onEdit = { navController.navigateFrom(e, EditProfileRoute) },
+                onFavorites = { navController.navigateFrom(e, FavoritesRoute) },
                 onSettings = { navController.navigateFrom(e, SettingsRoute) },
                 onVerifyEmail = { email ->
                     navController.navigateFrom(e, CheckEmailRoute(CheckEmailMode.VERIFICATION.name, email))
@@ -171,6 +200,20 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>) {
                 onLoggedOut = { navController.navigateOnResult(e, LoginRoute) { clearStack(navController) } }
             )
         }
+    }
+}
+
+/** Las pestañas comparten la raíz Inicio y guardan su estado (scroll, filtros) al cambiar. */
+private fun NavHostController.openTab(from: NavBackStackEntry, tab: MainTab) {
+    val route: Any = when (tab) {
+        MainTab.HOME -> HomeRoute
+        MainTab.EXPLORE -> ExploreRoute()
+        MainTab.PROFILE -> ProfileRoute
+    }
+    navigateFrom(from, route) {
+        popUpTo<HomeRoute> { saveState = true }
+        launchSingleTop = true
+        restoreState = true
     }
 }
 

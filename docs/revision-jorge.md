@@ -1,3 +1,30 @@
+# Revisión para Jorge — 2026-11-18: avance a más del 50 %
+
+> Trabajo de corrido, sin preguntas. Lo ambiguo se decidió y queda aquí. Avance en `docs/avance.md`.
+
+## Decisiones tomadas sin preguntarte
+- **Cómo se mide el %:** contra el backlog v3 (238 historias, 684 SP). Una historia cuenta si se usa de punta a punta; las de solo servidor cuentan si ya están en `wherever-backend`. Las parciales no suman. Al empezar: 100 SP (14,6 %).
+- **PR apilados:** cada PR sale de la rama del anterior y tiene base `main`, como hicimos con nv-43 sobre nv-42. Fusiónalos en orden; el siguiente solo mostrará sus propios commits. `versionCode` sube 1 por PR, sin conflictos.
+- **PR #22 (push):** no entra en la pila. Si lo fusionas antes, el siguiente PR de la pila necesitará un merge de `main` (lo hago yo si me lo pides).
+- **Staging sin negocios:** `/categorias` da 0 en los 6 giros, así que Inicio, Explorar y la ficha se ven vacíos. Hace falta que un administrador cargue `docs/semilla-negocios.csv` del backend (`POST /admin/negocios/importar`). No lo hice: requiere una cuenta de administrador y cambia datos compartidos.
+- **Coil 3.3.0** en vez de 3.6.3 (exige `compileSdk 37`), con `coil-network-okhttp`.
+
+## nv-47 — Inicio, Explorar y ficha del lugar (rama `feat/inicio-recomendaciones`, versión 0.2.0)
+- **Qué cambia:** Inicio deja de ser provisional: clima, "¿Qué se te antoja?", con quién sales, antojos según la hora, 5 recomendaciones con su "Por qué" y "No me interesa" (con Deshacer), y eventos de la semana. Deslizar hacia abajo recarga. La barra de abajo suma Explorar. Explorar busca por nombre o palabra, filtra (abierto, a menos de 2 km, precio, mejor calificados, giro) y muestra búsquedas y lugares recientes. La ficha tiene fotos, ruta, llamada, compartir, horario, calificación por aspecto, afluencia, menú, reseñas filtrables con "Útil" y "Reportar información incorrecta". Perfil → Mis favoritos.
+- **Ubicación:** una tarjeta explica para qué se usa antes del permiso del sistema (solo aproximada). Con "Ahora no" no vuelve a salir; tras 2 rechazos solo queda "Abrir ajustes".
+- **Compuertas locales (JDK 17, una por una):** ktlint, detekt, lint, 272 pruebas (34 nuevas), cobertura 74,18 %, `assembleDebug`, `assembleRelease`, scripts y Semgrep.
+
+**Para probar en el celular:**
+- [ ] Actualiza encima de la versión de Play (sin desinstalar): la sesión sigue.
+- [ ] Inicio → "Permitir ubicación" → acepta "aproximada": la tarjeta se va y salen eventos (si hay).
+- [ ] Toca "En pareja": recarga; tócalo otra vez y se quita.
+- [ ] Desliza hacia abajo en Inicio: recarga.
+- [ ] Explorar → escribe "tacos": busca al dejar de escribir. Filtra "Abierto ahora" y luego "Quitar filtros".
+- [ ] Con negocios cargados: abre una ficha, toca el corazón, "Cómo llegar" (abre Maps) y "Llamar". Reporta "Otro" sin detalle: Enviar queda deshabilitado.
+- [ ] Perfil → Mis favoritos: aparece el que guardaste; quítalo.
+
+---
+
 # Revisión para Jorge — paso 3 del 2026-11-13: transiciones entre pantallas y pulido de UI (nv-45)
 
 > Rama `feat/transiciones-ui`, PR a `main` sin merge. Spec `specs/nv-45` sin firmar.

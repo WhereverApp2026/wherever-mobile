@@ -164,6 +164,15 @@
 - A evitar: `android:enableOnBackInvokedCallback` sin `tools:targetApi="33"`, porque lint marca `UnusedAttribute` con minSdk 26.
 - A recordar: el teléfono de Jorge rechaza `input tap` de `adb` y, a veces, la instalación de la APK de pruebas (`INSTALL_FAILED_USER_RESTRICTED`); hay que aceptar en pantalla.
 
+## Inicio, Explorar y ficha del lugar (2026-11-18)
+- Estado: rama `feat/inicio-recomendaciones`, `specs/nv-47`, `versionCode 2`. Inicio real (`/inicio`, clima, compañía, "Por qué", "No me interesa" con deshacer, eventos), ubicación aproximada en contexto, Explorar (búsqueda, filtros, recientes, vacío), ficha completa y favoritos. Verificado con JDK 17, una compuerta por vez: ktlint, detekt, lint, 272 pruebas, cobertura 74,18 %, `assembleDebug`, `assembleDebugAndroidTest`, `assembleRelease`, scripts y Semgrep. Staging responde 200 pero sin negocios: no se vio una ficha real.
+- Decisión: medir el avance contra el backlog v3 (684 SP) en `docs/avance.md`; una historia cuenta si se usa de punta a punta, y las de solo servidor si ya están en `wherever-backend`. Porqué: el usuario pidió el % contra historias y SP.
+- Decisión: PR apilados, cada uno con base `main` y sobre la rama anterior, como nv-43 sobre nv-42. Porqué: cada slice usa pantallas del anterior (Inicio abre la ficha) y los merges los hace Jorge después; además así `versionCode` sube sin conflictos.
+- Decisión: tres repositorios de lugares (catálogo, reseñas y favoritos). Porqué: detekt `TooManyFunctions` y los siguientes slices (check-in, reseñas propias, favoritos de planes) los extienden por separado.
+- Decisión: ubicación con `LocationManager` y solo `ACCESS_COARSE_LOCATION`. Porqué: Play Services está fuera del stack y la app no necesita la ubicación precisa.
+- A evitar: Coil 3.6.3, porque exige `compileSdk 37`; se usa 3.3.0 con `coil-network-okhttp` (Coil 3 no trae red por defecto).
+- A recordar: el JDK 17 está en el scratchpad de la sesión `ceb6bb66…/jdk17dl/jdk-17.0.20.1+1`; `gradle-daemon-jvm.properties` ya no existe en `gradle/`.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).
