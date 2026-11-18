@@ -3,6 +3,7 @@ package com.wherever.mobile.feature.auth.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -15,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,6 +32,7 @@ import com.wherever.mobile.core.designsystem.TitleBlock
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.core.designsystem.WhereverTheme
+import com.wherever.mobile.core.designsystem.rememberFormSubmit
 import com.wherever.mobile.core.ui.formatCountdown
 import com.wherever.mobile.feature.auth.domain.PostAuthDestination
 
@@ -67,6 +70,7 @@ private fun LoginContent(
     onForgotPassword: () -> Unit,
     onCreateAccount: () -> Unit
 ) {
+    val submit = rememberFormSubmit(onSubmit)
     FormScreen(
         footer = {
             val waiting = state.retryAfterSeconds > 0
@@ -76,7 +80,7 @@ private fun LoginContent(
                 } else {
                     stringResource(R.string.login_submit)
                 },
-                onClick = onSubmit,
+                onClick = submit,
                 enabled = state.canSubmit,
                 loading = state.submitting,
                 tag = "login_submit"
@@ -102,7 +106,7 @@ private fun LoginContent(
             leadingIcon = Icons.Filled.Email,
             error = state.emailError?.asString(),
             onBlur = onEmailBlur,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
             tag = "login_email"
         )
         LabeledTextField(
@@ -112,7 +116,8 @@ private fun LoginContent(
             placeholder = stringResource(R.string.login_password_placeholder),
             leadingIcon = Icons.Filled.Lock,
             error = state.passwordError?.asString(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = { if (state.canSubmit) submit() }),
             visualTransformation = PasswordVisualTransformation(),
             tag = "login_password"
         )

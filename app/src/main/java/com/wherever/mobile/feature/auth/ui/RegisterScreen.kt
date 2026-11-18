@@ -42,6 +42,7 @@ import com.wherever.mobile.core.designsystem.StepHeader
 import com.wherever.mobile.core.designsystem.TitleBlock
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverTheme
+import com.wherever.mobile.core.designsystem.rememberFormSubmit
 import com.wherever.mobile.core.ui.formatCountdown
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -80,6 +81,7 @@ private fun RegisterContent(
     onBack: () -> Unit
 ) {
     var showDatePicker by remember { mutableStateOf(false) }
+    val submit = rememberFormSubmit(onSubmit)
     FormScreen(
         footer = {
             val waiting = state.retryAfterSeconds > 0
@@ -89,7 +91,7 @@ private fun RegisterContent(
                 } else {
                     stringResource(R.string.register_submit)
                 },
-                onClick = onSubmit,
+                onClick = submit,
                 enabled = state.canSubmit,
                 loading = state.submitting,
                 tag = "register_submit"

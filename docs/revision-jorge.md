@@ -1,3 +1,35 @@
+# Revisión para Jorge — 2026-11-18 (tarde): autenticación en tu teléfono (nv-49)
+
+> Rama `fix/auth-telefono`, desde `main`, versión 0.1.1. Spec `specs/nv-49` sin firmar.
+
+## Qué encontré en tu teléfono (Xiaomi 2207117BPG, contra staging)
+- **Iniciar sesión, crear cuenta, cerrar sesión y recuperar sí llegan bien a la API** (200, 201, 204 y 202).
+- **Lo que fallaba era la app:**
+  - En horizontal, Login mostraba solo el título y "Entrar" deshabilitado: los campos quedaban fuera de la vista.
+  - Con el teclado abierto, el error ("Correo o contraseña incorrectos") quedaba debajo del teclado: parecía que no pasaba nada.
+  - Un intento falló por DNS (`UnknownHostException`) aunque había red, y se mostraba "Sin conexión".
+- **Qué cambié:** el formulario mete el botón en el scroll cuando la pantalla es baja; enviar cierra el teclado para que se vea el resultado; Login tiene "Siguiente" y "Listo" en el teclado; el correo pierde los espacios que mete el autocorrector; y la app reintenta una vez el DNS.
+- **Capturas:** `docs/pruebas/antes_*.png` y `despues_*.png`.
+
+## Para el equipo de API
+- **El correo de recuperación (y el de verificación) no sale en staging.** La app recibe 202, pero staging no tiene `SMTP_HOST` y el backend usa `LogMailer`, que solo lo escribe en el log (`configs/.env.example` y `specs/nv-06` del backend). Request: `f84c9cf7-2051-4b36-ac98-1af61764e337`. Hay que configurar `SMTP_HOST`, `SMTP_USER`, `SMTP_PASSWORD` y `MAIL_FROM`.
+- **`GET /inicio` exige `lat` y `lng`**, pero `docs/endpoints.md` dice que la sesión es opcional y no los marca obligatorios: sin ellos da 422 (`traza_id` `46998e69d8ea13327fd904190d402718`). La app ya manda una zona de respaldo (ver nv-47).
+- **Staging no tiene negocios ni ciudades**: `/categorias` da 0 en los 6 giros, `ciudades/autocompletar` da `[]`, y la semilla del backend solo tiene 2 negocios de ejemplo en CDMX.
+
+## Decisiones
+- No pegaste la documentación en el mensaje (decía "[PEGA AQUÍ]"), así que usé `wherever-backend/docs/endpoints.md` de `origin/main` (nv-75) como fuente de verdad. `docs/contexto_api_sprint1.md` queda igual hasta que me pases la tuya.
+- La build de depuración que tenías instalada (versionCode 3, 14:00) la reemplacé con `adb install -d`; borré sus datos para probar desde cero (no tenía sesión).
+- Activé y luego restauré la rotación automática del teléfono (MIUI no deja girar por comando).
+- El PR sube a `versionCode 2` / `0.1.1`. La pila nv-47/nv-48 también usa 2 y 3: si fusionas este primero, la pila sube a 3 y 4 (lo ajusto yo).
+
+**Para probar en el celular:**
+- [ ] Login con un correo que no existe: sale "Correo o contraseña incorrectos" a la vista, sin teclado encima.
+- [ ] Gira el teléfono en Login: se ven los campos y "Entrar" con scroll.
+- [ ] Crear cuenta → Omitir gustos → Inicio; Perfil → Ajustes → Cerrar sesión.
+- [ ] Recuperar contraseña: llega a "Revisa tu correo" (el correo llegará cuando staging tenga SMTP).
+
+---
+
 # Revisión para Jorge — paso 3 del 2026-11-13: transiciones entre pantallas y pulido de UI (nv-45)
 
 > Rama `feat/transiciones-ui`, PR a `main` sin merge. Spec `specs/nv-45` sin firmar.

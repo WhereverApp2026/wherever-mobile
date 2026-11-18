@@ -35,4 +35,9 @@ class ValidatorsTest {
         assertEquals("os•••@correo.com", maskEmail("osmar@correo.com"))
         assertEquals("a•••@b.co", maskEmail("a@b.co"))
     }
+
+    @Test
+    fun `el correo pierde los espacios que mete el teclado`() {
+        assertEquals("ana@ejemplo.com", " ana @ejemplo.com ".withoutSpaces())
+    }
 }
