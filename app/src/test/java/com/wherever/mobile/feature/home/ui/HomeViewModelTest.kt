@@ -1,5 +1,6 @@
 package com.wherever.mobile.feature.home.ui
 
+import com.wherever.mobile.core.location.GeoPoint
 import com.wherever.mobile.feature.home.domain.Company
 import com.wherever.mobile.testing.FakeHomeRepository
 import com.wherever.mobile.testing.FakeLocationPermissionPreferences
@@ -41,20 +42,24 @@ class HomeViewModelTest {
     private val plans = FakePlansRepository()
     private val clock = Clock.fixed(Instant.parse("2026-11-18T18:00:00Z"), ZoneId.of("America/Mexico_City"))
 
+    private companion object {
+        val FALLBACK = GeoPoint(19.4326, -99.1332)
+    }
+
     private fun TestScope.viewModel(): HomeViewModel {
-        val vm = HomeViewModel(home, profiles, location, prefs, assistant, plans, clock)
+        val vm = HomeViewModel(home, profiles, location, prefs, FALLBACK, assistant, plans, clock)
         advanceUntilIdle()
         return vm
     }
 
     @Test
-    fun `sin permiso pide la ubicacion y carga recomendaciones generales`() = runTest(mainDispatcher.dispatcher) {
+    fun `sin permiso pide la ubicacion y carga con la zona de respaldo`() = runTest(mainDispatcher.dispatcher) {
         val vm = viewModel()
 
         val state = vm.state.value
         assertEquals("Ana", state.firstName)
         assertEquals(LocationPrompt.ASK, state.locationPrompt)
-        assertEquals(listOf(null to null), home.feedCalls)
+        assertEquals(listOf(FALLBACK to null), home.feedCalls)
         assertEquals(2, state.recommendations.size)
         assertTrue(home.eventCalls.isEmpty())
         assertFalse(state.loading)
