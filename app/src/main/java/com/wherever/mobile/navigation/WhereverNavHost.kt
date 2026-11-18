@@ -26,6 +26,9 @@ import com.wherever.mobile.feature.home.ui.HomeRouteScreen
 import com.wherever.mobile.feature.places.ui.ExploreRoute as ExploreScreen
 import com.wherever.mobile.feature.places.ui.FavoritesRoute as FavoritesScreen
 import com.wherever.mobile.feature.places.ui.PlaceDetailRoute as PlaceDetailScreen
+import com.wherever.mobile.feature.plans.ui.CreatePlanRoute as CreatePlanScreen
+import com.wherever.mobile.feature.plans.ui.MyPlansRoute as MyPlansScreen
+import com.wherever.mobile.feature.plans.ui.PlanDetailRoute as PlanDetailScreen
 import com.wherever.mobile.feature.profile.ui.EditProfileRoute as EditProfileScreen
 import com.wherever.mobile.feature.profile.ui.ProfileRoute as ProfileScreen
 import com.wherever.mobile.feature.settings.ui.DeleteAccountRoute as DeleteAccountScreen
@@ -126,7 +129,8 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>) {
             HomeRouteScreen(
                 HomeNavigation(
                     onTab = { navController.openTab(e, it) },
-                    onSearch = { navController.navigateFrom(e, ExploreRoute()) },
+                    onSearch = { navController.navigateFrom(e, CreatePlanRoute()) },
+                    onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
                     onCategory = { navController.navigateFrom(e, ExploreRoute(category = it)) },
                     onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "inicio")) }
                 )
@@ -139,6 +143,27 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>) {
             )
         }
         composable<PlaceRoute> { e -> PlaceDetailScreen(onBack = { navController.popFrom(e) }) }
+        composable<CreatePlanRoute> { e ->
+            CreatePlanScreen(
+                onBack = { navController.popFrom(e) },
+                onSaved = { id ->
+                    navController.navigateOnResult(e, PlanRoute(id)) { popUpTo<CreatePlanRoute> { inclusive = true } }
+                }
+            )
+        }
+        composable<PlanRoute> { e ->
+            PlanDetailScreen(
+                onBack = { navController.popOnResult(e) },
+                onOpenPlan = { id -> navController.navigateOnResult(e, PlanRoute(id)) }
+            )
+        }
+        composable<MyPlansRoute> { e ->
+            MyPlansScreen(
+                onTab = { navController.openTab(e, it) },
+                onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
+                onCreate = { navController.navigateFrom(e, CreatePlanRoute()) }
+            )
+        }
         composable<FavoritesRoute> { e ->
             FavoritesScreen(
                 onBack = { navController.popFrom(e) },
@@ -208,6 +233,7 @@ private fun NavHostController.openTab(from: NavBackStackEntry, tab: MainTab) {
     val route: Any = when (tab) {
         MainTab.HOME -> HomeRoute
         MainTab.EXPLORE -> ExploreRoute()
+        MainTab.PLANS -> MyPlansRoute
         MainTab.PROFILE -> ProfileRoute
     }
     navigateFrom(from, route) {

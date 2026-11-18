@@ -58,3 +58,14 @@ data class PlaceRoute(val id: String, val origin: String = "")
 
 @Serializable
 data object FavoritesRoute
+
+/** `phrase` la lee CreatePlanViewModel de SavedStateHandle por su nombre. */
+@Serializable
+data class CreatePlanRoute(val phrase: String = "")
+
+/** `id` lo lee PlanDetailViewModel. */
+@Serializable
+data class PlanRoute(val id: String)
+
+@Serializable
+data object MyPlansRoute

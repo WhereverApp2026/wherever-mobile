@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
@@ -231,7 +232,7 @@ fun ErrorState(message: String, onRetry: () -> Unit, modifier: Modifier = Modifi
     }
 }
 
-enum class MainTab { HOME, EXPLORE, PROFILE }
+enum class MainTab { HOME, EXPLORE, PLANS, PROFILE }
 
 /** Pestañas principales que ya existen (ver specs/README.md, D22). */
 @Composable
@@ -242,6 +243,9 @@ fun WhereverBottomBar(selected: MainTab, onSelect: (MainTab) -> Unit, modifier: 
         }
         BarItem(selected == MainTab.EXPLORE, Icons.Filled.Search, stringResource(R.string.tab_explore)) {
             onSelect(MainTab.EXPLORE)
+        }
+        BarItem(selected == MainTab.PLANS, Icons.Filled.DateRange, stringResource(R.string.tab_plans)) {
+            onSelect(MainTab.PLANS)
         }
         BarItem(selected == MainTab.PROFILE, Icons.Filled.Person, stringResource(R.string.tab_profile)) {
             onSelect(MainTab.PROFILE)
