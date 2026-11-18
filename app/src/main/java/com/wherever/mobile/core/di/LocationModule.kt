@@ -1,11 +1,15 @@
 package com.wherever.mobile.core.di
 
+import com.wherever.mobile.BuildConfig
 import com.wherever.mobile.core.location.AndroidLocationProvider
+import com.wherever.mobile.core.location.FallbackPoint
+import com.wherever.mobile.core.location.GeoPoint
 import com.wherever.mobile.core.location.LocationPermissionPreferences
 import com.wherever.mobile.core.location.LocationProvider
 import com.wherever.mobile.core.location.SharedLocationPermissionPreferences
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
@@ -17,4 +21,10 @@ abstract class LocationModule {
 
     @Binds
     abstract fun bindPermissionPreferences(impl: SharedLocationPermissionPreferences): LocationPermissionPreferences
+
+    companion object {
+        @Provides
+        @FallbackPoint
+        fun provideFallback(): GeoPoint = GeoPoint(BuildConfig.FALLBACK_LAT, BuildConfig.FALLBACK_LNG)
+    }
 }

@@ -1,5 +1,7 @@
 package com.wherever.mobile.core.location
 
+import javax.inject.Qualifier
+
 /** Coordenadas sin dependencias de Android, para que `domain` las use. */
 data class GeoPoint(val lat: Double, val lng: Double)
 
@@ -22,3 +24,8 @@ interface LocationPermissionPreferences {
 
 /** Después de 2 rechazos el sistema ya no muestra el diálogo: solo queda mandar a Ajustes (US-004). */
 const val MAX_LOCATION_DENIALS = 2
+
+/** Punto que usa Inicio cuando no hay ubicación: la API exige `lat` y `lng` (specs/nv-47). */
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class FallbackPoint

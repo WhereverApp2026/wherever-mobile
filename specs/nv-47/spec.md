@@ -22,7 +22,7 @@ Historias: US-025, US-032, US-037, US-047, US-053, US-062, US-030 (Inicio); US-0
 - **Ubicación aproximada (US-004, US-009)**:
   - Una tarjeta en Inicio explica para qué se usa antes del diálogo del sistema. Solo se pide `ACCESS_COARSE_LOCATION`, mientras se usa la app.
   - "Ahora no" la oculta. Tras 2 rechazos queda solo un aviso que abre Ajustes del sistema. Al volver de Ajustes con el permiso, Inicio recarga con ubicación.
-  - Sin permiso, Inicio pide recomendaciones generales y Explorar no muestra el filtro de distancia.
+  - Sin permiso, Inicio usa la zona de respaldo (la API exige ubicación) y Explorar no muestra el filtro de distancia.
   - La ubicación sale de `LocationManager` del sistema, sin Play Services.
 - **Explorar (18_Explorar)**:
   - Búsqueda por nombre o palabra (`GET /lugares/buscar`), con espera de 400 ms al escribir y mínimo 2 letras.
@@ -62,7 +62,7 @@ Contratos en `wherever-backend` `docs/endpoints.md` (nv-20 a nv-25, nv-54, nv-56
 | Ficha | `GET /lugares/{id}`, `/afluencia`, `/menu`, `/resenas`, `POST /vistas`, `POST /reportes`, `PUT /resenas/{id}/util`, `GET /favoritos/ids`, `PUT`/`DELETE /favoritos/negocio/{id}` |
 | Mis favoritos | `GET /favoritos?tipo=negocio`, `DELETE /favoritos/negocio/{id}` |
 
-Contra staging (2026-11-18, 11:50): `/health`, `/ready` y `/ping` dan 200. `/inicio`, `/categorias`, `/lugares`, `/buscar`, `/eventos` y `/planes/populares` responden 200, pero vacíos: staging no tiene negocios cargados (`conteo: 0` en los 6 giros). No hubo errores con `traza_id`. Las pantallas muestran su estado vacío hasta que un administrador cargue la semilla del backend (`docs/semilla-negocios.csv`, `POST /admin/negocios/importar`).
+Contra staging (2026-11-18, 11:50): `/health`, `/ready` y `/ping` dan 200. `/inicio`, `/categorias`, `/lugares`, `/buscar`, `/eventos` y `/planes/populares` responden 200, pero vacíos: staging no tiene negocios cargados (`conteo: 0` en los 6 giros). En el teléfono (17:44) `GET /inicio` sin `lat`/`lng` dio **422** "lat/lng es obligatorio" (`traza_id` `46998e69d8ea13327fd904190d402718` por curl), aunque `docs/endpoints.md` marca la sesión como opcional y no dice que la ubicación sea obligatoria. Por eso, sin permiso de ubicación, Inicio manda una zona de respaldo (`BuildConfig.FALLBACK_LAT/LNG`, centro de CDMX, donde está la semilla). Anotado para el equipo de API. Las pantallas muestran su estado vacío hasta que un administrador cargue la semilla del backend (`docs/semilla-negocios.csv`, `POST /admin/negocios/importar`).
 
 ## 4. Modelo de datos
 
@@ -79,7 +79,7 @@ Sin cambios en Room. Nuevos modelos de dominio en `feature/places/domain/Places.
 ## 6. Tests / Gates
 
 - **Unit:**
-  - `test/.../feature/home/ui/HomeViewModelTest.kt` (8): sin permiso pide ubicación y carga lo general; con permiso manda `lat`/`lng` y trae eventos; compañía que se quita al tocarla otra vez; "No me interesa" con deshacer en su lugar; descarte rechazado regresa; dos rechazos dejan el aviso de Ajustes; volver de Ajustes recarga; error y reintento al deslizar.
+  - `test/.../feature/home/ui/HomeViewModelTest.kt` (8): sin permiso pide ubicación y carga con la zona de respaldo; con permiso manda `lat`/`lng` y trae eventos; compañía que se quita al tocarla otra vez; "No me interesa" con deshacer en su lugar; descarte rechazado regresa; dos rechazos dejan el aviso de Ajustes; volver de Ajustes recarga; error y reintento al deslizar.
   - `test/.../feature/places/ui/PlacesViewModelsTest.kt` (14): categoría desde Inicio, espera al escribir, una letra no busca, filtros que se encienden y apagan, vacío y Quitar filtros, Ver más, filtros sobre la búsqueda, ficha con vista y día de hoy, favorito optimista que vuelve si falla, reporte "Otro" con detalle, 409 en el diálogo, filtro de estrellas, "Útil" que se desmarca si falla, y favoritos.
 - **Data:** `test/.../integration/PlacesIntegrationTest.kt` (12) con MockWebServer: parámetros de `/inicio` con y sin ubicación, clima y "por qué", `POST`/`DELETE` de "No me interesa", filtros y cursor de `/lugares`, radio sin ubicación, ficha (dirección, fotos ordenadas, aspectos), 404 → `NotFound`, reseñas con estrellas/orden/cursor, favoritos con `PUT`/`DELETE`, cuerpo del reporte, afluencia vacía y búsqueda recortada con el origen de la vista.
 - **UI:** `androidTest/.../feature/places/ui/PlaceCardTest.kt` (1): la tarjeta muestra giro, precio, distancia y "Cerrado", y abre la ficha. Corre en la CI del PR.
