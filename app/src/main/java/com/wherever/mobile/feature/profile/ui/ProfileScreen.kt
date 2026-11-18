@@ -12,9 +12,13 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -32,7 +36,6 @@ import com.wherever.mobile.core.designsystem.ErrorState
 import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.GoldTint
 import com.wherever.mobile.core.designsystem.InfoBanner
-import com.wherever.mobile.core.designsystem.InitialAvatar
 import com.wherever.mobile.core.designsystem.Ink
 import com.wherever.mobile.core.designsystem.LoadingState
 import com.wherever.mobile.core.designsystem.MainTab
@@ -59,10 +62,22 @@ fun ProfileRoute(
     onFavorites: () -> Unit,
     onSettings: () -> Unit,
     onVerifyEmail: (String) -> Unit,
-    viewModel: ProfileViewModel = hiltViewModel()
+    viewModel: ProfileViewModel = hiltViewModel(),
+    photoViewModel: ProfilePhotoViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val photoState by photoViewModel.state.collectAsStateWithLifecycle()
+    val photoActions = rememberPhotoActions(photoViewModel)
+    val snackbar = remember { SnackbarHostState() }
+    val photoMessage = photoState.message?.asString()
+    LaunchedEffect(photoMessage) {
+        if (photoMessage != null) {
+            snackbar.showSnackbar(photoMessage)
+            photoViewModel.messageShown()
+        }
+    }
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbar) },
         bottomBar = { WhereverBottomBar(MainTab.PROFILE, onSelect = onTab) }
     ) { padding ->
         val profile = state.profile
@@ -82,6 +97,7 @@ fun ProfileRoute(
                     onSettings = onSettings,
                     onFavorites = onFavorites,
                     onVerifyEmail = { onVerifyEmail(current.email) },
+                    avatar = { EditableProfileAvatar(current.name, current.photoUrl, photoState, photoActions) },
                     modifier = modifier
                 )
                 shown == ScreenPhase.ERROR -> ErrorState(
@@ -103,14 +119,15 @@ private fun ProfileContent(
     onSettings: () -> Unit,
     onFavorites: () -> Unit,
     onVerifyEmail: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    avatar: @Composable () -> Unit = { ProfileAvatar(profile.name, profile.photoUrl, 88.dp) }
 ) {
     FormScreen(modifier = modifier) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             CircleIconButton(Icons.Filled.Settings, stringResource(R.string.profile_settings), onSettings)
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
-            InitialAvatar(profile.name, size = 88.dp)
+            avatar()
             Spacer(Modifier.width(16.dp))
             Column {
                 Text(

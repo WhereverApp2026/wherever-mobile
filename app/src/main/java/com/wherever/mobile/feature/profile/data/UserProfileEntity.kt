@@ -43,6 +43,8 @@ data class UserProfileEntity(
     val name: String,
     val email: String,
     val emailVerified: Boolean,
+    /** nv-50: columna nueva en la versión 3 de Room, sin valor por defecto (null). */
+    val photoUrl: String? = null,
     val mode: String,
     @Embedded(prefix = "city_") val city: CityEntity?,
     @Embedded(prefix = "tastes_") val tastes: TastesEntity?,

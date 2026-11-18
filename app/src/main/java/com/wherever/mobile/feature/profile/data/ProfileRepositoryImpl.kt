@@ -30,6 +30,14 @@ class ProfileRepositoryImpl @Inject constructor(private val api: UsersApi, priva
         return store(safeApiCall { api.patchMe("\"$version\"", ProfilePatchDto(name, cityId)) })
     }
 
+    override suspend fun updatePhoto(url: String): Result<UserProfile> {
+        val version = dao.get()?.version ?: when (val fetched = refresh()) {
+            is Result.Success -> fetched.data.version
+            is Result.Failure -> return fetched
+        }
+        return store(safeApiCall { api.patchMe("\"$version\"", ProfilePatchDto(photoUrl = url)) })
+    }
+
     override suspend fun updateTastes(tastes: Tastes): Result<Unit> = safeApiCall {
         api.putTastes(tastes.toDto())
     }.applied { saved -> copy(tastes = saved.toEntity()) }

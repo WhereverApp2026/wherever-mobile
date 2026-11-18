@@ -59,6 +59,14 @@ object NetworkModule {
     fun provideRefreshApi(@RefreshClient client: OkHttpClient): RefreshApi =
         retrofit(client).create(RefreshApi::class.java)
 
+    @Provides
+    @Singleton
+    @UploadClient
+    fun provideUploadClient(): OkHttpClient = OkHttpClient.Builder()
+        .baseConfig()
+        .debugLogging()
+        .build()
+
     /** Orden fijo de la constitución §4: RequestId → AuthHeader → RedactedLogging. */
     @Provides
     @Singleton

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Solo comparte cache/fotos/ con la app de cámara (specs/nv-50). -->
+<paths>
+    <cache-path name="fotos" path="fotos/" />
+</paths>

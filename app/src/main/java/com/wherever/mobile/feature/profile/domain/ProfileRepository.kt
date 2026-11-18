@@ -12,6 +12,9 @@ interface ProfileRepository {
     /** `PATCH /usuarios/yo` con `If-Match`. Un 409 llega como `AppError.Conflict`. */
     suspend fun updateProfile(name: String? = null, cityId: String? = null): Result<UserProfile>
 
+    /** nv-50: guarda la URL pública (`url_1080`) de una foto ya publicada. */
+    suspend fun updatePhoto(url: String): Result<UserProfile>
+
     suspend fun updateTastes(tastes: Tastes): Result<Unit>
 
     suspend fun updatePreferences(patch: PreferencesPatch): Result<Unit>

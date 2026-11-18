@@ -80,6 +80,29 @@
 | US-017 Editar perfil | 2 | Parcial: falta foto, correo, contraseña y tamaño de texto | nv-14 |
 | US-148 Elegir avisos | 3 | Parcial: falta horario silencioso | nv-13 |
 
+## Pendientes (lista viva, 2026-11-18 17:30)
+
+Se cierran en este orden. ✅ = cerrado, con el PR o el motivo.
+
+| # | Pendiente | Dónde | Estado |
+|---|---|---|---|
+| P1 | Rama `fix/auth-telefono` (nv-49) sin PR | autenticación en el teléfono | en curso |
+| P2 | Fotos: perfil, reseñas y postales | nv-50 | en curso |
+| P3 | `/inicio` da 422 sin `lat`/`lng`: Inicio vacío sin permiso de ubicación | PR #24 (nv-47) | abierto |
+| P4 | Rama `feat/plan-ia` (nv-48) con un commit WIP, sin compuertas ni PR | plan con IA | abierto |
+| P5 | PR #22 (push): CI verde, falta probar el registro del token en el teléfono | nv-46 | abierto |
+| P6 | Correo de recuperación y verificación no sale (staging sin SMTP) | equipo de API | anotado |
+| P7 | Staging sin negocios ni ciudades (`/categorias` en 0, `ciudades` vacío) | equipo de API | anotado |
+| P8 | APK de release sin probar en el teléfono (aviso de R8, nv-41) | release | abierto |
+| P9 | Pantallas sin conectar: Descargar datos y Borrar historial (US-007), Nueva contraseña desde el enlace (US-014), cambiar correo y contraseña (US-017), horario silencioso (US-148) | cuenta | abierto |
+| P10 | Pantallas sin construir con API lista: notificaciones, amigos, reservas y pagos, cupones, check-in y reseñas, grupos y Vaca, recuerdos, modo negocio | backlog | abierto |
+| P11 | Bienvenida en horizontal: los íconos decorativos tapan el texto | nv-06 | abierto |
+| P12 | Tareas sin marcar en specs: pruebas de UI en CI y "en el teléfono" de nv-42 a nv-47 | specs | abierto |
+| P13 | 9 PR de Dependabot (#5 a #12 y #23) sin revisar; varios son saltos mayores que exigen `compileSdk 37` | dependencias | abierto |
+| P14 | `main` sin protección de rama (constitución §8): requiere administrador | GitHub | fuera de alcance (permisos) |
+| P15 | Proveedor de mapas (D25) y numeración única de pantallas (D23) | decisiones | abierto |
+| P16 | Sin TODO ni FIXME en `app/src` (revisado con grep) | código | ✅ |
+
 ## Plan para pasar del 50 %
 
 Orden: Must con pantalla y API lista, en el orden en que las usa una persona.
