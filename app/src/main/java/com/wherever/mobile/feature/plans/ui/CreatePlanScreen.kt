@@ -59,6 +59,9 @@ import kotlinx.coroutines.delay
 private const val STEP_MILLIS = 1_400L
 private const val PULSE_MILLIS = 700
 private const val PULSE_MIN = 0.35f
+
+/** Topes de presupuesto por persona de la hoja rápida, en pesos. */
+@Suppress("MagicNumber")
 private val BUDGETS = listOf(200, 400, 700, 1000)
 
 /** Palabras que bastan para pedir un plan (US-035). */

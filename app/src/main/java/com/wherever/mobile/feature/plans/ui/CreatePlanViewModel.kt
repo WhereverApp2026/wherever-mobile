@@ -33,8 +33,10 @@ import kotlinx.coroutines.launch
 internal const val PHRASE_MAX = 300
 internal const val MAX_PEOPLE = 20
 private const val HOURS_LATER = 2L
-private val TONIGHT: LocalTime = LocalTime.of(20, 0)
-private val TOMORROW_AFTERNOON: LocalTime = LocalTime.of(14, 0)
+private const val TONIGHT_HOUR = 20
+private const val TOMORROW_AFTERNOON_HOUR = 14
+private val TONIGHT: LocalTime = LocalTime.of(TONIGHT_HOUR, 0)
+private val TOMORROW_AFTERNOON: LocalTime = LocalTime.of(TOMORROW_AFTERNOON_HOUR, 0)
 
 /** Cuándo sale la persona (US-050). */
 enum class PlanWhen { NOW, LATER, TONIGHT, TOMORROW }
@@ -67,6 +69,7 @@ data class CreatePlanUiState(
 }
 
 /** 15_Asistente y 15b_HojaRapida (US-035, US-039 a US-046, US-048 a US-050). */
+@Suppress("TooManyFunctions") // Un evento por control de la hoja rápida (US-035 a US-050), como PlanDetailViewModel.
 @HiltViewModel
 class CreatePlanViewModel @Inject constructor(
     private val assistant: PlanAssistantRepository,
