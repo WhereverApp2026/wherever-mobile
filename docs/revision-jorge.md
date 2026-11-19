@@ -1,3 +1,16 @@
+# Revisión para Jorge — 2026-11-19 (noche): todo a GitHub y diseño normativo
+
+> Pedido: subir todo, lista de pendientes y diseño igual a la maqueta. Sin preguntas; lo ambiguo queda aquí.
+
+## Decisiones tomadas sin preguntarte
+- **Búsqueda (nv-19):** el WIP de `wip/pausa` se aplicó sobre `main` (que ya tenía `76718f1`) y se sube como su propio commit. Las 7 compuertas en verde con JDK 17.
+- **Conteo de nv-19 se queda en 3/4:** 19_Buscar y 21_SinResultados se probaron en el teléfono; 20_BuscarPersonas usa el mismo `personas/buscar` probado en Agregar amigos (nv-53). La variante "solicitud enviada" no cuenta hasta probarla en el teléfono.
+- **Sin teléfono conectado** (`adb devices` vacío): subo lo que pasa las 7 compuertas y la CI, y dejo la prueba en el teléfono como casilla abierta en `docs/pendientes.md`. No se puede esperar sin parar el trabajo.
+- **Dependabot:** #23 (setup-java 6.2.0) tiene la CI en verde y se integra. #8 a #12 piden `compileSdk 37` (confirmado en los logs: `checkDebugAarMetadata`), no se integran. #5 a #7 tienen CI roja sobre un `main` viejo; no pude pedir el rebase desde la sesión (permiso de comentar denegado): escribe `@dependabot rebase` en cada uno.
+- **Documento para el equipo:** "Wherever Móvil: qué está hecho y qué falta", agrupado por perfil (persona usuaria, modo negocio y base técnica) y con la lista de specs que faltan.
+
+---
+
 # Revisión para Jorge — 2026-11-19: trabajo directo en `main`
 
 > Métrica nueva: pantallas que funcionan de verdad / 162 (`docs/avance.md`). Un commit por parte, directo en `main`, con CI revisada después de cada push.

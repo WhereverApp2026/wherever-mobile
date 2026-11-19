@@ -223,6 +223,7 @@
 - A evitar: rutas con parámetros `token`/`password`: `SourceSecurityTest` lo prohíbe; guardar el token en memoria (`PendingEmailLink`).
 
 - Pausa (2026-11-19, tarde): `main` = `7791a86`, CI verde. Búsqueda (nv-19) quedó en la rama `wip/pausa` con pruebas unitarias en verde y sin lint/release ni prueba de Personas en el teléfono. Dónde seguir: `docs/pendientes.md`.
+- 2026-11-19 (noche): Búsqueda (nv-19) integrada en `main` desde `wip/pausa` con las 7 compuertas en verde (JDK 17, `--no-daemon --max-workers=1`). `docs/pendientes.md` reescrito como lista viva (% por área, prioridades, endpoints, bugs, ramas). A evitar: correr las 7 compuertas en una sola llamada de más de 10 min (se va a segundo plano); separar `assembleRelease`.
 
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).

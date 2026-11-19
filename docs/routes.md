@@ -16,6 +16,7 @@
 | `PlaceRoute(id, origin)` | Ficha del lugar | ninguno | release | nv-47 |
 | `NewPasswordRoute(token)` | Nueva contraseña desde el enlace del correo | ninguno | release | nv-08 |
 | `VerifyEmailRoute(token)` | Verificar correo desde el enlace | ninguno | release | nv-08 |
+| `SearchRoute(query)` | Buscar: lugares, personas y planes; recientes, ideas y sin resultados | ninguno | release | nv-19 |
 | `FavoritesRoute` | Mis favoritos | ninguno | release | nv-47 |
 | `BadgesRoute` | Insignias: nivel, puntos, ganadas y por desbloquear | ninguno | release | nv-14 |
 | `CreatePlanRoute(phrase)` | Crear plan con IA y hoja rápida | ubicación aproximada (obligatoria para generar) | release | nv-48 |

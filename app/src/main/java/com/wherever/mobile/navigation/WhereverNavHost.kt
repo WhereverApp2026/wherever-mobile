@@ -46,6 +46,8 @@ import com.wherever.mobile.feature.profile.ui.ProfileRoute as ProfileScreen
 import com.wherever.mobile.feature.reservations.ui.MyReservationsRoute as MyReservationsScreen
 import com.wherever.mobile.feature.reservations.ui.ReservationRoute as ReservationScreen
 import com.wherever.mobile.feature.reservations.ui.ReserveRoute as ReserveScreen
+import com.wherever.mobile.feature.search.ui.SearchActions
+import com.wherever.mobile.feature.search.ui.SearchRoute as SearchScreen
 import com.wherever.mobile.feature.settings.ui.DeleteAccountRoute as DeleteAccountScreen
 import com.wherever.mobile.feature.settings.ui.DeletionPendingRoute as DeletionPendingScreen
 import com.wherever.mobile.feature.settings.ui.PrivacyRoute as PrivacyScreen
@@ -177,11 +179,23 @@ fun WhereverNavHost(
             HomeRouteScreen(
                 HomeNavigation(
                     onTab = { navController.openTab(e, it) },
-                    onSearch = { navController.navigateFrom(e, CreatePlanRoute()) },
+                    onSearch = { navController.navigateFrom(e, SearchRoute()) },
                     onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
                     onCategory = { navController.navigateFrom(e, ExploreRoute(category = it)) },
                     onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "inicio")) },
                     onNotifications = { navController.navigateFrom(e, NotificationsRoute) }
+                )
+            )
+        }
+        composable<SearchRoute> { e ->
+            SearchScreen(
+                SearchActions(
+                    onBack = { navController.popFrom(e) },
+                    onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "busqueda")) },
+                    onPerson = { navController.navigateFrom(e, PersonRoute(it)) },
+                    onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
+                    onAskAi = { navController.navigateFrom(e, CreatePlanRoute(phrase = it)) },
+                    onExplore = { navController.navigateFrom(e, ExploreRoute()) }
                 )
             )
         }

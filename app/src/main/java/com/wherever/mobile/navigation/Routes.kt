@@ -78,6 +78,10 @@ data class PlaceRoute(val id: String, val origin: String = "")
 @Serializable
 data object FavoritesRoute
 
+/** 19_Buscar (nv-19). */
+@Serializable
+data class SearchRoute(val query: String = "")
+
 /** `phrase` la lee CreatePlanViewModel de SavedStateHandle por su nombre. */
 @Serializable
 data class CreatePlanRoute(val phrase: String = "")
