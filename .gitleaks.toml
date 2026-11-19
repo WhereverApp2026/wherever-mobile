@@ -9,3 +9,11 @@ description = "Refresh token de ejemplo en docs/contexto_api_sprint1.md"
 condition = "AND"
 paths = ['''^docs/contexto_api_sprint1\.md$''']
 regexes = ['''q8Zs3v1nX0r4bE7yTk2mW9pLhA6cUfGd''']
+
+# Ruta S3 de prueba ("cuarentena/img1") en la prueba de subida de fotos (nv-50)
+# y en la nota de Memoria.md que la cita. Es una clave de objeto, no un secreto.
+[[allowlists]]
+description = "Clave de objeto S3 de prueba en PhotoUploadIntegrationTest"
+condition = "AND"
+paths = ['''^(app/src/test/java/com/wherever/mobile/integration/PhotoUploadIntegrationTest\.kt|Memoria\.md)$''']
+regexes = ['''cuarentena/img1''']
