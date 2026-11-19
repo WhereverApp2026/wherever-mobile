@@ -15,6 +15,9 @@
 | `ExploreRoute(query, category)` | Explorar: búsqueda, filtros y recientes | ubicación aproximada (opcional) | release | nv-47 |
 | `PlaceRoute(id, origin)` | Ficha del lugar | ninguno | release | nv-47 |
 | `FavoritesRoute` | Mis favoritos | ninguno | release | nv-47 |
+| `CreatePlanRoute(phrase)` | Crear plan con IA y hoja rápida | ubicación aproximada (obligatoria para generar) | release | nv-48 |
+| `PlanRoute(id)` | Plan: línea de tiempo y edición | ninguno | release | nv-48 |
+| `MyPlansRoute` | Mis planes (próximos, guardados y pasados) | ninguno | release | nv-48 |
 | `ProfileRoute` | Perfil | ninguno | release | nv-14 |
 | `EditProfileRoute` | Editar perfil | ninguno | release | nv-14 |
 | `SettingsRoute` | Ajustes | ninguno | release | nv-13 |

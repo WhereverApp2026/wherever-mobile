@@ -78,6 +78,7 @@ import com.wherever.mobile.feature.home.domain.Event
 import com.wherever.mobile.feature.places.domain.PlaceCard
 import com.wherever.mobile.feature.places.ui.PlaceCardItem
 import com.wherever.mobile.feature.places.ui.PlaceCardSkeleton
+import com.wherever.mobile.feature.plans.domain.PopularPlan
 import java.time.ZoneId
 
 private const val CENTS = 100
@@ -87,7 +88,8 @@ data class HomeNavigation(
     val onTab: (MainTab) -> Unit,
     val onSearch: () -> Unit,
     val onCategory: (String) -> Unit,
-    val onPlace: (String) -> Unit
+    val onPlace: (String) -> Unit,
+    val onPlan: (String) -> Unit
 )
 
 /** 10_Inicio. */
@@ -97,6 +99,7 @@ fun HomeRouteScreen(navigation: HomeNavigation, viewModel: HomeViewModel = hiltV
     val snackbar = remember { SnackbarHostState() }
     val undoMessage = stringResource(R.string.home_not_interested_done)
     val undoLabel = stringResource(R.string.home_undo)
+    LaunchedEffect(viewModel) { viewModel.openPlan.collect(navigation.onPlan) }
     LifecycleResumeEffect(viewModel) {
         viewModel.onResume()
         onPauseOrDispose { }
@@ -122,7 +125,8 @@ fun HomeRouteScreen(navigation: HomeNavigation, viewModel: HomeViewModel = hiltV
                 onCompany = viewModel::onCompany,
                 onNotInterested = viewModel::notInterested,
                 onAskLocation = { permissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION) },
-                onLocationNotNow = viewModel::onLocationNotNow
+                onLocationNotNow = viewModel::onLocationNotNow,
+                onCopyPlan = viewModel::copyPopular
             ),
             modifier = Modifier.padding(bottom = padding.calculateBottomPadding())
         )
@@ -134,7 +138,8 @@ data class HomeActions(
     val onCompany: (Company) -> Unit,
     val onNotInterested: (PlaceCard) -> Unit,
     val onAskLocation: () -> Unit,
-    val onLocationNotNow: () -> Unit
+    val onLocationNotNow: () -> Unit,
+    val onCopyPlan: (PopularPlan) -> Unit
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -191,6 +196,19 @@ private fun HomeContent(state: HomeUiState, navigation: HomeNavigation, actions:
                             onClick = { actions.onNotInterested(place) }
                         )
                     }
+                }
+            }
+            if (state.popular.isNotEmpty()) {
+                item {
+                    Text(
+                        stringResource(R.string.home_popular),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(horizontal = ScreenPadding)
+                    )
+                }
+                items(state.popular, key = { "popular_${it.id}" }) { plan ->
+                    PopularPlanCard(plan) { actions.onCopyPlan(plan) }
                 }
             }
             if (state.events.isNotEmpty()) {
@@ -377,6 +395,24 @@ private fun EmptyRecommendations(onSearch: () -> Unit) {
     Column(modifier = Modifier.padding(horizontal = ScreenPadding), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         InfoBanner(stringResource(R.string.home_empty), tag = "home_empty")
         WhereverTextLink(stringResource(R.string.home_empty_action), onSearch)
+    }
+}
+
+/** US-033: plan popular de la semana; "Copiar" lo guarda para mañana. */
+@Composable
+private fun PopularPlanCard(plan: PopularPlan, onCopy: () -> Unit) {
+    SurfaceCard(modifier = Modifier.padding(horizontal = ScreenPadding).testTag("popular_${plan.id}")) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(14.dp)) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(plan.name, style = MaterialTheme.typography.titleSmall)
+                Text(
+                    stringResource(R.string.home_popular_detail, plan.stops.size, plan.costPerPerson, plan.copies),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            TextButton(onClick = onCopy) { Text(stringResource(R.string.home_popular_copy)) }
+        }
     }
 }
 

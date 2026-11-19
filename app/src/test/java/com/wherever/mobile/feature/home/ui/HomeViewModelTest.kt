@@ -5,12 +5,18 @@ import com.wherever.mobile.feature.home.domain.Company
 import com.wherever.mobile.testing.FakeHomeRepository
 import com.wherever.mobile.testing.FakeLocationPermissionPreferences
 import com.wherever.mobile.testing.FakeLocationProvider
+import com.wherever.mobile.testing.FakePlanAssistantRepository
+import com.wherever.mobile.testing.FakePlansRepository
 import com.wherever.mobile.testing.FakeProfileRepository
 import com.wherever.mobile.testing.MainDispatcherRule
 import com.wherever.mobile.testing.NETWORK_FAILURE
 import com.wherever.mobile.testing.TEST_POINT
 import com.wherever.mobile.testing.sampleProfile
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneId
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -32,13 +38,16 @@ class HomeViewModelTest {
     private val profiles = FakeProfileRepository(sampleProfile(name = "Ana López"))
     private val location = FakeLocationProvider()
     private val prefs = FakeLocationPermissionPreferences()
+    private val assistant = FakePlanAssistantRepository()
+    private val plans = FakePlansRepository()
+    private val clock = Clock.fixed(Instant.parse("2026-11-18T18:00:00Z"), ZoneId.of("America/Mexico_City"))
 
     private companion object {
         val FALLBACK = GeoPoint(19.4326, -99.1332)
     }
 
     private fun TestScope.viewModel(): HomeViewModel {
-        val vm = HomeViewModel(home, profiles, location, prefs, FALLBACK)
+        val vm = HomeViewModel(home, profiles, location, prefs, FALLBACK, assistant, plans, clock)
         advanceUntilIdle()
         return vm
     }
@@ -65,6 +74,19 @@ class HomeViewModelTest {
         assertEquals(LocationPrompt.NONE, vm.state.value.locationPrompt)
         assertTrue(vm.state.value.usingLocation)
         assertEquals(1, vm.state.value.events.size)
+    }
+
+    @Test
+    fun `con ubicacion trae planes populares y copiar abre el plan de manana`() = runTest(mainDispatcher.dispatcher) {
+        location.granted = true
+        val vm = viewModel()
+        assertEquals(1, vm.state.value.popular.size)
+
+        vm.copyPopular(vm.state.value.popular.single())
+        advanceUntilIdle()
+
+        assertEquals("plan2", vm.openPlan.first())
+        assertEquals("2026-11-19", plans.clonedTo)
     }
 
     @Test

@@ -16,13 +16,20 @@ import com.wherever.mobile.feature.home.domain.HomeRepository
 import com.wherever.mobile.feature.home.domain.MoodChip
 import com.wherever.mobile.feature.home.domain.Weather
 import com.wherever.mobile.feature.places.domain.PlaceCard
+import com.wherever.mobile.feature.plans.domain.PlanAssistantRepository
+import com.wherever.mobile.feature.plans.domain.PlansRepository
+import com.wherever.mobile.feature.plans.domain.PopularPlan
 import com.wherever.mobile.feature.profile.domain.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.Clock
+import java.time.LocalDate
 import javax.inject.Inject
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -40,6 +47,7 @@ data class HomeUiState(
     val chips: List<MoodChip> = emptyList(),
     val recommendations: List<PlaceCard> = emptyList(),
     val events: List<Event> = emptyList(),
+    val popular: List<PopularPlan> = emptyList(),
     val company: Company? = null,
     val locationPrompt: LocationPrompt = LocationPrompt.NONE,
     val usingLocation: Boolean = false,
@@ -54,12 +62,19 @@ class HomeViewModel @Inject constructor(
     private val profiles: ProfileRepository,
     private val location: LocationProvider,
     private val permissionPrefs: LocationPermissionPreferences,
-    @FallbackPoint private val fallback: GeoPoint
+    @FallbackPoint private val fallback: GeoPoint,
+    private val assistant: PlanAssistantRepository,
+    private val plans: PlansRepository,
+    private val clock: Clock
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(HomeUiState())
     val state: StateFlow<HomeUiState> = mutableState.asStateFlow()
 
     private var loadJob: Job? = null
+    private val openPlanChannel = Channel<String>(Channel.BUFFERED)
+
+    /** Id del plan copiado (US-033): la pantalla lo abre. */
+    val openPlan = openPlanChannel.receiveAsFlow()
     private var dismissedIndex = 0
 
     init {
@@ -123,6 +138,16 @@ class HomeViewModel @Inject constructor(
 
     fun undoExpired() = mutableState.update { it.copy(dismissed = null) }
 
+    /** US-033: copia un plan popular para mañana con un toque. */
+    fun copyPopular(plan: PopularPlan) {
+        viewModelScope.launch {
+            when (val result = plans.clone(plan.id, LocalDate.now(clock).plusDays(1).toString())) {
+                is Result.Success -> openPlanChannel.send(result.data.id)
+                is Result.Failure -> mutableState.update { it.copy(error = result.error.toUiText()) }
+            }
+        }
+    }
+
     private fun updatePrompt() {
         val prompt = when {
             location.hasPermission() -> LocationPrompt.NONE
@@ -163,7 +188,8 @@ class HomeViewModel @Inject constructor(
                 }
             }
             val events = near?.let { (repository.events(it) as? Result.Success)?.data }.orEmpty()
-            mutableState.update { it.copy(events = events) }
+            val popular = near?.let { (assistant.popular(it) as? Result.Success)?.data }.orEmpty()
+            mutableState.update { it.copy(events = events, popular = popular) }
         }
     }
 }
