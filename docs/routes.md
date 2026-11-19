@@ -11,7 +11,10 @@
 | `RecoverRoute` | Recuperar contraseña | ninguno | release | nv-08 |
 | `CheckEmailRoute(mode, email)` | Revisa tu correo | ninguno | release | nv-08 |
 | `TastesRoute(fromSettings)` | Gustos | ninguno | release | nv-10 |
-| `HomeRoute` | Inicio provisional | ninguno | release | nv-17 |
+| `HomeRoute` | Inicio con recomendaciones, clima y eventos | ubicación aproximada (opcional, en contexto) | release | nv-47 |
+| `ExploreRoute(query, category)` | Explorar: búsqueda, filtros y recientes | ubicación aproximada (opcional) | release | nv-47 |
+| `PlaceRoute(id, origin)` | Ficha del lugar | ninguno | release | nv-47 |
+| `FavoritesRoute` | Mis favoritos | ninguno | release | nv-47 |
 | `ProfileRoute` | Perfil | ninguno | release | nv-14 |
 | `EditProfileRoute` | Editar perfil | ninguno | release | nv-14 |
 | `SettingsRoute` | Ajustes | ninguno | release | nv-13 |

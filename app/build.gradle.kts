@@ -44,10 +44,14 @@ android {
         applicationId = "com.wherever.mobile"
         minSdk = 26
         targetSdk = 36
-        versionCode = 2
-        versionName = "0.1.1"
+        versionCode = 3
+        versionName = "0.2.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "TERMS_VERSION", "\"2026-10\"")
+        // Zona de respaldo de Inicio sin ubicación: `GET /inicio` exige lat y lng (specs/nv-47 §3).
+        // Centro de CDMX, donde está la semilla del backend. No es un dato personal.
+        buildConfigField("double", "FALLBACK_LAT", "19.4326")
+        buildConfigField("double", "FALLBACK_LNG", "-99.1332")
     }
 
     // Firma de release solo por variables de entorno; sin ellas el APK sale sin firmar (specs/nv-41).
@@ -192,6 +196,8 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.datastore)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging)

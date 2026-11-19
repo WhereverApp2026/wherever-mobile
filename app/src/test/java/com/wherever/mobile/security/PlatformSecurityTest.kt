@@ -80,7 +80,14 @@ class PlatformSecurityTest {
     fun `permisos minimos`() {
         val nodes = manifest.getElementsByTagName("uses-permission")
         val permissions = (0 until nodes.length).map { (nodes.item(it) as Element).android("name") }
-        // POST_NOTIFICATIONS: push de specs/nv-46, pedido en contexto (docs/permissions-matrix.md).
-        assertEquals(listOf("android.permission.INTERNET", "android.permission.POST_NOTIFICATIONS"), permissions)
+        // POST_NOTIFICATIONS: push de specs/nv-46, pedido en contexto; nv-47: ubicación solo aproximada (US-004).
+        assertEquals(
+            listOf(
+                "android.permission.INTERNET",
+                "android.permission.POST_NOTIFICATIONS",
+                "android.permission.ACCESS_COARSE_LOCATION"
+            ),
+            permissions
+        )
     }
 }

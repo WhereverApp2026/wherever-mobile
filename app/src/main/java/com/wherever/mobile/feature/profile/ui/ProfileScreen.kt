@@ -36,6 +36,7 @@ import com.wherever.mobile.core.designsystem.InitialAvatar
 import com.wherever.mobile.core.designsystem.Ink
 import com.wherever.mobile.core.designsystem.LoadingState
 import com.wherever.mobile.core.designsystem.MainTab
+import com.wherever.mobile.core.designsystem.NavRow
 import com.wherever.mobile.core.designsystem.PhaseCrossfade
 import com.wherever.mobile.core.designsystem.ScreenPhase
 import com.wherever.mobile.core.designsystem.StatusPill
@@ -53,15 +54,16 @@ import com.wherever.mobile.feature.tastes.ui.tasteLabelRes
 /** 81_Perfil */
 @Composable
 fun ProfileRoute(
-    onHome: () -> Unit,
+    onTab: (MainTab) -> Unit,
     onEdit: () -> Unit,
+    onFavorites: () -> Unit,
     onSettings: () -> Unit,
     onVerifyEmail: (String) -> Unit,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     Scaffold(
-        bottomBar = { WhereverBottomBar(MainTab.PROFILE, onHome = onHome, onProfile = {}) }
+        bottomBar = { WhereverBottomBar(MainTab.PROFILE, onSelect = onTab) }
     ) { padding ->
         val profile = state.profile
         val modifier = Modifier.padding(bottom = padding.calculateBottomPadding())
@@ -78,6 +80,7 @@ fun ProfileRoute(
                     errorBanner = { state.error?.let { ErrorBanner(it.asString()) } },
                     onEdit = onEdit,
                     onSettings = onSettings,
+                    onFavorites = onFavorites,
                     onVerifyEmail = { onVerifyEmail(current.email) },
                     modifier = modifier
                 )
@@ -98,6 +101,7 @@ private fun ProfileContent(
     errorBanner: @Composable () -> Unit,
     onEdit: () -> Unit,
     onSettings: () -> Unit,
+    onFavorites: () -> Unit,
     onVerifyEmail: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -135,6 +139,9 @@ private fun ProfileContent(
         }
         errorBanner()
         Stats(profile)
+        SurfaceCard {
+            NavRow(stringResource(R.string.profile_favorites), onFavorites, tag = "profile_favorites")
+        }
         profile.tastes?.let { tastes ->
             Text(text = stringResource(R.string.profile_tastes), style = MaterialTheme.typography.titleMedium)
             ChipGroup {
@@ -203,6 +210,7 @@ private fun ProfilePreview() {
                 deleteAt = null,
                 version = 1
             ),
+            {},
             {},
             {},
             {},
