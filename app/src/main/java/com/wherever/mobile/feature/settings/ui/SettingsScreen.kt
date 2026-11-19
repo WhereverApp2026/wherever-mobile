@@ -40,6 +40,8 @@ data class SettingsNavigation(
     val onPersonalData: () -> Unit,
     val onTastes: () -> Unit,
     val onSessions: () -> Unit,
+    val onChangeEmail: () -> Unit,
+    val onChangePassword: () -> Unit,
     val onPrivacy: () -> Unit,
     val onLoggedOut: () -> Unit
 )
@@ -87,6 +89,13 @@ private fun SettingsContent(
         SectionLabel(stringResource(R.string.settings_section_account))
         SurfaceCard {
             NavRow(stringResource(R.string.settings_personal_data), navigation.onPersonalData, value = profile.name)
+            NavRow(
+                stringResource(R.string.settings_email),
+                navigation.onChangeEmail,
+                value = profile.email,
+                tag = "settings_email"
+            )
+            NavRow(stringResource(R.string.settings_password), navigation.onChangePassword, tag = "settings_password")
             NavRow(stringResource(R.string.settings_sessions), navigation.onSessions, tag = "settings_sessions")
         }
         SectionLabel(stringResource(R.string.settings_section_preferences))

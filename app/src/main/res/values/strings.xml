@@ -10,6 +10,7 @@
     <string name="common_accept">Aceptar</string>
     <string name="common_save">Guardar</string>
     <string name="common_continue">Continuar</string>
+    <string name="common_done">Listo</string>
     <string name="common_wait">Espera %1$s</string>
     <string name="common_char_count">%1$d / %2$d</string>
     <string name="tab_home">Inicio</string>
@@ -172,6 +173,8 @@
     <!-- 85_Ajustes -->
     <string name="settings_title">Ajustes</string>
     <string name="settings_section_account">Cuenta</string>
+    <string name="settings_email">Correo</string>
+    <string name="settings_password">Contraseña</string>
     <string name="settings_section_preferences">Preferencias</string>
     <string name="settings_section_theme">Tema</string>
     <string name="settings_section_privacy">Privacidad</string>
@@ -452,4 +455,39 @@
     <string name="plans_past">Pasados</string>
     <string name="plans_empty">Aquí aparecerán tus planes.</string>
     <string name="plans_row_detail">%1$s · %2$d paradas · $%3$d por persona</string>
+
+    <!-- Cuenta: contraseña, correo y mis datos (nv-51) -->
+    <string name="account_password_title">Cambiar contraseña</string>
+    <string name="account_password_current">Contraseña actual</string>
+    <string name="account_password_new">Contraseña nueva</string>
+    <string name="account_password_confirm">Repite la contraseña nueva</string>
+    <string name="account_password_submit">Cambiar contraseña</string>
+    <string name="account_password_mismatch">Las contraseñas no coinciden</string>
+    <string name="account_password_same">La contraseña nueva debe ser distinta de la actual</string>
+    <string name="account_password_sessions_note">Al cambiarla cerramos tu sesión en los demás dispositivos. Aquí sigues dentro.</string>
+    <string name="account_password_done">Listo, cambiamos tu contraseña y cerramos tus otras sesiones.</string>
+    <string name="account_wrong_password">La contraseña no es correcta</string>
+    <string name="account_email_title">Cambiar correo</string>
+    <string name="account_email_current">Tu correo actual es %1$s</string>
+    <string name="account_email_new">Correo nuevo</string>
+    <string name="account_email_password_why">Por seguridad, confirma con tu contraseña</string>
+    <string name="account_email_submit">Cambiar correo</string>
+    <string name="account_email_same">Ese ya es tu correo</string>
+    <string name="account_email_taken">Ese correo ya tiene una cuenta</string>
+    <string name="account_email_done">Te mandamos un enlace a %1$s. Ábrelo para verificar tu correo nuevo.</string>
+    <string name="privacy_my_data">Mis datos</string>
+    <string name="my_data_title">Mis datos</string>
+    <string name="my_data_export_title">Descargar mis datos</string>
+    <string name="my_data_export_detail">Preparamos una copia con tu perfil, gustos, planes y actividad. Te llega un enlace por correo que dura 24 horas.</string>
+    <string name="my_data_export_action">Pedir mi copia</string>
+    <string name="my_data_export_sent">Listo. En cuanto esté tu copia te mandamos el enlace por correo.</string>
+    <string name="my_data_export_once_a_day">Ya pediste una copia hoy. Puedes pedir otra mañana.</string>
+    <string name="my_data_history_title">Borrar historial</string>
+    <string name="my_data_history_detail">Borra tus búsquedas, lugares vistos y lo que la app aprendió de ti. Tu cuenta, planes y favoritos se quedan.</string>
+    <string name="my_data_history_action">Borrar historial</string>
+    <string name="my_data_history_clearing">Borrando…</string>
+    <string name="my_data_history_confirm_title">¿Borrar tu historial?</string>
+    <string name="my_data_history_confirm_message">No se puede deshacer. Tus recomendaciones empezarán desde cero.</string>
+    <string name="my_data_history_confirm">Borrar</string>
+    <string name="my_data_history_cleared">Borramos tu historial.</string>
 </resources>

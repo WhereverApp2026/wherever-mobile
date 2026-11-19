@@ -10,6 +10,7 @@ import com.wherever.mobile.core.designsystem.ConfirmDialog
 import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.LoadingState
+import com.wherever.mobile.core.designsystem.NavRow
 import com.wherever.mobile.core.designsystem.PhaseCrossfade
 import com.wherever.mobile.core.designsystem.ScreenPhase
 import com.wherever.mobile.core.designsystem.SurfaceCard
@@ -20,14 +21,14 @@ import com.wherever.mobile.feature.profile.domain.PrivacyPatch
 
 /** 28_PrivSocial con los interruptores que sí existen en la API (duda D04). */
 @Composable
-fun PrivacyRoute(onBack: () -> Unit, viewModel: PrivacyViewModel = hiltViewModel()) {
+fun PrivacyRoute(onBack: () -> Unit, onMyData: () -> Unit, viewModel: PrivacyViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     PhaseCrossfade(if (state.privacy == null) ScreenPhase.LOADING else ScreenPhase.CONTENT) { phase ->
         val privacy = state.privacy
         if (phase == ScreenPhase.LOADING || privacy == null) {
             LoadingState()
         } else {
-            PrivacyContent(state, privacy, viewModel, onBack)
+            PrivacyContent(state, privacy, viewModel, onBack, onMyData)
         }
     }
     if (state.confirmSensitiveOff) {
@@ -42,7 +43,13 @@ fun PrivacyRoute(onBack: () -> Unit, viewModel: PrivacyViewModel = hiltViewModel
 }
 
 @Composable
-private fun PrivacyContent(state: PrivacyUiState, privacy: Privacy, viewModel: PrivacyViewModel, onBack: () -> Unit) {
+private fun PrivacyContent(
+    state: PrivacyUiState,
+    privacy: Privacy,
+    viewModel: PrivacyViewModel,
+    onBack: () -> Unit,
+    onMyData: () -> Unit
+) {
     val enabled = !state.saving
     FormScreen {
         TopTitleRow(stringResource(R.string.privacy_title), onBack)
@@ -93,6 +100,9 @@ private fun PrivacyContent(state: PrivacyUiState, privacy: Privacy, viewModel: P
                 enabled = enabled,
                 tag = "privacy_sensitive"
             )
+        }
+        SurfaceCard {
+            NavRow(stringResource(R.string.privacy_my_data), onMyData, tag = "privacy_my_data")
         }
     }
 }

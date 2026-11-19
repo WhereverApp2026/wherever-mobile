@@ -23,6 +23,9 @@
 | `SettingsRoute` | Ajustes | ninguno | release | nv-13 |
 | `SessionsRoute` | Sesiones abiertas | ninguno | release | nv-13 |
 | `PrivacyRoute` | Privacidad | ninguno | release | nv-15 |
+| `ChangePasswordRoute` | Cambiar contraseña | ninguno | release | nv-51 |
+| `ChangeEmailRoute` | Cambiar correo | ninguno | release | nv-51 |
+| `MyDataRoute` | Mis datos: descargar copia y borrar historial | ninguno | release | nv-51 |
 | `DeleteAccountRoute` | Eliminar cuenta | ninguno | release | nv-15 |
 | `DeletionPendingRoute` | Eliminación pendiente | ninguno | release | nv-15 |
 | `debug/conexion` | Estado de conexión con la API (`/health`, `/ready`). Sin implementar | ninguno | solo debug | nv-01 |

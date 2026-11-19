@@ -43,6 +43,15 @@ data object SessionsRoute
 data object PrivacyRoute
 
 @Serializable
+data object ChangePasswordRoute
+
+@Serializable
+data object ChangeEmailRoute
+
+@Serializable
+data object MyDataRoute
+
+@Serializable
 data object DeleteAccountRoute
 
 @Serializable

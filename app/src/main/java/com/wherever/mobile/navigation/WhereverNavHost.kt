@@ -15,6 +15,9 @@ import com.wherever.mobile.core.designsystem.MainTab
 import com.wherever.mobile.core.designsystem.NavMotion
 import com.wherever.mobile.core.designsystem.SystemBarIcons
 import com.wherever.mobile.core.notifications.PushDestination
+import com.wherever.mobile.feature.account.ui.ChangeEmailRoute as ChangeEmailScreen
+import com.wherever.mobile.feature.account.ui.ChangePasswordRoute as ChangePasswordScreen
+import com.wherever.mobile.feature.account.ui.MyDataRoute as MyDataScreen
 import com.wherever.mobile.feature.auth.domain.PostAuthDestination
 import com.wherever.mobile.feature.auth.ui.CheckEmailMode
 import com.wherever.mobile.feature.auth.ui.CheckEmailRoute as CheckEmailScreen
@@ -206,6 +209,8 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>, pushes
                     onPersonalData = { navController.navigateFrom(e, EditProfileRoute) },
                     onTastes = { navController.navigateFrom(e, TastesRoute(fromSettings = true)) },
                     onSessions = { navController.navigateFrom(e, SessionsRoute) },
+                    onChangeEmail = { navController.navigateFrom(e, ChangeEmailRoute) },
+                    onChangePassword = { navController.navigateFrom(e, ChangePasswordRoute) },
                     onPrivacy = { navController.navigateFrom(e, PrivacyRoute) },
                     onLoggedOut = { navController.navigateOnResult(e, LoginRoute) { clearStack(navController) } }
                 )
@@ -217,7 +222,12 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>, pushes
                 onAllClosed = { navController.navigateOnResult(e, LoginRoute) { clearStack(navController) } }
             )
         }
-        composable<PrivacyRoute> { e -> PrivacyScreen(onBack = { navController.popFrom(e) }) }
+        composable<PrivacyRoute> { e ->
+            PrivacyScreen(onBack = { navController.popFrom(e) }, onMyData = { navController.navigateFrom(e, MyDataRoute) })
+        }
+        composable<ChangePasswordRoute> { e -> ChangePasswordScreen(onBack = { navController.popFrom(e) }) }
+        composable<ChangeEmailRoute> { e -> ChangeEmailScreen(onBack = { navController.popFrom(e) }) }
+        composable<MyDataRoute> { e -> MyDataScreen(onBack = { navController.popFrom(e) }) }
         composable<DeleteAccountRoute> { e ->
             DeleteAccountScreen(
                 onBack = { navController.popFrom(e) },
