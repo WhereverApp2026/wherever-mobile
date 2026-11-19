@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
+import androidx.core.graphics.scale
 import androidx.core.net.toUri
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.ByteArrayOutputStream
@@ -68,6 +69,6 @@ class AndroidImageCompressor @Inject constructor(@ApplicationContext private val
         val side = max(width, height)
         if (side <= MAX_SIDE) return this
         val ratio = MAX_SIDE.toFloat() / side
-        return Bitmap.createScaledBitmap(this, (width * ratio).toInt(), (height * ratio).toInt(), true)
+        return scale((width * ratio).toInt(), (height * ratio).toInt())
     }
 }

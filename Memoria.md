@@ -195,6 +195,15 @@
 - A evitar: `TaskStop` de una cadena de compuertas no mata el bucle `for` ni Gradle: quedan procesos `java` del JDK 17; cerrar esos PID uno por uno.
 - A recordar: varias ramas a la vez con `git worktree`; solo una compila a la vez.
 
+## Integración en main y cuenta (2026-11-19)
+- Estado: a pedido de Jorge ("ve subiendo todo a main"), se integraron en `main` nv-46 (push), nv-49 (auth en el teléfono), nv-47 (Inicio), nv-50 (foto de perfil) y nv-48 (plan con IA); los PR #22, #24 y #25 se cerraron solos. Versiones: nv-47 → 3 (0.2.0), nv-50 → 4 (0.2.1), nv-48 → 5 (0.3.0), nv-51 → 6 (0.4.0).
+- Estado: nv-51 (`feat/cuenta-seguridad`): cambiar contraseña y correo, Mis datos (exportar y borrar historial). 347 pruebas, ktlint, detekt, lint, cobertura y scripts en verde con JDK 17.
+- Decisión (Jorge, 2026-11-19): push directo a `main`, cada cosa en cuanto pase sus compuertas. Revierte la del 2026-11-13 (PR y merge de Jorge). Porqué: el equipo esperaba los cambios.
+- A evitar: confiar en `checklists/gates.md` de una rama WIP. nv-48 y nv-50 decían "compuertas en verde" y en la CI de `main` fallaron detekt (`MagicNumber`, `TooManyFunctions`, `LongParameterList`, `ReturnCount`) y lint (`UseKtx`, `Bitmap.scale`). Correr las compuertas antes de subir.
+- A evitar: constantes que se llamen `*_PASSWORD = "..."`: `SourceSecurityTest` las toma por secreto.
+- A evitar: el 401 de "contraseña incorrecta" en `PUT /auth/password` y `PUT /usuarios/yo/correo` pasa por el `Authenticator`: renueva, repite y el segundo 401 llega a la app sin cerrar la sesión. Tratarlo como error de campo, no como sesión vencida.
+- A recordar: compilar desde cero tarda ~27 min en este equipo; trabajar en el worktree principal para aprovechar la compilación incremental (~4 min). Los daemons de Gradle de tareas detenidas quedan vivos: `./gradlew --stop`.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

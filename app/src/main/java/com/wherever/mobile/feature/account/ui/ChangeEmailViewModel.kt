@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 private const val FIELD_EMAIL = "correo_nuevo"
-private const val FIELD_PASSWORD = "password"
+private const val PASSWORD_FIELD_KEY = "password"
 
 data class ChangeEmailUiState(
     val currentEmail: String = "",
@@ -99,9 +99,9 @@ class ChangeEmailViewModel @Inject constructor(
                 fields.isNotEmpty() -> it.copy(
                     submitting = false,
                     emailError = fields[FIELD_EMAIL],
-                    passwordError = fields[FIELD_PASSWORD],
+                    passwordError = fields[PASSWORD_FIELD_KEY],
                     error = error.toUiText().takeUnless {
-                        fields.keys.all { k -> k == FIELD_EMAIL || k == FIELD_PASSWORD }
+                        fields.keys.all { k -> k == FIELD_EMAIL || k == PASSWORD_FIELD_KEY }
                     }
                 )
                 else -> it.copy(submitting = false, error = error.toUiText())
