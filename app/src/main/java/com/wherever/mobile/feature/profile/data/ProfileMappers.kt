@@ -93,6 +93,7 @@ fun PreferencesPatch.toDto(): PreferencesPatchDto {
     return PreferencesPatchDto(
         theme = theme,
         mobility = mobility,
+        quietHours = quietHours?.let { QuietHoursDto(it.from, it.to) },
         notifications = if (hasNotifications) NotificationsPatchDto(coupons, groups, reviews, promotions) else null
     )
 }

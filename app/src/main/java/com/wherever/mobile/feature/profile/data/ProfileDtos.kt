@@ -91,6 +91,7 @@ data class NotificationsPatchDto(
 data class PreferencesPatchDto(
     @SerialName("tema") val theme: String? = null,
     @SerialName("movilidad_default") val mobility: String? = null,
+    @SerialName("horario_silencioso") val quietHours: QuietHoursDto? = null,
     @SerialName("notificaciones") val notifications: NotificationsPatchDto? = null
 )
 

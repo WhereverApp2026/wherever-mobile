@@ -490,4 +490,28 @@
     <string name="my_data_history_confirm_message">No se puede deshacer. Tus recomendaciones empezarán desde cero.</string>
     <string name="my_data_history_confirm">Borrar</string>
     <string name="my_data_history_cleared">Borramos tu historial.</string>
+
+    <!-- Avisos y horario silencioso (nv-52) -->
+    <string name="notifications_title">Avisos</string>
+    <string name="notifications_mark_all">Marcar leídas</string>
+    <string name="notifications_filter_all">Todo</string>
+    <string name="notifications_filter_social">Social</string>
+    <string name="notifications_filter_plans">Planes</string>
+    <string name="notifications_empty">Aún no tienes avisos. Aquí verás solicitudes de amistad, invitaciones a planes y votaciones.</string>
+    <string name="notifications_more">Ver más</string>
+    <string name="notifications_delete">Borrar aviso</string>
+    <string name="notification_friend_request">Alguien quiere ser tu amigo en Wherever</string>
+    <string name="notification_friend_accepted">Aceptaron tu solicitud de amistad</string>
+    <string name="notification_plan_invitation">Te invitaron a un plan</string>
+    <string name="notification_vote_opened">Hay una votación abierta en tu grupo</string>
+    <string name="notification_vote_closed">Terminó una votación de tu grupo</string>
+    <string name="notification_other">Tienes un aviso nuevo</string>
+    <plurals name="home_notifications_unread">
+        <item quantity="one">Avisos: %1$d sin leer</item>
+        <item quantity="other">Avisos: %1$d sin leer</item>
+    </plurals>
+    <string name="settings_quiet_hours">Horario silencioso</string>
+    <string name="settings_quiet_detail">En este horario no te mandamos push, salvo los de tus reservaciones.</string>
+    <string name="settings_quiet_off">Apagado</string>
+    <string name="settings_quiet_range">De %1$s a %2$s</string>
 </resources>

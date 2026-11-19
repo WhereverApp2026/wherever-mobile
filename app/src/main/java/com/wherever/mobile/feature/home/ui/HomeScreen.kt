@@ -26,9 +26,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -50,6 +54,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
@@ -68,6 +73,7 @@ import com.wherever.mobile.core.designsystem.MainTab
 import com.wherever.mobile.core.designsystem.RouteBlue
 import com.wherever.mobile.core.designsystem.ScreenPadding
 import com.wherever.mobile.core.designsystem.SelectChip
+import com.wherever.mobile.core.designsystem.Sunset
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.WhereverBottomBar
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
@@ -75,6 +81,7 @@ import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.core.ui.formatDateTime
 import com.wherever.mobile.feature.home.domain.Company
 import com.wherever.mobile.feature.home.domain.Event
+import com.wherever.mobile.feature.notifications.ui.UnreadBadgeViewModel
 import com.wherever.mobile.feature.places.domain.PlaceCard
 import com.wherever.mobile.feature.places.ui.PlaceCardItem
 import com.wherever.mobile.feature.places.ui.PlaceCardSkeleton
@@ -89,19 +96,26 @@ data class HomeNavigation(
     val onSearch: () -> Unit,
     val onCategory: (String) -> Unit,
     val onPlace: (String) -> Unit,
-    val onPlan: (String) -> Unit
+    val onPlan: (String) -> Unit,
+    val onNotifications: () -> Unit
 )
 
 /** 10_Inicio. */
 @Composable
-fun HomeRouteScreen(navigation: HomeNavigation, viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeRouteScreen(
+    navigation: HomeNavigation,
+    viewModel: HomeViewModel = hiltViewModel(),
+    badge: UnreadBadgeViewModel = hiltViewModel()
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val unread by badge.count.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     val undoMessage = stringResource(R.string.home_not_interested_done)
     val undoLabel = stringResource(R.string.home_undo)
     LaunchedEffect(viewModel) { viewModel.openPlan.collect(navigation.onPlan) }
     LifecycleResumeEffect(viewModel) {
         viewModel.onResume()
+        badge.refresh()
         onPauseOrDispose { }
     }
     LaunchedEffect(state.dismissed) {
@@ -119,6 +133,7 @@ fun HomeRouteScreen(navigation: HomeNavigation, viewModel: HomeViewModel = hiltV
     ) { padding ->
         HomeContent(
             state = state,
+            unread = unread,
             navigation = navigation,
             actions = HomeActions(
                 onRefresh = viewModel::refresh,
@@ -144,7 +159,13 @@ data class HomeActions(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HomeContent(state: HomeUiState, navigation: HomeNavigation, actions: HomeActions, modifier: Modifier) {
+private fun HomeContent(
+    state: HomeUiState,
+    unread: Int,
+    navigation: HomeNavigation,
+    actions: HomeActions,
+    modifier: Modifier
+) {
     PullToRefreshBox(
         isRefreshing = state.refreshing,
         onRefresh = actions.onRefresh,
@@ -155,7 +176,7 @@ private fun HomeContent(state: HomeUiState, navigation: HomeNavigation, actions:
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxSize().testTag("home_list")
         ) {
-            item { Header(state, navigation.onSearch) }
+            item { Header(state, unread, navigation) }
             item { CompanyChips(state.company, actions.onCompany) }
             if (state.chips.isNotEmpty()) item { MoodChips(state, navigation.onCategory) }
             if (state.locationPrompt != LocationPrompt.NONE) item { LocationCard(state.locationPrompt, actions) }
@@ -234,7 +255,7 @@ private fun HomeContent(state: HomeUiState, navigation: HomeNavigation, actions:
 }
 
 @Composable
-private fun Header(state: HomeUiState, onSearch: () -> Unit) {
+private fun Header(state: HomeUiState, unread: Int, navigation: HomeNavigation) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -259,6 +280,7 @@ private fun Header(state: HomeUiState, onSearch: () -> Unit) {
                         )
                     }
                 }
+                NotificationBell(unread, navigation.onNotifications)
             }
             Text(
                 text = state.firstName?.let { stringResource(R.string.home_greeting_name, it) }
@@ -281,7 +303,7 @@ private fun Header(state: HomeUiState, onSearch: () -> Unit) {
                     style = MaterialTheme.typography.bodySmall
                 )
             }
-            SearchBox(onSearch)
+            SearchBox(navigation.onSearch)
         }
     }
 }
@@ -446,3 +468,28 @@ private fun EventCard(event: Event) {
         }
     }
 }
+
+/** Campana de avisos con el número de no leídos (specs/nv-52). */
+@Composable
+private fun NotificationBell(unread: Int, onClick: () -> Unit) {
+    val description = if (unread > 0) {
+        pluralStringResource(R.plurals.home_notifications_unread, unread, unread)
+    } else {
+        stringResource(R.string.notifications_title)
+    }
+    IconButton(onClick = onClick, modifier = Modifier.testTag("home_notifications")) {
+        BadgedBox(
+            badge = {
+                if (unread > 0) {
+                    Badge(containerColor = Sunset, contentColor = Color.White) {
+                        Text(if (unread > MAX_BADGE) "$MAX_BADGE+" else unread.toString())
+                    }
+                }
+            }
+        ) {
+            Icon(Icons.Filled.Notifications, contentDescription = description, tint = Color.White)
+        }
+    }
+}
+
+private const val MAX_BADGE = 99

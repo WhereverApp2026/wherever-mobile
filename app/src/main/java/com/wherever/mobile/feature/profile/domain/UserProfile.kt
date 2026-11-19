@@ -64,8 +64,20 @@ data class PreferencesPatch(
     val coupons: Boolean? = null,
     val groups: Boolean? = null,
     val reviews: Boolean? = null,
-    val promotions: Boolean? = null
+    val promotions: Boolean? = null,
+    /** Horario silencioso "HH:MM"; desde = hasta lo apaga (backend `inQuietHours`). */
+    val quietHours: QuietHours? = null
 )
+
+data class QuietHours(val from: String, val to: String) {
+    val enabled: Boolean
+        get() = from != to
+
+    companion object {
+        /** La API no acepta borrar el horario; "00:00" a "00:00" nunca silencia. */
+        val OFF = QuietHours("00:00", "00:00")
+    }
+}
 
 data class PrivacyPatch(
     val location: Boolean? = null,

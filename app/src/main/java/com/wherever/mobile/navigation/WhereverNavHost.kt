@@ -26,6 +26,7 @@ import com.wherever.mobile.feature.auth.ui.RecoverRoute as RecoverScreen
 import com.wherever.mobile.feature.auth.ui.RegisterRoute as RegisterScreen
 import com.wherever.mobile.feature.auth.ui.WelcomeScreen
 import com.wherever.mobile.feature.home.ui.HomeNavigation
+import com.wherever.mobile.feature.notifications.ui.NotificationsRoute as NotificationsScreen
 import com.wherever.mobile.feature.home.ui.HomeRouteScreen
 import com.wherever.mobile.feature.places.ui.ExploreRoute as ExploreScreen
 import com.wherever.mobile.feature.places.ui.FavoritesRoute as FavoritesScreen
@@ -145,7 +146,8 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>, pushes
                     onSearch = { navController.navigateFrom(e, CreatePlanRoute()) },
                     onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
                     onCategory = { navController.navigateFrom(e, ExploreRoute(category = it)) },
-                    onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "inicio")) }
+                    onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "inicio")) },
+                    onNotifications = { navController.navigateFrom(e, NotificationsRoute) }
                 )
             )
         }
@@ -181,6 +183,15 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>, pushes
             FavoritesScreen(
                 onBack = { navController.popFrom(e) },
                 onPlace = { navController.navigateFrom(e, PlaceRoute(it)) }
+            )
+        }
+        composable<NotificationsRoute> { e ->
+            NotificationsScreen(
+                onBack = { navController.popFrom(e) },
+                onOpen = { push ->
+                    val route = push.route()
+                    if (route != NotificationsRoute) navController.navigateFrom(e, route)
+                }
             )
         }
         composable<ProfileRoute> { e ->

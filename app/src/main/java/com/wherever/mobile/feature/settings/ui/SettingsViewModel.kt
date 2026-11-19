@@ -8,6 +8,7 @@ import com.wherever.mobile.core.ui.toUiText
 import com.wherever.mobile.feature.auth.domain.AuthRepository
 import com.wherever.mobile.feature.profile.domain.PreferencesPatch
 import com.wherever.mobile.feature.profile.domain.PrivacyPatch
+import com.wherever.mobile.feature.profile.domain.QuietHours
 import com.wherever.mobile.feature.profile.domain.ProfileRepository
 import com.wherever.mobile.feature.profile.domain.UserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -55,6 +56,8 @@ class SettingsViewModel @Inject constructor(
     fun setReviews(enabled: Boolean) = patchPreferences(PreferencesPatch(reviews = enabled))
 
     fun setPromotions(enabled: Boolean) = patchPreferences(PreferencesPatch(promotions = enabled))
+
+    fun setQuietHours(hours: QuietHours) = patchPreferences(PreferencesPatch(quietHours = hours))
 
     fun setUseLocation(enabled: Boolean) = save { profileRepository.updatePrivacy(PrivacyPatch(location = enabled)) }
 

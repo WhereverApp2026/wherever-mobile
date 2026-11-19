@@ -78,3 +78,6 @@ data class PlanRoute(val id: String)
 
 @Serializable
 data object MyPlansRoute
+
+@Serializable
+data object NotificationsRoute
