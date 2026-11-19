@@ -222,6 +222,8 @@
 - A evitar: el login de staging limita a ~10 por minuto (429); en scripts de prueba guardar el token un rato. No bloquear el teléfono de Jorge con `keyevent 26`: tiene PIN y adb no lo desbloquea.
 - A evitar: rutas con parámetros `token`/`password`: `SourceSecurityTest` lo prohíbe; guardar el token en memoria (`PendingEmailLink`).
 
+- Pausa (2026-11-19, tarde): `main` = `7791a86`, CI verde. Búsqueda (nv-19) quedó en la rama `wip/pausa` con pruebas unitarias en verde y sin lint/release ni prueba de Personas en el teléfono. Dónde seguir: `docs/pendientes.md`.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).
