@@ -1,3 +1,21 @@
+# Revisión para Jorge — 2026-11-18 (tarde): foto de perfil (nv-50)
+
+> Rama `feat/fotos-perfil`, sobre `feat/inicio-recomendaciones` (PR #24), versión 0.2.1. Spec `specs/nv-50` sin firmar.
+
+- **Qué encontré:** no existía ninguna pantalla de fotos. El avatar era solo la inicial; la API de imágenes (backend nv-45) ya funciona en staging.
+- **Qué cambia:** en Perfil, toca tu avatar → "Elegir de la galería" (selector del sistema, sin permiso de fotos) o "Tomar foto" (la cámara del teléfono, sin permiso de cámara). La app la comprime (JPEG, máx. 1600 px), la sube a S3 con el formulario firmado, la confirma y la guarda en tu perfil. Mientras sube ves la foto con un indicador. Si el backend la deja en revisión o la rechaza, te lo dice.
+- **Probado en tu teléfono (17:45):** galería y cámara, de punta a punta (subida 201 → S3 204 → confirmar 200 → perfil 200), y la foto aparece en Perfil. Para no subir fotos tuyas, usé una imagen de prueba copiada al teléfono (`Pictures/wherever_prueba.jpg`, puedes borrarla). La foto de cámara la borré del servidor al terminar.
+- **Fotos de lugares y reseñas:** en la API, las fotos del lugar las sube solo el dueño (modo negocio) y las de reseñas van con el check-in. Las dos usarán el mismo `PhotoRepository` cuando llegue su parte.
+- **Room 3:** se agrega la columna de la foto con migración; la sesión y el perfil se conservan al actualizar.
+
+**Para probar en el celular:**
+- [ ] Perfil → toca el avatar → "Elegir de la galería" → elige una foto: aparece con indicador y luego queda.
+- [ ] "Tomar foto" → toma una y acepta: se sube y aparece.
+- [ ] Cierra y abre la app: la foto sigue.
+- [ ] Cancela la galería o la cámara: no pasa nada.
+
+---
+
 # Revisión para Jorge — 2026-11-18: avance a más del 50 %
 
 > Trabajo de corrido, sin preguntas. Lo ambiguo se decidió y queda aquí. Avance en `docs/avance.md`.
