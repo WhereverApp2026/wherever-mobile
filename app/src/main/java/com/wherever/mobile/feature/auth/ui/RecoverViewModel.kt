@@ -6,6 +6,7 @@ import com.wherever.mobile.R
 import com.wherever.mobile.core.common.AppError
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.common.isValidEmail
+import com.wherever.mobile.core.common.withoutSpaces
 import com.wherever.mobile.core.ui.DEFAULT_RETRY_SECONDS
 import com.wherever.mobile.core.ui.UiText
 import com.wherever.mobile.core.ui.fieldErrors
@@ -46,7 +47,9 @@ class RecoverViewModel @Inject constructor(private val repository: AuthRepositor
 
     private var cooldown: Job? = null
 
-    fun onEmailChange(value: String) = mutableState.update { it.copy(email = value, emailError = null, error = null) }
+    fun onEmailChange(value: String) = mutableState.update {
+        it.copy(email = value.withoutSpaces(), emailError = null, error = null)
+    }
 
     fun onEmailBlur() = mutableState.update {
         val invalid = it.email.isNotBlank() && !isValidEmail(it.email)

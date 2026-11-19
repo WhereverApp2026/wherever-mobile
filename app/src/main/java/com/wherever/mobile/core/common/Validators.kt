@@ -10,3 +10,6 @@ fun isValidEmail(email: String): Boolean = EMAIL_REGEX.matches(email.trim())
 fun isValidPassword(password: String): Boolean = password.length in PASSWORD_MIN..PASSWORD_MAX &&
     password.any(Char::isLetter) &&
     password.any(Char::isDigit)
+
+/** Un correo nunca lleva espacios; el autocorrector del teclado a veces los mete (specs/nv-49). */
+fun String.withoutSpaces(): String = filterNot { it.isWhitespace() }

@@ -169,6 +169,15 @@
 - Decisión: la baja del teléfono va antes de `auth/logout`. Porqué: el `DELETE` necesita el JWT, que el logout revoca.
 - A evitar: valores por defecto en los DTO que deben viajar siempre; `ApiJson` no escribe defaults y el campo desaparece (pasó con `plataforma`).
 
+## Autenticación en el teléfono (2026-11-18, tarde)
+- Estado: rama `fix/auth-telefono` desde `main`, `specs/nv-49`, versión 2 (0.1.1). Reproducido en el teléfono de Jorge con logcat: login, registro, logout y recuperar llegan bien a la API; fallaban la presentación (campos y error ocultos en horizontal o con teclado) y un DNS momentáneo. El correo de recuperación no sale porque staging no tiene SMTP (backend).
+- Decisión: `FormScreen` pasa el pie al scroll bajo 520 dp de alto, en vez de bloquear la rotación. Porqué: la app publicada ya gira y bloquearla es una regresión para quien la usa así.
+- Decisión: `RetryingDns` reintenta una vez solo `UnknownHostException`. Porqué: la petición no salió, así que no duplica un `POST`.
+- A evitar: escribir con `adb shell input` sin esperar: el teclado mueve el diseño y el texto cae en otro campo. Usar Tab (`keyevent 61`) entre campos y `uiautomator dump` con `MSYS_NO_PATHCONV=1` en Git Bash.
+- A recordar: en MIUI `settings put system user_rotation` no gira la app; los casos de poca altura se prueban con `FormScreenCompactTest` o con el teclado abierto.
+- A recordar: una build de depuración con `versionCode` mayor se reemplaza con `adb install -r -d`.
+- A evitar: `scripts/check_coverage.sh` sin reporte previo lanza Gradle con el JDK del sistema y daemon; correr antes `koverVerifyDebug` con `gate.sh`.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

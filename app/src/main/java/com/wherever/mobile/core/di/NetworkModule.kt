@@ -7,6 +7,7 @@ import com.wherever.mobile.core.network.AuthHeaderInterceptor
 import com.wherever.mobile.core.network.RedactedLoggingInterceptor
 import com.wherever.mobile.core.network.RefreshApi
 import com.wherever.mobile.core.network.RequestIdInterceptor
+import com.wherever.mobile.core.network.RetryingDns
 import com.wherever.mobile.core.network.SessionEvents
 import com.wherever.mobile.core.network.TokenRefreshAuthenticator
 import com.wherever.mobile.core.security.TokenStore
@@ -33,6 +34,7 @@ object NetworkModule {
         .connectTimeout(CONNECT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .readTimeout(IO_TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .writeTimeout(IO_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        .dns(RetryingDns())
 
     private fun OkHttpClient.Builder.debugLogging(): OkHttpClient.Builder = apply {
         if (BuildConfig.DEBUG) addInterceptor(RedactedLoggingInterceptor { Log.d(LOG_TAG, it) })

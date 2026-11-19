@@ -7,6 +7,7 @@ import com.wherever.mobile.core.common.AppError
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.common.isValidEmail
 import com.wherever.mobile.core.common.isValidPassword
+import com.wherever.mobile.core.common.withoutSpaces
 import com.wherever.mobile.core.ui.DEFAULT_RETRY_SECONDS
 import com.wherever.mobile.core.ui.UiText
 import com.wherever.mobile.core.ui.fieldErrors
@@ -81,7 +82,7 @@ class RegisterViewModel @Inject constructor(private val repository: AuthReposito
 
     fun onEmailChange(value: String) {
         emailCheckJob?.cancel()
-        change { copy(email = value, emailError = null, emailCheck = EmailCheck.UNKNOWN) }
+        change { copy(email = value.withoutSpaces(), emailError = null, emailCheck = EmailCheck.UNKNOWN) }
     }
 
     fun onPasswordChange(value: String) = change {
