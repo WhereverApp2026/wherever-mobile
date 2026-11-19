@@ -40,6 +40,15 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- Enlaces de los correos de la API (nv-08, D11). El token va en el fragmento. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="wherever" />
+                <data android:host="restablecer" />
+                <data android:host="verificar" />
+            </intent-filter>
         </activity>
 
         <!-- FCM: no exportado; solo Google Play services le entrega mensajes (specs/nv-46). -->

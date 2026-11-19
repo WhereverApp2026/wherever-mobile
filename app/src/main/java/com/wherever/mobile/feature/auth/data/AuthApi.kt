@@ -41,6 +41,16 @@ data class RegisterRequestDto(
 data class RecoverRequestDto(@SerialName("correo") val email: String)
 
 @Serializable
+data class ResetPasswordRequestDto(
+    @SerialName("token") val token: String,
+    @SerialName("password_nuevo") val newPassword: String,
+    @SerialName("dispositivo") val device: DeviceDto
+)
+
+@Serializable
+data class EmailTokenRequestDto(@SerialName("token") val token: String)
+
+@Serializable
 data class EmailAvailabilityDto(@SerialName("disponible") val available: Boolean)
 
 @Serializable
@@ -67,6 +77,13 @@ interface AuthApi {
     @PublicEndpoint
     @POST("auth/recuperar")
     suspend fun recover(@Body body: RecoverRequestDto)
+
+    /** Enlace de un solo uso; cierra las otras sesiones y devuelve tokens nuevos. */
+    @POST("auth/restablecer")
+    suspend fun resetPassword(@Body body: ResetPasswordRequestDto): AuthTokensDto
+
+    @POST("auth/verificar-correo")
+    suspend fun verifyEmail(@Body body: EmailTokenRequestDto)
 
     @POST("auth/reenviar-verificacion")
     suspend fun resendVerification()

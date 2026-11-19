@@ -27,7 +27,21 @@ class MainViewModelTest {
     private val sessionEvents = SessionEvents()
     private val devices = FakeDeviceRegistration()
 
-    private fun viewModel() = MainViewModel(auth, profiles, sessionEvents, devices)
+    private val pendingLink = com.wherever.mobile.feature.auth.domain.PendingEmailLink()
+
+    private fun viewModel() = MainViewModel(auth, profiles, sessionEvents, devices, pendingLink)
+
+    @Test
+    fun `un enlace de correo valido se guarda y se emite y uno raro se ignora`() = runTest {
+        val viewModel = viewModel()
+        viewModel.links.test {
+            viewModel.onLinkOpened("wherever://verificar#token=t9")
+            assertEquals(com.wherever.mobile.feature.auth.domain.EmailLink.VerifyEmail("t9"), awaitItem())
+            viewModel.onLinkOpened("https://otro.mx/nada")
+            expectNoEvents()
+        }
+        assertEquals("t9", pendingLink.verifyToken())
+    }
 
     private val votePush = mapOf("tipo" to "votacion_abierta", "grupo_id" to "g1", "votacion_id" to "v1")
 

@@ -98,6 +98,19 @@
     <string name="check_email_resend_in">Reenviar enlace en %1$s</string>
     <string name="check_email_resent">Listo, te lo mandamos otra vez.</string>
     <string name="check_email_other">Usar otro correo</string>
+    <string name="check_email_link_label">¿Ya tienes el enlace?</string>
+    <string name="check_email_link_help">Si se abrió en el navegador, cópialo del correo y pégalo aquí.</string>
+    <string name="check_email_link_open">Abrir enlace</string>
+    <string name="check_email_link_invalid">Ese no es un enlace de Wherever. Cópialo completo del correo.</string>
+    <string name="new_password_title">Nueva contraseña</string>
+    <string name="new_password_subtitle">Escribe la contraseña con la que vas a entrar.</string>
+    <string name="new_password_submit">Guardar y entrar</string>
+    <string name="new_password_sessions_note">Al guardarla se cierran tus sesiones en otros teléfonos.</string>
+    <string name="new_password_link_expired">El enlace venció o ya se usó. Pide otro: dura 1 hora y sirve una sola vez.</string>
+    <string name="new_password_request_another">Pedir otro enlace</string>
+    <string name="verify_email_title">Verificar correo</string>
+    <string name="verify_email_done">Listo, tu correo quedó verificado.</string>
+    <string name="verify_email_expired">El enlace venció o ya se usó. Desde tu perfil puedes pedir otro.</string>
 
     <!-- 06_Gustos -->
     <string name="tastes_step">Paso 2 de 2</string>

@@ -108,7 +108,7 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 
 **Difiere de lo especificado**
 
-- **`NuevaContrasena` no está implementada:** requiere los enlaces profundos (D11). El flujo termina en el correo.
+- **`NuevaContrasena` implementada (2026-11-19):** enlace con esquema `wherever://` o pegado en Revisa tu correo. Los App Links `https` con verificación esperan el dominio de `APP_LINK_BASE` (ver `docs/revision-jorge.md`). Sin medidor de fuerza: se valida la regla de la API (8+, letra y número).
 - El correo viaja como argumento de la ruta `CheckEmailRoute`, sin persistirse en disco. En pantalla va enmascarado.
 
 **Archivos** (bajo `app/src/main/java/com/wherever/mobile/`)

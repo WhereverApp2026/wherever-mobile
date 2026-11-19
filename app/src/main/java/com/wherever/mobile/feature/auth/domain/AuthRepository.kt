@@ -35,6 +35,12 @@ interface AuthRepository {
 
     suspend fun resendVerification(): Result<Unit>
 
+    /** NuevaContrasena (nv-08): `POST /auth/restablecer`; guarda la sesión que devuelve. */
+    suspend fun resetPassword(token: String, newPassword: String): Result<PostAuthDestination>
+
+    /** `POST /auth/verificar-correo`; con sesión, refresca el perfil. */
+    suspend fun verifyEmail(token: String): Result<Unit>
+
     suspend fun sessions(): Result<List<ActiveSession>>
 
     suspend fun closeSession(id: String): Result<Unit>

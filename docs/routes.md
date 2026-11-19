@@ -14,6 +14,8 @@
 | `HomeRoute` | Inicio con recomendaciones, clima y eventos | ubicación aproximada (opcional, en contexto) | release | nv-47 |
 | `ExploreRoute(query, category)` | Explorar: búsqueda, filtros y recientes | ubicación aproximada (opcional) | release | nv-47 |
 | `PlaceRoute(id, origin)` | Ficha del lugar | ninguno | release | nv-47 |
+| `NewPasswordRoute(token)` | Nueva contraseña desde el enlace del correo | ninguno | release | nv-08 |
+| `VerifyEmailRoute(token)` | Verificar correo desde el enlace | ninguno | release | nv-08 |
 | `FavoritesRoute` | Mis favoritos | ninguno | release | nv-47 |
 | `BadgesRoute` | Insignias: nivel, puntos, ganadas y por desbloquear | ninguno | release | nv-14 |
 | `CreatePlanRoute(phrase)` | Crear plan con IA y hoja rápida | ubicación aproximada (obligatoria para generar) | release | nv-48 |

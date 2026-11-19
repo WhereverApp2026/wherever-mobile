@@ -301,8 +301,34 @@ class AuthViewModelsTest {
 
     private fun checkEmail(mode: CheckEmailMode) = CheckEmailViewModel(
         SavedStateHandle(mapOf("email" to "osmar@correo.com", "mode" to mode.name)),
-        repository
+        repository,
+        pendingLink
     )
+
+    private val pendingLink = com.wherever.mobile.feature.auth.domain.PendingEmailLink()
+
+    @Test
+    fun `pegar el enlace del correo lo guarda en memoria y lo emite`() = runTest {
+        val viewModel = checkEmail(CheckEmailMode.RECOVERY)
+        viewModel.onLinkChange("https://app.ejemplo.mx/restablecer#token=abc")
+
+        viewModel.links.test {
+            viewModel.openPastedLink()
+            assertEquals(com.wherever.mobile.feature.auth.domain.EmailLink.ResetPassword("abc"), awaitItem())
+        }
+        assertEquals("abc", pendingLink.resetToken())
+        assertEquals("", viewModel.state.value.pastedLink)
+    }
+
+    @Test
+    fun `pegar texto que no es enlace marca el error`() = runTest {
+        val viewModel = checkEmail(CheckEmailMode.RECOVERY)
+        viewModel.onLinkChange("hola")
+        viewModel.openPastedLink()
+
+        assertEquals(UiText.Res(R.string.check_email_link_invalid), viewModel.state.value.linkError)
+        assertEquals(null, pendingLink.resetToken())
+    }
 
     @Test
     fun `recuperacion arranca con 60 segundos y reenvia a recuperar`() = runTest {

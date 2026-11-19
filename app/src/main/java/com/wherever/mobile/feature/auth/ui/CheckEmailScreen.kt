@@ -13,12 +13,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +29,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,19 +41,30 @@ import com.wherever.mobile.core.designsystem.BackCircleButton
 import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.InfoBanner
+import com.wherever.mobile.core.designsystem.LabeledTextField
 import com.wherever.mobile.core.designsystem.Mint
 import com.wherever.mobile.core.designsystem.SurfaceCard
+import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.core.ui.formatCountdown
+import com.wherever.mobile.feature.auth.domain.EmailLink
 
 /** 04_RevisaCorreo */
 @Composable
-fun CheckEmailRoute(onBack: () -> Unit, viewModel: CheckEmailViewModel = hiltViewModel()) {
+fun CheckEmailRoute(onBack: () -> Unit, onLink: (EmailLink) -> Unit, viewModel: CheckEmailViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    CheckEmailContent(state, onResend = viewModel::resend, onOpenMail = { openMailApp(context) }, onBack = onBack)
+    LaunchedEffect(viewModel) { viewModel.links.collect(onLink) }
+    CheckEmailContent(
+        state,
+        onResend = viewModel::resend,
+        onOpenMail = { openMailApp(context) },
+        onBack = onBack,
+        onLinkChange = viewModel::onLinkChange,
+        onOpenLink = viewModel::openPastedLink
+    )
 }
 
 private fun openMailApp(context: Context) {
@@ -68,7 +84,9 @@ private fun CheckEmailContent(
     state: CheckEmailUiState,
     onResend: () -> Unit,
     onOpenMail: () -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onLinkChange: (String) -> Unit = {},
+    onOpenLink: () -> Unit = {}
 ) {
     FormScreen(
         footer = {
@@ -146,8 +164,32 @@ private fun CheckEmailContent(
                 modifier = Modifier.padding(14.dp)
             )
         }
+        PastedLinkField(state, onLinkChange, onOpenLink)
         if (state.resent) InfoBanner(stringResource(R.string.check_email_resent))
         state.error?.let { ErrorBanner(it.asString()) }
+    }
+}
+
+/** Si el enlace abre en el navegador (o en otro teléfono), se pega aquí (nv-08, D11). */
+@Composable
+private fun PastedLinkField(state: CheckEmailUiState, onLinkChange: (String) -> Unit, onOpenLink: () -> Unit) {
+    LabeledTextField(
+        label = stringResource(R.string.check_email_link_label),
+        value = state.pastedLink,
+        onValueChange = onLinkChange,
+        error = state.linkError?.asString(),
+        supporting = stringResource(R.string.check_email_link_help),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri, imeAction = ImeAction.Go),
+        keyboardActions = KeyboardActions(onGo = { onOpenLink() }),
+        tag = "check_email_link"
+    )
+    if (state.pastedLink.isNotBlank()) {
+        WhereverOutlinedButton(
+            text = stringResource(R.string.check_email_link_open),
+            onClick = onOpenLink,
+            modifier = Modifier.fillMaxWidth(),
+            tag = "check_email_link_open"
+        )
     }
 }
 

@@ -18,12 +18,15 @@ import com.wherever.mobile.core.notifications.PushDestination
 import com.wherever.mobile.feature.account.ui.ChangeEmailRoute as ChangeEmailScreen
 import com.wherever.mobile.feature.account.ui.ChangePasswordRoute as ChangePasswordScreen
 import com.wherever.mobile.feature.account.ui.MyDataRoute as MyDataScreen
+import com.wherever.mobile.feature.auth.domain.EmailLink
 import com.wherever.mobile.feature.auth.domain.PostAuthDestination
 import com.wherever.mobile.feature.auth.ui.CheckEmailMode
 import com.wherever.mobile.feature.auth.ui.CheckEmailRoute as CheckEmailScreen
 import com.wherever.mobile.feature.auth.ui.LoginRoute as LoginScreen
+import com.wherever.mobile.feature.auth.ui.NewPasswordRoute as NewPasswordScreen
 import com.wherever.mobile.feature.auth.ui.RecoverRoute as RecoverScreen
 import com.wherever.mobile.feature.auth.ui.RegisterRoute as RegisterScreen
+import com.wherever.mobile.feature.auth.ui.VerifyEmailRoute as VerifyEmailScreen
 import com.wherever.mobile.feature.auth.ui.WelcomeScreen
 import com.wherever.mobile.feature.friends.ui.AddFriendRoute as AddFriendScreen
 import com.wherever.mobile.feature.friends.ui.FriendsRoute as FriendsScreen
@@ -51,9 +54,15 @@ import com.wherever.mobile.feature.settings.ui.SettingsNavigation
 import com.wherever.mobile.feature.settings.ui.SettingsRoute as SettingsScreen
 import com.wherever.mobile.feature.tastes.ui.TastesRoute as TastesScreen
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 
 @Composable
-fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>, pushes: Flow<PushDestination>) {
+fun WhereverNavHost(
+    start: StartDestination,
+    rootEvents: Flow<RootEvent>,
+    pushes: Flow<PushDestination>,
+    links: Flow<EmailLink> = emptyFlow()
+) {
     val navController = rememberNavController()
     LaunchedEffect(navController) {
         rootEvents.collect { event ->
@@ -69,6 +78,11 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>, pushes
                 popUpTo<HomeRoute> { inclusive = false }
                 launchSingleTop = true
             }
+        }
+    }
+    LaunchedEffect(navController) {
+        links.collect { link ->
+            navController.navigate(link.route()) { launchSingleTop = true }
         }
     }
     val destination = navController.currentBackStackEntryAsState().value?.destination
@@ -104,12 +118,7 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>, pushes
                 onForgotPassword = { navController.navigateFrom(e, RecoverRoute) },
                 onCreateAccount = { navController.navigateFrom(e, RegisterRoute) },
                 onLoggedIn = { destination ->
-                    val route: Any = when (destination) {
-                        PostAuthDestination.HOME -> HomeRoute
-                        PostAuthDestination.TASTES -> TastesRoute()
-                        PostAuthDestination.DELETION_PENDING -> DeletionPendingRoute
-                    }
-                    navController.navigateOnResult(e, route) { clearStack(navController) }
+                    navController.navigateOnResult(e, destination.route()) { clearStack(navController) }
                 }
             )
         }
@@ -132,7 +141,25 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>, pushes
             exitTransition = { NavMotion.resultExit(motion) },
             popEnterTransition = { NavMotion.resultEnter(motion) },
             popExitTransition = { NavMotion.resultExit(motion) }
-        ) { e -> CheckEmailScreen(onBack = { navController.popFrom(e) }) }
+        ) { e ->
+            CheckEmailScreen(
+                onBack = { navController.popFrom(e) },
+                onLink = { link -> navController.navigateFrom(e, link.route()) }
+            )
+        }
+        composable<NewPasswordRoute> { e ->
+            NewPasswordScreen(
+                onDone = { destination ->
+                    navController.navigateOnResult(e, destination.route()) { clearStack(navController) }
+                },
+                onRequestAnother = { navController.navigateFrom(e, RecoverRoute) }
+            )
+        }
+        composable<VerifyEmailRoute> { e ->
+            VerifyEmailScreen(onContinue = {
+                if (!navController.popBackStack()) navController.navigate(WelcomeRoute) { clearStack(navController) }
+            })
+        }
         composable<TastesRoute> { e ->
             TastesScreen(
                 onBack = { navController.popFrom(e) },
@@ -333,4 +360,15 @@ private fun NavHostController.openTab(from: NavBackStackEntry, tab: MainTab) {
 private fun NavOptionsBuilder.clearStack(navController: NavHostController) {
     popUpTo(navController.graph.id) { inclusive = true }
     launchSingleTop = true
+}
+
+private fun PostAuthDestination.route(): Any = when (this) {
+    PostAuthDestination.HOME -> HomeRoute
+    PostAuthDestination.TASTES -> TastesRoute()
+    PostAuthDestination.DELETION_PENDING -> DeletionPendingRoute
+}
+
+private fun EmailLink.route(): Any = when (this) {
+    is EmailLink.ResetPassword -> NewPasswordRoute
+    is EmailLink.VerifyEmail -> VerifyEmailRoute
 }

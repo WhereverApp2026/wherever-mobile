@@ -25,7 +25,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         splash.setKeepOnScreenCondition { viewModel.start.value == null }
         // Tocar un push abre esta actividad con `data` como extras (specs/nv-46).
-        if (savedInstanceState == null) openPush(intent)
+        if (savedInstanceState == null) {
+            openPush(intent)
+            viewModel.onLinkOpened(intent?.dataString)
+        }
         enableEdgeToEdge()
         setContent {
             val theme by viewModel.theme.collectAsStateWithLifecycle()
@@ -36,7 +39,7 @@ class MainActivity : ComponentActivity() {
                 else -> isSystemInDarkTheme()
             }
             WhereverTheme(darkTheme = dark) {
-                start?.let { WhereverNavHost(it, viewModel.events, viewModel.pushes) }
+                start?.let { WhereverNavHost(it, viewModel.events, viewModel.pushes, viewModel.links) }
             }
         }
     }
@@ -46,6 +49,7 @@ class MainActivity : ComponentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         openPush(intent)
+        viewModel.onLinkOpened(intent.dataString)
     }
 
     private fun openPush(intent: Intent?) {

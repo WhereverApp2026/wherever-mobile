@@ -8,15 +8,15 @@
 
 | | Pantallas | % de 162 |
 |---|---|---|
-| Funcionan con la API real | 52 | **32.1 %** |
-| Con datos locales (falta endpoint) | 1 | 0.6 % |
-| Total con UI terminada | 53 | 32.7 % |
+| Funcionan con la API real | 53 | **32,7 %** |
+| Con datos locales (falta endpoint) | 1 | 0,6 % |
+| Total con UI terminada | 54 | 33,3 % |
 
 | Spec | Tema | Frames | Funcionan | Datos locales | Nota |
 |---|---|---|---|---|---|
 | nv-06 | Splash y bienvenida | 1 | 1 | 0 |  |
 | nv-07 | Iniciar sesión | 1 | 1 | 0 |  |
-| nv-08 | Recuperar contraseña | 3 | 2 | 0 | falta NuevaContrasena |
+| nv-08 | Recuperar contraseña | 3 | 3 | 0 | Nueva contraseña por enlace; sin token real (staging sin SMTP) |
 | nv-09 | Registro | 1 | 1 | 0 | probado en teléfono 2026-11-19 |
 | nv-10 | Gustos | 1 | 1 | 0 | probado en teléfono 2026-11-19 |
 | nv-11 | Permisos en contexto | 2 | 1 | 0 | ubicación sí; avisos no |
@@ -52,7 +52,8 @@
 | Fecha | Commit | Área cerrada | Funcionan | % real |
 |---|---|---|---|---|
 | 2026-11-19 | `30305af` | Punto de partida (nv-54 integrado) | 52 | 32,1 % |
-| 2026-11-19 | este | Perfil: Insignias (datos locales) | 52 (+1 local) | 32,1 % |
+| 2026-11-19 | `c528045` | Perfil: Insignias (datos locales) | 52 (+1 locales) | 32,1 % |
+| 2026-11-19 | después de `c528045` | Recuperar contraseña: Nueva contraseña y enlaces del correo | 53 (+1 locales) | 32,7 % |
 
 ---
 

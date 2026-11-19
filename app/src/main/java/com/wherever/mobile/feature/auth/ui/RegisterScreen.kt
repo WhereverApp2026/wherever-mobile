@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -135,7 +136,8 @@ private fun RegisterContent(
                 else -> null
             },
             onBlur = onEmailBlur,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            // Siguiente lleva a la contraseña (antes el teclado mostraba ✓ y no avanzaba).
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
             tag = "register_email"
         )
         LabeledTextField(
@@ -145,7 +147,7 @@ private fun RegisterContent(
             placeholder = stringResource(R.string.register_password_placeholder),
             leadingIcon = Icons.Filled.Lock,
             error = state.passwordError?.asString(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
             visualTransformation = PasswordVisualTransformation(),
             tag = "register_password"
         )

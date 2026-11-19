@@ -21,6 +21,13 @@ data object RecoverRoute
 data class CheckEmailRoute(val mode: String, val email: String)
 
 /** `fromSettings` lo lee TastesViewModel de SavedStateHandle por su nombre. */
+/** El token queda en `PendingEmailLink` (memoria), nunca en la ruta (nv-08). */
+@Serializable
+data object NewPasswordRoute
+
+@Serializable
+data object VerifyEmailRoute
+
 @Serializable
 data class TastesRoute(val fromSettings: Boolean = false)
 

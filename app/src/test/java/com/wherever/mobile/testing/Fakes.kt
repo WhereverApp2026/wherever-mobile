@@ -228,6 +228,10 @@ class FakeAuthRepository : AuthRepository {
     var registerResult: Result<Unit> = Result.Success(Unit)
     var recoverResult: Result<Unit> = Result.Success(Unit)
     var resendResult: Result<Unit> = Result.Success(Unit)
+    var resetResult: Result<PostAuthDestination> = Result.Success(PostAuthDestination.HOME)
+    var verifyResult: Result<Unit> = Result.Success(Unit)
+    val resetCalls = mutableListOf<Pair<String, String>>()
+    val verifyCalls = mutableListOf<String>()
     var sessionsResult: Result<List<ActiveSession>> = Result.Success(emptyList())
     var closeResult: Result<Unit> = Result.Success(Unit)
     var logoutAllResult: Result<Unit> = Result.Success(Unit)
@@ -241,6 +245,16 @@ class FakeAuthRepository : AuthRepository {
     val emailChecks = mutableListOf<String>()
 
     override suspend fun hasSession(): Boolean = session
+
+    override suspend fun resetPassword(token: String, newPassword: String): Result<PostAuthDestination> {
+        resetCalls += token to newPassword
+        return resetResult
+    }
+
+    override suspend fun verifyEmail(token: String): Result<Unit> {
+        verifyCalls += token
+        return verifyResult
+    }
 
     override suspend fun login(email: String, password: String) = loginResult
 

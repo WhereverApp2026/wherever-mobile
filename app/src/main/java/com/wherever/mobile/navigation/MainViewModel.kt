@@ -7,6 +7,8 @@ import com.wherever.mobile.core.network.SessionEvents
 import com.wherever.mobile.core.notifications.DeviceRegistration
 import com.wherever.mobile.core.notifications.PushDestination
 import com.wherever.mobile.feature.auth.domain.AuthRepository
+import com.wherever.mobile.feature.auth.domain.EmailLink
+import com.wherever.mobile.feature.auth.domain.PendingEmailLink
 import com.wherever.mobile.feature.profile.domain.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -37,7 +39,8 @@ class MainViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val profileRepository: ProfileRepository,
     private val sessionEvents: SessionEvents,
-    private val deviceRegistration: DeviceRegistration
+    private val deviceRegistration: DeviceRegistration,
+    private val pendingLink: PendingEmailLink
 ) : ViewModel() {
     private val mutableStart = MutableStateFlow<StartDestination?>(null)
     val start: StateFlow<StartDestination?> = mutableStart.asStateFlow()
@@ -54,6 +57,11 @@ class MainViewModel @Inject constructor(
 
     /** Destinos de los push tocados; la raíz los navega (specs/nv-46). */
     val pushes = pushChannel.receiveAsFlow()
+
+    private val linkChannel = Channel<EmailLink>(Channel.CONFLATED)
+
+    /** Enlaces de correo abiertos (nv-08); no exigen sesión. */
+    val links = linkChannel.receiveAsFlow()
 
     init {
         viewModelScope.launch {
@@ -84,6 +92,12 @@ class MainViewModel @Inject constructor(
      * Push tocado. Sin sesión, o con la cuenta por eliminarse, no navega: la app abre donde le toca
      * y el aviso sigue en la lista del servidor.
      */
+    fun onLinkOpened(uri: String?) {
+        val link = EmailLink.parse(uri) ?: return
+        pendingLink.put(link)
+        viewModelScope.launch { linkChannel.send(link) }
+    }
+
     fun onPushOpened(data: Map<String, String?>) {
         val destination = PushDestination.from(data) ?: return
         viewModelScope.launch {

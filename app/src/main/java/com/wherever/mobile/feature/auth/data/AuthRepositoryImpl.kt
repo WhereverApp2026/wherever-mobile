@@ -68,6 +68,19 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun resendVerification(): Result<Unit> = safeApiCall { api.resendVerification() }
 
+    override suspend fun resetPassword(token: String, newPassword: String): Result<PostAuthDestination> =
+        safeApiCall { api.resetPassword(ResetPasswordRequestDto(token, newPassword, device())) }.map { tokens ->
+            save(tokens)
+            destinationFor(tokens)
+        }
+
+    override suspend fun verifyEmail(token: String): Result<Unit> = safeApiCall {
+        api.verifyEmail(EmailTokenRequestDto(token))
+    }.map {
+        if (hasSession()) profileRepository.refresh()
+        Unit
+    }
+
     override suspend fun sessions(): Result<List<ActiveSession>> = safeApiCall {
         api.sessions().map {
             ActiveSession(it.id, it.device.model, it.device.system, it.lastUsed, it.isCurrent)
