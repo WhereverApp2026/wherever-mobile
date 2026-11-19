@@ -35,8 +35,10 @@ data class ChangeEmailUiState(
     val sentTo: String? = null
 ) {
     val canSubmit: Boolean
-        get() = isValidEmail(email) && !email.equals(currentEmail, ignoreCase = true) &&
-            password.isNotEmpty() && !submitting
+        get() = isValidEmail(email) &&
+            !email.equals(currentEmail, ignoreCase = true) &&
+            password.isNotEmpty() &&
+            !submitting
 }
 
 /** Cambiar correo (US-017, specs/nv-51). */
@@ -98,7 +100,9 @@ class ChangeEmailViewModel @Inject constructor(
                     submitting = false,
                     emailError = fields[FIELD_EMAIL],
                     passwordError = fields[FIELD_PASSWORD],
-                    error = if (fields.keys.all { k -> k == FIELD_EMAIL || k == FIELD_PASSWORD }) null else error.toUiText()
+                    error = error.toUiText().takeUnless {
+                        fields.keys.all { k -> k == FIELD_EMAIL || k == FIELD_PASSWORD }
+                    }
                 )
                 else -> it.copy(submitting = false, error = error.toUiText())
             }

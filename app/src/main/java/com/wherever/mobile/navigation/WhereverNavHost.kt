@@ -223,7 +223,10 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>, pushes
             )
         }
         composable<PrivacyRoute> { e ->
-            PrivacyScreen(onBack = { navController.popFrom(e) }, onMyData = { navController.navigateFrom(e, MyDataRoute) })
+            PrivacyScreen(
+                onBack = { navController.popFrom(e) },
+                onMyData = { navController.navigateFrom(e, MyDataRoute) }
+            )
         }
         composable<ChangePasswordRoute> { e -> ChangePasswordScreen(onBack = { navController.popFrom(e) }) }
         composable<ChangeEmailRoute> { e -> ChangeEmailScreen(onBack = { navController.popFrom(e) }) }

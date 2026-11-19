@@ -55,7 +55,11 @@ class AccountViewModelsTest {
 
     private val repository = FakeAccountRepository()
 
-    private fun ChangePasswordViewModel.fill(current: String = "Actual123", new: String = "Nueva4567", confirm: String = new) {
+    private fun ChangePasswordViewModel.fill(
+        current: String = "Actual123",
+        new: String = "Nueva4567",
+        confirm: String = new
+    ) {
         onCurrentChange(current)
         onNewChange(new)
         onConfirmChange(confirm)

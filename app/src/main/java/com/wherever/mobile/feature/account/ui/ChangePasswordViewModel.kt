@@ -91,7 +91,9 @@ class ChangePasswordViewModel @Inject constructor(private val repository: Accoun
                     submitting = false,
                     currentError = fields[FIELD_CURRENT],
                     newError = fields[FIELD_NEW],
-                    error = if (fields.keys.all { k -> k == FIELD_CURRENT || k == FIELD_NEW }) null else error.toUiText()
+                    error = error.toUiText().takeUnless {
+                        fields.keys.all { k -> k == FIELD_CURRENT || k == FIELD_NEW }
+                    }
                 )
                 else -> it.copy(submitting = false, error = error.toUiText())
             }
