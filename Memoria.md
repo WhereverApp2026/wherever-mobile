@@ -218,6 +218,9 @@
 - A evitar: `connectedDebugAndroidTest` desinstala la app al terminar y borra la sesión del teléfono. Para una clase sola: `installDebug installDebugAndroidTest` y `adb shell am instrument -w -e class …`.
 - A recordar: en el Xiaomi (MIUI) las pruebas de UI se cuelgan ("MIUILOG- Permission Denied Activity") hasta dar `adb shell appops set com.wherever.mobile 10021 allow` (ventanas en segundo plano); se pierde al reinstalar.
 - Estado: Insignias (nv-14) con catálogo local; Registro probado en el teléfono contra staging (cuenta QA `@example.com`).
+- Estado: nv-08 NuevaContrasena y enlaces de correo (`7f8866f`); nv-18 aviso dentro de la app (8 s), notificación privada en el bloqueo y Aceptar desde Avisos, probado con push real (cuenta QA B → cuenta del teléfono).
+- A evitar: el login de staging limita a ~10 por minuto (429); en scripts de prueba guardar el token un rato. No bloquear el teléfono de Jorge con `keyevent 26`: tiene PIN y adb no lo desbloquea.
+- A evitar: rutas con parámetros `token`/`password`: `SourceSecurityTest` lo prohíbe; guardar el token en memoria (`PendingEmailLink`).
 
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).

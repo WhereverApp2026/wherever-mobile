@@ -1,9 +1,11 @@
 package com.wherever.mobile.feature.notifications.ui
 
 import app.cash.turbine.test
+import com.wherever.mobile.R
 import com.wherever.mobile.core.common.AppError
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.notifications.PushDestination
+import com.wherever.mobile.core.ui.UiText
 import com.wherever.mobile.feature.notifications.domain.AppNotification
 import com.wherever.mobile.feature.notifications.domain.NotificationPage
 import com.wherever.mobile.feature.notifications.domain.NotificationType
@@ -73,6 +75,7 @@ class NotificationsViewModelTest {
     val mainDispatcher = MainDispatcherRule()
 
     private val repository = FakeNotificationsRepository()
+    private val friends = com.wherever.mobile.testing.FakeFriendsRepository()
     private val clock: Clock = Clock.fixed(Instant.parse("2026-11-19T18:00:00Z"), ZoneId.of("America/Mexico_City"))
 
     private fun withFirstPage(vararg items: AppNotification, next: String? = null) {
@@ -83,7 +86,7 @@ class NotificationsViewModelTest {
     fun `carga la primera pagina y luego la siguiente sin repetir`() = runTest(mainDispatcher.dispatcher) {
         withFirstPage(notification("1"), notification("2"), next = "c2")
         repository.pages["c2"] = Result.Success(NotificationPage(listOf(notification("2"), notification("3")), null))
-        val vm = NotificationsViewModel(repository, clock)
+        val vm = NotificationsViewModel(repository, friends, clock)
         advanceUntilIdle()
         assertEquals(listOf("1", "2"), vm.state.value.items.map { it.id })
         assertEquals("c2", vm.state.value.nextCursor)
@@ -98,7 +101,7 @@ class NotificationsViewModelTest {
     @Test
     fun `falla inicial muestra error y reintentar vuelve a pedir`() = runTest(mainDispatcher.dispatcher) {
         repository.pages[null] = Result.Failure(AppError.Network)
-        val vm = NotificationsViewModel(repository, clock)
+        val vm = NotificationsViewModel(repository, friends, clock)
         advanceUntilIdle()
         assertNotNull(vm.state.value.loadError)
 
@@ -117,7 +120,7 @@ class NotificationsViewModelTest {
             notification("2", NotificationType.PLAN_INVITATION, ids = mapOf("plan_id" to "p1")),
             notification("3", NotificationType.VOTE_OPENED, ids = mapOf("votacion_id" to "v1"))
         )
-        val vm = NotificationsViewModel(repository, clock)
+        val vm = NotificationsViewModel(repository, friends, clock)
         advanceUntilIdle()
 
         vm.onFilter(NotificationFilter.SOCIAL)
@@ -130,7 +133,7 @@ class NotificationsViewModelTest {
     fun `tocar marca leida y abre el plan de la invitacion`() = runTest(mainDispatcher.dispatcher) {
         val invitation = notification("2", NotificationType.PLAN_INVITATION, ids = mapOf("plan_id" to "p1"))
         withFirstPage(invitation)
-        val vm = NotificationsViewModel(repository, clock)
+        val vm = NotificationsViewModel(repository, friends, clock)
         advanceUntilIdle()
 
         vm.open.test {
@@ -148,7 +151,7 @@ class NotificationsViewModelTest {
         val request = notification("1")
         withFirstPage(request)
         repository.markResult = Result.Failure(AppError.Network)
-        val vm = NotificationsViewModel(repository, clock)
+        val vm = NotificationsViewModel(repository, friends, clock)
         advanceUntilIdle()
 
         vm.open(request)
@@ -161,7 +164,7 @@ class NotificationsViewModelTest {
     fun `una ya leida no vuelve a llamar a la API`() = runTest(mainDispatcher.dispatcher) {
         val read = notification("1", read = true)
         withFirstPage(read)
-        val vm = NotificationsViewModel(repository, clock)
+        val vm = NotificationsViewModel(repository, friends, clock)
         advanceUntilIdle()
 
         vm.open(read)
@@ -173,7 +176,7 @@ class NotificationsViewModelTest {
     @Test
     fun `marcar todas y su falla restaura`() = runTest(mainDispatcher.dispatcher) {
         withFirstPage(notification("1"), notification("2", read = true))
-        val vm = NotificationsViewModel(repository, clock)
+        val vm = NotificationsViewModel(repository, friends, clock)
         advanceUntilIdle()
         assertTrue(vm.state.value.hasUnread)
 
@@ -193,7 +196,7 @@ class NotificationsViewModelTest {
     fun `borrar quita la fila y su falla la regresa`() = runTest(mainDispatcher.dispatcher) {
         val first = notification("1")
         withFirstPage(first, notification("2"))
-        val vm = NotificationsViewModel(repository, clock)
+        val vm = NotificationsViewModel(repository, friends, clock)
         advanceUntilIdle()
 
         repository.deleteResult = Result.Failure(AppError.Network)
@@ -250,5 +253,42 @@ class NotificationsViewModelTest {
         badge.refresh()
         advanceUntilIdle()
         assertEquals(4, badge.count.value)
+    }
+
+    @Test
+    fun `aceptar desde el aviso busca la solicitud recibida y deja la fila como amigos`() =
+        runTest(mainDispatcher.dispatcher) {
+            withFirstPage(notification("1"))
+            val request = com.wherever.mobile.feature.friends.domain.Friendship(
+                "f9",
+                com.wherever.mobile.feature.friends.domain.Person("u1", "Luz", null, null),
+                received = true,
+                accepted = false
+            )
+            friends.lists[com.wherever.mobile.feature.friends.domain.FriendshipList.RECEIVED] =
+                Result.Success(com.wherever.mobile.feature.friends.domain.FriendshipPage(listOf(request), 1))
+            val vm = NotificationsViewModel(repository, friends, clock)
+            advanceUntilIdle()
+
+            vm.accept(vm.state.value.items.single())
+            advanceUntilIdle()
+
+            assertTrue("respond:f9:true" in friends.calls)
+            assertTrue("1" in vm.state.value.accepted)
+            assertTrue(vm.state.value.items.single().read)
+        }
+
+    @Test
+    fun `si la solicitud ya no esta avisa y no marca aceptada`() = runTest(mainDispatcher.dispatcher) {
+        withFirstPage(notification("1"))
+        val vm = NotificationsViewModel(repository, friends, clock)
+        advanceUntilIdle()
+
+        vm.accept(vm.state.value.items.single())
+        advanceUntilIdle()
+
+        assertTrue(vm.state.value.accepted.isEmpty())
+        assertEquals(UiText.Res(R.string.notification_request_gone), vm.state.value.error)
+        assertTrue(vm.state.value.accepting.isEmpty())
     }
 }

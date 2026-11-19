@@ -8,9 +8,9 @@
 
 | | Pantallas | % de 162 |
 |---|---|---|
-| Funcionan con la API real | 53 | **32,7 %** |
+| Funcionan con la API real | 54 | **33,3 %** |
 | Con datos locales (falta endpoint) | 1 | 0,6 % |
-| Total con UI terminada | 54 | 33,3 % |
+| Total con UI terminada | 55 | 34,0 % |
 
 | Spec | Tema | Frames | Funcionan | Datos locales | Nota |
 |---|---|---|---|---|---|
@@ -25,7 +25,7 @@
 | nv-15 | Privacidad, mis datos, eliminar | 2 | 2 | 0 |  |
 | nv-16 | Sin conexión | 1 | 0 | 0 |  |
 | nv-17 | Inicio y feed | 15 | 3 | 0 | feed social pendiente |
-| nv-18 | Notificaciones | 4 | 3 | 0 |  |
+| nv-18 | Notificaciones | 4 | 4 | 0 | aviso en la app, bloqueo y Aceptar; pushes de reserva/reseña pendientes de backend |
 | nv-19 | Búsqueda | 4 | 3 | 0 |  |
 | nv-20 | Amigos | 15 | 10 | 0 | falta QR y variantes |
 | nv-21 | Explorar y lugares | 8 | 5 | 0 | staging sin negocios |
@@ -54,6 +54,7 @@
 | 2026-11-19 | `30305af` | Punto de partida (nv-54 integrado) | 52 | 32,1 % |
 | 2026-11-19 | `c528045` | Perfil: Insignias (datos locales) | 52 (+1 locales) | 32,1 % |
 | 2026-11-19 | después de `c528045` | Recuperar contraseña: Nueva contraseña y enlaces del correo | 53 (+1 locales) | 32,7 % |
+| 2026-11-19 | después de `7f8866f` | Notificaciones: aviso en la app, bloqueo y Aceptar | 54 (+1 locales) | 33,3 % |
 
 ---
 

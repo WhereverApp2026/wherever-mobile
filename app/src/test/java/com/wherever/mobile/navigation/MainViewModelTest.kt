@@ -10,9 +10,12 @@ import com.wherever.mobile.testing.FakeProfileRepository
 import com.wherever.mobile.testing.MainDispatcherRule
 import com.wherever.mobile.testing.sampleProfile
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -29,7 +32,41 @@ class MainViewModelTest {
 
     private val pendingLink = com.wherever.mobile.feature.auth.domain.PendingEmailLink()
 
-    private fun viewModel() = MainViewModel(auth, profiles, sessionEvents, devices, pendingLink)
+    private val inApp = com.wherever.mobile.core.notifications.InAppPushes()
+
+    private fun viewModel() = MainViewModel(auth, profiles, sessionEvents, devices, pendingLink, inApp)
+
+    @Test
+    fun `push con la app visible se muestra como aviso, Ver navega y se va solo`() = runTest {
+        auth.session = true
+        val viewModel = viewModel()
+        viewModel.onForeground(true)
+        advanceUntilIdle()
+        val push = com.wherever.mobile.core.notifications.InAppPush("Hola", "Nueva solicitud", votePush)
+
+        assertTrue(inApp.offer(push))
+        runCurrent()
+        assertEquals(push, viewModel.banner.value)
+
+        viewModel.pushes.test {
+            viewModel.onBannerOpen()
+            awaitItem()
+        }
+        assertEquals(null, viewModel.banner.value)
+
+        assertTrue(inApp.offer(push))
+        runCurrent()
+        advanceTimeBy(BANNER_MILLIS + 1)
+        assertEquals(null, viewModel.banner.value)
+    }
+
+    @Test
+    fun `con la app en segundo plano el push no se ofrece dentro`() = runTest {
+        val viewModel = viewModel()
+        viewModel.onForeground(false)
+        assertFalse(inApp.offer(com.wherever.mobile.core.notifications.InAppPush(null, null, emptyMap())))
+        assertEquals(null, viewModel.banner.value)
+    }
 
     @Test
     fun `un enlace de correo valido se guarda y se emite y uno raro se ignora`() = runTest {

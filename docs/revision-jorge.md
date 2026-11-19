@@ -13,6 +13,7 @@
 | Pantalla | Falta | Mientras tanto |
 |---|---|---|
 | Enlaces de correo (nv-08) | Staging sin SMTP: no llegan correos. Y `APP_LINK_BASE` debe ser un dominio `https` con `/.well-known/assetlinks.json` para que el enlace abra la app sola | La app abre `wherever://restablecer#token=…` y deja pegar el enlace `https` en Revisa tu correo |
+| Push (nv-18) | Tipos de push de reserva (confirmada, cambio, recordatorio), "pide tu reseña" y "Es hora de salir" del día del plan: hoy solo hay `solicitud_amistad`, `amistad_aceptada`, `invitacion_plan`, `votacion_abierta` y `votacion_cerrada` | Los tipos nuevos caen en el destino genérico (Avisos); el aviso en la app y el del bloqueo ya funcionan con cualquier tipo |
 | Insignias (nv-14) | `GET /usuarios/yo/insignias` → `{ganadas[{id, ganada_en}], por_desbloquear[{id, progreso?}]}` y la escalera de niveles (umbrales de puntos) | `LocalBadgesRepository`: catálogo de 8, solo "bienvenida" ganada; escalera provisional 0/250/750/2000 |
 
 ---

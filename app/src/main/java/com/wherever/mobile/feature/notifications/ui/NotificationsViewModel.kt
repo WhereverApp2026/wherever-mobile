@@ -2,10 +2,14 @@ package com.wherever.mobile.feature.notifications.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wherever.mobile.R
+import com.wherever.mobile.core.common.AppError
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.notifications.PushDestination
 import com.wherever.mobile.core.ui.UiText
 import com.wherever.mobile.core.ui.toUiText
+import com.wherever.mobile.feature.friends.domain.FriendsRepository
+import com.wherever.mobile.feature.friends.domain.FriendshipList
 import com.wherever.mobile.feature.notifications.domain.AppNotification
 import com.wherever.mobile.feature.notifications.domain.NotificationType
 import com.wherever.mobile.feature.notifications.domain.NotificationsRepository
@@ -59,7 +63,10 @@ data class NotificationsUiState(
     /** Falla de la primera carga: pantalla de error con Reintentar. */
     val loadError: UiText? = null,
     /** Falla de una acción: aviso arriba, la lista se queda. */
-    val error: UiText? = null
+    val error: UiText? = null,
+    /** Solicitudes aceptadas desde aquí (Notif · solicitud aceptada). */
+    val accepted: Set<String> = emptySet(),
+    val accepting: Set<String> = emptySet()
 ) {
     val visible: List<AppNotification>
         get() = filter.types?.let { types -> items.filter { it.type in types } } ?: items
@@ -72,6 +79,7 @@ data class NotificationsUiState(
 @HiltViewModel
 class NotificationsViewModel @Inject constructor(
     private val repository: NotificationsRepository,
+    private val friends: FriendsRepository,
     private val clock: Clock
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(NotificationsUiState())
@@ -167,6 +175,46 @@ class NotificationsViewModel @Inject constructor(
                 mutableState.update { it.copy(items = before, error = result.error.toUiText()) }
             }
         }
+    }
+
+    /**
+     * Aceptar desde el aviso: el aviso solo trae `usuario_id`; la solicitud se busca en recibidas.
+     * Si ya no está (la cancelaron o se respondió en otro lado) se avisa y la fila se queda.
+     */
+    fun accept(notification: AppNotification) {
+        val userId = notification.ids[PushDestination.KEY_USER_ID] ?: return
+        if (notification.id in state.value.accepting) return
+        mutableState.update { it.copy(accepting = it.accepting + notification.id, error = null) }
+        viewModelScope.launch {
+            val result = when (val received = friends.list(FriendshipList.RECEIVED)) {
+                is Result.Success -> received.data.items.firstOrNull { it.person.id == userId }
+                    ?.let { friends.respond(it.id, accept = true) }
+                    ?: Result.Failure(AppError.NotFound())
+                is Result.Failure -> received
+            }
+            mutableState.update { state ->
+                when (result) {
+                    is Result.Success -> state.copy(
+                        accepting = state.accepting - notification.id,
+                        accepted = state.accepted + notification.id
+                    )
+                    is Result.Failure -> state.copy(
+                        accepting = state.accepting - notification.id,
+                        error = if (result.error is AppError.NotFound) {
+                            UiText.Res(R.string.notification_request_gone)
+                        } else {
+                            result.error.toUiText()
+                        }
+                    )
+                }
+            }
+            if (result is Result.Success && !notification.read) markRead(notification)
+        }
+    }
+
+    private fun markRead(notification: AppNotification) {
+        setRead(notification.id, read = true)
+        viewModelScope.launch { repository.markRead(notification.id) }
     }
 
     private fun setRead(id: String, read: Boolean) = mutableState.update { state ->

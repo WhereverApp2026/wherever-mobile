@@ -599,6 +599,11 @@
     <string name="place_reserve">Reservar</string>
     <string name="profile_reservations">Mis reservas</string>
     <string name="profile_badges">Insignias</string>
+    <string name="in_app_push_open">Ver</string>
+    <string name="in_app_push_later">Más tarde</string>
+    <string name="notification_accept">Aceptar</string>
+    <string name="notification_now_friends">Ya es tu amigo. Ahora pueden hacer planes juntos.</string>
+    <string name="notification_request_gone">Esa solicitud ya no está: la cancelaron o ya la respondiste.</string>
     <string name="badges_title">Insignias</string>
     <string name="badges_level_label">Tu nivel</string>
     <plurals name="badges_points">

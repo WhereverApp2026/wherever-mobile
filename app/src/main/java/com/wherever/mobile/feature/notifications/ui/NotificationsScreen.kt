@@ -121,7 +121,12 @@ private fun NotificationList(state: NotificationsUiState, viewModel: Notificatio
                     notification = notification,
                     time = formatDateTime(notification.createdAt, zone),
                     onClick = { viewModel.open(notification) },
-                    onDelete = { viewModel.delete(notification) }
+                    onDelete = { viewModel.delete(notification) },
+                    accept = RowAccept(
+                        accepted = notification.id in state.accepted,
+                        busy = notification.id in state.accepting,
+                        onAccept = { viewModel.accept(notification) }
+                    )
                 )
             }
         }
@@ -144,7 +149,13 @@ private fun NotificationList(state: NotificationsUiState, viewModel: Notificatio
 }
 
 @Composable
-private fun NotificationRow(notification: AppNotification, time: String, onClick: () -> Unit, onDelete: () -> Unit) {
+private fun NotificationRow(
+    notification: AppNotification,
+    time: String,
+    onClick: () -> Unit,
+    onDelete: () -> Unit,
+    accept: RowAccept
+) {
     SurfaceCard(modifier = Modifier.testTag("notification_${notification.id}")) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -165,14 +176,24 @@ private fun NotificationRow(notification: AppNotification, time: String, onClick
             }
             Column(modifier = Modifier.weight(1f).padding(horizontal = 12.dp)) {
                 Text(
-                    stringResource(textFor(notification.type)),
+                    stringResource(
+                        if (accept.accepted) R.string.notification_now_friends else textFor(notification.type)
+                    ),
                     style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = if (notification.read) FontWeight.Normal else FontWeight.SemiBold
+                    fontWeight = if (notification.read) FontWeight.Normal else FontWeight.SemiBold,
+                    modifier = Modifier.testTag(if (accept.accepted) "notification_accepted" else "notification_text")
                 )
                 Text(
                     time,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            if (notification.type == NotificationType.FRIEND_REQUEST && !accept.accepted) {
+                WhereverTextLink(
+                    stringResource(R.string.notification_accept),
+                    accept.onAccept,
+                    enabled = !accept.busy
                 )
             }
             IconButton(onClick = onDelete) {
@@ -213,3 +234,6 @@ private fun textFor(type: NotificationType): Int = when (type) {
     NotificationType.VOTE_CLOSED -> R.string.notification_vote_closed
     NotificationType.OTHER -> R.string.notification_other
 }
+
+/** Aceptar la solicitud desde la fila (18_Notif y su variante "solicitud aceptada"). */
+private data class RowAccept(val accepted: Boolean, val busy: Boolean, val onAccept: () -> Unit)

@@ -7,11 +7,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.core.notifications.PushDestination
+import com.wherever.mobile.navigation.InAppPushBanner
 import com.wherever.mobile.navigation.MainViewModel
 import com.wherever.mobile.navigation.WhereverNavHost
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,9 +43,23 @@ class MainActivity : ComponentActivity() {
                 else -> isSystemInDarkTheme()
             }
             WhereverTheme(darkTheme = dark) {
-                start?.let { WhereverNavHost(it, viewModel.events, viewModel.pushes, viewModel.links) }
+                val banner by viewModel.banner.collectAsStateWithLifecycle()
+                Box(Modifier.fillMaxSize()) {
+                    start?.let { WhereverNavHost(it, viewModel.events, viewModel.pushes, viewModel.links) }
+                    InAppPushBanner(banner, viewModel::onBannerOpen, viewModel::onBannerLater)
+                }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.onForeground(true)
+    }
+
+    override fun onStop() {
+        viewModel.onForeground(false)
+        super.onStop()
     }
 
     // `singleTask`: con la app abierta, el push tocado llega aquí en lugar de crear otra actividad.

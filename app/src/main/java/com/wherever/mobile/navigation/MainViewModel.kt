@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.network.SessionEvents
 import com.wherever.mobile.core.notifications.DeviceRegistration
+import com.wherever.mobile.core.notifications.InAppPush
+import com.wherever.mobile.core.notifications.InAppPushes
 import com.wherever.mobile.core.notifications.PushDestination
 import com.wherever.mobile.feature.auth.domain.AuthRepository
 import com.wherever.mobile.feature.auth.domain.EmailLink
@@ -12,7 +14,9 @@ import com.wherever.mobile.feature.auth.domain.PendingEmailLink
 import com.wherever.mobile.feature.profile.domain.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -29,6 +33,9 @@ enum class RootEvent { SESSION_EXPIRED, DELETION_PENDING }
 
 private const val STOP_TIMEOUT_MILLIS = 5_000L
 
+/** Tiempo que el aviso dentro de la app queda visible. */
+const val BANNER_MILLIS = 8_000L
+
 /**
  * Decide el primer destino (SessionGate de specs/nv-04 §2.4).
  * Con sesión entra de inmediato con lo que hay en Room y valida detrás: si el servidor rechaza
@@ -40,7 +47,8 @@ class MainViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val sessionEvents: SessionEvents,
     private val deviceRegistration: DeviceRegistration,
-    private val pendingLink: PendingEmailLink
+    private val pendingLink: PendingEmailLink,
+    private val inAppPushes: InAppPushes
 ) : ViewModel() {
     private val mutableStart = MutableStateFlow<StartDestination?>(null)
     val start: StateFlow<StartDestination?> = mutableStart.asStateFlow()
@@ -63,7 +71,38 @@ class MainViewModel @Inject constructor(
     /** Enlaces de correo abiertos (nv-08); no exigen sesión. */
     val links = linkChannel.receiveAsFlow()
 
+    private val mutableBanner = MutableStateFlow<InAppPush?>(null)
+
+    /** 88_PushBanner: el push que llegó con la app abierta; se va solo a los [BANNER_MILLIS]. */
+    val banner: StateFlow<InAppPush?> = mutableBanner.asStateFlow()
+
+    private var bannerJob: Job? = null
+
+    fun onForeground(visible: Boolean) {
+        inAppPushes.foreground = visible
+    }
+
+    fun onBannerOpen() {
+        val push = mutableBanner.value ?: return
+        mutableBanner.value = null
+        onPushOpened(push.data)
+    }
+
+    fun onBannerLater() {
+        mutableBanner.value = null
+    }
+
     init {
+        viewModelScope.launch {
+            inAppPushes.pushes.collect { push ->
+                mutableBanner.value = push
+                bannerJob?.cancel()
+                bannerJob = launch {
+                    delay(BANNER_MILLIS)
+                    if (mutableBanner.value === push) mutableBanner.value = null
+                }
+            }
+        }
         viewModelScope.launch {
             sessionEvents.sessionExpired.collect {
                 authRepository.clearLocalSession()
