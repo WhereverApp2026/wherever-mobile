@@ -36,7 +36,9 @@ data class Privacy(
     val usageData: Boolean,
     val searchableByPhone: Boolean,
     /** Permiso expreso para guardar alergias (dato de salud). Sin él, el backend no las guarda. */
-    val sensitiveData: Boolean
+    val sensitiveData: Boolean,
+    /** Que me encuentren por nombre de usuario (US-236, nv-53). */
+    val searchableByUser: Boolean = true
 )
 
 data class UserProfile(
@@ -45,6 +47,9 @@ data class UserProfile(
     val email: String,
     val emailVerified: Boolean,
     val photoUrl: String? = null,
+    /** nv-53: nombre de usuario (3 a 20 de `[a-z0-9_]`) y código de 8 para agregar amigos. */
+    val username: String? = null,
+    val friendCode: String? = null,
     val mode: String,
     val city: CityRef?,
     val tastes: Tastes?,
@@ -85,5 +90,6 @@ data class PrivacyPatch(
     val mood: Boolean? = null,
     val usageData: Boolean? = null,
     val searchableByPhone: Boolean? = null,
-    val sensitiveData: Boolean? = null
+    val sensitiveData: Boolean? = null,
+    val searchableByUser: Boolean? = null
 )

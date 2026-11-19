@@ -209,6 +209,10 @@
 - A evitar: plurales sin `many` en español; lint (`MissingQuantity`) lo marca error.
 - A evitar: `rm` de `app/build/generated/ksp` con Gradle vivo; Windows bloquea los archivos y KSP falla con `FileNotFoundException`. `./gradlew --stop` antes.
 
+- Estado: nv-53 (`feat/amigos`): Amigos (pestañas, filtro, aceptar/rechazar/cancelar), Agregar amigos (usuario o teléfono, código, sugerencias, mi usuario y mi código), Perfil de la persona (agregar, eliminar, bloquear). Room 4 con `username`, `friendCode` y `priv_searchableByUser`. Push sociales abren `PersonRoute`. 379 pruebas y compuertas locales en verde.
+- Decisión: el QR del código de amigo (US-234) queda fuera: no hay librería de QR ni cámara en el stack; el código se comparte como texto. Porqué: constitución §3, sin librerías fuera del stack sin acuerdo.
+- A evitar: heredocs grandes con `python - <<'EOF'` en la herramienta Bash a veces fallan con "unexpected EOF"; escribir el script con Write y ejecutarlo.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

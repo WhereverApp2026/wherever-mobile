@@ -81,3 +81,13 @@ data object MyPlansRoute
 
 @Serializable
 data object NotificationsRoute
+
+@Serializable
+data object FriendsRoute
+
+@Serializable
+data object AddFriendRoute
+
+/** `id` lo lee PersonViewModel de SavedStateHandle por su nombre. */
+@Serializable
+data class PersonRoute(val id: String)

@@ -6,6 +6,7 @@ import com.wherever.mobile.core.common.DefaultDispatcherProvider
 import com.wherever.mobile.core.common.DispatcherProvider
 import com.wherever.mobile.core.database.MIGRATION_1_2
 import com.wherever.mobile.core.database.MIGRATION_2_3
+import com.wherever.mobile.core.database.MIGRATION_3_4
 import com.wherever.mobile.core.database.WhereverDatabase
 import dagger.Module
 import dagger.Provides
@@ -40,5 +41,6 @@ object AppModule {
         Room.databaseBuilder(context, WhereverDatabase::class.java, "wherever.db")
             .addMigrations(MIGRATION_1_2)
             .addMigrations(MIGRATION_2_3)
+            .addMigrations(MIGRATION_3_4)
             .build()
 }

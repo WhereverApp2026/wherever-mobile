@@ -9,6 +9,7 @@ import com.wherever.mobile.feature.notifications.domain.NotificationPage
 import com.wherever.mobile.feature.notifications.domain.NotificationType
 import com.wherever.mobile.feature.notifications.domain.NotificationsRepository
 import com.wherever.mobile.navigation.NotificationsRoute
+import com.wherever.mobile.navigation.PersonRoute
 import com.wherever.mobile.navigation.PlanRoute
 import com.wherever.mobile.navigation.route
 import com.wherever.mobile.testing.MainDispatcherRule
@@ -229,8 +230,9 @@ class NotificationsViewModelTest {
     }
 
     @Test
-    fun `push sin pantalla propia abre Avisos`() {
-        assertEquals(NotificationsRoute, PushDestination.FriendRequest("u1").route())
+    fun `push social abre el perfil y el resto sin pantalla propia abre Avisos`() {
+        assertEquals(PersonRoute("u1"), PushDestination.FriendRequest("u1").route())
+        assertEquals(PersonRoute("u2"), PushDestination.FriendAccepted("u2").route())
         assertEquals(NotificationsRoute, PushDestination.VoteOpened("g1", "v1").route())
         assertEquals(NotificationsRoute, PushDestination.PlanInvitation("g1", null).route())
         assertEquals(NotificationsRoute, PushDestination.Notifications.route())

@@ -179,6 +179,18 @@ class FakeProfileRepository(initial: UserProfile? = null) : ProfileRepository {
         return profile.value?.let { Result.Success(it.copy(photoUrl = url)) } ?: Result.Failure(AppError.NotFound())
     }
 
+    var usernameResult: Result<UserProfile>? = null
+    val usernameUpdates = mutableListOf<String>()
+
+    override suspend fun updateUsername(username: String): Result<UserProfile> {
+        usernameUpdates += username
+        val result = usernameResult
+            ?: profile.value?.let { Result.Success(it.copy(username = username)) }
+            ?: Result.Failure(AppError.NotFound())
+        if (result is Result.Success) profile.value = result.data
+        return result
+    }
+
     override suspend fun updateTastes(tastes: Tastes): Result<Unit> {
         savedTastes += tastes
         calls += "gustos"

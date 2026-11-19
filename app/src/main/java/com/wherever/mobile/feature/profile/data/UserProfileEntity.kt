@@ -34,7 +34,9 @@ data class PrivacyEntity(
     val mood: Boolean,
     val usageData: Boolean,
     val searchableByPhone: Boolean,
-    @ColumnInfo(defaultValue = "0") val sensitiveData: Boolean
+    @ColumnInfo(defaultValue = "0") val sensitiveData: Boolean,
+    /** nv-53: la API lo crea encendido (`buscable_por_usuario`). */
+    @ColumnInfo(defaultValue = "1") val searchableByUser: Boolean = true
 )
 
 @Entity(tableName = "user_profile")
@@ -45,6 +47,9 @@ data class UserProfileEntity(
     val emailVerified: Boolean,
     /** nv-50: columna nueva en la versión 3 de Room, sin valor por defecto (null). */
     val photoUrl: String? = null,
+    /** nv-53: columnas nuevas en la versión 4 de Room (null hasta leer el perfil). */
+    val username: String? = null,
+    val friendCode: String? = null,
     val mode: String,
     @Embedded(prefix = "city_") val city: CityEntity?,
     @Embedded(prefix = "tastes_") val tastes: TastesEntity?,

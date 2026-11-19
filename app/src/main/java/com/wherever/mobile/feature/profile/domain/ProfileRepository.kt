@@ -15,6 +15,9 @@ interface ProfileRepository {
     /** nv-50: guarda la URL pública (`url_1080`) de una foto ya publicada. */
     suspend fun updatePhoto(url: String): Result<UserProfile>
 
+    /** `PATCH /usuarios/yo {nombre_usuario}` (nv-53); repetido = 409. */
+    suspend fun updateUsername(username: String): Result<UserProfile>
+
     suspend fun updateTastes(tastes: Tastes): Result<Unit>
 
     suspend fun updatePreferences(patch: PreferencesPatch): Result<Unit>

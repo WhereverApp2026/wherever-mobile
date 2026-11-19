@@ -26,7 +26,7 @@ fun PreferencesDto.toEntity() = PreferencesEntity(
 )
 
 fun PrivacyDto.toEntity() =
-    PrivacyEntity(location, personalizedLearning, mood, usageData, searchableByPhone, sensitiveData)
+    PrivacyEntity(location, personalizedLearning, mood, usageData, searchableByPhone, sensitiveData, searchableByUser)
 
 fun UserProfileDto.toEntity() = UserProfileEntity(
     id = id,
@@ -34,6 +34,8 @@ fun UserProfileDto.toEntity() = UserProfileEntity(
     email = email,
     emailVerified = emailVerified,
     photoUrl = photoUrl?.takeIf { it.isNotBlank() },
+    username = username?.takeIf { it.isNotBlank() },
+    friendCode = friendCode?.takeIf { it.isNotBlank() },
     mode = mode,
     city = city?.let { CityEntity(it.id, it.name) },
     tastes = tastes?.toEntity(),
@@ -52,6 +54,8 @@ fun UserProfileEntity.toDomain() = UserProfile(
     email = email,
     emailVerified = emailVerified,
     photoUrl = photoUrl?.takeIf { it.isNotBlank() },
+    username = username,
+    friendCode = friendCode,
     mode = mode,
     city = city?.let { CityRef(it.id, it.name) },
     tastes = tastes?.let { Tastes(it.categories, it.budgetMin, it.budgetMax, it.restrictions, it.allergies) },
@@ -75,7 +79,8 @@ fun UserProfileEntity.toDomain() = UserProfile(
         privacy.mood,
         privacy.usageData,
         privacy.searchableByPhone,
-        privacy.sensitiveData
+        privacy.sensitiveData,
+        privacy.searchableByUser
     ),
     points = points,
     level = level,
@@ -98,5 +103,12 @@ fun PreferencesPatch.toDto(): PreferencesPatchDto {
     )
 }
 
-fun PrivacyPatch.toDto() =
-    PrivacyPatchDto(location, personalizedLearning, mood, usageData, searchableByPhone, sensitiveData)
+fun PrivacyPatch.toDto() = PrivacyPatchDto(
+    location,
+    personalizedLearning,
+    mood,
+    usageData,
+    searchableByPhone,
+    sensitiveData,
+    searchableByUser
+)

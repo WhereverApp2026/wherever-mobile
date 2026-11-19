@@ -518,4 +518,67 @@
     <string name="settings_quiet_detail">En este horario no te mandamos push, salvo los de tus reservaciones.</string>
     <string name="settings_quiet_off">Apagado</string>
     <string name="settings_quiet_range">De %1$s a %2$s</string>
+
+    <!-- Amigos (nv-53) -->
+    <string name="profile_friends">Amigos</string>
+    <string name="friends_title">Amigos</string>
+    <string name="friends_add">Agregar</string>
+    <string name="friends_tab_friends">Amigos</string>
+    <string name="friends_tab_received">Solicitudes</string>
+    <string name="friends_tab_received_count">Solicitudes (%1$d)</string>
+    <string name="friends_tab_sent">Enviadas</string>
+    <string name="friends_filter">Buscar entre tus amigos</string>
+    <string name="friends_empty">Aún no tienes amigos en Wherever. Agrégalos para armar planes juntos.</string>
+    <string name="friends_empty_received">No tienes solicitudes por responder.</string>
+    <string name="friends_empty_sent">No tienes solicitudes enviadas sin respuesta.</string>
+    <string name="friends_accept">Aceptar</string>
+    <string name="friends_reject">Rechazar</string>
+    <string name="friends_cancel_request">Cancelar solicitud</string>
+    <string name="friends_username_at">\@%1$s</string>
+    <string name="friends_add_title">Agregar amigos</string>
+    <string name="friends_my_username">Tu nombre de usuario</string>
+    <string name="friends_username_missing">Elige uno</string>
+    <string name="friends_username_label">Nombre de usuario</string>
+    <string name="friends_username_rule">De 3 a 20 letras minúsculas, números o guion bajo</string>
+    <string name="friends_username_taken">Ese nombre de usuario ya está ocupado</string>
+    <string name="friends_my_code">Tu código de amigo</string>
+    <string name="friends_my_code_hint">Toca tu código para compartirlo. Quien lo escriba aquí te puede agregar.</string>
+    <string name="friends_share_text">Agrégame en Wherever con mi código de amigo: %1$s</string>
+    <string name="friends_search_label">Buscar personas</string>
+    <string name="friends_search_hint">Nombre de usuario o teléfono</string>
+    <string name="friends_search_action">Buscar</string>
+    <string name="friends_search_empty">No encontramos a nadie. Solo aparecen quienes permiten que los busquen.</string>
+    <string name="friends_code_label">Código de amigo</string>
+    <string name="friends_code_hint">8 letras y números</string>
+    <string name="friends_code_action">Buscar por código</string>
+    <string name="friends_code_invalid">El código tiene 8 letras y números</string>
+    <string name="friends_code_not_found">No hay nadie con ese código</string>
+    <string name="friends_suggestions">Quizá los conoces</string>
+    <string name="friends_add_person">Agregar amigo</string>
+    <string name="friends_request_sent">Le mandamos tu solicitud a %1$s</string>
+    <string name="friends_now_friends">Ya eres amigo de %1$s</string>
+    <string name="friends_request_pending">Solicitud enviada</string>
+    <string name="friends_relation_friend">Son amigos</string>
+    <string name="friends_relation_received">Te mandó una solicitud</string>
+    <string name="friends_relation_none">Aún no son amigos</string>
+    <string name="friends_person_not_found">No encontramos a esta persona</string>
+    <string name="friends_level">Nivel %1$s</string>
+    <string name="friends_remove">Eliminar amigo</string>
+    <string name="friends_remove_title">¿Eliminar a %1$s?</string>
+    <string name="friends_remove_message">Dejarán de ser amigos. No le avisamos.</string>
+    <string name="friends_block">Bloquear</string>
+    <string name="friends_block_title">¿Bloquear a %1$s?</string>
+    <string name="friends_block_message">No podrá encontrarte, mandarte solicitudes ni invitarte a planes. No se entera.</string>
+    <plurals name="friends_mutual">
+        <item quantity="one">%1$d amigo en común</item>
+        <item quantity="many">%1$d amigos en común</item>
+        <item quantity="other">%1$d amigos en común</item>
+    </plurals>
+    <plurals name="friends_mutual_groups">
+        <item quantity="one">%1$d plan en común</item>
+        <item quantity="many">%1$d planes en común</item>
+        <item quantity="other">%1$d planes en común</item>
+    </plurals>
+    <string name="privacy_searchable_user">Buscable por nombre de usuario</string>
+    <string name="privacy_searchable_user_detail">Quien sepa tu nombre de usuario podrá encontrarte</string>
 </resources>

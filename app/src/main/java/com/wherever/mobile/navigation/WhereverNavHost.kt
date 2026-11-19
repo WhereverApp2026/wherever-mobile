@@ -25,6 +25,9 @@ import com.wherever.mobile.feature.auth.ui.LoginRoute as LoginScreen
 import com.wherever.mobile.feature.auth.ui.RecoverRoute as RecoverScreen
 import com.wherever.mobile.feature.auth.ui.RegisterRoute as RegisterScreen
 import com.wherever.mobile.feature.auth.ui.WelcomeScreen
+import com.wherever.mobile.feature.friends.ui.AddFriendRoute as AddFriendScreen
+import com.wherever.mobile.feature.friends.ui.FriendsRoute as FriendsScreen
+import com.wherever.mobile.feature.friends.ui.PersonRoute as PersonScreen
 import com.wherever.mobile.feature.home.ui.HomeNavigation
 import com.wherever.mobile.feature.home.ui.HomeRouteScreen
 import com.wherever.mobile.feature.notifications.ui.NotificationsRoute as NotificationsScreen
@@ -194,11 +197,28 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>, pushes
                 }
             )
         }
+        composable<FriendsRoute> { e ->
+            FriendsScreen(
+                onBack = { navController.popFrom(e) },
+                onAdd = { navController.navigateFrom(e, AddFriendRoute) },
+                onPerson = { navController.navigateFrom(e, PersonRoute(it)) }
+            )
+        }
+        composable<AddFriendRoute> { e ->
+            AddFriendScreen(
+                onBack = { navController.popFrom(e) },
+                onPerson = { navController.navigateFrom(e, PersonRoute(it)) }
+            )
+        }
+        composable<PersonRoute> { e ->
+            PersonScreen(onBack = { navController.popFrom(e) }, onBlocked = { navController.popOnResult(e) })
+        }
         composable<ProfileRoute> { e ->
             ProfileScreen(
                 onTab = { navController.openTab(e, it) },
                 onEdit = { navController.navigateFrom(e, EditProfileRoute) },
                 onFavorites = { navController.navigateFrom(e, FavoritesRoute) },
+                onFriends = { navController.navigateFrom(e, FriendsRoute) },
                 onSettings = { navController.navigateFrom(e, SettingsRoute) },
                 onVerifyEmail = { email ->
                     navController.navigateFrom(e, CheckEmailRoute(CheckEmailMode.VERIFICATION.name, email))

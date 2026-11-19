@@ -50,7 +50,8 @@ data class PrivacyDto(
     @SerialName("estado_animo") val mood: Boolean = false,
     @SerialName("datos_uso") val usageData: Boolean = false,
     @SerialName("buscable_por_telefono") val searchableByPhone: Boolean = false,
-    @SerialName("datos_sensibles") val sensitiveData: Boolean = false
+    @SerialName("datos_sensibles") val sensitiveData: Boolean = false,
+    @SerialName("buscable_por_usuario") val searchableByUser: Boolean = true
 )
 
 @Serializable
@@ -60,6 +61,8 @@ data class UserProfileDto(
     @SerialName("correo") val email: String,
     @SerialName("correo_verificado") val emailVerified: Boolean = false,
     @SerialName("foto_url") val photoUrl: String? = null,
+    @SerialName("nombre_usuario") val username: String? = null,
+    @SerialName("codigo_amigo") val friendCode: String? = null,
     @SerialName("modo_actual") val mode: String = "explorar",
     @SerialName("ciudad") val city: CityRefDto? = null,
     @SerialName("gustos") val tastes: TastesDto? = null,
@@ -76,7 +79,8 @@ data class UserProfileDto(
 data class ProfilePatchDto(
     @SerialName("nombre") val name: String? = null,
     @SerialName("ciudad_id") val cityId: String? = null,
-    @SerialName("foto_url") val photoUrl: String? = null
+    @SerialName("foto_url") val photoUrl: String? = null,
+    @SerialName("nombre_usuario") val username: String? = null
 )
 
 @Serializable
@@ -102,7 +106,8 @@ data class PrivacyPatchDto(
     @SerialName("estado_animo") val mood: Boolean? = null,
     @SerialName("datos_uso") val usageData: Boolean? = null,
     @SerialName("buscable_por_telefono") val searchableByPhone: Boolean? = null,
-    @SerialName("datos_sensibles") val sensitiveData: Boolean? = null
+    @SerialName("datos_sensibles") val sensitiveData: Boolean? = null,
+    @SerialName("buscable_por_usuario") val searchableByUser: Boolean? = null
 )
 
 @Serializable

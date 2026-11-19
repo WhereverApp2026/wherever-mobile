@@ -74,6 +74,37 @@ class MigrationTest {
         }
     }
 
+    @Test
+    fun migration3To4AddsUsernameAndKeepsSearchable() {
+        helper.createDatabase(DB_NAME, 3).use { db ->
+            db.execSQL(
+                """
+                INSERT INTO user_profile (id, name, email, emailVerified, mode, points, level, weekStreak, version,
+                    tastes_categories, tastes_budgetMin, tastes_budgetMax, tastes_restrictions, tastes_allergies,
+                    pref_mobility, pref_theme, pref_units, pref_notifReservations, pref_notifCoupons,
+                    pref_notifGroups, pref_notifReviews, pref_notifPromotions,
+                    priv_location, priv_personalizedLearning, priv_mood, priv_usageData, priv_searchableByPhone,
+                    priv_sensitiveData, photoUrl)
+                VALUES ('u1', 'Ana', 'ana@ejemplo.com', 1, 'explorar', 50, 'Explorador', 0, 5,
+                    'cafes', 100, 500, '', '', 'a_pie', 'sistema', 'km', 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, NULL)
+                """.trimIndent()
+            )
+        }
+
+        helper.runMigrationsAndValidate(DB_NAME, 4, true, MIGRATION_3_4).use { db ->
+            db.query(
+                "SELECT name, version, username, friendCode, priv_searchableByUser FROM user_profile WHERE id = 'u1'"
+            ).use { cursor ->
+                assertTrue(cursor.moveToFirst())
+                assertEquals("Ana", cursor.getString(0))
+                assertEquals(5L, cursor.getLong(1))
+                assertTrue(cursor.isNull(2))
+                assertTrue(cursor.isNull(3))
+                assertEquals(1, cursor.getInt(4))
+            }
+        }
+    }
+
     private companion object {
         const val DB_NAME = "migration-test.db"
     }

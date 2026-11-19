@@ -124,3 +124,4 @@ Orden: Must con pantalla y API lista, en el orden en que las usa una persona.
 | Integración en `main` (push, auth, plan con IA, foto) | nv-46, nv-48, nv-49, nv-50 | US-162; US-010, 033, 035, 039 a 046, 048 a 050, 055 a 058, 061, 063, 064, 066 (parciales: US-017, US-065) | 69 | 33,5 % (229 SP) |
 | Cuenta: contraseña, correo y mis datos | nv-51 | US-007 | 5 | 34,2 % (234 SP) |
 | Avisos y horario silencioso | nv-52 | US-147, US-148 | 5 | 34,9 % (239 SP) |
+| Amigos | nv-53 | US-232, US-233, US-235, US-238 (parcial: US-234 sin QR) | 13 | 36,8 % (252 SP) |

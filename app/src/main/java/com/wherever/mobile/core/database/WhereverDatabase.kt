@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 import com.wherever.mobile.feature.profile.data.UserProfileDao
 import com.wherever.mobile.feature.profile.data.UserProfileEntity
 
-@Database(entities = [UserProfileEntity::class], version = 3, exportSchema = true)
+@Database(entities = [UserProfileEntity::class], version = 4, exportSchema = true)
 @TypeConverters(StringListConverter::class)
 abstract class WhereverDatabase : RoomDatabase() {
     abstract fun userProfileDao(): UserProfileDao

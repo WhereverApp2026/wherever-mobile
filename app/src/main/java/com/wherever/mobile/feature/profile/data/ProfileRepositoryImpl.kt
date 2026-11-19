@@ -30,12 +30,18 @@ class ProfileRepositoryImpl @Inject constructor(private val api: UsersApi, priva
         return store(safeApiCall { api.patchMe("\"$version\"", ProfilePatchDto(name, cityId)) })
     }
 
-    override suspend fun updatePhoto(url: String): Result<UserProfile> {
+    override suspend fun updatePhoto(url: String): Result<UserProfile> = patch(ProfilePatchDto(photoUrl = url))
+
+    override suspend fun updateUsername(username: String): Result<UserProfile> =
+        patch(ProfilePatchDto(username = username.trim().removePrefix("@").lowercase()))
+
+    /** `PATCH /usuarios/yo` con la versión guardada en Room (`If-Match`). */
+    private suspend fun patch(body: ProfilePatchDto): Result<UserProfile> {
         val version = dao.get()?.version ?: when (val fetched = refresh()) {
             is Result.Success -> fetched.data.version
             is Result.Failure -> return fetched
         }
-        return store(safeApiCall { api.patchMe("\"$version\"", ProfilePatchDto(photoUrl = url)) })
+        return store(safeApiCall { api.patchMe("\"$version\"", body) })
     }
 
     override suspend fun updateTastes(tastes: Tastes): Result<Unit> = safeApiCall {

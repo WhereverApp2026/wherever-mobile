@@ -93,6 +93,14 @@ private fun PrivacyContent(
                 tag = "privacy_searchable"
             )
             ToggleRow(
+                title = stringResource(R.string.privacy_searchable_user),
+                subtitle = stringResource(R.string.privacy_searchable_user_detail),
+                checked = privacy.searchableByUser,
+                onCheckedChange = { viewModel.update(PrivacyPatch(searchableByUser = it)) },
+                enabled = enabled,
+                tag = "privacy_searchable_user"
+            )
+            ToggleRow(
                 title = stringResource(R.string.privacy_sensitive),
                 subtitle = stringResource(R.string.privacy_sensitive_detail),
                 checked = privacy.sensitiveData,

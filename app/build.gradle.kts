@@ -44,8 +44,8 @@ android {
         applicationId = "com.wherever.mobile"
         minSdk = 26
         targetSdk = 36
-        versionCode = 7
-        versionName = "0.5.0"
+        versionCode = 8
+        versionName = "0.6.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "TERMS_VERSION", "\"2026-10\"")
         // Zona de respaldo de Inicio sin ubicación: `GET /inicio` exige lat y lng (specs/nv-47 §3).
