@@ -37,6 +37,7 @@ import com.wherever.mobile.feature.places.ui.PlaceDetailRoute as PlaceDetailScre
 import com.wherever.mobile.feature.plans.ui.CreatePlanRoute as CreatePlanScreen
 import com.wherever.mobile.feature.plans.ui.MyPlansRoute as MyPlansScreen
 import com.wherever.mobile.feature.plans.ui.PlanDetailRoute as PlanDetailScreen
+import com.wherever.mobile.feature.profile.ui.BadgesRoute as BadgesScreen
 import com.wherever.mobile.feature.profile.ui.EditProfileRoute as EditProfileScreen
 import com.wherever.mobile.feature.profile.ui.ProfileRoute as ProfileScreen
 import com.wherever.mobile.feature.reservations.ui.MyReservationsRoute as MyReservationsScreen
@@ -246,11 +247,15 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>, pushes
                 onFavorites = { navController.navigateFrom(e, FavoritesRoute) },
                 onFriends = { navController.navigateFrom(e, FriendsRoute) },
                 onReservations = { navController.navigateFrom(e, MyReservationsRoute) },
+                onBadges = { navController.navigateFrom(e, BadgesRoute) },
                 onSettings = { navController.navigateFrom(e, SettingsRoute) },
                 onVerifyEmail = { email ->
                     navController.navigateFrom(e, CheckEmailRoute(CheckEmailMode.VERIFICATION.name, email))
                 }
             )
+        }
+        composable<BadgesRoute> { e ->
+            BadgesScreen(onBack = { navController.popFrom(e) })
         }
         composable<EditProfileRoute> { e ->
             EditProfileScreen(

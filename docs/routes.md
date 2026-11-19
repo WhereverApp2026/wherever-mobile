@@ -15,6 +15,7 @@
 | `ExploreRoute(query, category)` | Explorar: búsqueda, filtros y recientes | ubicación aproximada (opcional) | release | nv-47 |
 | `PlaceRoute(id, origin)` | Ficha del lugar | ninguno | release | nv-47 |
 | `FavoritesRoute` | Mis favoritos | ninguno | release | nv-47 |
+| `BadgesRoute` | Insignias: nivel, puntos, ganadas y por desbloquear | ninguno | release | nv-14 |
 | `CreatePlanRoute(phrase)` | Crear plan con IA y hoja rápida | ubicación aproximada (obligatoria para generar) | release | nv-48 |
 | `PlanRoute(id)` | Plan: línea de tiempo y edición | ninguno | release | nv-48 |
 | `NotificationsRoute` | Avisos: lista, filtros, marcar leídas y borrar | ninguno | release | nv-52 |

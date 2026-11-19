@@ -585,6 +585,42 @@
     <!-- Reservas (nv-54) -->
     <string name="place_reserve">Reservar</string>
     <string name="profile_reservations">Mis reservas</string>
+    <string name="profile_badges">Insignias</string>
+    <string name="badges_title">Insignias</string>
+    <string name="badges_level_label">Tu nivel</string>
+    <plurals name="badges_points">
+        <item quantity="one">%1$d punto</item>
+        <item quantity="many">%1$d puntos</item>
+        <item quantity="other">%1$d puntos</item>
+    </plurals>
+    <plurals name="badges_to_next">
+        <item quantity="one">Te falta %1$d punto para %2$s</item>
+        <item quantity="many">Te faltan %1$d puntos para %2$s</item>
+        <item quantity="other">Te faltan %1$d puntos para %2$s</item>
+    </plurals>
+    <string name="badges_max_level">Llegaste al nivel más alto.</string>
+    <string name="badges_earned">Ganadas</string>
+    <string name="badges_locked">Por desbloquear</string>
+    <string name="badges_earned_empty">Todavía no ganas insignias.</string>
+    <string name="badges_locked_empty">Ya las ganaste todas.</string>
+    <string name="badge_welcome">Bienvenida</string>
+    <string name="badge_welcome_how">Creaste tu cuenta en Wherever.</string>
+    <string name="badge_first_plan">Primer plan</string>
+    <string name="badge_first_plan_how">Arma tu primer plan con la IA.</string>
+    <string name="badge_first_reservation">Primera reserva</string>
+    <string name="badge_first_reservation_how">Reserva en un lugar desde su ficha.</string>
+    <string name="badge_first_review">Primera reseña</string>
+    <string name="badge_first_review_how">Califica un lugar después de tu visita.</string>
+    <string name="badge_five_friends">Buena compañía</string>
+    <string name="badge_five_friends_how">Agrega a cinco amigos.</string>
+    <string name="badge_streak">Racha de cuatro</string>
+    <string name="badge_streak_how">Sal con un plan cuatro semanas seguidas.</string>
+    <string name="badge_all_categories">De todo un poco</string>
+    <string name="badge_all_categories_how">Visita lugares de los seis giros.</string>
+    <string name="badge_first_memory">Primer recuerdo</string>
+    <string name="badge_first_memory_how">Guarda el recuerdo de un plan.</string>
+    <string name="badge_unknown">Insignia</string>
+    <string name="badge_unknown_how">Sigue usando Wherever para desbloquearla.</string>
     <string name="reserve_title">Reservar</string>
     <string name="reserve_day">¿Qué día?</string>
     <string name="reserve_today">Hoy</string>

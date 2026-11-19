@@ -1,9 +1,11 @@
 package com.wherever.mobile.feature.profile.data.di
 
 import com.wherever.mobile.core.database.WhereverDatabase
+import com.wherever.mobile.feature.profile.data.LocalBadgesRepository
 import com.wherever.mobile.feature.profile.data.ProfileRepositoryImpl
 import com.wherever.mobile.feature.profile.data.UserProfileDao
 import com.wherever.mobile.feature.profile.data.UsersApi
+import com.wherever.mobile.feature.profile.domain.BadgesRepository
 import com.wherever.mobile.feature.profile.domain.ProfileRepository
 import dagger.Binds
 import dagger.Module
@@ -17,6 +19,9 @@ import retrofit2.Retrofit
 abstract class ProfileModule {
     @Binds
     abstract fun bindRepository(impl: ProfileRepositoryImpl): ProfileRepository
+
+    @Binds
+    abstract fun bindBadges(impl: LocalBadgesRepository): BadgesRepository
 
     companion object {
         @Provides

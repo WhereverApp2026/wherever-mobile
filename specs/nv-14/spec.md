@@ -20,7 +20,7 @@ Ver y editar la identidad de la cuenta, con su nivel y logros.
 **HU propuesta.** Como usuario quiero ver mi nivel y mis insignias para motivarme.
 
 - [x] Muestra `nivel`, `puntos` y `racha_semanas`.
-- [ ] Las insignias salen del backend cuando exista.
+- [x] `83_Insignias` (2026-11-19): nivel, puntos, progreso, Ganadas y Por desbloquear. Catálogo local (`LocalBadgesRepository`) detrás de `BadgesRepository` hasta que exista `GET /usuarios/yo/insignias`.
 
 ### UI
 
@@ -133,7 +133,7 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 - Guarda con botón, no al instante (D09).
 - Sin `@usuario`, bio, contadores de planes, amigos ni reseñas, ni teléfono: la API no los da (D08).
 - Sin foto: la API no permite subirla (D34). Se muestra la inicial.
-- Sin `83_Insignias`: faltan datos (se muestran `puntos`, `nivel` y `racha`).
+- `83_Insignias` con catálogo local y escalera de niveles provisional (Explorador 0, Aventurero 250, Trotamundos 750, Leyenda 2000): la API no publica insignias ni umbrales.
 - Sin cambio de correo: no estaba pedido.
 
 **Archivos** (bajo `app/src/main/java/com/wherever/mobile/`)

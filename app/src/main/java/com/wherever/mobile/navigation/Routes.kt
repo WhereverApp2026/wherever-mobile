@@ -31,6 +31,9 @@ data object HomeRoute
 data object ProfileRoute
 
 @Serializable
+data object BadgesRoute
+
+@Serializable
 data object EditProfileRoute
 
 @Serializable

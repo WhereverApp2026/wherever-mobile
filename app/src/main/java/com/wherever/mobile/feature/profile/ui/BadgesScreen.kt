@@ -1,0 +1,164 @@
+package com.wherever.mobile.feature.profile.ui
+
+import androidx.annotation.StringRes
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.wherever.mobile.R
+import com.wherever.mobile.core.designsystem.ErrorBanner
+import com.wherever.mobile.core.designsystem.Gold
+import com.wherever.mobile.core.designsystem.LoadingState
+import com.wherever.mobile.core.designsystem.ScreenPadding
+import com.wherever.mobile.core.designsystem.SurfaceCard
+import com.wherever.mobile.core.designsystem.TopTitleRow
+import com.wherever.mobile.feature.profile.domain.Badge
+import com.wherever.mobile.feature.profile.domain.LevelProgress
+
+/** 83_Insignias: tarjeta de nivel con puntos y progreso, Ganadas y Por desbloquear. */
+@Composable
+fun BadgesRoute(onBack: () -> Unit, viewModel: BadgesViewModel = hiltViewModel()) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    BadgesContent(state, onBack)
+}
+
+/** Sin estado, para la prueba de UI. */
+@Composable
+internal fun BadgesContent(state: BadgesUiState, onBack: () -> Unit) {
+    Column(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).safeDrawingPadding()) {
+        TopTitleRow(stringResource(R.string.badges_title), onBack, Modifier.padding(ScreenPadding))
+        state.error?.let { ErrorBanner(it.asString(), Modifier.padding(horizontal = ScreenPadding)) }
+        if (state.loading && state.progress == null) {
+            LoadingState()
+            return@Column
+        }
+        LazyColumn(
+            contentPadding = PaddingValues(ScreenPadding),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.testTag("badges_list")
+        ) {
+            state.progress?.let { progress -> item { LevelCard(progress) } }
+            item { SectionTitle(R.string.badges_earned) }
+            if (state.earned.isEmpty()) {
+                item { EmptyText(R.string.badges_earned_empty) }
+            } else {
+                items(state.earned, key = { it.id }) { BadgeRow(it) }
+            }
+            item { SectionTitle(R.string.badges_locked) }
+            if (state.locked.isEmpty()) {
+                item { EmptyText(R.string.badges_locked_empty) }
+            } else {
+                items(state.locked, key = { it.id }) { BadgeRow(it) }
+            }
+        }
+    }
+}
+
+@Composable
+private fun LevelCard(progress: LevelProgress) {
+    SurfaceCard(modifier = Modifier.testTag("badges_level")) {
+        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(
+                stringResource(R.string.badges_level_label),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(progress.current.name, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            Text(
+                pluralStringResource(R.plurals.badges_points, progress.points, progress.points),
+                style = MaterialTheme.typography.bodyMedium
+            )
+            LinearProgressIndicator(
+                progress = { progress.fraction },
+                modifier = Modifier.fillMaxWidth().testTag("badges_progress")
+            )
+            val next = progress.next
+            Text(
+                if (next == null) {
+                    stringResource(R.string.badges_max_level)
+                } else {
+                    pluralStringResource(
+                        R.plurals.badges_to_next,
+                        progress.pointsToNext,
+                        progress.pointsToNext,
+                        next.name
+                    )
+                },
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun SectionTitle(@StringRes title: Int) {
+    Text(stringResource(title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp))
+}
+
+@Composable
+private fun EmptyText(@StringRes text: Int) {
+    Text(stringResource(text), color = MaterialTheme.colorScheme.onSurfaceVariant)
+}
+
+@Composable
+private fun BadgeRow(badge: Badge) {
+    val text = badgeText(badge.id)
+    SurfaceCard(modifier = Modifier.testTag("badge_${badge.id}")) {
+        Row(modifier = Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                if (badge.earned) Icons.Filled.Star else Icons.Filled.Lock,
+                contentDescription = stringResource(
+                    if (badge.earned) R.string.badges_earned else R.string.badges_locked
+                ),
+                tint = if (badge.earned) Gold else MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Column(modifier = Modifier.weight(1f).padding(start = 12.dp)) {
+                Text(stringResource(text.first), style = MaterialTheme.typography.titleSmall)
+                Text(
+                    stringResource(text.second),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
+}
+
+/** Nombre y cómo se gana; una clave desconocida de la API cae en el texto genérico. */
+private fun badgeText(id: String): Pair<Int, Int> = when (id) {
+    "bienvenida" -> R.string.badge_welcome to R.string.badge_welcome_how
+    "primer_plan" -> R.string.badge_first_plan to R.string.badge_first_plan_how
+    "primera_reserva" -> R.string.badge_first_reservation to R.string.badge_first_reservation_how
+    "primera_resena" -> R.string.badge_first_review to R.string.badge_first_review_how
+    "cinco_amigos" -> R.string.badge_five_friends to R.string.badge_five_friends_how
+    "racha_cuatro" -> R.string.badge_streak to R.string.badge_streak_how
+    "seis_giros" -> R.string.badge_all_categories to R.string.badge_all_categories_how
+    "primer_recuerdo" -> R.string.badge_first_memory to R.string.badge_first_memory_how
+    else -> R.string.badge_unknown to R.string.badge_unknown_how
+}

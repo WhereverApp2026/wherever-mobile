@@ -10,6 +10,10 @@
 ## Endpoints que faltan en la API (para el equipo de backend)
 (Se llena conforme aparecen; cada pantalla con repositorio falso lo dice aquí.)
 
+| Pantalla | Falta | Mientras tanto |
+|---|---|---|
+| Insignias (nv-14) | `GET /usuarios/yo/insignias` → `{ganadas[{id, ganada_en}], por_desbloquear[{id, progreso?}]}` y la escalera de niveles (umbrales de puntos) | `LocalBadgesRepository`: catálogo de 8, solo "bienvenida" ganada; escalera provisional 0/250/750/2000 |
+
 ---
 
 # Revisión para Jorge — 2026-11-18 (tarde): foto de perfil (nv-50)

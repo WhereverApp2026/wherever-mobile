@@ -1,4 +1,63 @@
-# Avance de Wherever Móvil contra el backlog
+# Avance de Wherever Móvil: pantallas que funcionan
+
+> **Métrica (desde 2026-11-19):** pantallas que funcionan de verdad / 162 frames de la maqueta (`specs/README.md`).
+> Una pantalla cuenta si tiene código, llama a la API real, maneja carga, error y vacío, tiene pruebas y se probó en el teléfono.
+> "Con datos locales" = UI completa con repositorio falso detrás de una interfaz porque falta el endpoint (`docs/revision-jorge.md`); se cuentan aparte y **no** suman al % real.
+
+## Corte actual (main)
+
+| | Pantallas | % de 162 |
+|---|---|---|
+| Funcionan con la API real | 52 | **32.1 %** |
+| Con datos locales (falta endpoint) | 1 | 0.6 % |
+| Total con UI terminada | 53 | 32.7 % |
+
+| Spec | Tema | Frames | Funcionan | Datos locales | Nota |
+|---|---|---|---|---|---|
+| nv-06 | Splash y bienvenida | 1 | 1 | 0 |  |
+| nv-07 | Iniciar sesión | 1 | 1 | 0 |  |
+| nv-08 | Recuperar contraseña | 3 | 2 | 0 | falta NuevaContrasena |
+| nv-09 | Registro | 1 | 1 | 0 | probado en teléfono 2026-11-19 |
+| nv-10 | Gustos | 1 | 1 | 0 | probado en teléfono 2026-11-19 |
+| nv-11 | Permisos en contexto | 2 | 1 | 0 | ubicación sí; avisos no |
+| nv-13 | Ajustes y cerrar sesión | 1 | 1 | 0 |  |
+| nv-14 | Perfil, edición e insignias | 4 | 3 | 1 | Insignias con catálogo local (sin endpoint) |
+| nv-15 | Privacidad, mis datos, eliminar | 2 | 2 | 0 |  |
+| nv-16 | Sin conexión | 1 | 0 | 0 |  |
+| nv-17 | Inicio y feed | 15 | 3 | 0 | feed social pendiente |
+| nv-18 | Notificaciones | 4 | 3 | 0 |  |
+| nv-19 | Búsqueda | 4 | 3 | 0 |  |
+| nv-20 | Amigos | 15 | 10 | 0 | falta QR y variantes |
+| nv-21 | Explorar y lugares | 8 | 5 | 0 | staging sin negocios |
+| nv-22 | Favoritos | 2 | 2 | 0 |  |
+| nv-23 | Crear plan con IA | 6 | 4 | 0 |  |
+| nv-24 | Plan: detalle y edición | 5 | 3 | 0 |  |
+| nv-25 | Compartir, grupos y chats | 12 | 0 | 0 |  |
+| nv-26 | Vaca virtual y gastos | 4 | 0 | 0 |  |
+| nv-27 | Reserva y pago | 10 | 4 | 0 | sin pago; staging sin negocios |
+| nv-28 | Mis planes | 2 | 2 | 0 |  |
+| nv-29 | Cupones | 5 | 0 | 0 |  |
+| nv-30 | El día del plan | 5 | 0 | 0 |  |
+| nv-31 | Recuerdos y postales | 13 | 0 | 0 |  |
+| nv-32 | Reseñas | 8 | 0 | 0 |  |
+| nv-33 | Ayuda | 1 | 0 | 0 |  |
+| nv-34 | Negocio: registro | 6 | 0 | 0 |  |
+| nv-35 | Negocio: panel, reservas y check-in | 8 | 0 | 0 |  |
+| nv-36 | Negocio: reseñas y momentos | 3 | 0 | 0 |  |
+| nv-37 | Negocio: cupones y cupo | 3 | 0 | 0 |  |
+| nv-38 | Negocio: perfil, fotos y cobros | 6 | 0 | 0 |  |
+
+## Registro de cortes
+
+| Fecha | Commit | Área cerrada | Funcionan | % real |
+|---|---|---|---|---|
+| 2026-11-19 | `30305af` | Punto de partida (nv-54 integrado) | 52 | 32,1 % |
+| 2026-11-19 | este | Perfil: Insignias (datos locales) | 52 (+1 local) | 32,1 % |
+
+---
+
+# Histórico: avance por story points (hasta 2026-11-18)
+
 
 > Fuente: `Wherever_Product_Backlog_v3.xlsx` (hoja Historias): 238 historias y 684 story points (SP). Meta del 50 %: más de 342 SP.
 > Se actualiza al abrir cada PR. Los PR los fusiona Jorge; un PR abierto cuenta aparte ("En PR").

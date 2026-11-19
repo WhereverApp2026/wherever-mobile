@@ -6,6 +6,7 @@
 - [x] Ante 409 avisa "Tus datos cambiaron en otro dispositivo", recarga y deja al usuario revisar.
 - [x] Aviso de correo sin verificar, que lleva a Revisa tu correo (D20).
 - [x] Room: `UserProfileEntity` con esquema exportado en `app/schemas`.
+- [x] Insignias (`83_Insignias`, `BadgesRoute`): nivel y puntos de `/usuarios/yo`, insignias de `LocalBadgesRepository` (endpoint pendiente de backend).
 
 ## T2 — Verificación
 - [x] `assembleDebug`, `testDebugUnitTest`, `ktlintCheck` y `lintDebug` en verde
@@ -17,6 +18,8 @@
 - [x] Integración: `test/.../integration/ProfileIntegrationTest.kt` — perfil de la doc en caché; PATCH 200/409/422 y 401 con refresh
 - [ ] Integración: `androidTest/.../integration/ProfileRepositoryRoomTest.kt` — 409 no toca Room; la UI lee de Room (instrumentada)
 - [ ] Integración: `androidTest/.../feature/profile/data/UserProfileDaoTest.kt` — listas y objetos anidados en Room (instrumentada)
+- [x] Unit: `test/.../feature/profile/ui/BadgesViewModelTest.kt` — ganadas/por desbloquear, sin red, error, progreso y último nivel
+- [x] UI: `androidTest/.../feature/profile/ui/BadgesContentTest.kt` — nivel, puntos que faltan y secciones
 - [x] Seguridad: `test/.../security/PlatformSecurityTest.kt` — la base de datos se excluye de respaldos
 - [x] Seguridad: `test/.../integration/AuthIntegrationTest.kt` — sin datos personales en logs
 - **No hacer**: usar el servidor de staging en las pruebas.

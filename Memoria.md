@@ -215,6 +215,9 @@
 
 - Estado (2026-11-19): se trabaja directo en `main`, sin ramas ni PR (pedido de Jorge). Métrica: pantallas que funcionan / 162 en `docs/avance.md`. CI de `main` otra vez en verde tras la excepción de gitleaks (`40e8ff7`). nv-54 (reservas sin pago) integrado.
 - A evitar: `adb shell uiautomator dump /sdcard/...` desde Git Bash convierte la ruta; usar `MSYS_NO_PATHCONV=1`.
+- A evitar: `connectedDebugAndroidTest` desinstala la app al terminar y borra la sesión del teléfono. Para una clase sola: `installDebug installDebugAndroidTest` y `adb shell am instrument -w -e class …`.
+- A recordar: en el Xiaomi (MIUI) las pruebas de UI se cuelgan ("MIUILOG- Permission Denied Activity") hasta dar `adb shell appops set com.wherever.mobile 10021 allow` (ventanas en segundo plano); se pierde al reinstalar.
+- Estado: Insignias (nv-14) con catálogo local; Registro probado en el teléfono contra staging (cuenta QA `@example.com`).
 
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
