@@ -59,6 +59,7 @@ data class UserProfileDto(
     @SerialName("nombre") val name: String,
     @SerialName("correo") val email: String,
     @SerialName("correo_verificado") val emailVerified: Boolean = false,
+    @SerialName("foto_url") val photoUrl: String? = null,
     @SerialName("modo_actual") val mode: String = "explorar",
     @SerialName("ciudad") val city: CityRefDto? = null,
     @SerialName("gustos") val tastes: TastesDto? = null,
@@ -74,7 +75,8 @@ data class UserProfileDto(
 @Serializable
 data class ProfilePatchDto(
     @SerialName("nombre") val name: String? = null,
-    @SerialName("ciudad_id") val cityId: String? = null
+    @SerialName("ciudad_id") val cityId: String? = null,
+    @SerialName("foto_url") val photoUrl: String? = null
 )
 
 @Serializable

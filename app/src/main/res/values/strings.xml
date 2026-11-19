@@ -363,4 +363,15 @@
     <string name="profile_favorites">Mis favoritos</string>
     <string name="favorites_title">Mis favoritos</string>
     <string name="favorites_empty">Aún no guardas lugares. Toca el corazón en la ficha de un negocio para encontrarlo aquí.</string>
+
+    <!-- Fotos (nv-50) -->
+    <string name="photo_change">Cambiar foto</string>
+    <string name="photo_from_gallery">Elegir de la galería</string>
+    <string name="photo_from_camera">Tomar foto</string>
+    <string name="photo_avatar_a11y">Foto de perfil de %1$s</string>
+    <string name="photo_saved">Foto de perfil guardada</string>
+    <string name="photo_in_review">Recibimos tu foto. La revisaremos antes de mostrarla.</string>
+    <string name="photo_rejected">Esta foto no cumple las reglas de la comunidad. Prueba con otra.</string>
+    <string name="photo_unreadable">No pudimos leer esa foto o pesa más de 5 MB. Prueba con otra.</string>
+    <string name="photo_upload_failed">No se pudo subir la foto. Intenta de nuevo.</string>
 </resources>

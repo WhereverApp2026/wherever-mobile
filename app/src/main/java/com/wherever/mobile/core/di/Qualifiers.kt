@@ -14,3 +14,8 @@ annotation class RefreshClient
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class ApplicationScope
+
+/** Sube fotos al formulario firmado de S3: sin `Authorization` (specs/nv-50). */
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class UploadClient

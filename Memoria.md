@@ -187,6 +187,14 @@
 - A evitar: Coil 3.6.3, porque exige `compileSdk 37`; se usa 3.3.0 con `coil-network-okhttp` (Coil 3 no trae red por defecto).
 - A recordar: el JDK 17 está en el scratchpad de la sesión `ceb6bb66…/jdk17dl/jdk-17.0.20.1+1`; `gradle-daemon-jvm.properties` ya no existe en `gradle/`.
 
+## Foto de perfil (2026-11-18, tarde)
+- Estado: rama `feat/fotos-perfil` (worktree `../wherever-mobile-nv50`), `specs/nv-50`, versión 3. Galería y cámara probadas en el teléfono de Jorge contra staging.
+- Decisión: Photo Picker y `TakePicture` sin pedir `CAMERA` ni `READ_MEDIA_IMAGES`. Porqué: el sistema da acceso solo a la foto elegida; pedir permisos de más es peor para la privacidad y para Play.
+- Decisión: cliente OkHttp aparte (`@UploadClient`) para S3. Porqué: el formulario firmado no lleva token y el token no debe salir del dominio de la API.
+- A evitar: probar fotos con la galería real del teléfono: hay fotos personales. Copiar una imagen de prueba con `adb push` a `Pictures/`.
+- A evitar: `TaskStop` de una cadena de compuertas no mata el bucle `for` ni Gradle: quedan procesos `java` del JDK 17; cerrar esos PID uno por uno.
+- A recordar: varias ramas a la vez con `git worktree`; solo una compila a la vez.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

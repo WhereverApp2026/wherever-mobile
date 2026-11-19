@@ -44,6 +44,7 @@ data class UserProfile(
     val name: String,
     val email: String,
     val emailVerified: Boolean,
+    val photoUrl: String? = null,
     val mode: String,
     val city: CityRef?,
     val tastes: Tastes?,

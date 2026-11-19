@@ -1,5 +1,6 @@
 package com.wherever.mobile.testing
 
+import com.wherever.mobile.core.common.AppError
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.network.ApiJson
 import com.wherever.mobile.core.notifications.DeviceRegistration
@@ -169,6 +170,13 @@ class FakeProfileRepository(initial: UserProfile? = null) : ProfileRepository {
         val result = updateProfileResult ?: Result.Success(sampleProfile())
         if (result is Result.Success) profile.value = result.data
         return result
+    }
+
+    val photoUpdates = mutableListOf<String>()
+
+    override suspend fun updatePhoto(url: String): Result<UserProfile> {
+        photoUpdates += url
+        return profile.value?.let { Result.Success(it.copy(photoUrl = url)) } ?: Result.Failure(AppError.NotFound())
     }
 
     override suspend fun updateTastes(tastes: Tastes): Result<Unit> {
