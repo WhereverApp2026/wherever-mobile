@@ -56,6 +56,7 @@ data class HomeUiState(
 )
 
 /** 10_Inicio (US-025, US-032, US-037, US-047, US-053, US-062, US-030). */
+@Suppress("LongParameterList") // Hilt inyecta cada fuente de Inicio por separado; agruparlas solo movería el problema.
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: HomeRepository,

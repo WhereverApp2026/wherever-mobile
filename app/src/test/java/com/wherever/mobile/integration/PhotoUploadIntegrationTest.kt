@@ -67,7 +67,8 @@ class PhotoUploadIntegrationTest {
         server.reply(204)
         server.reply(
             200,
-            """{"id":"img1","estado":"publicada","url_1080":"https://img/i/img1/1080.jpg","url_320":"https://img/i/img1/320.jpg"}"""
+            """{"id":"img1","estado":"publicada","url_1080":"https://img/i/img1/1080.jpg",""" +
+                """"url_320":"https://img/i/img1/320.jpg"}"""
         )
 
         val image = (repository.upload("content://media/1") as Result.Success).data

@@ -3,7 +3,9 @@ package com.wherever.mobile.feature.photos.data
 import com.wherever.mobile.core.common.AppError
 import com.wherever.mobile.core.common.DispatcherProvider
 import com.wherever.mobile.core.common.Result
+import com.wherever.mobile.core.common.map
 import com.wherever.mobile.core.di.UploadClient
+import com.wherever.mobile.core.media.CompressedImage
 import com.wherever.mobile.core.media.ImageCompressor
 import com.wherever.mobile.core.network.safeApiCall
 import com.wherever.mobile.feature.photos.domain.ImageState
@@ -66,20 +68,21 @@ class PhotoRepositoryImpl @Inject constructor(
     override suspend fun upload(source: String): Result<UploadedImage> {
         val image = withContext(dispatchers.io) { compressor.compress(source) }
             ?: return Result.Failure(AppError.Validation(apiMessage = null))
-        val form = when (val requested = safeApiCall { api.requestUpload(UploadRequestDto(image.mimeType)) }) {
-            is Result.Success -> requested.data
-            is Result.Failure -> return requested
+        return when (val requested = safeApiCall { api.requestUpload(UploadRequestDto(image.mimeType)) }) {
+            is Result.Success -> sendAndConfirm(requested.data, image)
+            is Result.Failure -> requested
         }
+    }
+
+    /** Pasos 2 y 3: subir a S3 sin token y confirmar con la API. */
+    private suspend fun sendAndConfirm(form: UploadFormDto, image: CompressedImage): Result<UploadedImage> {
         if (form.maxBytes > 0 && image.bytes.size > form.maxBytes) {
             return Result.Failure(AppError.Validation(apiMessage = null))
         }
         val sent = withContext(dispatchers.io) { postToStorage(form, image.bytes, image.mimeType) }
-        if (sent is Result.Failure) return sent
-        return safeApiCall { api.confirm(form.id) }.let { result ->
-            when (result) {
-                is Result.Success -> Result.Success(result.data.toDomain())
-                is Result.Failure -> result
-            }
+        return when (sent) {
+            is Result.Failure -> sent
+            is Result.Success -> safeApiCall { api.confirm(form.id) }.map { it.toDomain() }
         }
     }
 
