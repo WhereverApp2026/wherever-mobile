@@ -1,3 +1,17 @@
+# Revisión para Jorge — 2026-11-19: trabajo directo en `main`
+
+> Métrica nueva: pantallas que funcionan de verdad / 162 (`docs/avance.md`). Un commit por parte, directo en `main`, con CI revisada después de cada push.
+
+## Decisiones tomadas sin preguntarte
+- **CI roja en `main` (ed871e0):** gitleaks marcaba 2 hallazgos `generic-api-key`, los dos la clave S3 de prueba `cuarentena/img1` (`PhotoUploadIntegrationTest` y la nota de `Memoria.md`). Agregué en `.gitleaks.toml` una excepción limitada a ese valor y a esos dos archivos (`40e8ff7`). CI en verde (corrida 44534784877).
+- **PR de Dependabot (#5–#12, #23):** no se integran. Son saltos mayores; varios piden `compileSdk 37`, que no hay en este equipo (AGENTS.md §5). Quedan abiertos para que decidas.
+- **Prueba en el teléfono (Xiaomi 2207117BPG):** al empezar no tenía red; encendí el wifi con `adb shell svc wifi enable` y se conectó solo. Staging sigue **sin negocios** (`/lugares` y `/categorias` 200 vacíos), así que reservar, la ficha y Explorar con resultados no se pueden probar de punta a punta: solo los estados vacío y sin red.
+
+## Endpoints que faltan en la API (para el equipo de backend)
+(Se llena conforme aparecen; cada pantalla con repositorio falso lo dice aquí.)
+
+---
+
 # Revisión para Jorge — 2026-11-18 (tarde): foto de perfil (nv-50)
 
 > Rama `feat/fotos-perfil`, sobre `feat/inicio-recomendaciones` (PR #24), versión 0.2.1. Spec `specs/nv-50` sin firmar.

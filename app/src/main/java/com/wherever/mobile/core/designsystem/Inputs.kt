@@ -29,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -109,9 +110,18 @@ fun LabeledTextField(
     }
 }
 
+private const val DISABLED_ALPHA = 0.38f
+
 /** Chip de selección de la maqueta: azul si está elegido, blanco si no. */
 @Composable
-fun SelectChip(text: String, selected: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier, tag: String = "") {
+fun SelectChip(
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    tag: String = "",
+    enabled: Boolean = true
+) {
     Surface(
         shape = CircleShape,
         color = if (selected) RouteBlue else MaterialTheme.colorScheme.surface,
@@ -119,7 +129,8 @@ fun SelectChip(text: String, selected: Boolean, onClick: () -> Unit, modifier: M
         border = if (selected) null else BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         modifier = modifier
             .heightIn(min = 48.dp)
-            .selectable(selected = selected, role = Role.Checkbox, onClick = onClick)
+            .alpha(if (enabled) 1f else DISABLED_ALPHA)
+            .selectable(selected = selected, enabled = enabled, role = Role.Checkbox, onClick = onClick)
             .testTag(tag)
     ) {
         Row(modifier = Modifier.heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {

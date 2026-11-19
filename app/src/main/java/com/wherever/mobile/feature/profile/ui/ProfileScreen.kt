@@ -61,6 +61,7 @@ fun ProfileRoute(
     onEdit: () -> Unit,
     onFavorites: () -> Unit,
     onFriends: () -> Unit,
+    onReservations: () -> Unit,
     onSettings: () -> Unit,
     onVerifyEmail: (String) -> Unit,
     viewModel: ProfileViewModel = hiltViewModel(),
@@ -98,6 +99,7 @@ fun ProfileRoute(
                     onSettings = onSettings,
                     onFavorites = onFavorites,
                     onFriends = onFriends,
+                    onReservations = onReservations,
                     onVerifyEmail = { onVerifyEmail(current.email) },
                     avatar = { EditableProfileAvatar(current.name, current.photoUrl, photoState, photoActions) },
                     modifier = modifier
@@ -121,6 +123,7 @@ private fun ProfileContent(
     onSettings: () -> Unit,
     onFavorites: () -> Unit,
     onFriends: () -> Unit,
+    onReservations: () -> Unit,
     onVerifyEmail: () -> Unit,
     modifier: Modifier = Modifier,
     avatar: @Composable () -> Unit = { ProfileAvatar(profile.name, profile.photoUrl, 88.dp) }
@@ -160,6 +163,7 @@ private fun ProfileContent(
         errorBanner()
         Stats(profile)
         SurfaceCard {
+            NavRow(stringResource(R.string.profile_reservations), onReservations, tag = "profile_reservations")
             NavRow(stringResource(R.string.profile_friends), onFriends, tag = "profile_friends")
             NavRow(stringResource(R.string.profile_favorites), onFavorites, tag = "profile_favorites")
         }
@@ -231,6 +235,7 @@ private fun ProfilePreview() {
                 deleteAt = null,
                 version = 1
             ),
+            {},
             {},
             {},
             {},

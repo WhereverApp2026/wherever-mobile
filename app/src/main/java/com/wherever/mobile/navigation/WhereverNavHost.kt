@@ -39,6 +39,9 @@ import com.wherever.mobile.feature.plans.ui.MyPlansRoute as MyPlansScreen
 import com.wherever.mobile.feature.plans.ui.PlanDetailRoute as PlanDetailScreen
 import com.wherever.mobile.feature.profile.ui.EditProfileRoute as EditProfileScreen
 import com.wherever.mobile.feature.profile.ui.ProfileRoute as ProfileScreen
+import com.wherever.mobile.feature.reservations.ui.MyReservationsRoute as MyReservationsScreen
+import com.wherever.mobile.feature.reservations.ui.ReservationRoute as ReservationScreen
+import com.wherever.mobile.feature.reservations.ui.ReserveRoute as ReserveScreen
 import com.wherever.mobile.feature.settings.ui.DeleteAccountRoute as DeleteAccountScreen
 import com.wherever.mobile.feature.settings.ui.DeletionPendingRoute as DeletionPendingScreen
 import com.wherever.mobile.feature.settings.ui.PrivacyRoute as PrivacyScreen
@@ -160,7 +163,30 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>, pushes
                 onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "busqueda")) }
             )
         }
-        composable<PlaceRoute> { e -> PlaceDetailScreen(onBack = { navController.popFrom(e) }) }
+        composable<PlaceRoute> { e ->
+            PlaceDetailScreen(
+                onBack = { navController.popFrom(e) },
+                onReserve = { id, name -> navController.navigateFrom(e, ReserveRoute(id, name)) }
+            )
+        }
+        composable<ReserveRoute> { e ->
+            ReserveScreen(
+                onBack = { navController.popFrom(e) },
+                // La confirmación reemplaza a Reservar: regresar vuelve a la ficha, no al formulario.
+                onCreated = { id ->
+                    navController.navigateOnResult(e, ReservationRoute(id)) {
+                        popUpTo<ReserveRoute> { inclusive = true }
+                    }
+                }
+            )
+        }
+        composable<ReservationRoute> { e -> ReservationScreen(onBack = { navController.popFrom(e) }) }
+        composable<MyReservationsRoute> { e ->
+            MyReservationsScreen(
+                onBack = { navController.popFrom(e) },
+                onReservation = { navController.navigateFrom(e, ReservationRoute(it)) }
+            )
+        }
         composable<CreatePlanRoute> { e ->
             CreatePlanScreen(
                 onBack = { navController.popFrom(e) },
@@ -219,6 +245,7 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>, pushes
                 onEdit = { navController.navigateFrom(e, EditProfileRoute) },
                 onFavorites = { navController.navigateFrom(e, FavoritesRoute) },
                 onFriends = { navController.navigateFrom(e, FriendsRoute) },
+                onReservations = { navController.navigateFrom(e, MyReservationsRoute) },
                 onSettings = { navController.navigateFrom(e, SettingsRoute) },
                 onVerifyEmail = { email ->
                     navController.navigateFrom(e, CheckEmailRoute(CheckEmailMode.VERIFICATION.name, email))

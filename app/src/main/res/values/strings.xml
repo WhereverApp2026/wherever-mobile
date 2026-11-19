@@ -581,4 +581,62 @@
     </plurals>
     <string name="privacy_searchable_user">Buscable por nombre de usuario</string>
     <string name="privacy_searchable_user_detail">Quien sepa tu nombre de usuario podrá encontrarte</string>
+
+    <!-- Reservas (nv-54) -->
+    <string name="place_reserve">Reservar</string>
+    <string name="profile_reservations">Mis reservas</string>
+    <string name="reserve_title">Reservar</string>
+    <string name="reserve_day">¿Qué día?</string>
+    <string name="reserve_today">Hoy</string>
+    <string name="reserve_tomorrow">Mañana</string>
+    <string name="reserve_people">¿Cuántas personas?</string>
+    <string name="reserve_people_less">Menos</string>
+    <string name="reserve_people_more">Más</string>
+    <string name="reserve_time">¿A qué hora?</string>
+    <string name="reserve_no_slots">No hay horarios con lugar ese día. Prueba otro día o menos personas.</string>
+    <string name="reserve_note">Nota para el lugar (opcional)</string>
+    <string name="reserve_note_hint">Ej. es un cumpleaños, vamos con carriola</string>
+    <string name="reserve_summary">Reserva para el %1$s a las %2$s, %3$s.</string>
+    <string name="reserve_submit">Confirmar reserva</string>
+    <string name="reserve_slot_taken">Ese horario se acaba de llenar. Elige otro.</string>
+    <string name="reserve_verify_email">Verifica tu correo para poder reservar. Te mandamos el enlace desde Perfil.</string>
+    <plurals name="reserve_people_count">
+        <item quantity="one">%1$d persona</item>
+        <item quantity="many">%1$d personas</item>
+        <item quantity="other">%1$d personas</item>
+    </plurals>
+    <string name="reservation_place_fallback">Tu reserva</string>
+    <string name="reservation_code">Código de tu reserva</string>
+    <string name="reservation_code_hint">Muéstralo al llegar.</string>
+    <string name="reservation_when">%1$s a las %2$s</string>
+    <string name="reservation_note">Nota: %1$s</string>
+    <string name="reservation_deposit">Anticipo: %1$s</string>
+    <string name="reservation_policy">Si cancelas con %2$d horas o más de anticipación te devolvemos el %1$d %%; después, el %3$d %%.</string>
+    <string name="reservation_held_notice">Este lugar pide un anticipo de %1$s. El pago desde la app llega pronto; tu lugar está apartado hasta las %2$s.</string>
+    <string name="reservation_messages">Mensajes del lugar</string>
+    <string name="reservation_calendar">Agregar al calendario</string>
+    <string name="reservation_share">Compartir</string>
+    <string name="reservation_share_text">Reservé en %1$s para el %2$s. Código: %3$s</string>
+    <string name="reservation_change">Cambiar hora</string>
+    <string name="reservation_changed">Listo, cambiamos la hora de tu reserva.</string>
+    <string name="reservation_cancel">Cancelar reserva</string>
+    <string name="reservation_keep">Conservarla</string>
+    <string name="reservation_cancel_title">¿Cancelar tu reserva?</string>
+    <string name="reservation_cancel_refund">Te devolvemos %1$s (%2$d %% del anticipo).</string>
+    <string name="reservation_cancel_no_refund">Esta reserva no tiene anticipo que devolver.</string>
+    <string name="reservation_cancel_reason">Motivo (opcional)</string>
+    <string name="reservation_cancelled">Cancelamos tu reserva.</string>
+    <string name="reservation_status_held">Apartada</string>
+    <string name="reservation_status_pending">Por confirmar</string>
+    <string name="reservation_status_confirmed">Confirmada</string>
+    <string name="reservation_status_attended">Asististe</string>
+    <string name="reservation_status_no_show">No asististe</string>
+    <string name="reservation_status_expired">Venció</string>
+    <string name="reservation_status_cancelled">Cancelada</string>
+    <string name="reservation_status_other">Reserva</string>
+    <string name="my_reservations_title">Mis reservas</string>
+    <string name="my_reservations_upcoming">Próximas</string>
+    <string name="my_reservations_past">Pasadas</string>
+    <string name="my_reservations_empty">No tienes reservas próximas. Reserva desde la ficha de un lugar.</string>
+    <string name="my_reservations_empty_past">Aún no tienes reservas pasadas.</string>
 </resources>

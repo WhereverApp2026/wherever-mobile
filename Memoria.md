@@ -213,6 +213,9 @@
 - Decisión: el QR del código de amigo (US-234) queda fuera: no hay librería de QR ni cámara en el stack; el código se comparte como texto. Porqué: constitución §3, sin librerías fuera del stack sin acuerdo.
 - A evitar: heredocs grandes con `python - <<'EOF'` en la herramienta Bash a veces fallan con "unexpected EOF"; escribir el script con Write y ejecutarlo.
 
+- Estado (2026-11-19): se trabaja directo en `main`, sin ramas ni PR (pedido de Jorge). Métrica: pantallas que funcionan / 162 en `docs/avance.md`. CI de `main` otra vez en verde tras la excepción de gitleaks (`40e8ff7`). nv-54 (reservas sin pago) integrado.
+- A evitar: `adb shell uiautomator dump /sdcard/...` desde Git Bash convierte la ruta; usar `MSYS_NO_PATHCONV=1`.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

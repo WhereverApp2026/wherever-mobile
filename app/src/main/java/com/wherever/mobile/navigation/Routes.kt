@@ -85,6 +85,17 @@ data object NotificationsRoute
 @Serializable
 data object FriendsRoute
 
+/** `placeId` y `placeName` los lee ReserveViewModel de SavedStateHandle por su nombre. */
+@Serializable
+data class ReserveRoute(val placeId: String, val placeName: String = "")
+
+/** `id` lo lee ReservationViewModel. */
+@Serializable
+data class ReservationRoute(val id: String)
+
+@Serializable
+data object MyReservationsRoute
+
 @Serializable
 data object AddFriendRoute
 

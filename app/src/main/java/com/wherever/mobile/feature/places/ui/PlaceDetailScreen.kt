@@ -70,6 +70,7 @@ import com.wherever.mobile.core.designsystem.SelectChip
 import com.wherever.mobile.core.designsystem.StatusPill
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
+import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.feature.places.domain.DaySchedule
 import com.wherever.mobile.feature.places.domain.PlaceDetail
@@ -82,7 +83,11 @@ private val STAR_FILTERS = (MAX_RATING.toInt() downTo 1).toList()
 
 /** 20_FichaNegocio. */
 @Composable
-fun PlaceDetailRoute(onBack: () -> Unit, viewModel: PlaceDetailViewModel = hiltViewModel()) {
+fun PlaceDetailRoute(
+    onBack: () -> Unit,
+    onReserve: (id: String, name: String) -> Unit,
+    viewModel: PlaceDetailViewModel = hiltViewModel()
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     val message = state.message?.asString()
@@ -96,7 +101,7 @@ fun PlaceDetailRoute(onBack: () -> Unit, viewModel: PlaceDetailViewModel = hiltV
         val place = state.place
         Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).padding(padding)) {
             when {
-                place != null -> PlaceContent(place, state, viewModel, onBack)
+                place != null -> PlaceContent(place, state, viewModel, onBack, onReserve)
                 state.loading -> LoadingState()
                 else -> ErrorState(state.error?.asString().orEmpty(), onRetry = viewModel::load)
             }
@@ -121,7 +126,8 @@ private fun PlaceContent(
     place: PlaceDetail,
     state: PlaceDetailUiState,
     viewModel: PlaceDetailViewModel,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onReserve: (id: String, name: String) -> Unit
 ) {
     val context = LocalContext.current
     LazyColumn(
@@ -150,6 +156,16 @@ private fun PlaceContent(
         }
         item { Header(place) }
         item { Actions(place, context) }
+        if (place.acceptsReservations) {
+            item {
+                WhereverPrimaryButton(
+                    text = stringResource(R.string.place_reserve),
+                    onClick = { onReserve(place.id, place.name) },
+                    modifier = Modifier.padding(horizontal = ScreenPadding),
+                    tag = "place_reserve"
+                )
+            }
+        }
         if (place.description.isNotBlank()) item { Section(R.string.place_about) { Text(place.description) } }
         item { Section(R.string.place_schedule) { Schedule(place.schedules, state.today) } }
         if (place.reviews > 0) item { Section(R.string.place_aspects) { Aspects(place.aspects) } }

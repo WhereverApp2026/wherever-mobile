@@ -18,6 +18,9 @@
 | `CreatePlanRoute(phrase)` | Crear plan con IA y hoja rápida | ubicación aproximada (obligatoria para generar) | release | nv-48 |
 | `PlanRoute(id)` | Plan: línea de tiempo y edición | ninguno | release | nv-48 |
 | `NotificationsRoute` | Avisos: lista, filtros, marcar leídas y borrar | ninguno | release | nv-52 |
+| `ReserveRoute(placeId, placeName)` | Reservar: día, personas, turno, nota y resumen | ninguno | release | nv-54 |
+| `ReservationRoute(id)` | Reserva: código, detalle, calendario, cambiar hora y cancelar | ninguno | release | nv-54 |
+| `MyReservationsRoute` | Mis reservas: próximas y pasadas | ninguno | release | nv-54 |
 | `FriendsRoute` | Amigos: lista, solicitudes recibidas y enviadas | ninguno | release | nv-53 |
 | `AddFriendRoute` | Agregar amigos: buscar, código, sugerencias y mi usuario | ninguno | release | nv-53 |
 | `PersonRoute(id)` | Perfil de otra persona con su acción | ninguno | release | nv-53 |
