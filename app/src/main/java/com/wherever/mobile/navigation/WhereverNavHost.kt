@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.wherever.mobile.core.designsystem.LocalMotionEnabled
 import com.wherever.mobile.core.designsystem.NavMotion
 import com.wherever.mobile.core.designsystem.SystemBarIcons
+import com.wherever.mobile.core.notifications.PushDestination
 import com.wherever.mobile.feature.auth.domain.PostAuthDestination
 import com.wherever.mobile.feature.auth.ui.CheckEmailMode
 import com.wherever.mobile.feature.auth.ui.CheckEmailRoute as CheckEmailScreen
@@ -32,13 +33,21 @@ import com.wherever.mobile.feature.tastes.ui.TastesRoute as TastesScreen
 import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>) {
+fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>, pushes: Flow<PushDestination>) {
     val navController = rememberNavController()
     LaunchedEffect(navController) {
         rootEvents.collect { event ->
             when (event) {
                 RootEvent.SESSION_EXPIRED -> navController.navigate(LoginRoute) { clearStack(navController) }
                 RootEvent.DELETION_PENDING -> navController.navigate(DeletionPendingRoute) { clearStack(navController) }
+            }
+        }
+    }
+    LaunchedEffect(navController) {
+        pushes.collect { push ->
+            navController.navigate(push.route()) {
+                popUpTo<HomeRoute> { inclusive = false }
+                launchSingleTop = true
             }
         }
     }
@@ -116,7 +125,10 @@ fun WhereverNavHost(start: StartDestination, rootEvents: Flow<RootEvent>) {
                 }
             )
         }
-        composable<HomeRoute> { e -> HomeRouteScreen(onProfile = { navController.navigateFrom(e, ProfileRoute) }) }
+        composable<HomeRoute> { e ->
+            RequestNotificationPermission()
+            HomeRouteScreen(onProfile = { navController.navigateFrom(e, ProfileRoute) })
+        }
         composable<ProfileRoute> { e ->
             ProfileScreen(
                 onHome = { if (e.isActive()) navController.popBackStack(HomeRoute, inclusive = false) },

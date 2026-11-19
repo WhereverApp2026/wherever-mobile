@@ -2,6 +2,7 @@ package com.wherever.mobile.testing
 
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.network.ApiJson
+import com.wherever.mobile.core.notifications.DeviceRegistration
 import com.wherever.mobile.core.security.SessionTokens
 import com.wherever.mobile.core.security.TokenStore
 import com.wherever.mobile.feature.auth.domain.ActiveSession
@@ -34,6 +35,27 @@ fun testRetrofit(baseUrl: okhttp3.HttpUrl, client: okhttp3.OkHttpClient = okhttp
         .client(client)
         .addConverterFactory(ApiJson.asConverterFactory("application/json".toMediaType()))
         .build()
+
+/** Anota cada llamada y si había sesión en ese momento (el DELETE necesita el JWT). */
+class FakeDeviceRegistration(private val tokenStore: TokenStore? = null) : DeviceRegistration {
+    val calls = mutableListOf<String>()
+    var unregisteredWithSession: Boolean? = null
+
+    override suspend fun register(token: String?): Result<Unit> {
+        calls += "register"
+        return Result.Success(Unit)
+    }
+
+    override fun registerInBackground(token: String?) {
+        calls += "registerInBackground"
+    }
+
+    override suspend fun unregister(): Result<Unit> {
+        calls += "unregister"
+        unregisteredWithSession = tokenStore?.current() != null
+        return Result.Success(Unit)
+    }
+}
 
 class FakeTokenStore(initial: SessionTokens? = null) : TokenStore {
     var tokens: SessionTokens? = initial

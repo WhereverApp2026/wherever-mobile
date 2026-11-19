@@ -163,6 +163,11 @@
 - A evitar: `togetherWith` en `AnimatedContent` cuando no debe cambiar de tamaño: trae `SizeTransform()` con resorte y deja el contenido anterior a la vista aunque la entrada y la salida sean `None`. Usar `ContentTransform(..., sizeTransform = null)`. Lo detectó la prueba de UI en la CI del PR #21.
 - A evitar: `android:enableOnBackInvokedCallback` sin `tools:targetApi="33"`, porque lint marca `UnusedAttribute` con minSdk 26.
 - A recordar: el teléfono de Jorge rechaza `input tap` de `adb` y, a veces, la instalación de la APK de pruebas (`INSTALL_FAILED_USER_RESTRICTED`); hay que aceptar en pantalla.
+## Notificaciones push con Firebase (2026-11-14)
+- Estado: rama `feat/notificaciones-push`, `specs/nv-46`. FCM con plugin google-services 4.6.0 y BoM 35.2.0. `PUT /dispositivos {token, plataforma}` tras login/registro, al arrancar con sesión y en `onNewToken`; `DELETE /dispositivos {token}` antes de logout y logout-todos. Tocar un push lee `data.tipo` y los ids (`PushDestination`); hoy todos abren Inicio porque Notificaciones, Votar y los perfiles de amigos aún no existen (`navigation/PushNavigation.kt`). Escrito sin SDK de Android: sin compilar en local; lo valida la CI del PR.
+- Decisión: el plugin google-services solo se aplica si existe `app/google-services.json`. Porqué: el archivo no va en Git (constitución §6) y la CI no usa secretos; sin él la app compila sin push.
+- Decisión: la baja del teléfono va antes de `auth/logout`. Porqué: el `DELETE` necesita el JWT, que el logout revoca.
+- A evitar: valores por defecto en los DTO que deben viajar siempre; `ApiJson` no escribe defaults y el campo desaparece (pasó con `plataforma`).
 
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).

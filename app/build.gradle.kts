@@ -13,6 +13,14 @@ plugins {
     alias(libs.plugins.kover)
 }
 
+// Firebase (specs/nv-46): `google-services.json` va en app/ y no se sube a Git (constitución §6).
+// Sin el archivo (CI, equipos sin configurar) la app compila sin Firebase y simplemente no recibe push.
+if (file("google-services.json").exists()) {
+    apply(plugin = libs.plugins.google.services.get().pluginId)
+} else {
+    logger.warn("app/google-services.json no existe: la app compila sin notificaciones push (specs/nv-46).")
+}
+
 val localProperties = Properties().apply {
     val file = rootProject.file("local.properties")
     if (file.exists()) file.inputStream().use(::load)
@@ -184,6 +192,9 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.datastore)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
