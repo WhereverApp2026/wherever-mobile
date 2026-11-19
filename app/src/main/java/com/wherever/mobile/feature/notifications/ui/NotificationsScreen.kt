@@ -107,13 +107,23 @@ private fun NotificationList(state: NotificationsUiState, viewModel: Notificatio
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier.testTag("notifications_list")
     ) {
-        items(state.visible, key = { it.id }) { notification ->
-            NotificationRow(
-                notification = notification,
-                time = formatDateTime(notification.createdAt, zone),
-                onClick = { viewModel.open(notification) },
-                onDelete = { viewModel.delete(notification) }
-            )
+        viewModel.groups(state).forEach { (group, notifications) ->
+            item(key = "group_$group") {
+                Text(
+                    stringResource(groupLabel(group)),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.testTag("notifications_group_$group")
+                )
+            }
+            items(notifications, key = { it.id }) { notification ->
+                NotificationRow(
+                    notification = notification,
+                    time = formatDateTime(notification.createdAt, zone),
+                    onClick = { viewModel.open(notification) },
+                    onDelete = { viewModel.delete(notification) }
+                )
+            }
         }
         if (state.nextCursor != null) {
             item {
@@ -174,6 +184,12 @@ private fun NotificationRow(notification: AppNotification, time: String, onClick
             }
         }
     }
+}
+
+private fun groupLabel(group: DayGroup): Int = when (group) {
+    DayGroup.TODAY -> R.string.notifications_today
+    DayGroup.WEEK -> R.string.notifications_week
+    DayGroup.EARLIER -> R.string.notifications_earlier
 }
 
 private fun filterLabel(filter: NotificationFilter): Int = when (filter) {

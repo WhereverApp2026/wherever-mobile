@@ -121,3 +121,6 @@ Orden: Must con pantalla y API lista, en el orden en que las usa una persona.
 | PR | Spec | Historias | SP | % acumulado (con PR abiertos) |
 |---|---|---|---|---|
 | Inicio, Explorar y ficha del lugar | nv-47 | US-004, 009, 025, 027, 030, 032, 034, 037, 047, 053, 062, 067, 068, 069, 070, 071, 072, 073, 074, 111, 121, 187 (parciales: US-028, US-029) | 57 | 23,4 % (160 SP) |
+| Integración en `main` (push, auth, plan con IA, foto) | nv-46, nv-48, nv-49, nv-50 | US-162; US-010, 033, 035, 039 a 046, 048 a 050, 055 a 058, 061, 063, 064, 066 (parciales: US-017, US-065) | 69 | 33,5 % (229 SP) |
+| Cuenta: contraseña, correo y mis datos | nv-51 | US-007 | 5 | 34,2 % (234 SP) |
+| Avisos y horario silencioso | nv-52 | US-147, US-148 | 5 | 34,9 % (239 SP) |

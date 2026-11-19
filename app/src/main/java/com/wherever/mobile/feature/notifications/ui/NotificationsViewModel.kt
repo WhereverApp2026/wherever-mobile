@@ -10,6 +10,10 @@ import com.wherever.mobile.feature.notifications.domain.AppNotification
 import com.wherever.mobile.feature.notifications.domain.NotificationType
 import com.wherever.mobile.feature.notifications.domain.NotificationsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.Clock
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,6 +29,26 @@ enum class NotificationFilter(val types: Set<NotificationType>?) {
     SOCIAL(setOf(NotificationType.FRIEND_REQUEST, NotificationType.FRIEND_ACCEPTED)),
     PLANS(setOf(NotificationType.PLAN_INVITATION, NotificationType.VOTE_OPENED, NotificationType.VOTE_CLOSED))
 }
+
+/** Grupos de US-147. */
+enum class DayGroup { TODAY, WEEK, EARLIER }
+
+private const val WEEK_DAYS = 7L
+
+/** Agrupa por el día local de [zone]; una fecha ilegible cae en Antes. */
+fun groupByDay(
+    items: List<AppNotification>,
+    today: LocalDate,
+    zone: ZoneId
+): List<Pair<DayGroup, List<AppNotification>>> = items.groupBy { notification ->
+    val day = runCatching { Instant.parse(notification.createdAt).atZone(zone).toLocalDate() }.getOrNull()
+    when {
+        day == null -> DayGroup.EARLIER
+        !day.isBefore(today) -> DayGroup.TODAY
+        day.isAfter(today.minusDays(WEEK_DAYS)) -> DayGroup.WEEK
+        else -> DayGroup.EARLIER
+    }
+}.toSortedMap().map { (group, list) -> group to list }
 
 data class NotificationsUiState(
     val items: List<AppNotification> = emptyList(),
@@ -46,11 +70,18 @@ data class NotificationsUiState(
 
 /** 18_Notif (specs/nv-18 y nv-52). */
 @HiltViewModel
-class NotificationsViewModel @Inject constructor(private val repository: NotificationsRepository) : ViewModel() {
+class NotificationsViewModel @Inject constructor(
+    private val repository: NotificationsRepository,
+    private val clock: Clock
+) : ViewModel() {
     private val mutableState = MutableStateFlow(NotificationsUiState())
     val state: StateFlow<NotificationsUiState> = mutableState.asStateFlow()
 
     private val openChannel = Channel<PushDestination>(Channel.BUFFERED)
+
+    /** Avisos visibles agrupados por día en la zona del teléfono. */
+    fun groups(state: NotificationsUiState): List<Pair<DayGroup, List<AppNotification>>> =
+        groupByDay(state.visible, LocalDate.now(clock), clock.zone)
 
     /** A dónde lleva tocar un aviso; mismo destino que su push (specs/nv-46). */
     val open = openChannel.receiveAsFlow()
@@ -68,7 +99,9 @@ class NotificationsViewModel @Inject constructor(private val repository: Notific
                 is Result.Success -> mutableState.update {
                     it.copy(loading = false, items = result.data.items, nextCursor = result.data.nextCursor)
                 }
-                is Result.Failure -> mutableState.update { it.copy(loading = false, loadError = result.error.toUiText()) }
+                is Result.Failure -> mutableState.update {
+                    it.copy(loading = false, loadError = result.error.toUiText())
+                }
             }
         }
     }
@@ -88,7 +121,9 @@ class NotificationsViewModel @Inject constructor(private val repository: Notific
                         nextCursor = result.data.nextCursor
                     )
                 }
-                is Result.Failure -> mutableState.update { it.copy(loadingMore = false, error = result.error.toUiText()) }
+                is Result.Failure -> mutableState.update {
+                    it.copy(loadingMore = false, error = result.error.toUiText())
+                }
             }
         }
     }
@@ -123,7 +158,9 @@ class NotificationsViewModel @Inject constructor(private val repository: Notific
 
     fun delete(notification: AppNotification) {
         val before = state.value.items
-        mutableState.update { state -> state.copy(items = state.items.filterNot { it.id == notification.id }, error = null) }
+        mutableState.update { state ->
+            state.copy(items = state.items.filterNot { it.id == notification.id }, error = null)
+        }
         viewModelScope.launch {
             val result = repository.delete(notification.id)
             if (result is Result.Failure) {

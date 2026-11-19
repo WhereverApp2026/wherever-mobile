@@ -77,7 +77,10 @@ class NotificationsIntegrationTest {
     @Test
     fun `no leidas, marcar una, marcar todas y borrar`() = runTest {
         server.reply(200, """{"total":7}""")
-        server.reply(200, """{"id":"n1","tipo":"amistad_aceptada","datos":{},"leida":true,"creada_en":"2026-11-19T08:00:00Z"}""")
+        server.reply(
+            200,
+            """{"id":"n1","tipo":"amistad_aceptada","datos":{},"leida":true,"creada_en":"2026-11-19T08:00:00Z"}"""
+        )
         server.reply(204)
         server.reply(204)
 

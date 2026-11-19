@@ -499,6 +499,9 @@
     <string name="notifications_filter_plans">Planes</string>
     <string name="notifications_empty">Aún no tienes avisos. Aquí verás solicitudes de amistad, invitaciones a planes y votaciones.</string>
     <string name="notifications_more">Ver más</string>
+    <string name="notifications_today">Hoy</string>
+    <string name="notifications_week">Esta semana</string>
+    <string name="notifications_earlier">Antes</string>
     <string name="notifications_delete">Borrar aviso</string>
     <string name="notification_friend_request">Alguien quiere ser tu amigo en Wherever</string>
     <string name="notification_friend_accepted">Aceptaron tu solicitud de amistad</string>
@@ -508,6 +511,7 @@
     <string name="notification_other">Tienes un aviso nuevo</string>
     <plurals name="home_notifications_unread">
         <item quantity="one">Avisos: %1$d sin leer</item>
+        <item quantity="many">Avisos: %1$d sin leer</item>
         <item quantity="other">Avisos: %1$d sin leer</item>
     </plurals>
     <string name="settings_quiet_hours">Horario silencioso</string>

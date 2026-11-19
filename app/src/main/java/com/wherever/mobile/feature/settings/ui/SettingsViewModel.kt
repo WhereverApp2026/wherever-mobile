@@ -8,8 +8,8 @@ import com.wherever.mobile.core.ui.toUiText
 import com.wherever.mobile.feature.auth.domain.AuthRepository
 import com.wherever.mobile.feature.profile.domain.PreferencesPatch
 import com.wherever.mobile.feature.profile.domain.PrivacyPatch
-import com.wherever.mobile.feature.profile.domain.QuietHours
 import com.wherever.mobile.feature.profile.domain.ProfileRepository
+import com.wherever.mobile.feature.profile.domain.QuietHours
 import com.wherever.mobile.feature.profile.domain.UserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

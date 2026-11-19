@@ -26,8 +26,8 @@ import com.wherever.mobile.feature.auth.ui.RecoverRoute as RecoverScreen
 import com.wherever.mobile.feature.auth.ui.RegisterRoute as RegisterScreen
 import com.wherever.mobile.feature.auth.ui.WelcomeScreen
 import com.wherever.mobile.feature.home.ui.HomeNavigation
-import com.wherever.mobile.feature.notifications.ui.NotificationsRoute as NotificationsScreen
 import com.wherever.mobile.feature.home.ui.HomeRouteScreen
+import com.wherever.mobile.feature.notifications.ui.NotificationsRoute as NotificationsScreen
 import com.wherever.mobile.feature.places.ui.ExploreRoute as ExploreScreen
 import com.wherever.mobile.feature.places.ui.FavoritesRoute as FavoritesScreen
 import com.wherever.mobile.feature.places.ui.PlaceDetailRoute as PlaceDetailScreen

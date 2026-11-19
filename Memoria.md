@@ -204,6 +204,11 @@
 - A evitar: el 401 de "contraseña incorrecta" en `PUT /auth/password` y `PUT /usuarios/yo/correo` pasa por el `Authenticator`: renueva, repite y el segundo 401 llega a la app sin cerrar la sesión. Tratarlo como error de campo, no como sesión vencida.
 - A recordar: compilar desde cero tarda ~27 min en este equipo; trabajar en el worktree principal para aprovechar la compilación incremental (~4 min). Los daemons de Gradle de tareas detenidas quedan vivos: `./gradlew --stop`.
 
+- Estado: nv-52 (`feat/notificaciones`): Avisos (lista por cursor, grupos Hoy/Semana/Antes, filtros, leídas, borrar), campana con no leídos en Inicio y horario silencioso en Ajustes. Push con destino inválido abre Avisos. 363 pruebas y todas las compuertas locales en verde.
+- Bloqueo (para Jorge): gitleaks de la CI de `main` falla por `"key":"cuarentena/img1"` en `PhotoUploadIntegrationTest` (commit `9672d7c` de nv-50; regla `generic-api-key`, entropía 3,51). Es la ruta S3 de prueba, no un secreto, pero gitleaks revisa todo el historial: hace falta una excepción en `.gitleaks.toml` (como la del refresh de ejemplo). No la agregué: cambiar el escáner de secretos es decisión de Jorge. Mientras falle, la CI se salta ui, critic, rutas, specs, cobertura y Semgrep.
+- A evitar: plurales sin `many` en español; lint (`MissingQuantity`) lo marca error.
+- A evitar: `rm` de `app/build/generated/ksp` con Gradle vivo; Windows bloquea los archivos y KSP falla con `FileNotFoundException`. `./gradlew --stop` antes.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).
