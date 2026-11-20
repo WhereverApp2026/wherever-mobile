@@ -7,6 +7,7 @@ import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.ui.UiText
 import com.wherever.mobile.core.ui.toUiText
 import com.wherever.mobile.feature.friends.domain.FriendsRepository
+import com.wherever.mobile.feature.friends.domain.FriendshipList
 import com.wherever.mobile.feature.friends.domain.Person
 import com.wherever.mobile.feature.places.domain.PlaceCard
 import com.wherever.mobile.feature.places.domain.PlacesRepository
@@ -43,7 +44,10 @@ data class SearchUiState(
     val loading: Boolean = false,
     /** Ya se buscó `query` en la pestaña actual (para mostrar "sin resultados" y no el estado inicial). */
     val searched: Boolean = false,
+    /** Solicitudes pendientes que mandé (de la API y de esta sesión): la fila dice "Solicitud enviada". */
     val sent: Set<String> = emptySet(),
+    /** Ya son amigos: la fila dice "Amigos" y no ofrece agregar. */
+    val friendIds: Set<String> = emptySet(),
     val sending: Set<String> = emptySet(),
     val error: UiText? = null
 ) {
@@ -164,13 +168,28 @@ class SearchViewModel @Inject constructor(
                 if (r is Result.Success) mutableState.update { it.copy(places = r.data) }
             }
             SearchTab.PEOPLE -> friends.search(peopleQuery(query) ?: return null).also { r ->
-                if (r is Result.Success) mutableState.update { it.copy(people = r.data) }
+                if (r is Result.Success) {
+                    loadRelations()
+                    mutableState.update { it.copy(people = r.data) }
+                }
             }
             SearchTab.PLANS -> plansMatching(query).also { r ->
                 if (r is Result.Success) mutableState.update { it.copy(plans = r.data) }
             }
         }
         return (result as? Result.Failure)?.error?.toUiText()
+    }
+
+    /**
+     * `GET /personas/buscar` no trae la relación (backend nv-35): se cruza con amigos y solicitudes enviadas para
+     * no ofrecer "Agregar" a quien ya es amigo o ya tiene una solicitud. Si falla, la fila queda con Agregar.
+     */
+    private suspend fun loadRelations() {
+        val friendIds = (friends.list(FriendshipList.FRIENDS) as? Result.Success)?.data?.items?.map { it.person.id }
+        val sentIds = (friends.list(FriendshipList.SENT) as? Result.Success)?.data?.items?.map { it.person.id }
+        mutableState.update {
+            it.copy(friendIds = friendIds?.toSet() ?: it.friendIds, sent = it.sent + sentIds.orEmpty())
+        }
     }
 
     /** Planes propios (próximos, guardados y pasados) cuyo nombre contiene el texto, sin acentos ni mayúsculas. */

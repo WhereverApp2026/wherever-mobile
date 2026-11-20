@@ -152,14 +152,16 @@ private fun LazyListScope.startItems(state: SearchUiState, viewModel: SearchView
 }
 
 private fun LazyListScope.results(state: SearchUiState, viewModel: SearchViewModel, actions: SearchActions) {
-    // La barra de Inicio antes abría la IA directo (nv-48): la primera fila lo conserva.
-    item {
-        SurfaceCard {
-            NavRow(
-                stringResource(R.string.search_plan_with_ai, state.query.trim()),
-                { actions.onAskAi(state.query.trim()) },
-                tag = "search_plan_ai"
-            )
+    // La barra de Inicio antes abría la IA directo (nv-48): la primera fila lo conserva. En Personas no aplica.
+    if (state.tab != SearchTab.PEOPLE) {
+        item {
+            SurfaceCard {
+                NavRow(
+                    stringResource(R.string.search_plan_with_ai, state.query.trim()),
+                    { actions.onAskAi(state.query.trim()) },
+                    tag = "search_plan_ai"
+                )
+            }
         }
     }
     when (state.tab) {
@@ -177,16 +179,21 @@ private fun LazyListScope.results(state: SearchUiState, viewModel: SearchViewMod
     }
 }
 
-/** 20_BuscarPersonas y su variante: Agregar pasa a Pendiente. */
+/** 20_BuscarPersonas y su variante: Amigos, Agregar o Solicitud enviada. */
 @Composable
 private fun SearchPerson(person: Person, state: SearchUiState, viewModel: SearchViewModel, onPerson: (String) -> Unit) {
     val sent = person.id in state.sent
+    val friend = person.id in state.friendIds
     PersonRow(
         person,
         onClick = { onPerson(person.id) },
-        detail = if (sent) stringResource(R.string.friends_request_pending) else null
+        detail = when {
+            friend -> stringResource(R.string.friends_tab_friends)
+            sent -> stringResource(R.string.friends_request_pending)
+            else -> null
+        }
     ) {
-        if (!sent) {
+        if (!sent && !friend) {
             WhereverIconButton(
                 onClick = { viewModel.request(person) },
                 enabled = person.id !in state.sending,
@@ -202,7 +209,7 @@ private fun SearchPerson(person: Person, state: SearchUiState, viewModel: Search
     }
 }
 
-/** 21_SinResultados: no se encontró, ideas y pedirle a la IA algo parecido. */
+/** 21_SinResultados: no se encontró, ideas y pedirle a la IA algo parecido (salvo en Personas). */
 @Composable
 private fun NoResults(query: String, tab: SearchTab, actions: SearchActions) {
     Column(
@@ -210,16 +217,20 @@ private fun NoResults(query: String, tab: SearchTab, actions: SearchActions) {
         modifier = Modifier.fillMaxWidth().testTag("search_empty")
     ) {
         Text(stringResource(R.string.search_no_results, query), style = MaterialTheme.typography.titleMedium)
+        // En Personas la IA no ayuda: se recuerda cómo se busca a alguien.
+        val people = tab == SearchTab.PEOPLE
         Text(
-            stringResource(R.string.search_no_results_hint),
+            stringResource(if (people) R.string.search_people_hint else R.string.search_no_results_hint),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        WhereverPrimaryButton(
-            text = stringResource(R.string.search_ask_ai),
-            onClick = { actions.onAskAi(query) },
-            tag = "search_ask_ai"
-        )
+        if (!people) {
+            WhereverPrimaryButton(
+                text = stringResource(R.string.search_ask_ai),
+                onClick = { actions.onAskAi(query) },
+                tag = "search_ask_ai"
+            )
+        }
         if (tab == SearchTab.PLACES) {
             WhereverOutlinedButton(
                 text = stringResource(R.string.search_maybe),

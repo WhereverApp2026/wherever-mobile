@@ -8,9 +8,9 @@
 
 | | Pantallas | % de 162 |
 |---|---|---|
-| Funcionan con la API real | 56 | **34,6 %** |
+| Funcionan con la API real | 57 | **35,2 %** |
 | Con datos locales (falta endpoint) | 1 | 0,6 % |
-| Total con UI terminada | 57 | 35,2 % |
+| Total con UI terminada | 58 | 35,8 % |
 
 | Spec | Tema | Frames | Funcionan | Datos locales | Nota |
 |---|---|---|---|---|---|
@@ -26,7 +26,7 @@
 | nv-16 | Sin conexión | 1 | 1 | 0 | más mantenimiento y versión mínima; probado en teléfono 2026-11-20 |
 | nv-17 | Inicio y feed | 15 | 3 | 0 | feed social pendiente |
 | nv-18 | Notificaciones | 4 | 4 | 0 | aviso en la app, bloqueo y Aceptar; pushes de reserva/reseña pendientes de backend |
-| nv-19 | Búsqueda | 4 | 3 | 0 | Buscar unificado en `main`; falta "solicitud enviada" en el teléfono |
+| nv-19 | Búsqueda | 4 | 4 | 0 | Personas: Amigos, Agregar o Solicitud enviada probado en teléfono 2026-11-20 |
 | nv-20 | Amigos | 15 | 10 | 0 | falta QR y variantes |
 | nv-21 | Explorar y lugares | 8 | 5 | 0 | staging sin negocios |
 | nv-22 | Favoritos | 2 | 2 | 0 |  |
@@ -58,6 +58,7 @@
 | 2026-11-19 | después de `76718f1` | Búsqueda unificada integrada (las 3 ya contadas pasan a tener su pantalla propia) | 54 (+1 locales) | 33,3 % |
 | 2026-11-20 | nv-16 integrado | 89_SinConexion, mantenimiento y versión mínima | 55 (+1 locales) | 34,0 % |
 | 2026-11-20 | `099142e` + prueba | 08_Permisos probado en teléfono | 56 (+1 locales) | 34,6 % |
+| 2026-11-20 | nv-19 Personas | BuscarPersonas · solicitud enviada (y Amigos) | 57 (+1 locales) | 35,2 % |
 
 ---
 

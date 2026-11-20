@@ -5,6 +5,9 @@ import com.wherever.mobile.R
 import com.wherever.mobile.core.common.AppError
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.ui.UiText
+import com.wherever.mobile.feature.friends.domain.Friendship
+import com.wherever.mobile.feature.friends.domain.FriendshipList
+import com.wherever.mobile.feature.friends.domain.FriendshipPage
 import com.wherever.mobile.feature.friends.domain.Person
 import com.wherever.mobile.testing.FakeFriendsRepository
 import com.wherever.mobile.testing.FakePlacesRepository
@@ -82,6 +85,37 @@ class SearchViewModelTest {
 
         assertTrue("request:u2" in friends.calls)
         assertTrue("u2" in vm.state.value.sent)
+    }
+
+    @Test
+    fun `personas marca amigos y solicitudes ya enviadas que la busqueda no trae`() = runTest {
+        val luz = Person("u2", "Luz", "luz", null)
+        val ana = Person("u3", "Ana", "luz_ana", null)
+        friends.searchResult = Result.Success(listOf(luz, ana, Person("u4", "Luzma", "luzma", null)))
+        val friend = Friendship("f1", luz, received = false, accepted = true)
+        val request = Friendship("f2", ana, received = false, accepted = false)
+        friends.lists[FriendshipList.FRIENDS] = Result.Success(FriendshipPage(listOf(friend), 0))
+        friends.lists[FriendshipList.SENT] = Result.Success(FriendshipPage(listOf(request), 0))
+        val vm = viewModel(query = "@luz")
+        vm.onTab(SearchTab.PEOPLE)
+        advanceUntilIdle()
+
+        assertEquals(setOf("u2"), vm.state.value.friendIds)
+        assertEquals(setOf("u3"), vm.state.value.sent)
+    }
+
+    @Test
+    fun `personas sin poder leer amigos deja Agregar`() = runTest {
+        friends.searchResult = Result.Success(listOf(Person("u2", "Luz", "luz", null)))
+        friends.lists[FriendshipList.FRIENDS] = Result.Failure(AppError.Network)
+        friends.lists[FriendshipList.SENT] = Result.Failure(AppError.Network)
+        val vm = viewModel(query = "@luz")
+        vm.onTab(SearchTab.PEOPLE)
+        advanceUntilIdle()
+
+        assertEquals("u2", vm.state.value.people.single().id)
+        assertTrue(vm.state.value.friendIds.isEmpty())
+        assertTrue(vm.state.value.sent.isEmpty())
     }
 
     @Test

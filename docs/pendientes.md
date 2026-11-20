@@ -6,18 +6,18 @@
 
 ## % real
 
-**56 de 162 = 34,6 %** con la API real, más 1 con datos locales (Insignias, sin endpoint) que no suma.
+**57 de 162 = 35,2 %** con la API real, más 1 con datos locales (Insignias, sin endpoint) que no suma.
 
 | Área | Specs | Frames | Funcionan | % |
 |---|---|---|---|---|
 | Cuenta y acceso | nv-06 a nv-16 | 17 | 16 (+1 local) | 94 % |
-| Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 13 | 45 % |
+| Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 14 | 48 % |
 | Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 14 | 45 % |
 | Planes: IA, detalle, Vaca, Mis planes, día del plan | nv-23, nv-24, nv-26, nv-28, nv-30 | 22 | 9 | 41 % |
 | Reserva, pago y cupones | nv-27, nv-29 | 15 | 4 | 27 % |
 | Después del plan: Recuerdos, Reseñas, Ayuda | nv-31 a nv-33 | 22 | 0 | 0 % |
 | Modo negocio | nv-34 a nv-38 | 26 | 0 | 0 % |
-| **Total** | | **162** | **56** | **34,6 %** |
+| **Total** | | **162** | **57** | **35,2 %** |
 
 ## ⏸ Pausa (2026-11-19, noche): dónde me quedé
 
@@ -61,7 +61,7 @@ Bugs conocidos del área: Bienvenida en horizontal (✅ nv-55); enlaces corridos
 
 ### 1. Subir todo a GitHub
 - [x] Búsqueda (nv-19) de `wip/pausa` a `main`, con las 7 compuertas en verde.
-- [ ] Probar en el teléfono la pestaña Personas de Buscar y la variante "solicitud enviada" (no había teléfono conectado el 2026-11-19 por la noche).
+- [x] Pestaña Personas de Buscar en el teléfono (2026-11-20): Amigos, Agregar y Solicitud enviada; la búsqueda no trae la relación y se cruza con amigos y enviadas.
 - [x] PR de Dependabot #5, #6 y #7 (GitHub Actions): integrados juntos en `a333916`, CI de `main` en verde.
 - [x] PR #23 (`actions/setup-java` 6.2.0): CI en verde, se integra.
 
@@ -75,18 +75,18 @@ Bugs conocidos del área: Bienvenida en horizontal (✅ nv-55); enlaces corridos
 - [x] Pruebas de captura (Roborazzi): 8 pantallas × claro, oscuro y chica con letra grande.
 
 ### 3. Terminar lo que está a medias
-- [ ] nv-11 Permisos en contexto (1/2): 08_Permisos "Antes de empezar" tras Gustos, con el permiso de avisos.
+- [x] nv-11 Permisos en contexto (2/2), probado en teléfono 2026-11-20.
 - [ ] nv-21 Explorar y lugares (5/8).
 - [ ] nv-23 Crear plan con IA (4/6).
 - [ ] nv-24 Plan: detalle y edición (3/5).
 - [ ] nv-20 Amigos (10/15): QR (requiere acordar la librería, constitución §3) y variantes.
 - [ ] nv-27 Reserva y pago (4/10): pago.
 - [ ] nv-17 Inicio y feed (3/15): feed social.
-- [ ] nv-19 Búsqueda (3/4): variante "solicitud enviada" en el teléfono.
+- [x] nv-19 Búsqueda (4/4).
 - [ ] nv-14 Insignias con API real (cuando exista el endpoint).
 
 ### 4. Lo que está en 0 %
-- [ ] nv-16 Sin conexión (1)
+- [x] nv-16 Sin conexión (1), probado en teléfono 2026-11-20
 - [ ] nv-25 Compartir, grupos y chats (12)
 - [ ] nv-26 Vaca virtual y gastos (4)
 - [ ] nv-29 Cupones (5)
