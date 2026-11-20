@@ -24,7 +24,10 @@ private class FakeMonitor(initial: Boolean) : ConnectivityMonitor {
     val flow = MutableStateFlow(initial)
     override val online = flow
 
-    override fun isOnline() = flow.value
+    /** El sistema ya ve la red aunque el callback del flujo aún no llegue (como `ConnectivityManager`). */
+    var current: Boolean? = null
+
+    override fun isOnline() = current ?: flow.value
 }
 
 private class FakeStatusRepository : AppStatusRepository {
@@ -122,11 +125,13 @@ class AppStatusViewModelTest {
         advanceUntilIdle()
         repository.result = Result.Failure(AppError.Server())
         // Hay red, pero el evento del monitor aún no llega: el aviso sigue arriba y Reintentar consulta la API.
-        monitor.flow.value = true
+        monitor.current = true
         vm.retry()
         advanceUntilIdle()
 
+        assertTrue(vm.state.value.offline)
         assertEquals(StatusNotice.SERVER_DOWN, vm.state.value.notice)
+        assertEquals(1, repository.calls)
     }
 
     @Test

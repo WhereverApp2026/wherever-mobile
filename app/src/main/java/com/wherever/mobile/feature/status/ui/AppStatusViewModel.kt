@@ -57,7 +57,7 @@ class AppStatusViewModel @Inject constructor(
                 if (online) {
                     dismissed = false
                     mutableState.update { it.copy(offline = false, notice = null) }
-                    if (!checkedVersion) check(fromRetry = false)
+                    if (!checkedVersion && !state.value.checking) check(fromRetry = false)
                 } else if (!dismissed) {
                     mutableState.update { it.copy(offline = true, notice = null) }
                 }
