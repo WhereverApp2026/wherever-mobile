@@ -8,9 +8,9 @@
 
 | | Pantallas | % de 162 |
 |---|---|---|
-| Funcionan con la API real | 55 | **34,0 %** |
+| Funcionan con la API real | 56 | **34,6 %** |
 | Con datos locales (falta endpoint) | 1 | 0,6 % |
-| Total con UI terminada | 56 | 34,6 % |
+| Total con UI terminada | 57 | 35,2 % |
 
 | Spec | Tema | Frames | Funcionan | Datos locales | Nota |
 |---|---|---|---|---|---|
@@ -19,7 +19,7 @@
 | nv-08 | Recuperar contraseña | 3 | 3 | 0 | Nueva contraseña por enlace; sin token real (staging sin SMTP) |
 | nv-09 | Registro | 1 | 1 | 0 | probado en teléfono 2026-11-19 |
 | nv-10 | Gustos | 1 | 1 | 0 | probado en teléfono 2026-11-19 |
-| nv-11 | Permisos en contexto | 2 | 1 | 0 | ubicación sí; avisos no |
+| nv-11 | Permisos en contexto | 2 | 2 | 0 | 08_Permisos probado en teléfono (Android 12) 2026-11-20; diálogo de avisos de Android 13+ sin probar |
 | nv-13 | Ajustes y cerrar sesión | 1 | 1 | 0 |  |
 | nv-14 | Perfil, edición e insignias | 4 | 3 | 1 | Insignias con catálogo local (sin endpoint) |
 | nv-15 | Privacidad, mis datos, eliminar | 2 | 2 | 0 |  |
@@ -57,6 +57,7 @@
 | 2026-11-19 | después de `7f8866f` | Notificaciones: aviso en la app, bloqueo y Aceptar | 54 (+1 locales) | 33,3 % |
 | 2026-11-19 | después de `76718f1` | Búsqueda unificada integrada (las 3 ya contadas pasan a tener su pantalla propia) | 54 (+1 locales) | 33,3 % |
 | 2026-11-20 | nv-16 integrado | 89_SinConexion, mantenimiento y versión mínima | 55 (+1 locales) | 34,0 % |
+| 2026-11-20 | `099142e` + prueba | 08_Permisos probado en teléfono | 56 (+1 locales) | 34,6 % |
 
 ---
 

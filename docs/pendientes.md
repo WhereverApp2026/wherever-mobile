@@ -6,18 +6,18 @@
 
 ## % real
 
-**55 de 162 = 34,0 %** con la API real, más 1 con datos locales (Insignias, sin endpoint) que no suma.
+**56 de 162 = 34,6 %** con la API real, más 1 con datos locales (Insignias, sin endpoint) que no suma.
 
 | Área | Specs | Frames | Funcionan | % |
 |---|---|---|---|---|
-| Cuenta y acceso | nv-06 a nv-16 | 17 | 15 (+1 local) | 88 % |
+| Cuenta y acceso | nv-06 a nv-16 | 17 | 16 (+1 local) | 94 % |
 | Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 13 | 45 % |
 | Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 14 | 45 % |
 | Planes: IA, detalle, Vaca, Mis planes, día del plan | nv-23, nv-24, nv-26, nv-28, nv-30 | 22 | 9 | 41 % |
 | Reserva, pago y cupones | nv-27, nv-29 | 15 | 4 | 27 % |
 | Después del plan: Recuerdos, Reseñas, Ayuda | nv-31 a nv-33 | 22 | 0 | 0 % |
 | Modo negocio | nv-34 a nv-38 | 26 | 0 | 0 % |
-| **Total** | | **162** | **55** | **34,0 %** |
+| **Total** | | **162** | **56** | **34,6 %** |
 
 ## ⏸ Pausa (2026-11-19, noche): dónde me quedé
 
@@ -44,7 +44,7 @@
 | 5 | `NuevaContrasena` | `NewPasswordScreen.kt` | a medias | vista previa y captura |
 | 6 | `05_Registro` | `RegisterScreen.kt` | funciona | prueba en teléfono |
 | 7 | `06_Gustos` | `TastesScreen.kt` | funciona | prueba en teléfono |
-| 8 | `08_Permisos` | `PermissionsScreen.kt` | hecha (2026-11-19) | prueba en teléfono |
+| 8 | `08_Permisos` | `PermissionsScreen.kt` | funciona | — (probada en teléfono Android 12, 2026-11-20; falta ver el diálogo de avisos en Android 13+) |
 | 9 | `06_PermisoSys` | diálogo del sistema | hecha | se dispara desde `08_Permisos` y desde Inicio |
 | 10 | `85_Ajustes` | `SettingsScreen.kt` | a medias | vista previa y captura |
 | 11 | `81_Perfil` | `ProfileScreen.kt` | funciona | — (arreglado el corte sobre la barra, nv-55) |
