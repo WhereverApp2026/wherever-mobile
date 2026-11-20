@@ -91,7 +91,7 @@
 
 | Rama / PR | Estado | Motivo |
 |---|---|---|
-| `wip/pausa`, `feat/plan-ia`, `feat/fotos-perfil`, `feat/inicio-recomendaciones`, `fix/auth-telefono` | borradas (local y remoto) el 2026-11-19 | `git log main..<rama>` vacío; #24 y #25 ya fusionados |
+| Todas las ramas salvo `main` (feat, fix, docs, spec, chore, integra y las de Dependabot de #11 y #12) | borradas (local y remoto) el 2026-11-19 | `git cherry main <rama>` vacío; las de Dependabot solo tenían el bump de sus PR cerrados. Solo queda `main` |
 | #12 core-ktx 1.19.1 | **cerrado** el 2026-11-19 | `checkDebugAarMetadata` falla: exige `compileSdk 37` y AGP 9.1.0; el proyecto está en SDK 36 / AGP 9.0.1. Reabrir al subir a SDK 37 |
 | #8 okhttp 5.5.1, #9 hilt 1.4.0, #10 navigation 2.10.2, #11 compose-bom 2026.09 | **cerrados** el 2026-11-19 | probados uno por uno en `main`: `assembleDebug` falla en `checkDebugAarMetadata`, exigen `compileSdk 37` y AGP 9.1.0 (hilt arrastra lifecycle 2.11.0; el BOM, material-ripple 1.12.1). Sin SDK 37 en el equipo (dl.google.com no responde). Retomar todos juntos al subir a SDK 37 + AGP 9.1 |
 | #5 setup-gradle 6.4.1, #6 checkout 7.0.1, #7 upload-artifact 7.0.2 | integrados en `a333916` | CI de `main` en verde |
