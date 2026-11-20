@@ -33,7 +33,7 @@
 - **Bloqueo del backend:** Insignias (`GET /usuarios/yo/insignias` no existe).
 - **Pendiente de otras áreas:** "Disponible sin internet" necesita que planes y reservas se guarden en Room.
 
-## Área 1 — Cuenta y acceso: inventario (2026-11-19, revisado en el código)
+## Área 1 — Cuenta y acceso: inventario (2026-11-20, revisado en el código y en el teléfono)
 
 | # | Frame | Pantalla / archivo | Estado | Falta para "terminada" |
 |---|---|---|---|---|
@@ -41,18 +41,18 @@
 | 2 | `03_Login` | `LoginScreen.kt` | funciona | prueba en teléfono (doble toque, giro, sin red) |
 | 3 | `03_Recuperar` | `RecoverScreen.kt` | funciona | prueba en teléfono |
 | 4 | `04_RevisaCorreo` | `CheckEmailScreen.kt` | funciona | prueba en teléfono |
-| 5 | `NuevaContrasena` | `NewPasswordScreen.kt` | a medias | vista previa y captura |
-| 6 | `05_Registro` | `RegisterScreen.kt` | funciona | prueba en teléfono |
-| 7 | `06_Gustos` | `TastesScreen.kt` | funciona | prueba en teléfono |
+| 5 | `NuevaContrasena` | `NewPasswordScreen.kt` | funciona | captura lista (normal y enlace vencido); prueba en teléfono con enlace real cuando staging mande correos |
+| 6 | `05_Registro` | `RegisterScreen.kt` | funciona | — (prueba en teléfono 2026-11-20: fecha, correo disponible, términos) |
+| 7 | `06_Gustos` | `TastesScreen.kt` | funciona | — (prueba en teléfono 2026-11-20) |
 | 8 | `08_Permisos` | `PermissionsScreen.kt` | funciona | — (probada en teléfono Android 12, 2026-11-20; falta ver el diálogo de avisos en Android 13+) |
 | 9 | `06_PermisoSys` | diálogo del sistema | hecha | se dispara desde `08_Permisos` y desde Inicio |
-| 10 | `85_Ajustes` | `SettingsScreen.kt` | a medias | vista previa y captura |
+| 10 | `85_Ajustes` | `SettingsScreen.kt` | funciona | — (captura y prueba en teléfono 2026-11-20: el cambio persiste al reabrir) |
 | 11 | `81_Perfil` | `ProfileScreen.kt` | funciona | — (arreglado el corte sobre la barra, nv-55) |
 | 12 | `82_EditarPerfil` | `EditProfileScreen.kt` | funciona | prueba en teléfono de la foto |
 | 13 | `83_Insignias` | `BadgesScreen.kt` | **bloqueo backend** | `GET /usuarios/yo/insignias` no existe (404 en staging, no está en el backend); vista previa y captura |
 | 14 | `84_DatosPers` | unido a `EditProfileScreen.kt` (D09) | funciona | — |
-| 15 | `28_PrivSocial` | `PrivacyScreen.kt` | a medias | vista previa y captura |
-| 16 | `EliminarCuenta` | `DeleteAccountScreen.kt` | a medias | vista previa y captura |
+| 15 | `28_PrivSocial` | `PrivacyScreen.kt` | funciona | — (captura y prueba en teléfono 2026-11-20) |
+| 16 | `EliminarCuenta` | `DeleteAccountScreen.kt` | funciona | — (captura y prueba en teléfono 2026-11-20: ELIMINAR → Login) |
 | 17 | `89_SinConexion` | `feature/status/` (capa en `MainActivity`) | hecha (2026-11-20) | — (probada en teléfono; "Disponible sin internet" espera Room de planes/reservas) |
 
 Bugs conocidos del área: Bienvenida en horizontal (✅ nv-55); enlaces corridos (✅ nv-55); tema oscuro sin selección visible (✅ nv-55); Perfil cortado (✅ nv-55).
