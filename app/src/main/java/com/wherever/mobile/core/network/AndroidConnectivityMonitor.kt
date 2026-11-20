@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
+import com.wherever.mobile.core.common.ConnectivityMonitor
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import kotlinx.coroutines.channels.awaitClose
@@ -11,19 +12,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 
-/**
- * Hay red con salida a internet (specs/nv-16): se detecta con `ConnectivityManager`, no por el fallo de una llamada.
- */
-interface ConnectivityMonitor {
-    val online: Flow<Boolean>
-
-    fun isOnline(): Boolean
-}
-
+/** Único lugar con `ConnectivityManager`: solo emite el estado de la red para el aviso 89_SinConexion. */
 class AndroidConnectivityMonitor @Inject constructor(@ApplicationContext context: Context) : ConnectivityMonitor {
     private val manager = context.getSystemService(ConnectivityManager::class.java)
 
-    override fun isOnline(): Boolean {
+    private fun isOnline(): Boolean {
         val capabilities = manager.getNetworkCapabilities(manager.activeNetwork) ?: return false
         return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }

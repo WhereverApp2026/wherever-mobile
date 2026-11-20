@@ -24,7 +24,8 @@
 - [x] Revisor: Jorge — fecha: 2026-11-06
 ## Estado real (2026-11-20)
 - [x] `89_SinConexion` como capa sobre la app (`feature/status/ui/AppStatusScreens.kt`, `AppStatusOverlay` en `MainActivity`), no como ruta: `ConnectivityMonitor` (`ConnectivityManager`, `ACCESS_NETWORK_STATE`) con espera de 1,5 s para no avisar en cambios wifi↔datos.
-- [x] Reintentar: sin red → "Sigues sin conexión" sin llamar a la API; con red y servidor caído → aviso propio. Atrás cierra el aviso hasta la siguiente pérdida de red.
+- [x] Reintentar siempre intenta `GET /configuracion` (nv-40: ningún chequeo de red frena una petición): falla de red → "Sigues sin conexión"; servidor caído → aviso propio; éxito → se cierra. Atrás cierra el aviso hasta la siguiente pérdida de red.
+- [x] `ConnectivityMonitor` (interfaz en `core/common`) solo informa a la UI; `AndroidConnectivityMonitor` es el único archivo con `ConnectivityManager` (`ConnectionSecurityTest` lo fija y prohíbe usarlo en `core/network` y `feature/*/data`).
 - [x] Mantenimiento (`mantenimiento: true`) y versión mínima (`version_minima_app`, pantalla Actualizar → Play Store) con `GET /configuracion` (pública).
 - [x] Unit: `test/.../feature/status/ui/AppStatusViewModelTest.kt` (monitor falso inyectado) y `feature/status/domain/VersionTest.kt`. Data: `integration/StatusIntegrationTest.kt` (MockWebServer). Seguridad: `PlatformSecurityTest` fija el permiso nuevo.
 - [x] Capturas: `89_sin_conexion`, `89_sin_conexion_aviso`, `mantenimiento`, `actualizar` × `{claro,oscuro,chica_letra_grande}`.

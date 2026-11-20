@@ -58,6 +58,22 @@ class ConnectionSecurityTest {
             }
             .map { it.name }
             .toList()
+        // nv-16: el único permitido solo emite el estado para el aviso 89_SinConexion.
+        assertEquals(listOf("AndroidConnectivityMonitor.kt"), offenders)
+    }
+
+    @Test
+    fun `el monitor de red no se usa en datos ni en la red para frenar peticiones`() {
+        val offenders = File("src/main/java").walkTopDown()
+            .filter { it.isFile && it.extension == "kt" && it.name != "AndroidConnectivityMonitor.kt" }
+            .filter { file ->
+                val path = file.invariantSeparatorsPath
+                val featureData = path.contains("/feature/") && path.contains("/data/") && !path.contains("/di/")
+                path.contains("/core/network/") || featureData
+            }
+            .filter { it.readText().contains("ConnectivityMonitor") }
+            .map { it.name }
+            .toList()
         assertEquals(emptyList<String>(), offenders)
     }
 }

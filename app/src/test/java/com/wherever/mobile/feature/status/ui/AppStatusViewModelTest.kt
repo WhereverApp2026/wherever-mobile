@@ -1,8 +1,8 @@
 package com.wherever.mobile.feature.status.ui
 
 import com.wherever.mobile.core.common.AppError
+import com.wherever.mobile.core.common.ConnectivityMonitor
 import com.wherever.mobile.core.common.Result
-import com.wherever.mobile.core.network.ConnectivityMonitor
 import com.wherever.mobile.feature.status.domain.AppStatus
 import com.wherever.mobile.feature.status.domain.AppStatusRepository
 import com.wherever.mobile.testing.MainDispatcherRule
@@ -23,11 +23,6 @@ import org.junit.Test
 private class FakeMonitor(initial: Boolean) : ConnectivityMonitor {
     val flow = MutableStateFlow(initial)
     override val online = flow
-
-    /** El sistema ya ve la red aunque el callback del flujo aún no llegue (como `ConnectivityManager`). */
-    var current: Boolean? = null
-
-    override fun isOnline() = current ?: flow.value
 }
 
 private class FakeStatusRepository : AppStatusRepository {
@@ -107,31 +102,45 @@ class AppStatusViewModelTest {
     }
 
     @Test
-    fun `reintentar sin red avisa que sigue sin conexion sin llamar a la API`() = runTest(mainRule.dispatcher) {
+    fun `reintentar sin red intenta la llamada y avisa que sigue sin conexion`() = runTest(mainRule.dispatcher) {
         val vm = viewModel(FakeMonitor(false))
         advanceUntilIdle()
         assertTrue(vm.state.value.offline)
+        repository.result = Result.Failure(AppError.Network)
 
         vm.retry()
+        advanceUntilIdle()
 
+        // nv-40: nunca se bloquea la petición por un chequeo previo de red.
+        assertEquals(1, repository.calls)
         assertEquals(StatusNotice.STILL_OFFLINE, vm.state.value.notice)
-        assertEquals(0, repository.calls)
+        assertTrue(vm.state.value.offline)
     }
 
     @Test
     fun `reintentar con red pero servidor caido lo distingue`() = runTest(mainRule.dispatcher) {
-        val monitor = FakeMonitor(false)
-        val vm = viewModel(monitor)
+        val vm = viewModel(FakeMonitor(false))
         advanceUntilIdle()
         repository.result = Result.Failure(AppError.Server())
-        // Hay red, pero el evento del monitor aún no llega: el aviso sigue arriba y Reintentar consulta la API.
-        monitor.current = true
+
         vm.retry()
         advanceUntilIdle()
 
         assertTrue(vm.state.value.offline)
         assertEquals(StatusNotice.SERVER_DOWN, vm.state.value.notice)
         assertEquals(1, repository.calls)
+    }
+
+    @Test
+    fun `reintentar con exito cierra el aviso`() = runTest(mainRule.dispatcher) {
+        val vm = viewModel(FakeMonitor(false))
+        advanceUntilIdle()
+
+        vm.retry()
+        advanceUntilIdle()
+
+        assertFalse(vm.state.value.offline)
+        assertNull(vm.state.value.notice)
     }
 
     @Test

@@ -3,9 +3,9 @@ package com.wherever.mobile.feature.status.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wherever.mobile.core.common.AppError
+import com.wherever.mobile.core.common.ConnectivityMonitor
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.di.AppVersion
-import com.wherever.mobile.core.network.ConnectivityMonitor
 import com.wherever.mobile.feature.status.domain.AppStatusRepository
 import com.wherever.mobile.feature.status.domain.isOlder
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -65,12 +65,9 @@ class AppStatusViewModel @Inject constructor(
         }
     }
 
+    /** Siempre intenta la llamada (nv-40): el error dice si sigue sin red o si el servidor no responde. */
     fun retry() {
         if (state.value.checking) return
-        if (!monitor.isOnline()) {
-            mutableState.update { it.copy(notice = StatusNotice.STILL_OFFLINE) }
-            return
-        }
         check(fromRetry = true)
     }
 
