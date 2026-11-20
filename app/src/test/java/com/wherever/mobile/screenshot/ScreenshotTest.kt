@@ -19,6 +19,10 @@ import com.wherever.mobile.feature.auth.ui.RegisterPreview
 import com.wherever.mobile.feature.auth.ui.WelcomePreview
 import com.wherever.mobile.feature.profile.ui.EditProfilePreview
 import com.wherever.mobile.feature.profile.ui.ProfilePreview
+import com.wherever.mobile.feature.status.ui.MaintenancePreview
+import com.wherever.mobile.feature.status.ui.OfflineNoticePreview
+import com.wherever.mobile.feature.status.ui.OfflinePreview
+import com.wherever.mobile.feature.status.ui.UpdateRequiredPreview
 import com.wherever.mobile.feature.tastes.ui.TastesPreview
 import org.junit.Rule
 import org.junit.Test
@@ -51,7 +55,11 @@ class ScreenshotTest {
         "06_gustos" to { TastesPreview() },
         "08_permisos" to { PermissionsPreview() },
         "perfil" to { ProfilePreview() },
-        "editar_perfil" to { EditProfilePreview() }
+        "editar_perfil" to { EditProfilePreview() },
+        "89_sin_conexion" to { OfflinePreview() },
+        "89_sin_conexion_aviso" to { OfflineNoticePreview() },
+        "mantenimiento" to { MaintenancePreview() },
+        "actualizar" to { UpdateRequiredPreview() }
     )
 
     @Test

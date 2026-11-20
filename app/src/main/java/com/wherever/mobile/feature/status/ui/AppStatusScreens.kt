@@ -177,3 +177,15 @@ internal fun OfflineNoticePreview() {
         OfflineContent(AppStatusUiState(offline = true, notice = StatusNotice.STILL_OFFLINE), onRetry = {})
     }
 }
+
+@Preview
+@Composable
+internal fun MaintenancePreview() {
+    WhereverTheme { OfflineContent(AppStatusUiState(maintenance = true), onRetry = {}) }
+}
+
+@Preview
+@Composable
+internal fun UpdateRequiredPreview() {
+    WhereverTheme { UpdateRequiredContent(onUpdate = {}) }
+}
