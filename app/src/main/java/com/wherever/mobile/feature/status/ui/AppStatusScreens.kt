@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.net.toUri
 import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.InfoBanner
 import com.wherever.mobile.core.designsystem.ScreenPadding
@@ -154,11 +154,11 @@ private fun StatusLayout(
 }
 
 private fun openStore(context: Context) {
-    val market = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${context.packageName}"))
+    val market = Intent(Intent.ACTION_VIEW, "market://details?id=${context.packageName}".toUri())
     try {
         context.startActivity(market)
     } catch (_: ActivityNotFoundException) {
-        val web = Uri.parse("https://play.google.com/store/apps/details?id=${context.packageName}")
+        val web = "https://play.google.com/store/apps/details?id=${context.packageName}".toUri()
         context.startActivity(Intent(Intent.ACTION_VIEW, web))
     }
 }
