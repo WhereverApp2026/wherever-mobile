@@ -245,6 +245,9 @@
 - A recordar: el contrato de la API está en `wherever-backend/docs/endpoints.md` de `origin/main`; la copia local del backend puede ir atrasada (`git fetch` y `git show origin/main:docs/endpoints.md`).
 - A recordar: desde la protección de `main`, también Jorge (y Claude) integra por PR; nada de push directo.
 
+- Pausa (2026-11-20, tarde): `main` = `810b91e`. nv-17 (feed de amigos) en `wip/pausa`, compilado y con la suite unitaria verde, sin compuertas ni teléfono ni PR. Bug de `mapApiError` (códigos específicos → `Unknown`) corregido ahí con prueba. Siguiente paso exacto en `docs/pendientes.md` ("⏸ Pausa (2026-11-20, tarde)").
+- A recordar: desde el 2026-11-20 todo va por PR a `main`, también el trabajo de Jorge.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

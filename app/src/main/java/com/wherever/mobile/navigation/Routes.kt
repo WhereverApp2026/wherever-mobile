@@ -119,3 +119,11 @@ data object AddFriendRoute
 /** `id` lo lee PersonViewModel de SavedStateHandle por su nombre. */
 @Serializable
 data class PersonRoute(val id: String)
+
+/** 17_PostDetalle: un momento del feed de amigos (specs/nv-17). */
+@Serializable
+data class MomentRoute(val id: String)
+
+/** 29_PlanAmigo: plan público de un amigo, con Me apunto y Hacer mi versión (specs/nv-17). */
+@Serializable
+data class FriendPlanRoute(val id: String)

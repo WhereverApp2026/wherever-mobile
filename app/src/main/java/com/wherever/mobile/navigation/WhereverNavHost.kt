@@ -29,6 +29,10 @@ import com.wherever.mobile.feature.auth.ui.RecoverRoute as RecoverScreen
 import com.wherever.mobile.feature.auth.ui.RegisterRoute as RegisterScreen
 import com.wherever.mobile.feature.auth.ui.VerifyEmailRoute as VerifyEmailScreen
 import com.wherever.mobile.feature.auth.ui.WelcomeScreen
+import com.wherever.mobile.feature.feed.ui.FriendPlanNavigation
+import com.wherever.mobile.feature.feed.ui.FriendPlanRoute as FriendPlanScreen
+import com.wherever.mobile.feature.feed.ui.MomentDetailRoute
+import com.wherever.mobile.feature.feed.ui.MomentNavigation
 import com.wherever.mobile.feature.friends.ui.AddFriendRoute as AddFriendScreen
 import com.wherever.mobile.feature.friends.ui.FriendsRoute as FriendsScreen
 import com.wherever.mobile.feature.friends.ui.PersonRoute as PersonScreen
@@ -190,7 +194,28 @@ fun WhereverNavHost(
                     onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
                     onCategory = { navController.navigateFrom(e, ExploreRoute(category = it)) },
                     onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "inicio")) },
-                    onNotifications = { navController.navigateFrom(e, NotificationsRoute) }
+                    onNotifications = { navController.navigateFrom(e, NotificationsRoute) },
+                    onMoment = { navController.navigateFrom(e, MomentRoute(it)) },
+                    onFriendPlan = { navController.navigateFrom(e, FriendPlanRoute(it)) },
+                    onPerson = { navController.navigateFrom(e, PersonRoute(it)) },
+                    onAddFriends = { navController.navigateFrom(e, AddFriendRoute) }
+                )
+            )
+        }
+        composable<MomentRoute> { e ->
+            MomentDetailRoute(
+                MomentNavigation(
+                    onBack = { navController.popFrom(e) },
+                    onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "inicio")) },
+                    onPlan = { navController.navigateFrom(e, FriendPlanRoute(it)) }
+                )
+            )
+        }
+        composable<FriendPlanRoute> { e ->
+            FriendPlanScreen(
+                FriendPlanNavigation(
+                    onBack = { navController.popFrom(e) },
+                    onMyCopy = { navController.navigateFrom(e, PlanRoute(it)) }
                 )
             )
         }

@@ -738,4 +738,49 @@
     <string name="update_title">Actualiza Wherever</string>
     <string name="update_body">Esta versión ya no funciona con el servicio. Descarga la más reciente para seguir.</string>
     <string name="update_action">Actualizar</string>
+
+    <!-- Inicio: pestaña Amigos, publicación y plan de un amigo (specs/nv-17) -->
+    <string name="home_tab_nearby">Cerca de ti</string>
+    <string name="home_tab_friends">Amigos</string>
+    <string name="feed_time_now">Ahora</string>
+    <string name="feed_time_minutes">Hace %1$d min</string>
+    <string name="feed_time_hours">Hace %1$d h</string>
+    <string name="feed_time_yesterday">Ayer</string>
+    <string name="feed_time_days">Hace %1$d días</string>
+    <string name="feed_time_long_ago">Hace más de una semana</string>
+    <string name="feed_more">Ver más publicaciones</string>
+    <string name="feed_empty_title">Tus amigos aún no comparten momentos</string>
+    <string name="feed_empty_body">Cuando publiquen una postal de un lugar o de un plan, la verás aquí.</string>
+    <string name="feed_add_friends">Agregar amigos</string>
+    <string name="feed_see_plan">Ver plan</string>
+    <string name="feed_see_place">Ver lugar</string>
+    <string name="feed_plan_here">Planear aquí</string>
+    <string name="feed_a_friend">Tu amigo</string>
+    <string name="feed_was_here">%1$s estuvo aquí</string>
+    <string name="feed_shared">%1$s compartió un momento</string>
+    <string name="feed_suggestions">Personas que quizá conozcas</string>
+    <string name="feed_see_more">Ver más</string>
+    <plurals name="feed_mutual">
+        <item quantity="one">%1$d en común</item>
+        <item quantity="other">%1$d en común</item>
+    </plurals>
+    <string name="feed_post_title">Publicación</string>
+    <string name="feed_moment_gone">Esta publicación ya no está disponible.</string>
+    <string name="feed_friend_plan_title">Plan de un amigo</string>
+    <string name="feed_plan_gone">Este plan ya no está disponible o es privado.</string>
+    <string name="feed_plan_date">Fecha: %1$s</string>
+    <string name="feed_join">Me apunto</string>
+    <string name="feed_joined_short">Ya te apuntaste</string>
+    <string name="feed_make_mine">Hacer mi versión</string>
+    <string name="feed_join_title">Apuntarte al plan</string>
+    <plurals name="feed_join_stops">
+        <item quantity="one">%1$d parada</item>
+        <item quantity="other">%1$d paradas</item>
+    </plurals>
+    <string name="feed_join_info">Tu amigo recibe el aviso y entras al grupo del plan.</string>
+    <string name="feed_join_confirm">Apuntarme al plan</string>
+    <string name="feed_not_now">Ahora no</string>
+    <string name="feed_joined">Listo, ya estás en el plan.</string>
+    <string name="feed_plan_full">El plan ya está lleno.</string>
+    <string name="feed_plan_private">Este plan es privado.</string>
 </resources>

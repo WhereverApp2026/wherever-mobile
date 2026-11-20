@@ -139,7 +139,12 @@ class FakePlacesRepository :
 
     override suspend fun recentlyViewed(): Result<List<PlaceCard>> = Result.Success(emptyList())
 
-    override suspend fun detail(id: String): Result<PlaceDetail> = detailResult
+    val detailCalls = mutableListOf<String>()
+
+    override suspend fun detail(id: String): Result<PlaceDetail> {
+        detailCalls += id
+        return detailResult
+    }
 
     override suspend fun traffic(id: String): Result<Traffic> =
         Result.Success(Traffic(day = 3, hours = List(24) { it }, currentHour = 12, enough = true))

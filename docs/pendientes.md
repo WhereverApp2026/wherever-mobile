@@ -19,6 +19,22 @@
 | Modo negocio | nv-34 a nv-38 | 26 | 0 | 0 % |
 | **Total** | | **162** | **57** | **35,2 %** |
 
+## ⏸ Pausa (2026-11-20, tarde): dónde me quedé
+
+- **En `main`:** sin cambios de código desde `810b91e` (reparto del equipo). 57/162 = 35,2 %.
+- **En `wip/pausa` (sin tocar `main`):** nv-17 feed de amigos, compilado y con toda la suite unitaria en verde, **sin compuertas completas, sin prueba en teléfono y sin PR**:
+  - `feature/feed/` (`GET /momentos/feed`, `GET /momentos/{id}`, `POST /planes/{id}/me-apunto`), pestañas Cerca de ti / Amigos en Inicio (`UnderlineTabs` nuevo en designsystem), 11_InicioAmigos + 12_InicioMas (sugerencias con Agregar → Pendiente), 17_PostDetalle (`MomentRoute`), 29_PlanAmigo con hoja 14_MeApunto (`FriendPlanRoute`, `WhereverBottomSheet` nuevo) y Hacer mi versión (clona para mañana).
+  - **Bug corregido con prueba:** `mapApiError` convertía en `Unknown` los códigos específicos de módulo (`grupo_lleno`, `codigo_ya_usado`…); ahora siguen al estado HTTP (`SafeApiCallTest`).
+  - Pruebas: `FeedViewModelsTest`, `FeedTimeTest`, `FeedIntegrationTest`; capturas `11_inicio_amigos*`, `17_post_detalle`, `29_plan_amigo` grabadas **sin revisar a ojo**.
+- **Siguiente paso exacto:**
+  1. `git switch wip/pausa` → `git switch -c feat/nv-17-feed` (o renombrar), revisar las 12 capturas nuevas contra Figma (`11_InicioAmigos`, `12_InicioMas`, `17_PostDetalle`, `29_PlanAmigo`, `14_MeApunto`).
+  2. Prueba de UI en `androidTest` (pestaña Amigos: vacío, Agregar → Pendiente) y correrla en el teléfono.
+  3. Registrar `MomentRoute` y `FriendPlanRoute` en `docs/routes.md` (`check_routes.sh`).
+  4. Compuertas una por una (`scratchpad/gates.sh <sha>`), instalar y probar en el teléfono con las cuentas QA (B ya tiene un momento en staging; A lo ve en Amigos).
+  5. PR a `main`, CI verde, sumar en `docs/avance.md`: nv-17 pasa de 3 a 3 + 11_InicioAmigos, 12_InicioMas, InicioMas · solicitud enviada, 14_MeApunto, 17_PostDetalle, 29_PlanAmigo (+ variante) si todo queda verde. Sin API: Historias, Reacciones y comentarios.
+  6. Después: Social (nv-18, nv-20, nv-25), una rama y un PR por spec; luego Planes y Reserva.
+- **Protección de `main`:** sigue sin aplicar (JaRe0528 tiene WRITE). Comando en `docs/revision-jorge.md`.
+
 ## Reparto del equipo (desde 2026-11-20)
 
 Reglas: `CONTRIBUTING.md`. Cada spec es una rama y un PR a `main` con Jorge como revisor.
