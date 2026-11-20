@@ -1,8 +1,10 @@
 package com.wherever.mobile.feature.settings.ui
 
+import android.content.res.Configuration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -16,6 +18,7 @@ import com.wherever.mobile.core.designsystem.ScreenPhase
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.ToggleRow
 import com.wherever.mobile.core.designsystem.TopTitleRow
+import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.feature.profile.domain.Privacy
 import com.wherever.mobile.feature.profile.domain.PrivacyPatch
 
@@ -28,7 +31,7 @@ fun PrivacyRoute(onBack: () -> Unit, onMyData: () -> Unit, viewModel: PrivacyVie
         if (phase == ScreenPhase.LOADING || privacy == null) {
             LoadingState()
         } else {
-            PrivacyContent(state, privacy, viewModel, onBack, onMyData)
+            PrivacyContent(state, privacy, viewModel::update, viewModel::onSensitiveDataChange, onBack, onMyData)
         }
     }
     if (state.confirmSensitiveOff) {
@@ -46,7 +49,8 @@ fun PrivacyRoute(onBack: () -> Unit, onMyData: () -> Unit, viewModel: PrivacyVie
 private fun PrivacyContent(
     state: PrivacyUiState,
     privacy: Privacy,
-    viewModel: PrivacyViewModel,
+    onUpdate: (PrivacyPatch) -> Unit,
+    onSensitiveChange: (Boolean) -> Unit,
     onBack: () -> Unit,
     onMyData: () -> Unit
 ) {
@@ -59,7 +63,7 @@ private fun PrivacyContent(
                 title = stringResource(R.string.privacy_location),
                 subtitle = stringResource(R.string.privacy_location_detail),
                 checked = privacy.location,
-                onCheckedChange = { viewModel.update(PrivacyPatch(location = it)) },
+                onCheckedChange = { onUpdate(PrivacyPatch(location = it)) },
                 enabled = enabled,
                 tag = "privacy_location"
             )
@@ -67,28 +71,28 @@ private fun PrivacyContent(
                 title = stringResource(R.string.privacy_learning),
                 subtitle = stringResource(R.string.privacy_learning_detail),
                 checked = privacy.personalizedLearning,
-                onCheckedChange = { viewModel.update(PrivacyPatch(personalizedLearning = it)) },
+                onCheckedChange = { onUpdate(PrivacyPatch(personalizedLearning = it)) },
                 enabled = enabled
             )
             ToggleRow(
                 title = stringResource(R.string.privacy_mood),
                 subtitle = stringResource(R.string.privacy_mood_detail),
                 checked = privacy.mood,
-                onCheckedChange = { viewModel.update(PrivacyPatch(mood = it)) },
+                onCheckedChange = { onUpdate(PrivacyPatch(mood = it)) },
                 enabled = enabled
             )
             ToggleRow(
                 title = stringResource(R.string.privacy_usage),
                 subtitle = stringResource(R.string.privacy_usage_detail),
                 checked = privacy.usageData,
-                onCheckedChange = { viewModel.update(PrivacyPatch(usageData = it)) },
+                onCheckedChange = { onUpdate(PrivacyPatch(usageData = it)) },
                 enabled = enabled
             )
             ToggleRow(
                 title = stringResource(R.string.privacy_searchable),
                 subtitle = stringResource(R.string.privacy_searchable_detail),
                 checked = privacy.searchableByPhone,
-                onCheckedChange = { viewModel.update(PrivacyPatch(searchableByPhone = it)) },
+                onCheckedChange = { onUpdate(PrivacyPatch(searchableByPhone = it)) },
                 enabled = enabled,
                 tag = "privacy_searchable"
             )
@@ -96,7 +100,7 @@ private fun PrivacyContent(
                 title = stringResource(R.string.privacy_searchable_user),
                 subtitle = stringResource(R.string.privacy_searchable_user_detail),
                 checked = privacy.searchableByUser,
-                onCheckedChange = { viewModel.update(PrivacyPatch(searchableByUser = it)) },
+                onCheckedChange = { onUpdate(PrivacyPatch(searchableByUser = it)) },
                 enabled = enabled,
                 tag = "privacy_searchable_user"
             )
@@ -104,7 +108,7 @@ private fun PrivacyContent(
                 title = stringResource(R.string.privacy_sensitive),
                 subtitle = stringResource(R.string.privacy_sensitive_detail),
                 checked = privacy.sensitiveData,
-                onCheckedChange = viewModel::onSensitiveDataChange,
+                onCheckedChange = onSensitiveChange,
                 enabled = enabled,
                 tag = "privacy_sensitive"
             )
@@ -112,5 +116,21 @@ private fun PrivacyContent(
         SurfaceCard {
             NavRow(stringResource(R.string.privacy_my_data), onMyData, tag = "privacy_my_data")
         }
+    }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+internal fun PrivacyPreview() {
+    WhereverTheme {
+        PrivacyContent(
+            state = PrivacyUiState(privacy = PREVIEW_PROFILE.privacy),
+            privacy = PREVIEW_PROFILE.privacy,
+            onUpdate = {},
+            onSensitiveChange = {},
+            onBack = {},
+            onMyData = {}
+        )
     }
 }

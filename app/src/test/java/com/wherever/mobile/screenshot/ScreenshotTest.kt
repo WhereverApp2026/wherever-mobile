@@ -13,12 +13,17 @@ import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.wherever.mobile.feature.auth.ui.CheckEmailPreview
 import com.wherever.mobile.feature.auth.ui.LoginPreview
+import com.wherever.mobile.feature.auth.ui.NewPasswordExpiredPreview
+import com.wherever.mobile.feature.auth.ui.NewPasswordPreview
 import com.wherever.mobile.feature.auth.ui.PermissionsPreview
 import com.wherever.mobile.feature.auth.ui.RecoverPreview
 import com.wherever.mobile.feature.auth.ui.RegisterPreview
 import com.wherever.mobile.feature.auth.ui.WelcomePreview
 import com.wherever.mobile.feature.profile.ui.EditProfilePreview
 import com.wherever.mobile.feature.profile.ui.ProfilePreview
+import com.wherever.mobile.feature.settings.ui.DeleteAccountPreview
+import com.wherever.mobile.feature.settings.ui.PrivacyPreview
+import com.wherever.mobile.feature.settings.ui.SettingsPreview
 import com.wherever.mobile.feature.status.ui.MaintenancePreview
 import com.wherever.mobile.feature.status.ui.OfflineNoticePreview
 import com.wherever.mobile.feature.status.ui.OfflinePreview
@@ -51,11 +56,16 @@ class ScreenshotTest {
         "03_login" to { LoginPreview() },
         "03_recuperar" to { RecoverPreview() },
         "04_revisa_correo" to { CheckEmailPreview() },
+        "nueva_contrasena" to { NewPasswordPreview() },
+        "nueva_contrasena_vencida" to { NewPasswordExpiredPreview() },
         "05_registro" to { RegisterPreview() },
         "06_gustos" to { TastesPreview() },
         "08_permisos" to { PermissionsPreview() },
         "perfil" to { ProfilePreview() },
         "editar_perfil" to { EditProfilePreview() },
+        "85_ajustes" to { SettingsPreview() },
+        "28_priv_social" to { PrivacyPreview() },
+        "eliminar_cuenta" to { DeleteAccountPreview() },
         "89_sin_conexion" to { OfflinePreview() },
         "89_sin_conexion_aviso" to { OfflineNoticePreview() },
         "mantenimiento" to { MaintenancePreview() },

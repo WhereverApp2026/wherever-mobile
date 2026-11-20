@@ -1,5 +1,6 @@
 package com.wherever.mobile.feature.auth.ui
 
+import android.content.res.Configuration
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.Composable
@@ -7,6 +8,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -15,6 +17,7 @@ import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.InfoBanner
 import com.wherever.mobile.core.designsystem.TitleBlock
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
+import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.core.designsystem.rememberFormSubmit
 import com.wherever.mobile.feature.account.ui.PasswordField
 import com.wherever.mobile.feature.auth.domain.PostAuthDestination
@@ -103,4 +106,17 @@ internal fun NewPasswordContent(
         InfoBanner(stringResource(R.string.new_password_sessions_note))
         state.error?.let { ErrorBanner(it.asString()) }
     }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+internal fun NewPasswordPreview() {
+    WhereverTheme { NewPasswordContent(NewPasswordUiState(password = "Wherever2026"), {}, {}, {}, {}, {}, {}) }
+}
+
+@Preview
+@Composable
+internal fun NewPasswordExpiredPreview() {
+    WhereverTheme { NewPasswordContent(NewPasswordUiState(linkExpired = true), {}, {}, {}, {}, {}, {}) }
 }

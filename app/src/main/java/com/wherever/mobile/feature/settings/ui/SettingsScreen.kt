@@ -1,5 +1,6 @@
 package com.wherever.mobile.feature.settings.ui
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -39,7 +41,13 @@ import com.wherever.mobile.core.designsystem.TopTitleRow
 import com.wherever.mobile.core.designsystem.WhereverDialog
 import com.wherever.mobile.core.designsystem.WhereverTextButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
+import com.wherever.mobile.core.designsystem.WhereverTheme
+import com.wherever.mobile.feature.profile.domain.CityRef
+import com.wherever.mobile.feature.profile.domain.NotificationSettings
+import com.wherever.mobile.feature.profile.domain.Preferences
+import com.wherever.mobile.feature.profile.domain.Privacy
 import com.wherever.mobile.feature.profile.domain.QuietHours
+import com.wherever.mobile.feature.profile.domain.Tastes
 import com.wherever.mobile.feature.profile.domain.UserProfile
 
 private val THEMES = listOf("claro", "oscuro", "sistema")
@@ -59,6 +67,7 @@ data class SettingsNavigation(
 @Composable
 fun SettingsRoute(navigation: SettingsNavigation, viewModel: SettingsViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val actions = remember(viewModel) { viewModel.actions() }
     var confirmLogout by remember { mutableStateOf(false) }
     LaunchedEffect(viewModel) { viewModel.loggedOut.collect { navigation.onLoggedOut() } }
     val loading = state.profile == null || state.loggingOut
@@ -67,7 +76,7 @@ fun SettingsRoute(navigation: SettingsNavigation, viewModel: SettingsViewModel =
         if (phase == ScreenPhase.LOADING || profile == null) {
             LoadingState()
         } else {
-            SettingsContent(state, profile, viewModel, navigation, onLogout = { confirmLogout = true })
+            SettingsContent(state, profile, actions, navigation, onLogout = { confirmLogout = true })
         }
     }
     if (confirmLogout) {
@@ -84,11 +93,32 @@ fun SettingsRoute(navigation: SettingsNavigation, viewModel: SettingsViewModel =
     }
 }
 
+/** Cambios de 85_Ajustes; la pantalla solo los envía (sin lógica en el Composable). */
+internal data class SettingsActions(
+    val onTheme: (String) -> Unit,
+    val onGroups: (Boolean) -> Unit,
+    val onCoupons: (Boolean) -> Unit,
+    val onReviews: (Boolean) -> Unit,
+    val onPromotions: (Boolean) -> Unit,
+    val onQuietHours: (QuietHours) -> Unit,
+    val onUseLocation: (Boolean) -> Unit
+)
+
+private fun SettingsViewModel.actions() = SettingsActions(
+    onTheme = ::setTheme,
+    onGroups = ::setGroups,
+    onCoupons = ::setCoupons,
+    onReviews = ::setReviews,
+    onPromotions = ::setPromotions,
+    onQuietHours = ::setQuietHours,
+    onUseLocation = ::setUseLocation
+)
+
 @Composable
 private fun SettingsContent(
     state: SettingsUiState,
     profile: UserProfile,
-    viewModel: SettingsViewModel,
+    actions: SettingsActions,
     navigation: SettingsNavigation,
     onLogout: () -> Unit
 ) {
@@ -121,8 +151,8 @@ private fun SettingsContent(
                     pluralStringResource(R.plurals.settings_tastes_count, it, it)
                 }
             )
-            Toggles(profile, state.saving, viewModel)
-            QuietHoursRow(profile, enabled = !state.saving, onSelect = viewModel::setQuietHours)
+            Toggles(profile, state.saving, actions)
+            QuietHoursRow(profile, enabled = !state.saving, onSelect = actions.onQuietHours)
         }
         SectionLabel(stringResource(R.string.settings_section_theme))
         SegmentedControl(
@@ -132,7 +162,7 @@ private fun SettingsContent(
                 stringResource(R.string.settings_theme_system)
             ),
             selectedIndex = THEMES.indexOf(profile.preferences.theme).coerceAtLeast(0),
-            onSelect = { viewModel.setTheme(THEMES[it]) }
+            onSelect = { actions.onTheme(THEMES[it]) }
         )
         SectionLabel(stringResource(R.string.settings_section_privacy))
         SurfaceCard {
@@ -140,7 +170,7 @@ private fun SettingsContent(
             ToggleRow(
                 title = stringResource(R.string.settings_use_location),
                 checked = profile.privacy.location,
-                onCheckedChange = viewModel::setUseLocation,
+                onCheckedChange = actions.onUseLocation,
                 enabled = !state.saving
             )
         }
@@ -157,31 +187,31 @@ private fun SettingsContent(
 
 /** No hay interruptor de reservaciones: la API no permite apagarlas (duda D06). */
 @Composable
-private fun Toggles(profile: UserProfile, saving: Boolean, viewModel: SettingsViewModel) {
+private fun Toggles(profile: UserProfile, saving: Boolean, actions: SettingsActions) {
     val notifications = profile.preferences.notifications
     ToggleRow(
         title = stringResource(R.string.settings_notif_groups),
         checked = notifications.groups,
-        onCheckedChange = viewModel::setGroups,
+        onCheckedChange = actions.onGroups,
         enabled = !saving,
         tag = "settings_notif_groups"
     )
     ToggleRow(
         title = stringResource(R.string.settings_notif_coupons),
         checked = notifications.coupons,
-        onCheckedChange = viewModel::setCoupons,
+        onCheckedChange = actions.onCoupons,
         enabled = !saving
     )
     ToggleRow(
         title = stringResource(R.string.settings_notif_reviews),
         checked = notifications.reviews,
-        onCheckedChange = viewModel::setReviews,
+        onCheckedChange = actions.onReviews,
         enabled = !saving
     )
     ToggleRow(
         title = stringResource(R.string.settings_notif_promotions),
         checked = notifications.promotions,
-        onCheckedChange = viewModel::setPromotions,
+        onCheckedChange = actions.onPromotions,
         enabled = !saving
     )
 }
@@ -251,6 +281,52 @@ private fun QuietHoursRow(profile: UserProfile, enabled: Boolean, onSelect: (Qui
             confirmButton = {
                 WhereverTextButton(onClick = { choosing = false }) { Text(stringResource(R.string.common_cancel)) }
             }
+        )
+    }
+}
+
+/** Perfil de ejemplo para las vistas previas de Ajustes y Privacidad. */
+internal val PREVIEW_PROFILE = UserProfile(
+    id = "1",
+    name = "Ana López",
+    email = "ana@ejemplo.com",
+    emailVerified = true,
+    mode = "explorar",
+    city = CityRef("1", "Guadalajara"),
+    tastes = Tastes(
+        categories = listOf("tacos", "cafe", "museos"),
+        budgetMin = 100,
+        budgetMax = 400,
+        restrictions = emptyList(),
+        allergies = ""
+    ),
+    preferences = Preferences(
+        "a_pie",
+        "sistema",
+        "km",
+        "22:00",
+        "08:00",
+        NotificationSettings(true, true, true, true, false)
+    ),
+    privacy = Privacy(true, true, false, true, false, false),
+    points = 50,
+    level = "Explorador",
+    weekStreak = 0,
+    deleteAt = null,
+    version = 1
+)
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+internal fun SettingsPreview() {
+    WhereverTheme {
+        SettingsContent(
+            state = SettingsUiState(profile = PREVIEW_PROFILE),
+            profile = PREVIEW_PROFILE,
+            actions = SettingsActions({}, {}, {}, {}, {}, {}, {}),
+            navigation = SettingsNavigation({}, {}, {}, {}, {}, {}, {}, {}),
+            onLogout = {}
         )
     }
 }

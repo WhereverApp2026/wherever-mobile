@@ -177,7 +177,14 @@ fun ToggleRow(
             checked = checked,
             onCheckedChange = onCheckedChange,
             enabled = enabled,
-            colors = SwitchDefaults.colors(checkedTrackColor = Mint, checkedThumbColor = Color.White),
+            // Apagado con borde y botón en onSurfaceVariant: el contorno suave no llegaba a 3:1 (WCAG 1.4.11).
+            colors = SwitchDefaults.colors(
+                checkedTrackColor = Mint,
+                checkedThumbColor = Color.White,
+                uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                uncheckedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
+            ),
             modifier = Modifier.testTag(tag)
         )
     }

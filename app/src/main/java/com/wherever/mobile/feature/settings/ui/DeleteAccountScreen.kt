@@ -1,5 +1,6 @@
 package com.wherever.mobile.feature.settings.ui
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
@@ -11,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -23,12 +25,23 @@ import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.TitleBlock
 import com.wherever.mobile.core.designsystem.WhereverDangerButton
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
+import com.wherever.mobile.core.designsystem.WhereverTheme
 
 /** EliminarCuenta. Sigue a la API: se escribe ELIMINAR y hay 30 días para cancelar (duda D03). */
 @Composable
 fun DeleteAccountRoute(onBack: () -> Unit, onDeleted: () -> Unit, viewModel: DeleteAccountViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(viewModel) { viewModel.deleted.collect { onDeleted() } }
+    DeleteAccountContent(state, viewModel::onConfirmationChange, viewModel::delete, onBack)
+}
+
+@Composable
+internal fun DeleteAccountContent(
+    state: DeleteAccountUiState,
+    onConfirmationChange: (String) -> Unit,
+    onDelete: () -> Unit,
+    onBack: () -> Unit
+) {
     FormScreen(
         footer = {
             WhereverOutlinedButton(
@@ -38,7 +51,7 @@ fun DeleteAccountRoute(onBack: () -> Unit, onDeleted: () -> Unit, viewModel: Del
             )
             WhereverDangerButton(
                 text = stringResource(R.string.delete_account_action),
-                onClick = viewModel::delete,
+                onClick = onDelete,
                 enabled = state.canDelete,
                 loading = state.deleting,
                 tag = "delete_account_submit"
@@ -66,11 +79,18 @@ fun DeleteAccountRoute(onBack: () -> Unit, onDeleted: () -> Unit, viewModel: Del
         LabeledTextField(
             label = stringResource(R.string.delete_account_confirm_label, DELETE_CONFIRMATION),
             value = state.confirmation,
-            onValueChange = viewModel::onConfirmationChange,
+            onValueChange = onConfirmationChange,
             placeholder = DELETE_CONFIRMATION,
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
             tag = "delete_account_confirmation"
         )
         state.error?.let { ErrorBanner(it.asString()) }
     }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+internal fun DeleteAccountPreview() {
+    WhereverTheme { DeleteAccountContent(DeleteAccountUiState(confirmation = "ELIM"), {}, {}, {}) }
 }
