@@ -15,8 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import com.wherever.mobile.R
+import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.feature.friends.domain.Person
 import com.wherever.mobile.feature.profile.ui.ProfileAvatar
@@ -33,14 +34,14 @@ internal fun PersonRow(
     SurfaceCard(modifier = modifier.testTag("person_${person.id}")) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(Spacing.S),
             modifier = Modifier
                 .fillMaxWidth()
                 .let { if (onClick != null) it.clickable(onClick = onClick) else it }
-                .padding(12.dp)
+                .padding(Spacing.M)
         ) {
-            ProfileAvatar(person.name, person.photoUrl, size = 44.dp)
-            Column(modifier = Modifier.weight(1f).padding(start = 4.dp)) {
+            ProfileAvatar(person.name, person.photoUrl, size = Sizes.AvatarList)
+            Column(modifier = Modifier.weight(1f).padding(start = Spacing.XS)) {
                 Text(
                     person.name,
                     style = MaterialTheme.typography.titleSmall,

@@ -3,6 +3,7 @@ package com.wherever.mobile.feature.auth.ui
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,7 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,7 +34,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -43,6 +43,8 @@ import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.InfoBanner
 import com.wherever.mobile.core.designsystem.LabeledTextField
 import com.wherever.mobile.core.designsystem.Mint
+import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
@@ -93,7 +95,7 @@ private fun CheckEmailContent(
             WhereverPrimaryButton(
                 text = stringResource(R.string.check_email_open),
                 onClick = onOpenMail,
-                icon = Icons.Filled.Email,
+                icon = Icons.Outlined.Email,
                 tag = "check_email_open"
             )
             WhereverTextLink(
@@ -111,20 +113,25 @@ private fun CheckEmailContent(
         }
     ) {
         BackCircleButton(onClick = onBack)
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(Spacing.L))
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            verticalArrangement = Arrangement.spacedBy(Spacing.M)
         ) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .size(88.dp)
+                    .size(Sizes.AvatarL)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.tertiaryContainer)
             ) {
-                Icon(Icons.Filled.Email, contentDescription = null, tint = Mint, modifier = Modifier.size(40.dp))
+                Icon(
+                    Icons.Outlined.Email,
+                    contentDescription = null,
+                    tint = Mint,
+                    modifier = Modifier.size(Sizes.IconXXL)
+                )
             }
             Text(text = stringResource(R.string.check_email_title), style = MaterialTheme.typography.headlineLarge)
             Text(
@@ -161,7 +168,7 @@ private fun CheckEmailContent(
                 text = stringResource(R.string.check_email_help),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(14.dp)
+                modifier = Modifier.padding(Spacing.L)
             )
         }
         PastedLinkField(state, onLinkChange, onOpenLink)
@@ -194,9 +201,10 @@ private fun PastedLinkField(state: CheckEmailUiState, onLinkChange: (String) -> 
 }
 
 @Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun CheckEmailPreview() {
-    WhereverTheme(darkTheme = false) {
+internal fun CheckEmailPreview() {
+    WhereverTheme {
         CheckEmailContent(CheckEmailUiState(CheckEmailMode.RECOVERY, "tu•••@ejemplo.com", secondsLeft = 45), {}, {}, {})
     }
 }

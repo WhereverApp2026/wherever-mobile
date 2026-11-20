@@ -22,21 +22,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material.icons.outlined.Call
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Place
+import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -51,7 +48,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -65,12 +61,18 @@ import com.wherever.mobile.core.designsystem.LabeledTextField
 import com.wherever.mobile.core.designsystem.LoadingState
 import com.wherever.mobile.core.designsystem.Mint
 import com.wherever.mobile.core.designsystem.MintTint
+import com.wherever.mobile.core.designsystem.Radius
 import com.wherever.mobile.core.designsystem.ScreenPadding
 import com.wherever.mobile.core.designsystem.SelectChip
+import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.StatusPill
 import com.wherever.mobile.core.designsystem.SurfaceCard
+import com.wherever.mobile.core.designsystem.WhereverDialog
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
+import com.wherever.mobile.core.designsystem.WhereverSnackbarHost
+import com.wherever.mobile.core.designsystem.WhereverTextButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.feature.places.domain.DaySchedule
 import com.wherever.mobile.feature.places.domain.PlaceDetail
@@ -97,7 +99,7 @@ fun PlaceDetailRoute(
             viewModel.messageShown()
         }
     }
-    Scaffold(snackbarHost = { SnackbarHost(snackbar) }) { padding ->
+    Scaffold(snackbarHost = { WhereverSnackbarHost(snackbar) }) { padding ->
         val place = state.place
         Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).padding(padding)) {
             when {
@@ -106,7 +108,7 @@ fun PlaceDetailRoute(
                 else -> ErrorState(state.error?.asString().orEmpty(), onRetry = viewModel::load)
             }
             if (place == null) {
-                BackCircleButton(onBack, Modifier.safeDrawingPadding().padding(12.dp))
+                BackCircleButton(onBack, Modifier.safeDrawingPadding().padding(Spacing.M))
             }
         }
     }
@@ -131,20 +133,20 @@ private fun PlaceContent(
 ) {
     val context = LocalContext.current
     LazyColumn(
-        contentPadding = PaddingValues(bottom = 32.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(bottom = Spacing.XXXL),
+        verticalArrangement = Arrangement.spacedBy(Spacing.L),
         modifier = Modifier.fillMaxSize().safeDrawingPadding().testTag("place_detail")
     ) {
         item {
             Box {
                 Photos(place.photos)
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(12.dp),
+                    modifier = Modifier.fillMaxWidth().padding(Spacing.M),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     BackCircleButton(onBack)
                     CircleIconButton(
-                        icon = if (state.favorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        icon = if (state.favorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                         description = stringResource(
                             if (state.favorite) R.string.place_favorite_remove else R.string.place_favorite_add
                         ),
@@ -209,21 +211,26 @@ private fun PlaceContent(
 @Composable
 private fun Photos(photos: List<String>) {
     if (photos.size <= 1) {
-        PlacePhoto(photos.firstOrNull(), height = 240.dp)
+        PlacePhoto(photos.firstOrNull(), height = Sizes.HeroImage)
     } else {
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(photos) { url -> PlacePhoto(url, height = 240.dp, modifier = Modifier.width(300.dp)) }
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(Spacing.S)) {
+            items(photos) { url ->
+                PlacePhoto(url, height = Sizes.HeroImage, modifier = Modifier.width(Sizes.GalleryPhotoWidth))
+            }
         }
     }
 }
 
 @Composable
 private fun Header(place: PlaceDetail) {
-    Column(modifier = Modifier.padding(horizontal = ScreenPadding), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+    Column(
+        modifier = Modifier.padding(horizontal = ScreenPadding),
+        verticalArrangement = Arrangement.spacedBy(Spacing.S)
+    ) {
         Text(place.name, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
         PlaceMetaLine(place.category, place.priceLevel, null, place.openNow)
         RatingRow(place.rating, place.reviews)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(Spacing.S)) {
             if (place.verified) StatusPill(stringResource(R.string.place_verified), container = MintTint)
             if (place.excellenceSeal) StatusPill(stringResource(R.string.place_seal))
         }
@@ -249,12 +256,12 @@ private fun Actions(place: PlaceDetail, context: Context) {
     val shareText = stringResource(R.string.place_share_text, place.name, place.address)
     val shareTitle = stringResource(R.string.place_share)
     Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(Spacing.S),
         modifier = Modifier.padding(horizontal = ScreenPadding)
     ) {
         WhereverOutlinedButton(
             text = stringResource(R.string.place_route),
-            icon = Icons.Filled.Place,
+            icon = Icons.Outlined.Place,
             onClick = {
                 val point = "${place.location.lat},${place.location.lng}"
                 val uri = "geo:$point?q=$point"
@@ -266,13 +273,13 @@ private fun Actions(place: PlaceDetail, context: Context) {
         place.phone?.let { phone ->
             WhereverOutlinedButton(
                 text = stringResource(R.string.place_call),
-                icon = Icons.Filled.Call,
+                icon = Icons.Outlined.Call,
                 onClick = { context.startSafely(Intent(Intent.ACTION_DIAL, "tel:$phone".toUri())) },
                 modifier = Modifier.weight(1f),
                 tag = "place_call"
             )
         }
-        CircleIconButton(Icons.Filled.Share, shareTitle, onClick = {
+        CircleIconButton(Icons.Outlined.Share, shareTitle, onClick = {
             val send = Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, shareText)
             context.startSafely(Intent.createChooser(send, shareTitle))
         })
@@ -289,7 +296,10 @@ private fun Context.startSafely(intent: Intent) {
 
 @Composable
 private fun Section(title: Int, content: @Composable () -> Unit) {
-    Column(modifier = Modifier.padding(horizontal = ScreenPadding), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(
+        modifier = Modifier.padding(horizontal = ScreenPadding),
+        verticalArrangement = Arrangement.spacedBy(Spacing.S)
+    ) {
         Text(stringResource(title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
         content()
     }
@@ -311,7 +321,7 @@ private fun Schedule(schedules: List<DaySchedule>, today: Int) {
         Text(stringResource(R.string.place_schedule_unknown), color = MaterialTheme.colorScheme.onSurfaceVariant)
         return
     }
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(Spacing.XS)) {
         schedules.sortedBy { (it.day - today + DAY_NAMES.size) % DAY_NAMES.size }.forEach { day ->
             val weight = if (day.day == today) FontWeight.Bold else FontWeight.Normal
             Row {
@@ -331,13 +341,16 @@ private fun Schedule(schedules: List<DaySchedule>, today: Int) {
 
 @Composable
 private fun ReviewsHeader(state: PlaceDetailUiState, viewModel: PlaceDetailViewModel) {
-    Column(modifier = Modifier.padding(horizontal = ScreenPadding), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(
+        modifier = Modifier.padding(horizontal = ScreenPadding),
+        verticalArrangement = Arrangement.spacedBy(Spacing.S)
+    ) {
         Text(
             stringResource(R.string.place_reviews),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.SemiBold
         )
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(Spacing.S)) {
             item {
                 SelectChip(
                     stringResource(R.string.place_reviews_recent),
@@ -362,7 +375,7 @@ private fun ReviewsHeader(state: PlaceDetailUiState, viewModel: PlaceDetailViewM
 @Composable
 private fun ReviewCard(review: Review, markedUseful: Boolean, onUseful: () -> Unit) {
     SurfaceCard(modifier = Modifier.padding(horizontal = ScreenPadding).testTag("review_${review.id}")) {
-        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Column(modifier = Modifier.padding(Spacing.L), verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     review.author.ifBlank { stringResource(R.string.place_review_anonymous) },
@@ -384,9 +397,9 @@ private fun ReviewCard(review: Review, markedUseful: Boolean, onUseful: () -> Un
             review.businessReply?.let { reply ->
                 BusinessReply(reply)
             }
-            TextButton(onClick = onUseful, enabled = !markedUseful) {
-                Icon(Icons.Filled.ThumbUp, contentDescription = null)
-                Spacer(Modifier.width(6.dp))
+            WhereverTextButton(onClick = onUseful, enabled = !markedUseful) {
+                Icon(Icons.Outlined.ThumbUp, contentDescription = null)
+                Spacer(Modifier.width(Spacing.S))
                 Text(stringResource(R.string.place_review_useful, review.useful + if (markedUseful) 1 else 0))
             }
         }
@@ -398,9 +411,9 @@ private fun BusinessReply(reply: String) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(Radius.M))
             .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(10.dp)
+            .padding(Spacing.M)
     ) {
         Text(stringResource(R.string.place_review_reply), style = MaterialTheme.typography.labelMedium)
         Text(reply, style = MaterialTheme.typography.bodySmall)
@@ -424,11 +437,11 @@ private fun ReportDialog(
     onSend: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    AlertDialog(
+    WhereverDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.place_report)) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(Spacing.XS)) {
                 REPORT_REASONS.forEach { (reason, label) ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -438,7 +451,7 @@ private fun ReportDialog(
                             .testTag("report_${reason.apiValue}")
                     ) {
                         RadioButton(selected = form.reason == reason, onClick = null)
-                        Spacer(Modifier.width(8.dp))
+                        Spacer(Modifier.width(Spacing.S))
                         Text(stringResource(label))
                     }
                 }
@@ -454,10 +467,10 @@ private fun ReportDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = onSend, enabled = form.canSend, modifier = Modifier.testTag("report_send")) {
+            WhereverTextButton(onClick = onSend, enabled = form.canSend, modifier = Modifier.testTag("report_send")) {
                 Text(stringResource(R.string.report_send))
             }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } }
+        dismissButton = { WhereverTextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } }
     )
 }

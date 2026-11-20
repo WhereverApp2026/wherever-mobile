@@ -15,10 +15,9 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,20 +27,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.ChipGroup
 import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.LabeledTextField
-import com.wherever.mobile.core.designsystem.LoadingState
+import com.wherever.mobile.core.designsystem.ListSkeleton
 import com.wherever.mobile.core.designsystem.NavRow
 import com.wherever.mobile.core.designsystem.ScreenPadding
 import com.wherever.mobile.core.designsystem.SegmentedControl
 import com.wherever.mobile.core.designsystem.SelectChip
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.Sunset
 import com.wherever.mobile.core.designsystem.SurfaceCard
+import com.wherever.mobile.core.designsystem.WhereverIconButton
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
@@ -61,14 +61,14 @@ private fun SearchContent(state: SearchUiState, viewModel: SearchViewModel, acti
     Column(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).safeDrawingPadding()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = ScreenPadding, vertical = 8.dp)
+            modifier = Modifier.padding(horizontal = ScreenPadding, vertical = Spacing.S)
         ) {
             LabeledTextField(
                 label = stringResource(R.string.search_title),
                 value = state.query,
                 onValueChange = viewModel::onQueryChange,
                 placeholder = stringResource(R.string.search_placeholder),
-                leadingIcon = Icons.Filled.Search,
+                leadingIcon = Icons.Outlined.Search,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 modifier = Modifier.weight(1f),
                 tag = "search_field"
@@ -76,7 +76,7 @@ private fun SearchContent(state: SearchUiState, viewModel: SearchViewModel, acti
             WhereverTextLink(
                 stringResource(R.string.common_cancel),
                 actions.onBack,
-                Modifier.padding(start = 8.dp, top = 24.dp)
+                Modifier.padding(start = Spacing.S, top = Spacing.XXL)
             )
         }
         SegmentedControl(
@@ -90,11 +90,11 @@ private fun SearchContent(state: SearchUiState, viewModel: SearchViewModel, acti
             modifier = Modifier.padding(horizontal = ScreenPadding)
         )
         state.error?.let {
-            ErrorBanner(it.asString(), Modifier.padding(horizontal = ScreenPadding, vertical = 8.dp))
+            ErrorBanner(it.asString(), Modifier.padding(horizontal = ScreenPadding, vertical = Spacing.S))
         }
         LazyColumn(
             contentPadding = PaddingValues(ScreenPadding),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(Spacing.M),
             modifier = Modifier.testTag("search_list")
         ) {
             when {
@@ -106,7 +106,7 @@ private fun SearchContent(state: SearchUiState, viewModel: SearchViewModel, acti
                         modifier = Modifier.testTag("search_people_hint")
                     )
                 }
-                state.loading -> item { LoadingState() }
+                state.loading -> item { ListSkeleton() }
                 state.emptyResults -> item { NoResults(state.query.trim(), state.tab, actions) }
                 else -> results(state, viewModel, actions)
             }
@@ -187,12 +187,16 @@ private fun SearchPerson(person: Person, state: SearchUiState, viewModel: Search
         detail = if (sent) stringResource(R.string.friends_request_pending) else null
     ) {
         if (!sent) {
-            IconButton(
+            WhereverIconButton(
                 onClick = { viewModel.request(person) },
                 enabled = person.id !in state.sending,
                 modifier = Modifier.testTag("search_request_${person.id}")
             ) {
-                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.friends_add_person), tint = Sunset)
+                Icon(
+                    Icons.Outlined.Add,
+                    contentDescription = stringResource(R.string.friends_add_person),
+                    tint = Sunset
+                )
             }
         }
     }
@@ -202,7 +206,7 @@ private fun SearchPerson(person: Person, state: SearchUiState, viewModel: Search
 @Composable
 private fun NoResults(query: String, tab: SearchTab, actions: SearchActions) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(Spacing.M),
         modifier = Modifier.fillMaxWidth().testTag("search_empty")
     ) {
         Text(stringResource(R.string.search_no_results, query), style = MaterialTheme.typography.titleMedium)

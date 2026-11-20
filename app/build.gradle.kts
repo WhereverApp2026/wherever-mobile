@@ -95,6 +95,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    testOptions {
+        // Robolectric necesita los recursos (fuentes, textos) para dibujar las capturas.
+        unitTests.isIncludeAndroidResources = true
+    }
+
     buildFeatures {
         compose = true
         buildConfig = true
@@ -128,6 +133,8 @@ detekt {
 // Límite conocido: además, no corre sobre JDK 25; usar JDK 17-22 para esta tarea (ver Memoria.md).
 tasks.withType<Detekt>().configureEach {
     jvmTarget = "17"
+    // Las reglas propias se prueban antes de usarse.
+    dependsOn(":detekt-rules:test")
 }
 
 ksp {
@@ -168,6 +175,8 @@ kover {
 }
 
 dependencies {
+    // Regla HardcodedDesignValue (docs/diseno.md).
+    detektPlugins(project(":detekt-rules"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.activity.compose)
@@ -209,6 +218,13 @@ dependencies {
     testImplementation(libs.okhttp.mockwebserver)
     testImplementation(libs.okhttp.tls)
     testImplementation(libs.kotlinx.coroutines.test)
+    // Pruebas de captura de pantalla (specs/nv-55): Robolectric dibuja y Roborazzi compara con src/test/screenshots.
+    testImplementation(platform(libs.androidx.compose.bom))
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.androidx.test.ext.junit)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.roborazzi)
+    testImplementation(libs.roborazzi.compose)
     testImplementation(libs.konsist)
 
     androidTestImplementation(libs.androidx.test.ext.junit)
@@ -220,4 +236,11 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+}
+
+// Capturas (specs/nv-55): por defecto se comparan con src/test/screenshots y la prueba falla si cambian.
+// Para grabarlas de nuevo, a propósito: ./gradlew testDebugUnitTest -Proborazzi.record=true
+tasks.withType<Test>().configureEach {
+    val record = providers.gradleProperty("roborazzi.record").orNull == "true"
+    systemProperty(if (record) "roborazzi.test.record" else "roborazzi.test.verify", "true")
 }

@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -25,6 +24,7 @@ import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.LabeledTextField
 import com.wherever.mobile.core.designsystem.LoadingState
 import com.wherever.mobile.core.designsystem.SelectChip
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.TopTitleRow
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
@@ -93,7 +93,7 @@ fun ReserveRoute(onBack: () -> Unit, onCreated: (String) -> Unit, viewModel: Res
                         formatTime(slot.time, zone),
                         pluralStringResource(R.plurals.reserve_people_count, state.people, state.people)
                     ),
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(Spacing.L)
                 )
             }
         }
@@ -114,7 +114,7 @@ private fun Label(text: Int) {
 
 @Composable
 private fun Days(dates: List<LocalDate>, selected: LocalDate?, onSelect: (LocalDate) -> Unit) {
-    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.testTag("reserve_days")) {
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(Spacing.S), modifier = Modifier.testTag("reserve_days")) {
         items(dates) { date ->
             SelectChip(
                 text = when (date) {
@@ -132,7 +132,7 @@ private fun Days(dates: List<LocalDate>, selected: LocalDate?, onSelect: (LocalD
 
 @Composable
 private fun People(people: Int, onChange: (Int) -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.L)) {
         Text(
             pluralStringResource(R.plurals.reserve_people_count, people, people),
             style = MaterialTheme.typography.titleMedium,

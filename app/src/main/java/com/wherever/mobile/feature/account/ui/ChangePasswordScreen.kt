@@ -3,8 +3,8 @@ package com.wherever.mobile.feature.account.ui
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
@@ -46,7 +46,7 @@ fun ChangePasswordRoute(onBack: () -> Unit, viewModel: ChangePasswordViewModel =
         if (state.done) {
             InfoBanner(
                 stringResource(R.string.account_password_done),
-                icon = Icons.Filled.CheckCircle,
+                icon = Icons.Outlined.CheckCircle,
                 tag = "change_password_success"
             )
             return@FormScreen
@@ -98,7 +98,7 @@ internal fun PasswordField(
         label = label,
         value = value,
         onValueChange = onValueChange,
-        leadingIcon = Icons.Filled.Lock,
+        leadingIcon = Icons.Outlined.Lock,
         error = error,
         supporting = supporting,
         onBlur = onBlur,

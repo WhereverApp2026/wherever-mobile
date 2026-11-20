@@ -2,7 +2,7 @@ package com.wherever.mobile.feature.account.ui
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +27,7 @@ fun MyDataRoute(onBack: () -> Unit, viewModel: MyDataViewModel = hiltViewModel()
     FormScreen {
         TopTitleRow(stringResource(R.string.my_data_title), onBack)
         state.message?.let {
-            InfoBanner(it.asString(), icon = Icons.Filled.CheckCircle, tag = "my_data_message")
+            InfoBanner(it.asString(), icon = Icons.Outlined.CheckCircle, tag = "my_data_message")
         }
         state.error?.let { ErrorBanner(it.asString()) }
         Section(stringResource(R.string.my_data_export_title), stringResource(R.string.my_data_export_detail))

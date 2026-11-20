@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +15,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -24,9 +22,11 @@ import com.wherever.mobile.core.designsystem.ConfirmDialog
 import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.ErrorState
 import com.wherever.mobile.core.designsystem.FormScreen
-import com.wherever.mobile.core.designsystem.LoadingState
+import com.wherever.mobile.core.designsystem.InlineProgress
+import com.wherever.mobile.core.designsystem.ListSkeleton
 import com.wherever.mobile.core.designsystem.PhaseCrossfade
 import com.wherever.mobile.core.designsystem.ScreenPhase
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.StatusPill
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.TopTitleRow
@@ -46,7 +46,7 @@ fun SessionsRoute(onBack: () -> Unit, onAllClosed: () -> Unit, viewModel: Sessio
     }
     PhaseCrossfade(phase) { shown ->
         when (shown) {
-            ScreenPhase.LOADING -> LoadingState()
+            ScreenPhase.LOADING -> ListSkeleton()
             ScreenPhase.ERROR -> ErrorState(state.error?.asString().orEmpty(), viewModel::load)
             ScreenPhase.CONTENT -> SessionsContent(state, onBack, onCloseAll = { confirmAll = true }, viewModel::close)
         }
@@ -94,7 +94,7 @@ private fun SessionsContent(
 private fun SessionCard(session: SessionItem, closing: Boolean, onClose: () -> Unit) {
     SurfaceCard {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.L, vertical = Spacing.S),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
@@ -108,7 +108,7 @@ private fun SessionCard(session: SessionItem, closing: Boolean, onClose: () -> U
             when {
                 // La sesión actual se cierra con "Cerrar sesión" en Ajustes, que además limpia el teléfono.
                 session.isCurrent -> StatusPill(stringResource(R.string.sessions_current))
-                closing -> CircularProgressIndicator()
+                closing -> InlineProgress()
                 else -> WhereverTextLink(stringResource(R.string.sessions_close), onClose)
             }
         }

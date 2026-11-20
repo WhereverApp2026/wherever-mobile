@@ -24,17 +24,17 @@
 ### 1. Subir todo a GitHub
 - [x] Búsqueda (nv-19) de `wip/pausa` a `main`, con las 7 compuertas en verde.
 - [ ] Probar en el teléfono la pestaña Personas de Buscar y la variante "solicitud enviada" (no había teléfono conectado el 2026-11-19 por la noche).
-- [ ] PR de Dependabot #5, #6 y #7 (GitHub Actions): pedir `@dependabot rebase` y fusionarlos si la CI pasa. No pude comentar en los PR desde la sesión.
+- [x] PR de Dependabot #5, #6 y #7 (GitHub Actions): integrados juntos en `a333916`, CI de `main` en verde.
 - [x] PR #23 (`actions/setup-java` 6.2.0): CI en verde, se integra.
 
 ### 2. Diseño normativo (todas las pantallas)
-- [ ] Tokens en `core/designsystem`: colores, tipografía, espaciado (escala 4/8 dp), radios, elevaciones y formas, sacados de `analisis/guia_estilo_wherever.md` y de la maqueta. Norma en `docs/diseno.md`.
-- [ ] Regla de detekt que falle con colores hex, `dp` o `sp` escritos a mano fuera de `core/designsystem`.
-- [ ] Componentes únicos: botones, campos, tarjetas, barra superior, carga/error/vacío, diálogos y snackbars.
-- [ ] Revisión pantalla por pantalla contra la maqueta, con la captura del teléfono junto a la de Figma en `docs/pruebas/`.
-- [ ] Transiciones iguales en todo el grafo, skeletons al cargar y Atrás correcto.
-- [ ] Accesibilidad: 48 dp, `contentDescription`, contraste y letra grande.
-- [ ] Pruebas de captura (Roborazzi) de las pantallas principales.
+- [x] Tokens en `core/designsystem/Dimens.kt` (espaciado 4/8, radios, formas, trazos, elevaciones, tamaños) y norma en `docs/diseno.md` (nv-55). `analisis/` no existe: se usó la maqueta y `docs/figma-inventory.md`.
+- [x] Regla de detekt `HardcodedDesignValue` (módulo `detekt-rules/`): 207 `dp` sueltos en 34 archivos pasados a tokens.
+- [x] Componentes únicos (diálogo, botones de texto e ícono, snackbar, progreso, skeleton) y regla de Konsist que prohíbe los de Material en pantallas.
+- [ ] Revisión pantalla por pantalla contra la maqueta: comparación maqueta | render en `docs/pruebas/comparacion/` para las 8 principales; capturas del teléfono de Inicio, Perfil y Mis planes en `docs/pruebas/nv55/` (2026-11-19). Falta el resto de pantallas.
+- [x] Transiciones iguales en todo el grafo (`NavMotion`) y `ListSkeleton` en las 7 listas.
+- [ ] Accesibilidad: 48 dp en botones de texto e ícono y filas de diálogo, descripción en la carga ✅; falta revisar contraste y letra grande en el teléfono.
+- [x] Pruebas de captura (Roborazzi): 8 pantallas × claro, oscuro y chica con letra grande.
 
 ### 3. Terminar lo que está a medias
 - [ ] nv-11 Permisos en contexto (1/2): 08_Permisos "Antes de empezar" tras Gustos, con el permiso de avisos.
@@ -75,8 +75,13 @@
 
 | Bug | Estado |
 |---|---|
-| Bienvenida en horizontal: los íconos tapan el texto (nv-06) | abierto |
-| Irregularidades de diseño entre pantallas (valores sueltos, componentes duplicados) | abierto: parte 2 |
+| Bienvenida en horizontal: los íconos tapan el texto (nv-06) | ✅ arreglado: la ilustración solo se dibuja si cabe y el contenido se desplaza (captura `01_bienvenida_horizontal`) |
+| Tema oscuro: pestaña activa de la barra inferior y del selector invisibles; enlaces en blanco (primario = `RouteBlueTint`) | ✅ arreglado: `RouteBlueLight`, `InkRaised`, `InkTrack` en la paleta oscura; `RouteBlue` fijo en textos → `colorScheme.primary` |
+| Enlaces de texto corridos 12 dp respecto al margen de su columna (p. ej. "Buscar lugares", "Armar un plan") | ✅ arreglado: `WhereverTextLink` sin relleno lateral |
+| Foto de perfil: Editar perfil mostraba iniciales aunque hubiera foto | ✅ arreglado (con prueba en `ProfileViewModelsTest`) |
+| Irregularidades de diseño entre pantallas (valores sueltos, componentes duplicados) | ✅ arreglado (nv-55) |
+| Línea del traslado descentrada respecto al círculo numerado (Detalle del plan) | ✅ arreglado (nv-55) |
+| Barra de progreso distinta en Insignias y en la ficha | ✅ arreglado (`WhereverProgressBar`) |
 | APK de release sin probar en el teléfono (aviso de R8, nv-41) | abierto |
 | Búsqueda de personas daba 422 con menos de 3 caracteres | ✅ arreglado (valida en la app) |
 | Gustos con alergias daba 422 | ✅ arreglado (nv-43) |
@@ -86,9 +91,10 @@
 
 | Rama / PR | Estado | Motivo |
 |---|---|---|
-| `wip/pausa` | integrada en `main` (Búsqueda) | se puede borrar cuando Jorge lo confirme |
-| #8 okhttp 5.5.1, #9 hilt 1.4.0, #10 navigation 2.10.2, #11 compose-bom 2026.09, #12 core-ktx 1.19.1 | no se integran | piden `compileSdk 37`; no hay SDK 37 en el equipo (AGENTS.md §5) |
-| #5 setup-gradle 6.4.1, #6 checkout 7.0.1, #7 upload-artifact 7.0.2 | pendientes | CI roja sobre un `main` viejo; falta rebase |
+| `wip/pausa`, `feat/plan-ia`, `feat/fotos-perfil`, `feat/inicio-recomendaciones`, `fix/auth-telefono` | borradas (local y remoto) el 2026-11-19 | `git log main..<rama>` vacío; #24 y #25 ya fusionados |
+| #12 core-ktx 1.19.1 | **cerrado** el 2026-11-19 | `checkDebugAarMetadata` falla: exige `compileSdk 37` y AGP 9.1.0; el proyecto está en SDK 36 / AGP 9.0.1. Reabrir al subir a SDK 37 |
+| #8 okhttp 5.5.1, #9 hilt 1.4.0, #10 navigation 2.10.2, #11 compose-bom 2026.09 | **cerrados** el 2026-11-19 | probados uno por uno en `main`: `assembleDebug` falla en `checkDebugAarMetadata`, exigen `compileSdk 37` y AGP 9.1.0 (hilt arrastra lifecycle 2.11.0; el BOM, material-ripple 1.12.1). Sin SDK 37 en el equipo (dl.google.com no responde). Retomar todos juntos al subir a SDK 37 + AGP 9.1 |
+| #5 setup-gradle 6.4.1, #6 checkout 7.0.1, #7 upload-artifact 7.0.2 | integrados en `a333916` | CI de `main` en verde |
 
 ## Entorno (para retomar rápido)
 

@@ -13,12 +13,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,12 +35,16 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import coil3.compose.AsyncImage
 import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.InitialAvatar
+import com.wherever.mobile.core.designsystem.InlineProgress
 import com.wherever.mobile.core.designsystem.RouteBlue
+import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
+import com.wherever.mobile.core.designsystem.WhereverDialog
+import com.wherever.mobile.core.designsystem.WhereverTextButton
 import java.io.File
 
 /** Foto de perfil o, si no hay, la inicial. */
@@ -72,7 +73,7 @@ fun EditableProfileAvatar(
     photoUrl: String?,
     state: ProfilePhotoUiState,
     actions: ProfilePhotoActions,
-    size: Dp = 88.dp
+    size: Dp = Sizes.AvatarL
 ) {
     val context = LocalContext.current
     var pendingCamera by rememberSaveable { mutableStateOf<String?>(null) }
@@ -100,7 +101,7 @@ fun EditableProfileAvatar(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.size(size).clip(CircleShape).background(Color.Black.copy(alpha = 0.45f))
             ) {
-                CircularProgressIndicator(color = Color.White, modifier = Modifier.size(32.dp))
+                InlineProgress(Modifier.size(Sizes.IconXL), color = Color.White)
             }
         } else {
             // Fuera del recorte circular, para que el lápiz se vea completo.
@@ -108,27 +109,32 @@ fun EditableProfileAvatar(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .size(30.dp)
+                    .size(Sizes.EditBadge)
                     .clip(CircleShape)
                     .background(RouteBlue)
             ) {
-                Icon(Icons.Filled.Edit, contentDescription = null, tint = Color.White, modifier = Modifier.size(16.dp))
+                Icon(
+                    Icons.Outlined.Edit,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(Sizes.IconS)
+                )
             }
         }
     }
     if (state.choosing) {
-        AlertDialog(
+        WhereverDialog(
             onDismissRequest = actions.onClose,
             title = { Text(stringResource(R.string.photo_change)) },
             text = {
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    TextButton(
+                Column(verticalArrangement = Arrangement.spacedBy(Spacing.XS)) {
+                    WhereverTextButton(
                         onClick = {
                             gallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                         },
                         modifier = Modifier.testTag("photo_gallery")
                     ) { Text(stringResource(R.string.photo_from_gallery)) }
-                    TextButton(
+                    WhereverTextButton(
                         onClick = {
                             val uri = context.newCameraUri()
                             pendingCamera = uri.toString()
@@ -138,7 +144,9 @@ fun EditableProfileAvatar(
                     ) { Text(stringResource(R.string.photo_from_camera)) }
                 }
             },
-            confirmButton = { TextButton(onClick = actions.onClose) { Text(stringResource(R.string.common_cancel)) } }
+            confirmButton = {
+                WhereverTextButton(onClick = actions.onClose) { Text(stringResource(R.string.common_cancel)) }
+            }
         )
     }
 }

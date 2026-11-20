@@ -4,16 +4,13 @@ import android.content.Intent
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -35,7 +32,10 @@ import com.wherever.mobile.core.designsystem.NavRow
 import com.wherever.mobile.core.designsystem.Sunset
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.TopTitleRow
+import com.wherever.mobile.core.designsystem.WhereverDialog
+import com.wherever.mobile.core.designsystem.WhereverIconButton
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
+import com.wherever.mobile.core.designsystem.WhereverTextButton
 import com.wherever.mobile.feature.friends.domain.Person
 import com.wherever.mobile.feature.friends.domain.Relation
 
@@ -45,7 +45,7 @@ fun AddFriendRoute(onBack: () -> Unit, onPerson: (String) -> Unit, viewModel: Ad
     val state by viewModel.state.collectAsStateWithLifecycle()
     FormScreen {
         TopTitleRow(stringResource(R.string.friends_add_title), onBack)
-        state.message?.let { InfoBanner(it.asString(), icon = Icons.Filled.Check, tag = "add_friend_message") }
+        state.message?.let { InfoBanner(it.asString(), icon = Icons.Outlined.Check, tag = "add_friend_message") }
         state.error?.let { ErrorBanner(it.asString()) }
         MyIdentity(state, viewModel)
         LabeledTextField(
@@ -53,7 +53,7 @@ fun AddFriendRoute(onBack: () -> Unit, onPerson: (String) -> Unit, viewModel: Ad
             value = state.query,
             onValueChange = viewModel::onQuery,
             placeholder = stringResource(R.string.friends_search_hint),
-            leadingIcon = Icons.Filled.Search,
+            leadingIcon = Icons.Outlined.Search,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions(onSearch = { viewModel.search() }),
             tag = "add_friend_query"
@@ -124,7 +124,7 @@ private fun MyIdentity(state: AddFriendUiState, viewModel: AddFriendViewModel) {
         }
     }
     if (state.myCode != null) {
-        InfoBanner(stringResource(R.string.friends_my_code_hint), icon = Icons.Filled.Share)
+        InfoBanner(stringResource(R.string.friends_my_code_hint), icon = Icons.Outlined.Share)
     }
 }
 
@@ -174,12 +174,16 @@ private fun AddablePerson(
         detail = if (sent) stringResource(R.string.friends_request_pending) else detail
     ) {
         if (!sent) {
-            IconButton(
+            WhereverIconButton(
                 onClick = { viewModel.request(person) },
                 enabled = person.id !in state.sending,
                 modifier = Modifier.testTag("add_friend_request_${person.id}")
             ) {
-                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.friends_add_person), tint = Sunset)
+                Icon(
+                    Icons.Outlined.Add,
+                    contentDescription = stringResource(R.string.friends_add_person),
+                    tint = Sunset
+                )
             }
         }
     }
@@ -197,7 +201,7 @@ internal fun relationLabel(relation: Relation): String = stringResource(
 
 @Composable
 private fun UsernameDialog(state: AddFriendUiState, viewModel: AddFriendViewModel) {
-    AlertDialog(
+    WhereverDialog(
         onDismissRequest = viewModel::dismissUsername,
         title = { Text(stringResource(R.string.friends_my_username)) },
         text = {
@@ -213,14 +217,14 @@ private fun UsernameDialog(state: AddFriendUiState, viewModel: AddFriendViewMode
             )
         },
         confirmButton = {
-            TextButton(
+            WhereverTextButton(
                 onClick = viewModel::saveUsername,
                 enabled = state.canSaveUsername,
                 modifier = Modifier.testTag("username_save")
             ) { Text(stringResource(R.string.common_save)) }
         },
         dismissButton = {
-            TextButton(onClick = viewModel::dismissUsername) { Text(stringResource(R.string.common_cancel)) }
+            WhereverTextButton(onClick = viewModel::dismissUsername) { Text(stringResource(R.string.common_cancel)) }
         }
     )
 }

@@ -23,12 +23,14 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.ChipGroup
 import com.wherever.mobile.core.designsystem.Mint
 import com.wherever.mobile.core.designsystem.RouteBlue
+import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.StatusPill
+import com.wherever.mobile.core.designsystem.Strokes
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.ui.formatTime
 import com.wherever.mobile.feature.places.ui.categoryLabel
@@ -66,7 +68,7 @@ internal fun moodLabel(mood: Mood): Int = when (mood) {
 /** US-041: lo que la IA entendió de la frase. */
 @Composable
 internal fun UnderstoodChips(params: PlanParameters, people: Int) {
-    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
         Text(stringResource(R.string.plan_understood), style = MaterialTheme.typography.labelLarge)
         ChipGroup {
             if (params.company.isNotBlank()) StatusPill(params.company.replaceFirstChar { it.uppercase() })
@@ -83,7 +85,7 @@ internal fun UnderstoodChips(params: PlanParameters, people: Int) {
 @Composable
 internal fun CostSummary(total: Int, perPerson: Int, people: Int) {
     SurfaceCard(modifier = Modifier.testTag("plan_cost")) {
-        Row(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(modifier = Modifier.fillMaxWidth().padding(Spacing.L), horizontalArrangement = Arrangement.SpaceBetween) {
             Column {
                 Text(stringResource(R.string.plan_total), style = MaterialTheme.typography.labelMedium)
                 Text(
@@ -97,7 +99,7 @@ internal fun CostSummary(total: Int, perPerson: Int, people: Int) {
                 Text(
                     stringResource(R.string.place_price, perPerson),
                     style = MaterialTheme.typography.titleLarge,
-                    color = RouteBlue
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
         }
@@ -117,7 +119,7 @@ internal fun Timeline(
 ) {
     val zone = ZoneId.systemDefault()
     val ordered = stops.sortedBy { it.arrives }
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.testTag("plan_timeline")) {
+    Column(verticalArrangement = Arrangement.spacedBy(Spacing.S), modifier = Modifier.testTag("plan_timeline")) {
         ordered.forEachIndexed { index, stop ->
             StopCard(stop, index, zone, actions)
             val next = ordered.getOrNull(index + 1)
@@ -130,11 +132,11 @@ internal fun Timeline(
 @Composable
 private fun StopCard(stop: PlanStop, index: Int, zone: ZoneId, actions: (@Composable (PlanStop, Int) -> Unit)?) {
     SurfaceCard(modifier = Modifier.testTag("plan_stop_$index")) {
-        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Column(modifier = Modifier.padding(Spacing.L), verticalArrangement = Arrangement.spacedBy(Spacing.XS)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier.size(28.dp).clip(CircleShape).background(RouteBlue)
+                    modifier = Modifier.size(Sizes.StepBadge).clip(CircleShape).background(RouteBlue)
                 ) {
                     Text(
                         (index + 1).toString(),
@@ -142,7 +144,7 @@ private fun StopCard(stop: PlanStop, index: Int, zone: ZoneId, actions: (@Compos
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
-                Spacer(Modifier.width(10.dp))
+                Spacer(Modifier.width(Spacing.M))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         stop.name.ifBlank { stringResource(R.string.plan_stop_unknown) },
@@ -156,7 +158,11 @@ private fun StopCard(stop: PlanStop, index: Int, zone: ZoneId, actions: (@Compos
                         )
                     }
                 }
-                Text(formatTime(stop.arrives, zone), style = MaterialTheme.typography.titleMedium, color = RouteBlue)
+                Text(
+                    formatTime(stop.arrives, zone),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
             Text(
                 stringResource(R.string.plan_stop_detail, stop.minutes, stop.price),
@@ -180,10 +186,12 @@ private fun TransferRow(transfer: Transfer, mobility: Mobility) {
     )
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(start = 13.dp).semantics(mergeDescendants = true) { }
+        // La línea queda bajo el centro del círculo numerado y el texto, alineado con el de la parada.
+        modifier = Modifier.padding(start = Spacing.L + Sizes.StepBadge / 2 - Strokes.Thin / 2)
+            .semantics(mergeDescendants = true) { }
     ) {
-        Box(Modifier.width(2.dp).height(28.dp).background(MaterialTheme.colorScheme.outline))
-        Spacer(Modifier.width(18.dp))
+        Box(Modifier.width(Strokes.Thin).height(Sizes.StepBadge).background(MaterialTheme.colorScheme.outline))
+        Spacer(Modifier.width(Sizes.StepBadge / 2 + Spacing.M - Strokes.Thin / 2))
         Text(label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }

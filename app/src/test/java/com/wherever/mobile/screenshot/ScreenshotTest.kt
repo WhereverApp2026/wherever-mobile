@@ -1,0 +1,93 @@
+package com.wherever.mobile.screenshot
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onRoot
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
+import com.github.takahirom.roborazzi.RoborazziOptions
+import com.github.takahirom.roborazzi.captureRoboImage
+import com.wherever.mobile.feature.auth.ui.CheckEmailPreview
+import com.wherever.mobile.feature.auth.ui.LoginPreview
+import com.wherever.mobile.feature.auth.ui.RecoverPreview
+import com.wherever.mobile.feature.auth.ui.RegisterPreview
+import com.wherever.mobile.feature.auth.ui.WelcomePreview
+import com.wherever.mobile.feature.profile.ui.EditProfilePreview
+import com.wherever.mobile.feature.profile.ui.ProfilePreview
+import com.wherever.mobile.feature.tastes.ui.TastesPreview
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
+import org.robolectric.annotation.GraphicsMode
+
+private const val SDK = 35
+private const val SMALL_PHONE = "w320dp-h568dp-xhdpi"
+private const val LARGE_FONT = 1.3f
+
+/**
+ * Capturas de las pantallas principales (specs/nv-55, docs/diseno.md §7). Cada una se compara con su PNG en
+ * `src/test/screenshots`; si el diseño cambia, la prueba falla. Grabar a propósito: `-Proborazzi.record=true`.
+ * Variantes: claro (teléfono normal), oscuro, y pantalla chica con letra grande.
+ */
+@RunWith(AndroidJUnit4::class)
+@GraphicsMode(GraphicsMode.Mode.NATIVE)
+@Config(sdk = [SDK], qualifiers = RobolectricDeviceQualifiers.Pixel7)
+class ScreenshotTest {
+    @get:Rule
+    val compose = createComposeRule()
+
+    private val screens: List<Pair<String, @Composable () -> Unit>> = listOf(
+        "01_bienvenida" to { WelcomePreview() },
+        "03_login" to { LoginPreview() },
+        "03_recuperar" to { RecoverPreview() },
+        "04_revisa_correo" to { CheckEmailPreview() },
+        "05_registro" to { RegisterPreview() },
+        "06_gustos" to { TastesPreview() },
+        "perfil" to { ProfilePreview() },
+        "editar_perfil" to { EditProfilePreview() }
+    )
+
+    @Test
+    fun claro() = shootAll("claro")
+
+    @Test
+    @Config(qualifiers = "+night")
+    fun oscuro() = shootAll("oscuro")
+
+    @Test
+    @Config(qualifiers = SMALL_PHONE, fontScale = LARGE_FONT)
+    fun chica_letra_grande() = shootAll("chica_letra_grande")
+
+    /** Bug nv-06: en horizontal la ilustración tapaba el texto de Bienvenida. */
+    @Test
+    @Config(qualifiers = "+land")
+    fun bienvenida_horizontal() {
+        compose.setContent { WelcomePreview() }
+        compose.onNodeWithTag("welcome_art").assertDoesNotExist()
+        compose.onNodeWithTag("welcome_create_account").assertExists()
+        compose.onRoot().captureRoboImage(
+            "src/test/screenshots/01_bienvenida_horizontal.png",
+            roborazziOptions = OPTIONS
+        )
+    }
+
+    private fun shootAll(variant: String) {
+        var current: @Composable () -> Unit by mutableStateOf({})
+        compose.setContent { current() }
+        screens.forEach { (name, screen) ->
+            current = screen
+            compose.waitForIdle()
+            compose.onRoot().captureRoboImage("src/test/screenshots/${name}_$variant.png", roborazziOptions = OPTIONS)
+        }
+    }
+
+    private companion object {
+        // Tolerancia para el suavizado del texto entre sistemas (Windows en local, Linux en CI).
+        val OPTIONS = RoborazziOptions(compareOptions = RoborazziOptions.CompareOptions(changeThreshold = 0.01f))
+    }
+}

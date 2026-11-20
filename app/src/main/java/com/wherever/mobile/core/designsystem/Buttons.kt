@@ -1,6 +1,7 @@
 package com.wherever.mobile.core.designsystem
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,7 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -28,10 +29,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.wherever.mobile.R
+import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
+import com.wherever.mobile.core.designsystem.Strokes
 
-private val ButtonHeight = 56.dp
+private val ButtonHeight = Sizes.ButtonHeight
 
 /** El botón naranja: uno solo por pantalla (constitución §4). */
 @Composable
@@ -58,7 +61,11 @@ fun WhereverPrimaryButton(
     ) {
         LoadingSwap(loading) { showSpinner ->
             if (showSpinner) {
-                CircularProgressIndicator(modifier = Modifier.size(22.dp), color = Ink, strokeWidth = 2.dp)
+                CircularProgressIndicator(
+                    modifier = Modifier.size(Sizes.ProgressSmall),
+                    color = Ink,
+                    strokeWidth = Strokes.Thin
+                )
             } else {
                 ButtonContent(text, icon)
             }
@@ -81,7 +88,7 @@ fun WhereverOutlinedButton(
         onClick = onClick,
         enabled = enabled,
         shape = CircleShape,
-        border = BorderStroke(1.dp, borderColor),
+        border = BorderStroke(Strokes.Hairline, borderColor),
         colors = ButtonDefaults.outlinedButtonColors(contentColor = contentColor),
         modifier = modifier.height(ButtonHeight).testTag(tag)
     ) {
@@ -107,7 +114,11 @@ fun WhereverDangerButton(
     ) {
         LoadingSwap(loading) { showSpinner ->
             if (showSpinner) {
-                CircularProgressIndicator(modifier = Modifier.size(22.dp), color = Color.White, strokeWidth = 2.dp)
+                CircularProgressIndicator(
+                    modifier = Modifier.size(Sizes.ProgressSmall),
+                    color = Color.White,
+                    strokeWidth = Strokes.Thin
+                )
             } else {
                 ButtonContent(text, null)
             }
@@ -127,7 +138,9 @@ fun WhereverTextLink(
         onClick = onClick,
         enabled = enabled,
         colors = ButtonDefaults.textButtonColors(contentColor = color),
-        modifier = modifier.height(48.dp)
+        // Sin relleno lateral: el texto queda alineado con el margen de su columna (nv-55).
+        contentPadding = PaddingValues(horizontal = Spacing.None, vertical = Spacing.S),
+        modifier = modifier.height(Sizes.TouchTarget)
     ) {
         Text(text = text, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
     }
@@ -138,14 +151,14 @@ fun BackCircleButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     OutlinedIconButton(
         onClick = onClick,
         shape = CircleShape,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        border = BorderStroke(Strokes.Hairline, MaterialTheme.colorScheme.outline),
         colors = IconButtonDefaults.outlinedIconButtonColors(
             containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.onSurface
         ),
-        modifier = modifier.size(48.dp)
+        modifier = modifier.size(Sizes.TouchTarget)
     ) {
-        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
+        Icon(Icons.AutoMirrored.Outlined.KeyboardArrowLeft, contentDescription = stringResource(R.string.common_back))
     }
 }
 
@@ -155,12 +168,12 @@ fun CircleIconButton(icon: ImageVector, description: String, onClick: () -> Unit
     OutlinedIconButton(
         onClick = onClick,
         shape = CircleShape,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        border = BorderStroke(Strokes.Hairline, MaterialTheme.colorScheme.outline),
         colors = IconButtonDefaults.outlinedIconButtonColors(
             containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.onSurface
         ),
-        modifier = modifier.size(48.dp)
+        modifier = modifier.size(Sizes.TouchTarget)
     ) {
         Icon(icon, contentDescription = description)
     }
@@ -170,8 +183,8 @@ fun CircleIconButton(icon: ImageVector, description: String, onClick: () -> Unit
 private fun ButtonContent(text: String, icon: ImageVector?) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         if (icon != null) {
-            Icon(icon, contentDescription = null, modifier = Modifier.size(20.dp))
-            Spacer(Modifier.width(8.dp))
+            Icon(icon, contentDescription = null, modifier = Modifier.size(Sizes.IconM))
+            Spacer(Modifier.width(Spacing.S))
         }
         Text(text = text, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
     }

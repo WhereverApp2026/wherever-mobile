@@ -25,6 +25,7 @@ class TokenRefreshAuthenticator(
 ) : Authenticator {
     private val lock = Any()
 
+    @Throws(IOException::class)
     override fun authenticate(route: Route?, response: Response): Request? {
         if (response.priorResponse != null) return null
         val sent = response.request.header(HEADER_AUTHORIZATION)?.removePrefix(BEARER_PREFIX)
@@ -39,12 +40,14 @@ class TokenRefreshAuthenticator(
         return if (current.accessToken != sent) current.accessToken else refresh(current)
     }
 
+    /**
+     * Una falla de red al renovar se propaga como [IOException]: la llamada termina en "Sin conexión" y la sesión
+     * se conserva para reintentar. Antes devolvía null y el 401 original salía como "Credenciales inválidas"
+     * (bug visto en el teléfono, specs/nv-55).
+     */
+    @Throws(IOException::class)
     private fun refresh(current: SessionTokens): String? {
-        val result = try {
-            refreshApi.refresh(RefreshRequestDto(current.refreshToken)).execute()
-        } catch (_: IOException) {
-            return null
-        }
+        val result = refreshApi.refresh(RefreshRequestDto(current.refreshToken)).execute()
         val body = result.body()
         return when {
             result.isSuccessful && body != null -> {

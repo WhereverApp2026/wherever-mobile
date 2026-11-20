@@ -7,6 +7,11 @@
 - **Conteo de nv-19 se queda en 3/4:** 19_Buscar y 21_SinResultados se probaron en el teléfono; 20_BuscarPersonas usa el mismo `personas/buscar` probado en Agregar amigos (nv-53). La variante "solicitud enviada" no cuenta hasta probarla en el teléfono.
 - **Sin teléfono conectado** (`adb devices` vacío): subo lo que pasa las 7 compuertas y la CI, y dejo la prueba en el teléfono como casilla abierta en `docs/pendientes.md`. No se puede esperar sin parar el trabajo.
 - **Dependabot:** #23 (setup-java 6.2.0) tiene la CI en verde y se integra. #8 a #12 piden `compileSdk 37` (confirmado en los logs: `checkDebugAarMetadata`), no se integran. #5 a #7 tienen CI roja sobre un `main` viejo; no pude pedir el rebase desde la sesión (permiso de comentar denegado): escribe `@dependabot rebase` en cada uno.
+- **No existe `analisis/`** (ni `guia_estilo_wherever.md`, `revision_figma_maqueta.md` ni `revision_maqueta2.md`): no están en el repo, ni en su historial, ni en tu carpeta de usuario. La norma de diseño (`docs/diseno.md`) sale de los 198 frames de `maqueta/figma-frames/`, de `docs/figma-inventory.md` (bordes de 16–24 dp, botones píldora, sombras suaves) y de la paleta de la constitución §4. Si me pasas esos archivos, concilio la norma con ellos.
+- **Escala de 4/8:** los espaciados fuera de escala (6, 10, 14, 18, 22 dp) se llevaron al paso siguiente (8, 12, 16, 16, 24). Cambia poco a la vista y deja todo alineado a la misma rejilla.
+- **Bug de alineación corregido:** en el detalle del plan, la línea del traslado estaba a 14 dp del borde y el centro del círculo numerado a 30 dp. Ahora queda centrada bajo el círculo y su texto, alineado con el de la parada.
+- **Robolectric 4.17 y Roborazzi 1.77.0** (solo pruebas): excepción de stack documentada en `specs/nv-55` §2.5. Son las versiones más nuevas con más de dos semanas.
+- **Regla de detekt propia** en el módulo `detekt-rules/`, compilado con API de Kotlin 2.1 para que cargue en el runtime de detekt 1.23 (Kotlin 2.0).
 - **Documento para el equipo:** "Wherever Móvil: qué está hecho y qué falta", agrupado por perfil (persona usuaria, modo negocio y base técnica) y con la lista de specs que faltan.
 
 ---

@@ -2,8 +2,8 @@ package com.wherever.mobile.feature.account.ui
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
@@ -45,7 +45,7 @@ fun ChangeEmailRoute(onBack: () -> Unit, viewModel: ChangeEmailViewModel = hiltV
         if (sentTo != null) {
             InfoBanner(
                 stringResource(R.string.account_email_done, sentTo),
-                icon = Icons.Filled.CheckCircle,
+                icon = Icons.Outlined.CheckCircle,
                 tag = "change_email_success"
             )
             return@FormScreen
@@ -58,7 +58,7 @@ fun ChangeEmailRoute(onBack: () -> Unit, viewModel: ChangeEmailViewModel = hiltV
             value = state.email,
             onValueChange = viewModel::onEmailChange,
             placeholder = stringResource(R.string.field_email_placeholder),
-            leadingIcon = Icons.Filled.Email,
+            leadingIcon = Icons.Outlined.Email,
             error = state.emailError?.asString(),
             onBlur = viewModel::onEmailBlur,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),

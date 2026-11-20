@@ -13,11 +13,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,7 +34,6 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -45,11 +42,13 @@ import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.InfoBanner
 import com.wherever.mobile.core.designsystem.LabeledTextField
+import com.wherever.mobile.core.designsystem.LargeProgress
 import com.wherever.mobile.core.designsystem.LocalMotionEnabled
-import com.wherever.mobile.core.designsystem.RouteBlue
 import com.wherever.mobile.core.designsystem.SelectChip
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.TopTitleRow
+import com.wherever.mobile.core.designsystem.WhereverIconButton
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
@@ -126,7 +125,7 @@ private fun Editor(state: CreatePlanUiState, viewModel: CreatePlanViewModel, onB
 @Composable
 private fun QuickSheet(state: CreatePlanUiState, viewModel: CreatePlanViewModel) {
     SurfaceCard {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Column(modifier = Modifier.padding(Spacing.L), verticalArrangement = Arrangement.spacedBy(Spacing.M)) {
             Text(stringResource(R.string.plan_when), style = MaterialTheme.typography.titleSmall)
             ChipGroup {
                 PlanWhen.entries.forEach { option ->
@@ -142,10 +141,10 @@ private fun QuickSheet(state: CreatePlanUiState, viewModel: CreatePlanViewModel)
                     modifier = Modifier.weight(1f)
                 )
                 WhereverTextLink(stringResource(R.string.plan_people_less), { viewModel.onPeople(state.people - 1) })
-                IconButton(onClick = {
+                WhereverIconButton(onClick = {
                     viewModel.onPeople(state.people + 1)
                 }, modifier = Modifier.testTag("plan_people_more")) {
-                    Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.plan_people_more))
+                    Icon(Icons.Outlined.Add, contentDescription = stringResource(R.string.plan_people_more))
                 }
             }
             Text(stringResource(R.string.plan_budget), style = MaterialTheme.typography.titleSmall)
@@ -206,10 +205,10 @@ private fun Generating(onCancel: () -> Unit) {
     )
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
-        modifier = Modifier.fillMaxSize().padding(32.dp).testTag("plan_generating")
+        verticalArrangement = Arrangement.spacedBy(Spacing.XL, Alignment.CenterVertically),
+        modifier = Modifier.fillMaxSize().padding(Spacing.XXXL).testTag("plan_generating")
     ) {
-        CircularProgressIndicator(color = RouteBlue, modifier = Modifier.size(56.dp))
+        LargeProgress(color = MaterialTheme.colorScheme.primary)
         Text(
             stringResource(R.string.generating_title),
             style = MaterialTheme.typography.headlineSmall,
@@ -241,7 +240,7 @@ private fun DraftResult(state: CreatePlanUiState, viewModel: CreatePlanViewModel
             WhereverOutlinedButton(
                 text = stringResource(R.string.plan_other_idea),
                 onClick = viewModel::otherIdea,
-                icon = Icons.Filled.Refresh,
+                icon = Icons.Outlined.Refresh,
                 modifier = Modifier.fillMaxWidth(),
                 tag = "plan_other_idea"
             )

@@ -44,6 +44,19 @@ class ArchitectureTest {
     }
 
     @Test
+    fun `las pantallas usan los componentes unicos del sistema de diseno`() {
+        // docs/diseno.md §4: diálogos, botones de texto e ícono, avisos y progreso salen de core/designsystem.
+        val material = listOf(
+            "AlertDialog", "TextButton", "IconButton", "SnackbarHost", "Snackbar",
+            "CircularProgressIndicator", "LinearProgressIndicator", "Button", "OutlinedButton",
+            "TextField", "OutlinedTextField", "Card", "TopAppBar", "CenterAlignedTopAppBar"
+        ).map { "androidx.compose.material3.$it" }
+        scope.files.filter { !it.isInPackage(DESIGN_SYSTEM_PACKAGE) }.assertFalse { file ->
+            file.imports.any { it.name in material }
+        }
+    }
+
+    @Test
     fun `core database solo alcanza entidades y DAOs de las features`() {
         val databaseFiles = scope.files.filter { it.isInPackage(DATABASE_PACKAGE) }
         org.junit.Assert.assertTrue("core/database sin archivos", databaseFiles.isNotEmpty())
@@ -179,6 +192,7 @@ class ArchitectureTest {
 
     private companion object {
         const val DATABASE_PACKAGE = "com.wherever.mobile.core.database"
+        const val DESIGN_SYSTEM_PACKAGE = "com.wherever.mobile.core.designsystem"
         const val FEATURE_PACKAGE = "com.wherever.mobile.feature."
         const val NAVIGATION_PACKAGE = "com.wherever.mobile.navigation."
     }

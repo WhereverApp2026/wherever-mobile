@@ -25,23 +25,20 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -60,7 +57,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
@@ -70,13 +66,19 @@ import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.InfoBanner
 import com.wherever.mobile.core.designsystem.Ink
 import com.wherever.mobile.core.designsystem.MainTab
+import com.wherever.mobile.core.designsystem.Radius
 import com.wherever.mobile.core.designsystem.RouteBlue
 import com.wherever.mobile.core.designsystem.ScreenPadding
 import com.wherever.mobile.core.designsystem.SelectChip
+import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.Sunset
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.WhereverBottomBar
+import com.wherever.mobile.core.designsystem.WhereverIconButton
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
+import com.wherever.mobile.core.designsystem.WhereverSnackbarHost
+import com.wherever.mobile.core.designsystem.WhereverTextButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.core.ui.formatDateTime
 import com.wherever.mobile.feature.home.domain.Company
@@ -128,7 +130,7 @@ fun HomeRouteScreen(
         viewModel.onPermissionResult(it)
     }
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbar) },
+        snackbarHost = { WhereverSnackbarHost(snackbar) },
         bottomBar = { WhereverBottomBar(MainTab.HOME, onSelect = navigation.onTab) }
     ) { padding ->
         HomeContent(
@@ -172,8 +174,8 @@ private fun HomeContent(
         modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).testTag("home_refresh")
     ) {
         LazyColumn(
-            contentPadding = PaddingValues(bottom = 24.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(bottom = Spacing.XXL),
+            verticalArrangement = Arrangement.spacedBy(Spacing.L),
             modifier = Modifier.fillMaxSize().testTag("home_list")
         ) {
             item { Header(state, unread, navigation) }
@@ -208,7 +210,7 @@ private fun HomeContent(
                             Text(
                                 stringResource(R.string.home_why, why),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = RouteBlue,
+                                color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.testTag("home_why_${place.id}")
                             )
                         }
@@ -244,7 +246,7 @@ private fun HomeContent(
                 item {
                     LazyRow(
                         contentPadding = PaddingValues(horizontal = ScreenPadding),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.M)
                     ) {
                         items(state.events, key = { it.id }) { EventCard(it) }
                     }
@@ -259,15 +261,15 @@ private fun Header(state: HomeUiState, unread: Int, navigation: HomeNavigation) 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
+            .clip(RoundedCornerShape(bottomStart = Radius.XXXL, bottomEnd = Radius.XXXL))
             .background(Brush.verticalGradient(listOf(Ink, RouteBlue)))
             .statusBarsPadding()
             .padding(ScreenPadding)
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Column(verticalArrangement = Arrangement.spacedBy(Spacing.M)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (state.city != null) {
-                    Icon(Icons.Filled.LocationOn, contentDescription = null, tint = Color.White)
+                    Icon(Icons.Outlined.LocationOn, contentDescription = null, tint = Color.White)
                     Text(text = state.city, color = Color.White, style = MaterialTheme.typography.bodyMedium)
                 }
                 Spacer(Modifier.weight(1f))
@@ -276,7 +278,10 @@ private fun Header(state: HomeUiState, unread: Int, navigation: HomeNavigation) 
                         Text(
                             stringResource(R.string.home_weather, weather.temperatureC, weather.condition),
                             style = MaterialTheme.typography.labelLarge,
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp).testTag("home_weather")
+                            modifier = Modifier.padding(
+                                horizontal = Spacing.M,
+                                vertical = Spacing.S
+                            ).testTag("home_weather")
                         )
                     }
                 }
@@ -312,19 +317,19 @@ private fun Header(state: HomeUiState, unread: Int, navigation: HomeNavigation) 
 @Composable
 private fun SearchBox(onClick: () -> Unit) {
     Surface(
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(Radius.L),
         color = MaterialTheme.colorScheme.surface,
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 52.dp)
-            .clip(RoundedCornerShape(16.dp))
+            .heightIn(min = Sizes.RowMinHeight)
+            .clip(RoundedCornerShape(Radius.L))
             .clickable(onClick = onClick)
             .semantics { role = Role.Button }
             .testTag("home_search")
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(14.dp)) {
-            Icon(Icons.Filled.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
-            Spacer(Modifier.width(10.dp))
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(Spacing.L)) {
+            Icon(Icons.Outlined.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+            Spacer(Modifier.width(Spacing.M))
             Text(stringResource(R.string.home_search_hint), color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
@@ -342,7 +347,7 @@ private val COMPANIES = listOf(
 private fun CompanyChips(selected: Company?, onCompany: (Company) -> Unit) {
     LazyRow(
         contentPadding = PaddingValues(horizontal = ScreenPadding),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(Spacing.S)
     ) {
         items(COMPANIES) { (company, label) ->
             SelectChip(
@@ -357,7 +362,7 @@ private fun CompanyChips(selected: Company?, onCompany: (Company) -> Unit) {
 
 @Composable
 private fun MoodChips(state: HomeUiState, onCategory: (String) -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
         Text(
             stringResource(R.string.home_cravings),
             style = MaterialTheme.typography.titleMedium,
@@ -365,7 +370,7 @@ private fun MoodChips(state: HomeUiState, onCategory: (String) -> Unit) {
         )
         LazyRow(
             contentPadding = PaddingValues(horizontal = ScreenPadding),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(Spacing.S)
         ) {
             items(state.chips, key = { it.id }) { chip ->
                 SelectChip(chip.name, selected = false, onClick = {
@@ -380,7 +385,7 @@ private fun MoodChips(state: HomeUiState, onCategory: (String) -> Unit) {
 private fun LocationCard(prompt: LocationPrompt, actions: HomeActions) {
     val context = LocalContext.current
     SurfaceCard(modifier = Modifier.padding(horizontal = ScreenPadding).testTag("home_location_card")) {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Column(modifier = Modifier.padding(Spacing.L), verticalArrangement = Arrangement.spacedBy(Spacing.M)) {
             Text(stringResource(R.string.location_title), style = MaterialTheme.typography.titleMedium)
             Text(
                 stringResource(
@@ -405,7 +410,7 @@ private fun LocationCard(prompt: LocationPrompt, actions: HomeActions) {
                     tag = "location_settings"
                 )
             }
-            TextButton(onClick = actions.onLocationNotNow, modifier = Modifier.testTag("location_not_now")) {
+            WhereverTextButton(onClick = actions.onLocationNotNow, modifier = Modifier.testTag("location_not_now")) {
                 Text(stringResource(R.string.location_not_now))
             }
         }
@@ -414,7 +419,10 @@ private fun LocationCard(prompt: LocationPrompt, actions: HomeActions) {
 
 @Composable
 private fun EmptyRecommendations(onSearch: () -> Unit) {
-    Column(modifier = Modifier.padding(horizontal = ScreenPadding), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(
+        modifier = Modifier.padding(horizontal = ScreenPadding),
+        verticalArrangement = Arrangement.spacedBy(Spacing.S)
+    ) {
         InfoBanner(stringResource(R.string.home_empty), tag = "home_empty")
         WhereverTextLink(stringResource(R.string.home_empty_action), onSearch)
     }
@@ -424,7 +432,7 @@ private fun EmptyRecommendations(onSearch: () -> Unit) {
 @Composable
 private fun PopularPlanCard(plan: PopularPlan, onCopy: () -> Unit) {
     SurfaceCard(modifier = Modifier.padding(horizontal = ScreenPadding).testTag("popular_${plan.id}")) {
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(14.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(Spacing.L)) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(plan.name, style = MaterialTheme.typography.titleSmall)
                 Text(
@@ -433,7 +441,7 @@ private fun PopularPlanCard(plan: PopularPlan, onCopy: () -> Unit) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            TextButton(onClick = onCopy) { Text(stringResource(R.string.home_popular_copy)) }
+            WhereverTextButton(onClick = onCopy) { Text(stringResource(R.string.home_popular_copy)) }
         }
     }
 }
@@ -441,13 +449,13 @@ private fun PopularPlanCard(plan: PopularPlan, onCopy: () -> Unit) {
 /** US-030: eventos, ferias y tianguis de los próximos 7 días. */
 @Composable
 private fun EventCard(event: Event) {
-    SurfaceCard(modifier = Modifier.width(240.dp).testTag("event_${event.id}")) {
-        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    SurfaceCard(modifier = Modifier.width(Sizes.EventCardWidth).testTag("event_${event.id}")) {
+        Column(modifier = Modifier.padding(Spacing.M), verticalArrangement = Arrangement.spacedBy(Spacing.XS)) {
             Text(event.title, style = MaterialTheme.typography.titleSmall, maxLines = 2)
             Text(
                 formatDateTime(event.startsAt, ZoneId.systemDefault()),
                 style = MaterialTheme.typography.bodySmall,
-                color = RouteBlue
+                color = MaterialTheme.colorScheme.primary
             )
             if (event.address.isNotBlank()) {
                 Text(
@@ -477,7 +485,7 @@ private fun NotificationBell(unread: Int, onClick: () -> Unit) {
     } else {
         stringResource(R.string.notifications_title)
     }
-    IconButton(onClick = onClick, modifier = Modifier.testTag("home_notifications")) {
+    WhereverIconButton(onClick = onClick, modifier = Modifier.testTag("home_notifications")) {
         BadgedBox(
             badge = {
                 if (unread > 0) {
@@ -487,7 +495,7 @@ private fun NotificationBell(unread: Int, onClick: () -> Unit) {
                 }
             }
         ) {
-            Icon(Icons.Filled.Notifications, contentDescription = description, tint = Color.White)
+            Icon(Icons.Outlined.Notifications, contentDescription = description, tint = Color.White)
         }
     }
 }

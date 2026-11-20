@@ -1,8 +1,8 @@
 package com.wherever.mobile.feature.auth.ui
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
@@ -99,12 +99,12 @@ internal fun VerifyEmailContent(state: VerifyEmailUiState, onContinue: () -> Uni
             VerifyEmailPhase.VERIFYING -> LoadingState()
             VerifyEmailPhase.VERIFIED -> InfoBanner(
                 stringResource(R.string.verify_email_done),
-                icon = Icons.Filled.CheckCircle,
+                icon = Icons.Outlined.CheckCircle,
                 tag = "verify_email_done"
             )
             VerifyEmailPhase.LINK_EXPIRED -> InfoBanner(
                 stringResource(R.string.verify_email_expired),
-                icon = Icons.Filled.Info,
+                icon = Icons.Outlined.Info,
                 tag = "verify_email_expired"
             )
             VerifyEmailPhase.ERROR -> state.error?.let { ErrorBanner(it.asString()) }

@@ -9,13 +9,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,7 +27,6 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -41,9 +38,12 @@ import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.InfoBanner
 import com.wherever.mobile.core.designsystem.LabeledTextField
 import com.wherever.mobile.core.designsystem.LoadingState
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.WhereverDangerButton
+import com.wherever.mobile.core.designsystem.WhereverDialog
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
+import com.wherever.mobile.core.designsystem.WhereverTextButton
 import com.wherever.mobile.core.ui.formatDate
 import com.wherever.mobile.core.ui.formatDateTime
 import com.wherever.mobile.core.ui.formatTime
@@ -74,7 +74,7 @@ fun ReservationRoute(onBack: () -> Unit, viewModel: ReservationViewModel = hiltV
     state.cancelQuote?.let { CancelDialog(it, viewModel) }
     state.changeSlots?.let { slots ->
         val zone = remember { ZoneId.systemDefault() }
-        AlertDialog(
+        WhereverDialog(
             onDismissRequest = viewModel::dismissChange,
             title = { Text(stringResource(R.string.reservation_change)) },
             text = {
@@ -85,7 +85,7 @@ fun ReservationRoute(onBack: () -> Unit, viewModel: ReservationViewModel = hiltV
                 }
             },
             confirmButton = {
-                TextButton(onClick = viewModel::dismissChange) { Text(stringResource(R.string.common_cancel)) }
+                WhereverTextButton(onClick = viewModel::dismissChange) { Text(stringResource(R.string.common_cancel)) }
             }
         )
     }
@@ -113,7 +113,7 @@ private fun ReservationContent(
         state.error?.let { ErrorBanner(it.asString()) }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(Spacing.S),
             modifier = Modifier.fillMaxWidth()
         ) {
             StatusBadge(reservation.status)
@@ -136,7 +136,7 @@ private fun ReservationContent(
             Text(stringResource(R.string.reservation_messages), style = MaterialTheme.typography.titleMedium)
             reservation.messages.forEach { message ->
                 SurfaceCard {
-                    Column(modifier = Modifier.padding(12.dp)) {
+                    Column(modifier = Modifier.padding(Spacing.M)) {
                         Text(message.text)
                         Text(
                             formatDateTime(message.createdAt, zone),
@@ -156,7 +156,7 @@ private fun ReservationStatus.isActive(): Boolean =
 @Composable
 private fun Details(reservation: Reservation, zone: ZoneId) {
     SurfaceCard(modifier = Modifier.testTag("reservation_details")) {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Column(modifier = Modifier.padding(Spacing.L), verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
             Text(
                 stringResource(
                     R.string.reservation_when,
@@ -193,7 +193,7 @@ private fun HoldNotice(reservation: Reservation, zone: ZoneId) {
             formatCents(reservation.depositCents),
             reservation.holdExpiresAt?.let { formatTime(it, zone) }.orEmpty()
         ),
-        icon = Icons.Filled.Info,
+        icon = Icons.Outlined.Info,
         tag = "reservation_held"
     )
 }
@@ -211,7 +211,7 @@ private fun Actions(
         WhereverOutlinedButton(
             text = stringResource(R.string.reservation_calendar),
             onClick = { addToCalendar(context, reservation, placeName) },
-            icon = Icons.Filled.DateRange,
+            icon = Icons.Outlined.DateRange,
             tag = "reservation_calendar"
         )
         WhereverOutlinedButton(
@@ -220,7 +220,7 @@ private fun Actions(
                 val send = Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, shareText)
                 context.startActivity(Intent.createChooser(send, null))
             },
-            icon = Icons.Filled.Share,
+            icon = Icons.Outlined.Share,
             tag = "reservation_share"
         )
     }
@@ -261,11 +261,11 @@ private fun addToCalendar(context: Context, reservation: Reservation, placeName:
 @Composable
 private fun CancelDialog(quote: RefundQuote, viewModel: ReservationViewModel) {
     var reason by remember { mutableStateOf("") }
-    AlertDialog(
+    WhereverDialog(
         onDismissRequest = viewModel::dismissCancel,
         title = { Text(stringResource(R.string.reservation_cancel_title)) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(Spacing.M)) {
                 Text(
                     if (quote.cents > 0) {
                         stringResource(R.string.reservation_cancel_refund, formatCents(quote.cents), quote.percent)
@@ -283,13 +283,13 @@ private fun CancelDialog(quote: RefundQuote, viewModel: ReservationViewModel) {
             }
         },
         confirmButton = {
-            TextButton(
+            WhereverTextButton(
                 onClick = { viewModel.confirmCancel(reason) },
                 modifier = Modifier.testTag("confirm_dialog_accept")
             ) { Text(stringResource(R.string.reservation_cancel)) }
         },
         dismissButton = {
-            TextButton(onClick = viewModel::dismissCancel) { Text(stringResource(R.string.reservation_keep)) }
+            WhereverTextButton(onClick = viewModel::dismissCancel) { Text(stringResource(R.string.reservation_keep)) }
         }
     )
 }

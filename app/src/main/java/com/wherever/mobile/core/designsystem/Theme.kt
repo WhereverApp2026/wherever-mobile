@@ -39,9 +39,9 @@ private val LightColors = lightColorScheme(
 )
 
 private val DarkColors = darkColorScheme(
-    primary = RouteBlueTint,
+    primary = RouteBlueLight,
     onPrimary = Ink,
-    primaryContainer = InkDeep,
+    primaryContainer = InkRaised,
     onPrimaryContainer = Mist,
     secondary = Sunset,
     onSecondary = Ink,
@@ -54,7 +54,7 @@ private val DarkColors = darkColorScheme(
     surface = InkDeep,
     onSurface = Mist,
     onSurfaceVariant = OutlineSoft,
-    surfaceVariant = InkDeep,
+    surfaceVariant = InkTrack,
     outline = InkMuted,
     error = DangerTint,
     onError = Ink,

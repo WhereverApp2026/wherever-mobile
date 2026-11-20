@@ -39,7 +39,10 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.dp
+import com.wherever.mobile.core.designsystem.Radius
+import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
+import com.wherever.mobile.core.designsystem.Strokes
 
 /** Campo con etiqueta arriba, como en la maqueta. `onBlur` se dispara al salir del campo. */
 @Composable
@@ -65,7 +68,7 @@ fun LabeledTextField(
     tag: String = ""
 ) {
     var wasFocused by remember { mutableStateOf(false) }
-    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
         Text(text = label, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onBackground)
         OutlinedTextField(
             value = value,
@@ -73,7 +76,7 @@ fun LabeledTextField(
             readOnly = readOnly,
             singleLine = singleLine,
             isError = error != null,
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(Radius.L),
             placeholder = { Text(placeholder, color = MaterialTheme.colorScheme.onSurfaceVariant) },
             leadingIcon = leadingIcon?.let {
                 { Icon(it, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant) }
@@ -126,18 +129,18 @@ fun SelectChip(
         shape = CircleShape,
         color = if (selected) RouteBlue else MaterialTheme.colorScheme.surface,
         contentColor = if (selected) Color.White else MaterialTheme.colorScheme.onSurface,
-        border = if (selected) null else BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        border = if (selected) null else BorderStroke(Strokes.Hairline, MaterialTheme.colorScheme.outline),
         modifier = modifier
-            .heightIn(min = 48.dp)
+            .heightIn(min = Sizes.TouchTarget)
             .alpha(if (enabled) 1f else DISABLED_ALPHA)
             .selectable(selected = selected, enabled = enabled, role = Role.Checkbox, onClick = onClick)
             .testTag(tag)
     ) {
-        Row(modifier = Modifier.heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(modifier = Modifier.heightIn(min = Sizes.TouchTarget), verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                modifier = Modifier.padding(horizontal = Spacing.L, vertical = Spacing.S)
             )
         }
     }
@@ -148,8 +151,8 @@ fun SelectChip(
 fun ChipGroup(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     FlowRow(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(Spacing.S),
+        verticalArrangement = Arrangement.spacedBy(Spacing.S)
     ) {
         content()
     }
@@ -164,7 +167,7 @@ fun SegmentedControl(
     modifier: Modifier = Modifier
 ) {
     Surface(shape = CircleShape, color = MaterialTheme.colorScheme.surfaceVariant, modifier = modifier.fillMaxWidth()) {
-        Row(modifier = Modifier.padding(4.dp)) {
+        Row(modifier = Modifier.padding(Spacing.XS)) {
             options.forEachIndexed { index, option ->
                 val selected = index == selectedIndex
                 Surface(
@@ -172,11 +175,11 @@ fun SegmentedControl(
                     color = if (selected) MaterialTheme.colorScheme.surface else Color.Transparent,
                     modifier = Modifier
                         .weight(1f)
-                        .heightIn(min = 48.dp)
+                        .heightIn(min = Sizes.TouchTarget)
                         .selectable(selected = selected, role = Role.RadioButton, onClick = { onSelect(index) })
                 ) {
                     Row(
-                        modifier = Modifier.heightIn(min = 48.dp),
+                        modifier = Modifier.heightIn(min = Sizes.TouchTarget),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {

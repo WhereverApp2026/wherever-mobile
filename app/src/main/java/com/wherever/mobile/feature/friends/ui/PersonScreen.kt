@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -23,6 +22,8 @@ import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.ErrorState
 import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.LoadingState
+import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.WhereverDangerButton
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
@@ -71,10 +72,10 @@ private fun PersonContent(detail: PersonDetail, state: PersonUiState, viewModel:
         BackCircleButton(onClick = onBack)
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(Spacing.S),
             modifier = Modifier.fillMaxWidth()
         ) {
-            ProfileAvatar(detail.person.name, detail.person.photoUrl, size = 96.dp)
+            ProfileAvatar(detail.person.name, detail.person.photoUrl, size = Sizes.AvatarXL)
             Text(
                 detail.person.name,
                 style = MaterialTheme.typography.headlineMedium,

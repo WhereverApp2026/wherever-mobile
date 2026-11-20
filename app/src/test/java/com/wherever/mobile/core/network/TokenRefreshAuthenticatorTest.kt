@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import com.wherever.mobile.core.security.SessionTokens
 import com.wherever.mobile.testing.FakeTokenStore
 import com.wherever.mobile.testing.testRetrofit
+import java.io.IOException
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
@@ -12,11 +13,13 @@ import mockwebserver3.Dispatcher
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
 import mockwebserver3.RecordedRequest
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
 
@@ -69,6 +72,22 @@ class TokenRefreshAuthenticatorTest {
         assertNull(refresh.headers["Authorization"])
         assertEquals("Bearer nuevo", server.takeRequest().headers["Authorization"])
         assertEquals("refresh-nuevo", tokenStore.tokens?.refreshToken)
+    }
+
+    @Test
+    fun `si renovar falla por red, la llamada es falla de red y la sesion se conserva`() {
+        // Bug visto en el teléfono (nv-55): sin red al renovar salía "Credenciales inválidas".
+        val unreachable = testRetrofit("http://127.0.0.1:1/api/v1/".toHttpUrl()).create(RefreshApi::class.java)
+        val offlineClient = OkHttpClient.Builder()
+            .addInterceptor(AuthHeaderInterceptor(tokenStore))
+            .authenticator(TokenRefreshAuthenticator(tokenStore, unreachable, events))
+            .build()
+        status(401)
+
+        val request = Request.Builder().url(server.url("/api/v1/usuarios/yo")).build()
+        assertThrows(IOException::class.java) { offlineClient.newCall(request).execute().close() }
+
+        assertEquals("refresh-viejo", tokenStore.tokens?.refreshToken)
     }
 
     @Test

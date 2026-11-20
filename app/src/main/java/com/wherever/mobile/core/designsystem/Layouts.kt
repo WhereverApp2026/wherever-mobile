@@ -21,7 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,8 +35,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.wherever.mobile.core.designsystem.Spacing
 
-val ScreenPadding: Dp = 20.dp
+val ScreenPadding: Dp = Spacing.XL
 
 /**
  * Pantalla con scroll y fondo Niebla. `footer` queda fijo abajo, como en la maqueta, salvo cuando
@@ -64,13 +65,13 @@ fun FormScreen(
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
                     .padding(ScreenPadding),
-                verticalArrangement = Arrangement.spacedBy(14.dp)
+                verticalArrangement = Arrangement.spacedBy(Spacing.L)
             ) {
                 content()
                 if (footer != null && compact) FooterColumn(footer, Modifier)
             }
             if (footer != null && !compact) {
-                FooterColumn(footer, Modifier.padding(horizontal = ScreenPadding, vertical = 12.dp))
+                FooterColumn(footer, Modifier.padding(horizontal = ScreenPadding, vertical = Spacing.M))
             }
         }
     }
@@ -84,7 +85,7 @@ private fun FooterColumn(footer: @Composable ColumnScope.() -> Unit, modifier: M
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(Spacing.S),
         content = footer
     )
 }
@@ -108,7 +109,7 @@ fun rememberFormSubmit(onSubmit: () -> Unit): () -> Unit {
 
 @Composable
 fun TitleBlock(title: String, modifier: Modifier = Modifier, subtitle: String? = null) {
-    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
         Text(
             text = title,
             style = MaterialTheme.typography.headlineLarge,
@@ -129,7 +130,7 @@ fun TitleBlock(title: String, modifier: Modifier = Modifier, subtitle: String? =
 fun TopTitleRow(title: String, onBack: () -> Unit, modifier: Modifier = Modifier) {
     Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         BackCircleButton(onClick = onBack)
-        Spacer(Modifier.width(12.dp))
+        Spacer(Modifier.width(Spacing.M))
         Text(
             text = title,
             style = MaterialTheme.typography.headlineMedium,
@@ -144,20 +145,20 @@ fun StepHeader(stepLabel: String, step: Int, total: Int, onBack: (() -> Unit)?, 
     Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         if (onBack != null) {
             BackCircleButton(onClick = onBack)
-            Spacer(Modifier.width(12.dp))
+            Spacer(Modifier.width(Spacing.M))
         }
-        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
             Text(
                 text = stepLabel,
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(Spacing.S)) {
                 repeat(total) { index ->
                     Box(
                         modifier = Modifier
                             .weight(1f)
-                            .height(5.dp)
+                            .height(Strokes.Thick)
                             .clip(CircleShape)
                             .background(if (index < step) RouteBlue else MaterialTheme.colorScheme.surfaceVariant)
                     )
@@ -171,7 +172,7 @@ fun StepHeader(stepLabel: String, step: Int, total: Int, onBack: (() -> Unit)?, 
 @Composable
 fun LogoMark(
     modifier: Modifier = Modifier,
-    size: Dp = 56.dp,
+    size: Dp = Sizes.AvatarM,
     background: Color = RouteBlue,
     tint: Color = Color.White
 ) {
@@ -179,6 +180,6 @@ fun LogoMark(
         contentAlignment = Alignment.Center,
         modifier = modifier.size(size).clip(RoundedCornerShape(size / 4)).background(background)
     ) {
-        Icon(Icons.Filled.LocationOn, contentDescription = null, tint = tint, modifier = Modifier.size(size * 0.6f))
+        Icon(Icons.Outlined.LocationOn, contentDescription = null, tint = tint, modifier = Modifier.size(size * 0.6f))
     }
 }

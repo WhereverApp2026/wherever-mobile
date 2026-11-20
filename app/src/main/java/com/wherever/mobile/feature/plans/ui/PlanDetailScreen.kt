@@ -6,28 +6,25 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.KeyboardArrowDown
+import androidx.compose.material.icons.outlined.KeyboardArrowUp
+import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -45,8 +41,14 @@ import com.wherever.mobile.core.designsystem.ErrorState
 import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.LabeledTextField
 import com.wherever.mobile.core.designsystem.LoadingState
+import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.TopTitleRow
+import com.wherever.mobile.core.designsystem.WhereverDialog
+import com.wherever.mobile.core.designsystem.WhereverIconButton
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
+import com.wherever.mobile.core.designsystem.WhereverSnackbarHost
+import com.wherever.mobile.core.designsystem.WhereverTextButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.core.ui.formatDate
 import com.wherever.mobile.feature.places.ui.categoryLabel
@@ -92,7 +94,7 @@ fun PlanDetailRoute(
             viewModel.messageShown()
         }
     }
-    Scaffold(snackbarHost = { SnackbarHost(snackbar) }) { padding ->
+    Scaffold(snackbarHost = { WhereverSnackbarHost(snackbar) }) { padding ->
         val plan = state.plan
         when {
             plan != null -> PlanContent(plan, state, viewModel, onBack, Modifier.padding(padding))
@@ -121,11 +123,11 @@ private fun PlanContent(
             ),
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(Spacing.S)) {
             WhereverOutlinedButton(
                 stringResource(R.string.place_share),
                 viewModel::share,
-                icon = Icons.Filled.Share,
+                icon = Icons.Outlined.Share,
                 enabled = !state.busy,
                 modifier = Modifier.weight(1f),
                 tag = "plan_share"
@@ -133,7 +135,7 @@ private fun PlanContent(
             WhereverOutlinedButton(
                 stringResource(R.string.plan_repeat),
                 viewModel::repeatTomorrow,
-                icon = Icons.Filled.Refresh,
+                icon = Icons.Outlined.Refresh,
                 enabled = !state.busy,
                 modifier = Modifier.weight(1f),
                 tag = "plan_repeat"
@@ -146,12 +148,12 @@ private fun PlanContent(
         WhereverOutlinedButton(
             stringResource(R.string.plan_add_stop),
             viewModel::openAddStop,
-            icon = Icons.Filled.Add,
+            icon = Icons.Outlined.Add,
             enabled = !state.busy && plan.stops.size < MAX_STOPS,
             modifier = Modifier.fillMaxWidth(),
             tag = "plan_add_stop"
         )
-        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(Spacing.L)) {
             WhereverTextLink(stringResource(R.string.plan_rename), viewModel::startRename)
             WhereverTextLink(
                 stringResource(R.string.plan_delete),
@@ -168,27 +170,27 @@ private const val MAX_STOPS = 6
 @Composable
 private fun StopActions(stop: PlanStop, index: Int, count: Int, busy: Boolean, viewModel: PlanDetailViewModel) {
     Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-        IconButton(onClick = { viewModel.moveUp(stop) }, enabled = !busy && index > 0) {
-            Icon(Icons.Filled.KeyboardArrowUp, contentDescription = stringResource(R.string.plan_move_up))
+        WhereverIconButton(onClick = { viewModel.moveUp(stop) }, enabled = !busy && index > 0) {
+            Icon(Icons.Outlined.KeyboardArrowUp, contentDescription = stringResource(R.string.plan_move_up))
         }
-        IconButton(onClick = { viewModel.moveDown(stop) }, enabled = !busy && index < count - 1) {
-            Icon(Icons.Filled.KeyboardArrowDown, contentDescription = stringResource(R.string.plan_move_down))
+        WhereverIconButton(onClick = { viewModel.moveDown(stop) }, enabled = !busy && index < count - 1) {
+            Icon(Icons.Outlined.KeyboardArrowDown, contentDescription = stringResource(R.string.plan_move_down))
         }
-        TextButton(onClick = { viewModel.shiftTime(stop, forward = false) }, enabled = !busy) {
+        WhereverTextButton(onClick = { viewModel.shiftTime(stop, forward = false) }, enabled = !busy) {
             Text(stringResource(R.string.plan_earlier))
         }
-        TextButton(onClick = { viewModel.shiftTime(stop, forward = true) }, enabled = !busy) {
+        WhereverTextButton(onClick = { viewModel.shiftTime(stop, forward = true) }, enabled = !busy) {
             Text(stringResource(R.string.plan_later))
         }
-        IconButton(onClick = {
+        WhereverIconButton(onClick = {
             viewModel.openAlternatives(stop)
         }, enabled = !busy, modifier = Modifier.testTag("stop_change_$index")) {
-            Icon(Icons.Filled.Edit, contentDescription = stringResource(R.string.plan_change_stop))
+            Icon(Icons.Outlined.Edit, contentDescription = stringResource(R.string.plan_change_stop))
         }
-        IconButton(onClick = {
+        WhereverIconButton(onClick = {
             viewModel.removeStop(stop)
         }, enabled = !busy, modifier = Modifier.testTag("stop_remove_$index")) {
-            Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.plan_remove_stop))
+            Icon(Icons.Outlined.Delete, contentDescription = stringResource(R.string.plan_remove_stop))
         }
     }
 }
@@ -196,19 +198,19 @@ private fun StopActions(stop: PlanStop, index: Int, count: Int, busy: Boolean, v
 @Composable
 private fun Dialogs(state: PlanDetailUiState, viewModel: PlanDetailViewModel) {
     state.alternatives?.let { sheet ->
-        AlertDialog(
+        WhereverDialog(
             onDismissRequest = viewModel::closeAlternatives,
             title = { Text(stringResource(R.string.plan_change_stop)) },
             text = {
                 when {
                     sheet.loading -> LoadingState()
                     sheet.items.isEmpty() -> Text(stringResource(R.string.plan_no_alternatives))
-                    else -> LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    else -> LazyColumn(verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
                         items(sheet.items, key = { it.placeId }) { alt ->
                             Column(
-                                modifier = Modifier.fillMaxWidth().clickable {
+                                modifier = Modifier.fillMaxWidth().heightIn(min = Sizes.TouchTarget).clickable {
                                     viewModel.replaceWith(alt)
-                                }.padding(8.dp)
+                                }.padding(Spacing.S)
                             ) {
                                 Text(alt.name, style = MaterialTheme.typography.titleSmall)
                                 Text(
@@ -225,16 +227,18 @@ private fun Dialogs(state: PlanDetailUiState, viewModel: PlanDetailViewModel) {
                 }
             },
             confirmButton = {
-                TextButton(onClick = viewModel::closeAlternatives) { Text(stringResource(R.string.common_cancel)) }
+                WhereverTextButton(onClick = viewModel::closeAlternatives) {
+                    Text(stringResource(R.string.common_cancel))
+                }
             }
         )
     }
     state.addStop?.let { sheet ->
-        AlertDialog(
+        WhereverDialog(
             onDismissRequest = viewModel::closeAddStop,
             title = { Text(stringResource(R.string.plan_add_stop)) },
             text = {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
                     LabeledTextField(
                         label = stringResource(R.string.explore_search_label),
                         value = sheet.query,
@@ -245,28 +249,30 @@ private fun Dialogs(state: PlanDetailUiState, viewModel: PlanDetailViewModel) {
                     sheet.results.take(ADD_RESULTS).forEach { place ->
                         Text(
                             place.name,
-                            modifier = Modifier.fillMaxWidth().clickable { viewModel.addPlace(place) }.padding(8.dp)
+                            modifier = Modifier.fillMaxWidth().heightIn(min = Sizes.TouchTarget).clickable {
+                                viewModel.addPlace(place)
+                            }.padding(Spacing.S)
                         )
                     }
                 }
             },
             confirmButton = {
-                TextButton(onClick = viewModel::closeAddStop) { Text(stringResource(R.string.common_cancel)) }
+                WhereverTextButton(onClick = viewModel::closeAddStop) { Text(stringResource(R.string.common_cancel)) }
             }
         )
     }
     state.renaming?.let { name ->
-        AlertDialog(
+        WhereverDialog(
             onDismissRequest = viewModel::cancelRename,
             title = { Text(stringResource(R.string.plan_rename)) },
             text = {
                 LabeledTextField(stringResource(R.string.plan_name), name, viewModel::onRename, tag = "plan_name")
             },
             confirmButton = {
-                TextButton(onClick = viewModel::confirmRename) { Text(stringResource(R.string.common_save)) }
+                WhereverTextButton(onClick = viewModel::confirmRename) { Text(stringResource(R.string.common_save)) }
             },
             dismissButton = {
-                TextButton(onClick = viewModel::cancelRename) { Text(stringResource(R.string.common_cancel)) }
+                WhereverTextButton(onClick = viewModel::cancelRename) { Text(stringResource(R.string.common_cancel)) }
             }
         )
     }

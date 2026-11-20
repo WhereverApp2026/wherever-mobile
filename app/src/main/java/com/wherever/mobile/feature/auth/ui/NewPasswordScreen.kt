@@ -1,7 +1,7 @@
 package com.wherever.mobile.feature.auth.ui
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -76,7 +76,7 @@ internal fun NewPasswordContent(
         if (state.linkExpired) {
             InfoBanner(
                 stringResource(R.string.new_password_link_expired),
-                icon = Icons.Filled.Info,
+                icon = Icons.Outlined.Info,
                 tag = "new_password_expired"
             )
             return@FormScreen

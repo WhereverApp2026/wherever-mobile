@@ -67,6 +67,16 @@ class ProfileViewModelsTest {
     }
 
     @Test
+    fun `editar muestra la foto del perfil y no solo la inicial`() = runTest {
+        // Bug visto en el teléfono (nv-55): Editar perfil pintaba la inicial aunque la cuenta tenía foto.
+        profiles.profile.value = sampleProfile().copy(photoUrl = "https://cdn.example.com/avatar.jpg")
+        val viewModel = EditProfileViewModel(profiles)
+        runCurrent()
+
+        assertEquals("https://cdn.example.com/avatar.jpg", viewModel.state.value.photoUrl)
+    }
+
+    @Test
     fun `editar manda solo el nombre cambiado`() = runTest {
         val viewModel = loadedEditor()
         runCurrent()

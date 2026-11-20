@@ -1,12 +1,13 @@
 package com.wherever.mobile.feature.profile.ui
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,18 +17,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.FormScreen
-import com.wherever.mobile.core.designsystem.InitialAvatar
 import com.wherever.mobile.core.designsystem.LabeledTextField
 import com.wherever.mobile.core.designsystem.LoadingState
 import com.wherever.mobile.core.designsystem.NavRow
 import com.wherever.mobile.core.designsystem.PhaseCrossfade
 import com.wherever.mobile.core.designsystem.ScreenPhase
+import com.wherever.mobile.core.designsystem.Sizes
 import com.wherever.mobile.core.designsystem.StatusPill
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
@@ -99,13 +99,13 @@ private fun EditProfileContent(
             Box(Modifier)
         }
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            InitialAvatar(state.name.ifBlank { state.originalName }, size = 88.dp)
+            ProfileAvatar(state.name.ifBlank { state.originalName }, state.photoUrl, size = Sizes.AvatarL)
         }
         LabeledTextField(
             label = stringResource(R.string.field_name),
             value = state.name,
             onValueChange = onNameChange,
-            leadingIcon = Icons.Filled.Person,
+            leadingIcon = Icons.Outlined.Person,
             error = state.nameError?.asString(),
             tag = "edit_profile_name"
         )
@@ -114,7 +114,7 @@ private fun EditProfileContent(
             value = state.email,
             onValueChange = {},
             readOnly = true,
-            leadingIcon = Icons.Filled.Email,
+            leadingIcon = Icons.Outlined.Email,
             trailingContent = if (state.emailVerified) {
                 { StatusPill(stringResource(R.string.edit_profile_verified)) }
             } else {
@@ -138,9 +138,10 @@ private fun EditProfileContent(
 }
 
 @Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun EditProfilePreview() {
-    WhereverTheme(darkTheme = false) {
+internal fun EditProfilePreview() {
+    WhereverTheme {
         EditProfileContent(
             EditProfileUiState(loading = false, name = "Ana López", email = "ana@ejemplo.com", emailVerified = true),
             {},

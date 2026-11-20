@@ -7,9 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.SelectChip
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.StatusPill
 import com.wherever.mobile.core.ui.formatTime
 import com.wherever.mobile.feature.reservations.domain.ReservationStatus
@@ -44,7 +44,10 @@ internal fun StatusBadge(status: ReservationStatus, modifier: Modifier = Modifie
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun SlotGrid(slots: List<TimeSlot>, selected: String?, zone: ZoneId, onSelect: (TimeSlot) -> Unit) {
-    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(Spacing.S),
+        verticalArrangement = Arrangement.spacedBy(Spacing.S)
+    ) {
         slots.forEach { slot ->
             SelectChip(
                 text = formatTime(slot.time, zone),

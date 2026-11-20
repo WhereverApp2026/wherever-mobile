@@ -1,22 +1,22 @@
 package com.wherever.mobile.feature.auth.ui
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,7 +31,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -39,9 +38,11 @@ import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.LabeledCheckbox
 import com.wherever.mobile.core.designsystem.LabeledTextField
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.StepHeader
 import com.wherever.mobile.core.designsystem.TitleBlock
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
+import com.wherever.mobile.core.designsystem.WhereverTextButton
 import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.core.designsystem.rememberFormSubmit
 import com.wherever.mobile.core.ui.formatCountdown
@@ -106,7 +107,7 @@ private fun RegisterContent(
             value = state.name,
             onValueChange = onNameChange,
             placeholder = stringResource(R.string.register_name_placeholder),
-            leadingIcon = Icons.Filled.Person,
+            leadingIcon = Icons.Outlined.Person,
             error = state.nameError?.asString(),
             tag = "register_name"
         )
@@ -117,7 +118,7 @@ private fun RegisterContent(
                 onValueChange = {},
                 readOnly = true,
                 placeholder = stringResource(R.string.register_birth_date_placeholder),
-                leadingIcon = Icons.Filled.DateRange,
+                leadingIcon = Icons.Outlined.DateRange,
                 error = state.birthDateError?.asString(),
                 tag = "register_birth_date"
             )
@@ -128,7 +129,7 @@ private fun RegisterContent(
             value = state.email,
             onValueChange = onEmailChange,
             placeholder = stringResource(R.string.field_email_placeholder),
-            leadingIcon = Icons.Filled.Email,
+            leadingIcon = Icons.Outlined.Email,
             error = state.emailError?.asString(),
             supporting = when (state.emailCheck) {
                 EmailCheck.CHECKING -> stringResource(R.string.register_email_checking)
@@ -145,7 +146,7 @@ private fun RegisterContent(
             value = state.password,
             onValueChange = onPasswordChange,
             placeholder = stringResource(R.string.register_password_placeholder),
-            leadingIcon = Icons.Filled.Lock,
+            leadingIcon = Icons.Outlined.Lock,
             error = state.passwordError?.asString(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
             visualTransformation = PasswordVisualTransformation(),
@@ -156,7 +157,7 @@ private fun RegisterContent(
                 text = stringResource(R.string.register_terms),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(start = 4.dp)
+                modifier = Modifier.padding(start = Spacing.XS)
             )
         }
         state.error?.let { ErrorBanner(it.asString()) }
@@ -197,7 +198,7 @@ internal fun BirthDatePicker(
     DatePickerDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
-            TextButton(
+            WhereverTextButton(
                 enabled = pickerState.selectedDateMillis != null,
                 onClick = { pickerState.selectedDateMillis?.let { onPicked(it.toPickerDate()) } },
                 modifier = Modifier.testTag("birth_date_accept")
@@ -205,16 +206,17 @@ internal fun BirthDatePicker(
                 Text(stringResource(R.string.common_accept))
             }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } }
+        dismissButton = { WhereverTextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } }
     ) {
         DatePicker(state = pickerState, modifier = Modifier.testTag("birth_date_picker"))
     }
 }
 
 @Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun RegisterPreview() {
-    WhereverTheme(darkTheme = false) {
+internal fun RegisterPreview() {
+    WhereverTheme {
         RegisterContent(RegisterUiState(today = PREVIEW_TODAY), {}, {}, {}, {}, {}, {}, {}, {})
     }
 }

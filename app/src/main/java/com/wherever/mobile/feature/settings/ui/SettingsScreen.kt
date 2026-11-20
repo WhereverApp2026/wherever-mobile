@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,7 +21,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -35,9 +32,12 @@ import com.wherever.mobile.core.designsystem.NavRow
 import com.wherever.mobile.core.designsystem.PhaseCrossfade
 import com.wherever.mobile.core.designsystem.ScreenPhase
 import com.wherever.mobile.core.designsystem.SegmentedControl
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.ToggleRow
 import com.wherever.mobile.core.designsystem.TopTitleRow
+import com.wherever.mobile.core.designsystem.WhereverDialog
+import com.wherever.mobile.core.designsystem.WhereverTextButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.feature.profile.domain.QuietHours
 import com.wherever.mobile.feature.profile.domain.UserProfile
@@ -144,7 +144,7 @@ private fun SettingsContent(
                 enabled = !state.saving
             )
         }
-        Box(modifier = Modifier.fillMaxWidth().padding(top = 8.dp), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.fillMaxWidth().padding(top = Spacing.S), contentAlignment = Alignment.Center) {
             // 85_Ajustes: "Cerrar sesión" va en gris, no en azul de enlace.
             WhereverTextLink(
                 stringResource(R.string.settings_logout),
@@ -219,7 +219,7 @@ private fun QuietHoursRow(profile: UserProfile, enabled: Boolean, onSelect: (Qui
         tag = "settings_quiet_hours"
     )
     if (choosing) {
-        AlertDialog(
+        WhereverDialog(
             onDismissRequest = { choosing = false },
             title = { Text(stringResource(R.string.settings_quiet_hours)) },
             text = {
@@ -239,17 +239,17 @@ private fun QuietHoursRow(profile: UserProfile, enabled: Boolean, onSelect: (Qui
                                     choosing = false
                                     if (!selected) onSelect(preset)
                                 }
-                                .padding(vertical = 8.dp)
+                                .padding(vertical = Spacing.S)
                                 .testTag("quiet_${preset.from}_${preset.to}")
                         ) {
                             RadioButton(selected = selected, onClick = null)
-                            Text(quietLabel(preset), modifier = Modifier.padding(start = 12.dp))
+                            Text(quietLabel(preset), modifier = Modifier.padding(start = Spacing.M))
                         }
                     }
                 }
             },
             confirmButton = {
-                TextButton(onClick = { choosing = false }) { Text(stringResource(R.string.common_cancel)) }
+                WhereverTextButton(onClick = { choosing = false }) { Text(stringResource(R.string.common_cancel)) }
             }
         )
     }

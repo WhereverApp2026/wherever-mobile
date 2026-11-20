@@ -16,13 +16,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.ThumbUp
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,19 +34,21 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.ChipGroup
 import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.ErrorState
-import com.wherever.mobile.core.designsystem.LoadingState
+import com.wherever.mobile.core.designsystem.ListSkeleton
 import com.wherever.mobile.core.designsystem.ScreenPadding
 import com.wherever.mobile.core.designsystem.SelectChip
+import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.Sunset
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.TopTitleRow
+import com.wherever.mobile.core.designsystem.WhereverIconButton
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.core.notifications.PushDestination
@@ -87,7 +88,7 @@ fun NotificationsRoute(
         state.error?.let { ErrorBanner(it.asString(), Modifier.padding(ScreenPadding)) }
         val loadError = state.loadError
         when {
-            state.loading -> LoadingState()
+            state.loading -> ListSkeleton()
             loadError != null -> ErrorState(loadError.asString(), viewModel::retry)
             state.visible.isEmpty() && state.nextCursor == null -> Text(
                 stringResource(R.string.notifications_empty),
@@ -104,7 +105,7 @@ private fun NotificationList(state: NotificationsUiState, viewModel: Notificatio
     val zone = remember { ZoneId.systemDefault() }
     LazyColumn(
         contentPadding = PaddingValues(ScreenPadding),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(Spacing.M),
         modifier = Modifier.testTag("notifications_list")
     ) {
         viewModel.groups(state).forEach { (group, notifications) ->
@@ -159,22 +160,22 @@ private fun NotificationRow(
     SurfaceCard(modifier = Modifier.testTag("notification_${notification.id}")) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).padding(12.dp)
+            modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).padding(Spacing.M)
         ) {
             Box(contentAlignment = Alignment.TopEnd) {
                 Icon(
                     iconFor(notification.type),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(32.dp)
+                    modifier = Modifier.size(Sizes.IconXL)
                 )
                 if (!notification.read) {
                     Box(
-                        Modifier.size(10.dp).background(Sunset, CircleShape).testTag("notification_unread")
+                        Modifier.size(Sizes.Dot).background(Sunset, CircleShape).testTag("notification_unread")
                     )
                 }
             }
-            Column(modifier = Modifier.weight(1f).padding(horizontal = 12.dp)) {
+            Column(modifier = Modifier.weight(1f).padding(horizontal = Spacing.M)) {
                 Text(
                     stringResource(
                         if (accept.accepted) R.string.notification_now_friends else textFor(notification.type)
@@ -196,9 +197,9 @@ private fun NotificationRow(
                     enabled = !accept.busy
                 )
             }
-            IconButton(onClick = onDelete) {
+            WhereverIconButton(onClick = onDelete) {
                 Icon(
-                    Icons.Filled.Close,
+                    Icons.Outlined.Close,
                     contentDescription = stringResource(R.string.notifications_delete),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -220,10 +221,10 @@ private fun filterLabel(filter: NotificationFilter): Int = when (filter) {
 }
 
 private fun iconFor(type: NotificationType): ImageVector = when (type) {
-    NotificationType.FRIEND_REQUEST, NotificationType.FRIEND_ACCEPTED -> Icons.Filled.Person
-    NotificationType.PLAN_INVITATION -> Icons.Filled.DateRange
-    NotificationType.VOTE_OPENED, NotificationType.VOTE_CLOSED -> Icons.Filled.ThumbUp
-    NotificationType.OTHER -> Icons.Filled.Notifications
+    NotificationType.FRIEND_REQUEST, NotificationType.FRIEND_ACCEPTED -> Icons.Outlined.Person
+    NotificationType.PLAN_INVITATION -> Icons.Outlined.DateRange
+    NotificationType.VOTE_OPENED, NotificationType.VOTE_CLOSED -> Icons.Outlined.ThumbUp
+    NotificationType.OTHER -> Icons.Outlined.Notifications
 }
 
 private fun textFor(type: NotificationType): Int = when (type) {

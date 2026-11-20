@@ -12,11 +12,10 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -33,11 +31,13 @@ import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.ErrorState
 import com.wherever.mobile.core.designsystem.LabeledTextField
-import com.wherever.mobile.core.designsystem.LoadingState
+import com.wherever.mobile.core.designsystem.ListSkeleton
 import com.wherever.mobile.core.designsystem.ScreenPadding
 import com.wherever.mobile.core.designsystem.SegmentedControl
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.Sunset
 import com.wherever.mobile.core.designsystem.TopTitleRow
+import com.wherever.mobile.core.designsystem.WhereverIconButton
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.feature.friends.domain.Friendship
@@ -62,7 +62,7 @@ fun FriendsRoute(
             WhereverTextLink(stringResource(R.string.friends_add), onAdd)
         }
         Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(Spacing.M),
             modifier = Modifier.padding(horizontal = ScreenPadding)
         ) {
             SegmentedControl(
@@ -83,7 +83,7 @@ fun FriendsRoute(
                     label = stringResource(R.string.friends_filter),
                     value = state.query,
                     onValueChange = viewModel::onQuery,
-                    leadingIcon = Icons.Filled.Search,
+                    leadingIcon = Icons.Outlined.Search,
                     tag = "friends_filter"
                 )
             }
@@ -91,12 +91,12 @@ fun FriendsRoute(
         }
         val loadError = state.loadError
         when {
-            state.loading -> LoadingState()
+            state.loading -> ListSkeleton()
             loadError != null -> ErrorState(loadError.asString(), viewModel::load)
             state.visible.isEmpty() -> EmptyFriends(state.tab, onAdd)
             else -> LazyColumn(
                 contentPadding = PaddingValues(ScreenPadding),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
+                verticalArrangement = Arrangement.spacedBy(Spacing.M),
                 modifier = Modifier.testTag("friends_list")
             ) {
                 items(state.visible, key = { it.id }) { friendship ->
@@ -119,24 +119,24 @@ private fun FriendshipRow(
         when (tab) {
             FriendshipList.FRIENDS -> Unit
             FriendshipList.RECEIVED -> {
-                IconButton(
+                WhereverIconButton(
                     onClick = { viewModel.reject(friendship) },
                     enabled = !busy,
                     modifier = Modifier.testTag("friends_reject_${friendship.id}")
                 ) {
                     Icon(
-                        Icons.Filled.Close,
+                        Icons.Outlined.Close,
                         contentDescription = stringResource(R.string.friends_reject),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                IconButton(
+                WhereverIconButton(
                     onClick = { viewModel.accept(friendship) },
                     enabled = !busy,
                     modifier = Modifier.testTag("friends_accept_${friendship.id}")
                 ) {
                     Icon(
-                        Icons.Filled.Check,
+                        Icons.Outlined.Check,
                         contentDescription = stringResource(R.string.friends_accept),
                         tint = Sunset
                     )
@@ -152,7 +152,7 @@ private fun FriendshipRow(
 @Composable
 private fun EmptyFriends(tab: FriendshipList, onAdd: () -> Unit) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(Spacing.L),
         modifier = Modifier.padding(ScreenPadding).testTag("friends_empty")
     ) {
         Text(

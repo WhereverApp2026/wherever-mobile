@@ -25,3 +25,10 @@ style:
   ReturnCount:
     # Las cláusulas de guarda (`?: return`, `if (...) return`) no cuentan.
     excludeGuardClauses: true
+
+# Reglas propias (detekt-rules/, docs/diseno.md): nada de dp, sp ni colores hex fuera del sistema de diseño.
+wherever:
+  active: true
+  HardcodedDesignValue:
+    active: true
+    excludes: ['**/core/designsystem/**', '**/test/**', '**/androidTest/**']

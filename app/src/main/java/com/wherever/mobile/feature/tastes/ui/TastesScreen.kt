@@ -1,5 +1,6 @@
 package com.wherever.mobile.feature.tastes.ui
 
+import android.content.res.Configuration
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -24,6 +24,7 @@ import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.LabeledCheckbox
 import com.wherever.mobile.core.designsystem.LabeledTextField
 import com.wherever.mobile.core.designsystem.SelectChip
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.StepHeader
 import com.wherever.mobile.core.designsystem.TitleBlock
 import com.wherever.mobile.core.designsystem.TopTitleRow
@@ -194,7 +195,7 @@ private fun AllergiesConsent(state: TastesUiState, onChange: (Boolean) -> Unit) 
                 text = stringResource(R.string.tastes_allergies_consent),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(start = 4.dp)
+                modifier = Modifier.padding(start = Spacing.XS)
             )
         }
         FieldErrorText(
@@ -206,7 +207,7 @@ private fun AllergiesConsent(state: TastesUiState, onChange: (Boolean) -> Unit) 
 
 @Composable
 private fun Section(title: String, content: @Composable () -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
         Text(text = title, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onBackground)
         content()
     }
@@ -232,9 +233,10 @@ private fun OptionChips(
 }
 
 @Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun TastesPreview() {
-    WhereverTheme(darkTheme = false) {
+internal fun TastesPreview() {
+    WhereverTheme {
         TastesContent(
             TastesUiState(categories = setOf("tacos", "cafes")),
             TastesActions({}, {}, BudgetActions({}, {}, { _, _ -> }, {}), {}, {}, {}, {}, {}, {}, {}, {}, {})

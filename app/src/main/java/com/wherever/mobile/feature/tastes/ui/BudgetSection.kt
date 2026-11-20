@@ -21,10 +21,11 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.LabeledTextField
 import com.wherever.mobile.core.designsystem.RouteBlue
+import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.feature.tastes.domain.BudgetIssue
 
 /**
@@ -41,11 +42,11 @@ internal fun BudgetSection(
 ) {
     val rangeLabel = rangeLabel(form)
     val sliderDescription = stringResource(R.string.tastes_budget_slider_description)
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
         Text(
             text = rangeLabel,
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(horizontal = 4.dp).testTag("tastes_budget_range")
+            modifier = Modifier.padding(horizontal = Spacing.XS).testTag("tastes_budget_range")
         )
         RangeSlider(
             value = form.sliderStart..form.sliderEnd,
@@ -55,14 +56,14 @@ internal fun BudgetSection(
             colors = SliderDefaults.colors(thumbColor = RouteBlue, activeTrackColor = RouteBlue),
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 48.dp)
+                .heightIn(min = Sizes.TouchTarget)
                 .semantics {
                     contentDescription = sliderDescription
                     stateDescription = rangeLabel
                 }
                 .testTag("tastes_budget")
         )
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(Spacing.M)) {
             AmountField(
                 label = stringResource(R.string.tastes_budget_min),
                 accessibilityLabel = stringResource(R.string.tastes_budget_min_description),

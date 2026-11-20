@@ -22,16 +22,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.ErrorState
-import com.wherever.mobile.core.designsystem.LoadingState
+import com.wherever.mobile.core.designsystem.ListSkeleton
 import com.wherever.mobile.core.designsystem.ScreenPadding
 import com.wherever.mobile.core.designsystem.SegmentedControl
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.TopTitleRow
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
@@ -66,7 +66,7 @@ fun MyReservationsRoute(
         state.error?.let { ErrorBanner(it.asString(), Modifier.padding(ScreenPadding)) }
         val loadError = state.loadError
         when {
-            state.loading -> LoadingState()
+            state.loading -> ListSkeleton()
             loadError != null -> ErrorState(loadError.asString(), viewModel::load)
             state.items.isEmpty() -> Text(
                 stringResource(
@@ -77,7 +77,7 @@ fun MyReservationsRoute(
             )
             else -> LazyColumn(
                 contentPadding = PaddingValues(ScreenPadding),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
+                verticalArrangement = Arrangement.spacedBy(Spacing.M),
                 modifier = Modifier.testTag("my_reservations_list")
             ) {
                 items(state.items, key = { it.id }) { reservation ->
@@ -107,7 +107,7 @@ private fun ReservationRow(reservation: Reservation, placeName: String?, time: S
     SurfaceCard(modifier = Modifier.testTag("reservation_${reservation.id}")) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).padding(12.dp)
+            modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).padding(Spacing.M)
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(

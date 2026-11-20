@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,10 +23,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.wherever.mobile.R
+import com.wherever.mobile.core.designsystem.Radius
 import com.wherever.mobile.core.designsystem.RouteBlue
+import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.StatusPill
+import com.wherever.mobile.core.designsystem.WhereverProgressBar
 import com.wherever.mobile.feature.places.domain.AspectRatings
 import com.wherever.mobile.feature.places.domain.MenuSection
 import com.wherever.mobile.feature.places.domain.PlaceDetail
@@ -42,7 +44,7 @@ private const val MIN_BAR_FRACTION = 0.05f
 /** US-068: calificación por aspecto. */
 @Composable
 internal fun Aspects(aspects: AspectRatings) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
         AspectBar(R.string.aspect_taste, aspects.taste)
         AspectBar(R.string.aspect_service, aspects.service)
         AspectBar(R.string.aspect_ambience, aspects.ambience)
@@ -59,13 +61,13 @@ private fun AspectBar(label: Int, value: Double) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.semantics(mergeDescendants = true) { contentDescription = description }
     ) {
-        Text(name, modifier = Modifier.width(120.dp), style = MaterialTheme.typography.bodyMedium)
-        LinearProgressIndicator(
+        Text(name, modifier = Modifier.width(Sizes.LabelColumn), style = MaterialTheme.typography.bodyMedium)
+        WhereverProgressBar(
             progress = { (value.toFloat() / MAX_RATING).coerceIn(0f, 1f) },
-            color = RouteBlue,
-            modifier = Modifier.weight(1f).height(8.dp).clip(RoundedCornerShape(4.dp))
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.weight(1f)
         )
-        Spacer(Modifier.width(8.dp))
+        Spacer(Modifier.width(Spacing.S))
         Text(ratingLabel(value), style = MaterialTheme.typography.labelLarge)
     }
 }
@@ -81,11 +83,11 @@ internal fun TrafficBars(traffic: Traffic) {
     val max = (hours.maxOrNull() ?: 0).coerceAtLeast(1)
     val busiest = FIRST_TRAFFIC_HOUR + hours.indexOf(hours.maxOrNull() ?: 0)
     val description = stringResource(R.string.place_traffic_a11y, busiest)
-    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(3.dp),
+            horizontalArrangement = Arrangement.spacedBy(Spacing.XS),
             verticalAlignment = Alignment.Bottom,
-            modifier = Modifier.fillMaxWidth().height(72.dp).semantics { contentDescription = description }
+            modifier = Modifier.fillMaxWidth().height(Sizes.ChartHeight).semantics { contentDescription = description }
         ) {
             hours.forEachIndexed { index, value ->
                 val current = traffic.currentHour == FIRST_TRAFFIC_HOUR + index
@@ -93,7 +95,7 @@ internal fun TrafficBars(traffic: Traffic) {
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight(fraction = (value.toFloat() / max).coerceIn(MIN_BAR_FRACTION, 1f))
-                        .clip(RoundedCornerShape(topStart = 3.dp, topEnd = 3.dp))
+                        .clip(RoundedCornerShape(topStart = Radius.XS, topEnd = Radius.XS))
                         .background(if (current) RouteBlue else MaterialTheme.colorScheme.outline)
                 )
             }
@@ -109,9 +111,9 @@ internal fun TrafficBars(traffic: Traffic) {
 /** US-071: menú con precios. */
 @Composable
 internal fun Menu(sections: List<MenuSection>) {
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(Spacing.M)) {
         sections.forEach { section ->
-            Text(section.name, style = MaterialTheme.typography.labelLarge, color = RouteBlue)
+            Text(section.name, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
             section.items.forEach { item ->
                 Row {
                     Column(modifier = Modifier.weight(1f)) {
@@ -133,7 +135,7 @@ internal fun Menu(sections: List<MenuSection>) {
 
 @Composable
 internal fun Features(place: PlaceDetail) {
-    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(Spacing.S)) {
         items(place.accessibility + place.dietOptions + place.services) { key ->
             StatusPill(featureLabel(key))
         }

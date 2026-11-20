@@ -9,9 +9,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,10 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.wherever.mobile.R
-import com.wherever.mobile.core.designsystem.RouteBlue
+import com.wherever.mobile.core.designsystem.Elevations
 import com.wherever.mobile.core.designsystem.ScreenPadding
+import com.wherever.mobile.core.designsystem.Spacing
+import com.wherever.mobile.core.designsystem.WhereverShapes
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.core.notifications.InAppPush
 
@@ -40,23 +40,27 @@ fun InAppPushBanner(push: InAppPush?, onOpen: () -> Unit, onLater: () -> Unit, m
     ) {
         val shown = push ?: return@AnimatedVisibility
         Surface(
-            shape = RoundedCornerShape(20.dp),
+            shape = WhereverShapes.Card,
             color = MaterialTheme.colorScheme.surface,
-            shadowElevation = 8.dp,
+            shadowElevation = Elevations.Overlay,
             modifier = Modifier
                 .statusBarsPadding()
-                .padding(horizontal = ScreenPadding, vertical = 8.dp)
+                .padding(horizontal = ScreenPadding, vertical = Spacing.S)
                 .fillMaxWidth()
                 .testTag("in_app_push")
         ) {
-            Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Column(modifier = Modifier.padding(Spacing.L), verticalArrangement = Arrangement.spacedBy(Spacing.XS)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Filled.Notifications, contentDescription = null, tint = RouteBlue)
+                    Icon(
+                        Icons.Outlined.Notifications,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
                     Text(
                         shown.title ?: stringResource(R.string.notifications_default_title),
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(start = 8.dp)
+                        modifier = Modifier.padding(start = Spacing.S)
                     )
                 }
                 Text(

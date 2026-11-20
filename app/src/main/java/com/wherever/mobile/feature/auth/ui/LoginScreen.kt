@@ -1,13 +1,14 @@
 package com.wherever.mobile.feature.auth.ui
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -103,7 +104,7 @@ private fun LoginContent(
             value = state.email,
             onValueChange = onEmailChange,
             placeholder = stringResource(R.string.field_email_placeholder),
-            leadingIcon = Icons.Filled.Email,
+            leadingIcon = Icons.Outlined.Email,
             error = state.emailError?.asString(),
             onBlur = onEmailBlur,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
@@ -114,7 +115,7 @@ private fun LoginContent(
             value = state.password,
             onValueChange = onPasswordChange,
             placeholder = stringResource(R.string.login_password_placeholder),
-            leadingIcon = Icons.Filled.Lock,
+            leadingIcon = Icons.Outlined.Lock,
             error = state.passwordError?.asString(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = { if (state.canSubmit) submit() }),
@@ -129,9 +130,10 @@ private fun LoginContent(
 }
 
 @Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun LoginPreview() {
-    WhereverTheme(darkTheme = false) {
+internal fun LoginPreview() {
+    WhereverTheme {
         LoginContent(LoginUiState(email = "tu@ejemplo.com"), {}, {}, {}, {}, {}, {}, {})
     }
 }

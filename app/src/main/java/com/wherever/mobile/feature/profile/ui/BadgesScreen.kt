@@ -13,10 +13,9 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +26,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -35,8 +33,10 @@ import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.Gold
 import com.wherever.mobile.core.designsystem.LoadingState
 import com.wherever.mobile.core.designsystem.ScreenPadding
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.TopTitleRow
+import com.wherever.mobile.core.designsystem.WhereverProgressBar
 import com.wherever.mobile.feature.profile.domain.Badge
 import com.wherever.mobile.feature.profile.domain.LevelProgress
 
@@ -59,7 +59,7 @@ internal fun BadgesContent(state: BadgesUiState, onBack: () -> Unit) {
         }
         LazyColumn(
             contentPadding = PaddingValues(ScreenPadding),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(Spacing.M),
             modifier = Modifier.testTag("badges_list")
         ) {
             state.progress?.let { progress -> item { LevelCard(progress) } }
@@ -82,7 +82,7 @@ internal fun BadgesContent(state: BadgesUiState, onBack: () -> Unit) {
 @Composable
 private fun LevelCard(progress: LevelProgress) {
     SurfaceCard(modifier = Modifier.testTag("badges_level")) {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(modifier = Modifier.padding(Spacing.L), verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
             Text(
                 stringResource(R.string.badges_level_label),
                 style = MaterialTheme.typography.labelMedium,
@@ -93,7 +93,7 @@ private fun LevelCard(progress: LevelProgress) {
                 pluralStringResource(R.plurals.badges_points, progress.points, progress.points),
                 style = MaterialTheme.typography.bodyMedium
             )
-            LinearProgressIndicator(
+            WhereverProgressBar(
                 progress = { progress.fraction },
                 modifier = Modifier.fillMaxWidth().testTag("badges_progress")
             )
@@ -118,7 +118,11 @@ private fun LevelCard(progress: LevelProgress) {
 
 @Composable
 private fun SectionTitle(@StringRes title: Int) {
-    Text(stringResource(title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp))
+    Text(
+        stringResource(title),
+        style = MaterialTheme.typography.titleMedium,
+        modifier = Modifier.padding(top = Spacing.S)
+    )
 }
 
 @Composable
@@ -130,15 +134,15 @@ private fun EmptyText(@StringRes text: Int) {
 private fun BadgeRow(badge: Badge) {
     val text = badgeText(badge.id)
     SurfaceCard(modifier = Modifier.testTag("badge_${badge.id}")) {
-        Row(modifier = Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(modifier = Modifier.fillMaxWidth().padding(Spacing.M), verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                if (badge.earned) Icons.Filled.Star else Icons.Filled.Lock,
+                if (badge.earned) Icons.Filled.Star else Icons.Outlined.Lock,
                 contentDescription = stringResource(
                     if (badge.earned) R.string.badges_earned else R.string.badges_locked
                 ),
                 tint = if (badge.earned) Gold else MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Column(modifier = Modifier.weight(1f).padding(start = 12.dp)) {
+            Column(modifier = Modifier.weight(1f).padding(start = Spacing.M)) {
                 Text(stringResource(text.first), style = MaterialTheme.typography.titleSmall)
                 Text(
                     stringResource(text.second),

@@ -14,10 +14,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -38,7 +36,10 @@ import com.wherever.mobile.core.designsystem.LoadingState
 import com.wherever.mobile.core.designsystem.MainTab
 import com.wherever.mobile.core.designsystem.ScreenPadding
 import com.wherever.mobile.core.designsystem.SelectChip
+import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.WhereverBottomBar
+import com.wherever.mobile.core.designsystem.WhereverIconButton
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.feature.places.domain.SortOrder
@@ -52,8 +53,8 @@ fun ExploreRoute(onTab: (MainTab) -> Unit, onPlace: (String) -> Unit, viewModel:
     val state by viewModel.state.collectAsStateWithLifecycle()
     Scaffold(bottomBar = { WhereverBottomBar(MainTab.EXPLORE, onSelect = onTab) }) { padding ->
         LazyColumn(
-            contentPadding = PaddingValues(bottom = padding.calculateBottomPadding() + 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(bottom = padding.calculateBottomPadding() + Spacing.L),
+            verticalArrangement = Arrangement.spacedBy(Spacing.M),
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
@@ -67,9 +68,13 @@ fun ExploreRoute(onTab: (MainTab) -> Unit, onPlace: (String) -> Unit, viewModel:
                 if (state.recentlyViewed.isNotEmpty()) item { RecentlyViewed(state, onPlace) }
             }
             when {
-                state.loading -> item { LoadingState(Modifier.padding(32.dp)) }
+                state.loading -> item { LoadingState(Modifier.padding(Spacing.XXXL)) }
                 state.error != null && state.results.isEmpty() -> item {
-                    ErrorState(state.error?.asString().orEmpty(), onRetry = viewModel::retry, Modifier.padding(16.dp))
+                    ErrorState(
+                        state.error?.asString().orEmpty(),
+                        onRetry = viewModel::retry,
+                        Modifier.padding(Spacing.L)
+                    )
                 }
                 state.showEmpty -> item { EmptyResults(viewModel::clearFilters) }
                 else -> {
@@ -99,7 +104,7 @@ fun ExploreRoute(onTab: (MainTab) -> Unit, onPlace: (String) -> Unit, viewModel:
 
 @Composable
 private fun SearchHeader(query: String, onQueryChange: (String) -> Unit) {
-    Column(modifier = Modifier.padding(horizontal = ScreenPadding, vertical = 8.dp)) {
+    Column(modifier = Modifier.padding(horizontal = ScreenPadding, vertical = Spacing.S)) {
         Text(
             stringResource(R.string.explore_title),
             style = MaterialTheme.typography.headlineMedium,
@@ -110,11 +115,11 @@ private fun SearchHeader(query: String, onQueryChange: (String) -> Unit) {
             value = query,
             onValueChange = onQueryChange,
             placeholder = stringResource(R.string.explore_search_hint),
-            leadingIcon = Icons.Filled.Search,
+            leadingIcon = Icons.Outlined.Search,
             trailingContent = if (query.isNotEmpty()) {
                 {
-                    IconButton(onClick = { onQueryChange("") }) {
-                        Icon(Icons.Filled.Clear, contentDescription = stringResource(R.string.explore_search_clear))
+                    WhereverIconButton(onClick = { onQueryChange("") }) {
+                        Icon(Icons.Outlined.Clear, contentDescription = stringResource(R.string.explore_search_clear))
                     }
                 }
             } else {
@@ -130,7 +135,7 @@ private fun FilterChips(state: ExploreUiState, viewModel: ExploreViewModel) {
     val filters = state.filters
     LazyRow(
         contentPadding = PaddingValues(horizontal = ScreenPadding),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(Spacing.S)
     ) {
         item {
             SelectChip(
@@ -179,7 +184,10 @@ private fun FilterChips(state: ExploreUiState, viewModel: ExploreViewModel) {
 
 @Composable
 private fun RecentSearches(state: ExploreUiState, viewModel: ExploreViewModel) {
-    Column(modifier = Modifier.padding(horizontal = ScreenPadding), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(
+        modifier = Modifier.padding(horizontal = ScreenPadding),
+        verticalArrangement = Arrangement.spacedBy(Spacing.S)
+    ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 stringResource(R.string.explore_recent_searches),
@@ -188,7 +196,7 @@ private fun RecentSearches(state: ExploreUiState, viewModel: ExploreViewModel) {
             )
             WhereverTextLink(stringResource(R.string.explore_clear_recent), viewModel::clearRecentSearches)
         }
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(Spacing.S)) {
             items(state.recentSearches) { recent ->
                 SelectChip(recent.text, selected = false, onClick = { viewModel.onRecentSearch(recent.text) })
             }
@@ -198,7 +206,7 @@ private fun RecentSearches(state: ExploreUiState, viewModel: ExploreViewModel) {
 
 @Composable
 private fun RecentlyViewed(state: ExploreUiState, onPlace: (String) -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
         Text(
             stringResource(R.string.explore_recently_viewed),
             style = MaterialTheme.typography.titleMedium,
@@ -206,10 +214,12 @@ private fun RecentlyViewed(state: ExploreUiState, onPlace: (String) -> Unit) {
         )
         LazyRow(
             contentPadding = PaddingValues(horizontal = ScreenPadding),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(Spacing.M)
         ) {
             items(state.recentlyViewed, key = { "recent_${it.id}" }) { place ->
-                PlaceCardItem(place = place, onClick = { onPlace(place.id) }, modifier = Modifier.width(240.dp))
+                PlaceCardItem(place = place, onClick = {
+                    onPlace(place.id)
+                }, modifier = Modifier.width(Sizes.EventCardWidth))
             }
         }
     }
@@ -219,10 +229,10 @@ private fun RecentlyViewed(state: ExploreUiState, onPlace: (String) -> Unit) {
 private fun EmptyResults(onClear: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier.fillMaxWidth().padding(32.dp).testTag("explore_empty")
+        verticalArrangement = Arrangement.spacedBy(Spacing.M),
+        modifier = Modifier.fillMaxWidth().padding(Spacing.XXXL).testTag("explore_empty")
     ) {
-        Icon(Icons.Filled.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+        Icon(Icons.Outlined.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
         Text(stringResource(R.string.explore_empty_title), style = MaterialTheme.typography.titleMedium)
         Text(
             stringResource(R.string.explore_empty_body),

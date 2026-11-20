@@ -20,3 +20,8 @@ val Danger = Color(0xFFD64545)
 val DangerTint = Color(0xFFFBE6E6)
 val SegmentTrack = Color(0xFFE2E7F0)
 val InkDeep = Color(0xFF16305C)
+
+// Tema oscuro: primario legible sobre Ink, contenedor distinto de la superficie y riel del selector (nv-55).
+val RouteBlueLight = Color(0xFF9BB4FF)
+val InkRaised = Color(0xFF274A8C)
+val InkTrack = Color(0xFF0A1828)

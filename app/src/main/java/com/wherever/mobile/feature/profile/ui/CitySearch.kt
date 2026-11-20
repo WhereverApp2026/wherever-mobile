@@ -6,16 +6,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.wherever.mobile.R
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.designsystem.LabeledTextField
+import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.ui.UiText
 import com.wherever.mobile.core.ui.toUiText
@@ -80,22 +81,22 @@ fun CityField(
             value = state.query,
             onValueChange = onQueryChange,
             placeholder = stringResource(R.string.city_placeholder),
-            leadingIcon = Icons.Filled.LocationOn,
+            leadingIcon = Icons.Outlined.LocationOn,
             error = state.error?.asString(),
             supporting = if (state.noResults) stringResource(R.string.city_no_results) else null,
             tag = tag
         )
         if (state.suggestions.isNotEmpty()) {
-            SurfaceCard(modifier = Modifier.padding(top = 6.dp)) {
+            SurfaceCard(modifier = Modifier.padding(top = Spacing.S)) {
                 state.suggestions.forEach { city ->
                     Text(
                         text = stringResource(R.string.city_suggestion, city.name, city.state),
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .heightIn(min = 48.dp)
+                            .heightIn(min = Sizes.TouchTarget)
                             .clickable { onSelect(city) }
-                            .padding(horizontal = 16.dp, vertical = 12.dp)
+                            .padding(horizontal = Spacing.L, vertical = Spacing.M)
                     )
                 }
             }

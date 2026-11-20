@@ -225,6 +225,11 @@
 - Pausa (2026-11-19, tarde): `main` = `7791a86`, CI verde. Búsqueda (nv-19) quedó en la rama `wip/pausa` con pruebas unitarias en verde y sin lint/release ni prueba de Personas en el teléfono. Dónde seguir: `docs/pendientes.md`.
 - 2026-11-19 (noche): Búsqueda (nv-19) integrada en `main` desde `wip/pausa` con las 7 compuertas en verde (JDK 17, `--no-daemon --max-workers=1`). `docs/pendientes.md` reescrito como lista viva (% por área, prioridades, endpoints, bugs, ramas). A evitar: correr las 7 compuertas en una sola llamada de más de 10 min (se va a segundo plano); separar `assembleRelease`.
 
+- 2026-11-19 (noche, 2): limpieza de GitHub. `wip/pausa` ya estaba en `main` (368f097); borradas `wip/pausa`, `feat/plan-ia`, `feat/fotos-perfil`, `feat/inicio-recomendaciones`, `fix/auth-telefono` (local y remoto, `git log main..` vacío) y sus worktrees. #24/#25 ya fusionados (comentados). #12 core-ktx 1.19.1 cerrado: exige compileSdk 37 + AGP 9.1. Quedan ramas viejas ya integradas y los PR de Dependabot #5–#11: borrarlos/comentarlos lo debe autorizar Jorge (la sesión no tiene permiso).
+- nv-55 (continuación): paleta oscura corregida (`RouteBlueLight`, `InkRaised`, `InkTrack`): el indicador de la barra inferior y la píldora del selector eran del mismo color que `surface`. `WhereverTextLink` sin relleno lateral. Bienvenida en horizontal sin ilustración si no cabe. Perfil: `consumeWindowInsets` (la barra del sistema se sumaba dos veces).
+- A evitar: `colorScheme.primaryContainer`/`surfaceVariant` iguales a `surface` en oscuro; `RouteBlue` fijo en textos sobre superficies del tema. `FormScreen` dentro de un `Scaffold` con barra inferior necesita `consumeWindowInsets(padding)`.
+- A evitar: detener con TaskStop un script que lanza `./gradlew` deja el daemon vivo y bloquea el siguiente build; usar `./gradlew --stop`.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

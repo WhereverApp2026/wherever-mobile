@@ -1,8 +1,6 @@
 package com.wherever.mobile.core.designsystem
 
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -18,14 +16,16 @@ fun ConfirmDialog(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    AlertDialog(
+    WhereverDialog(
         onDismissRequest = onDismiss,
         title = { Text(title) },
         text = { Text(message) },
         confirmButton = {
-            TextButton(onClick = onConfirm, modifier = Modifier.testTag("confirm_dialog_accept")) { Text(confirmText) }
+            WhereverTextButton(onClick = onConfirm, modifier = Modifier.testTag("confirm_dialog_accept")) {
+                Text(confirmText)
+            }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } },
+        dismissButton = { WhereverTextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } },
         modifier = modifier
     )
 }

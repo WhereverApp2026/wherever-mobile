@@ -22,3 +22,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "wherever-mobile"
 include(":app")
+// Reglas propias de detekt (docs/diseno.md): las usa la tarea `detekt` de :app.
+include(":detekt-rules")

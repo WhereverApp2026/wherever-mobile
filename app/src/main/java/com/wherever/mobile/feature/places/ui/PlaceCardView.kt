@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -30,12 +30,14 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.Gold
 import com.wherever.mobile.core.designsystem.Mint
+import com.wherever.mobile.core.designsystem.Radius
 import com.wherever.mobile.core.designsystem.RouteBlueTint
+import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.feature.places.domain.PlaceCard
 import java.util.Locale
@@ -74,7 +76,7 @@ fun PlacePhoto(url: String?, height: Dp, modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .height(height)
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(Radius.L))
             .background(RouteBlueTint)
     ) {
         if (url != null) {
@@ -85,7 +87,7 @@ fun PlacePhoto(url: String?, height: Dp, modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxWidth().height(height)
             )
         } else {
-            Icon(Icons.Filled.Place, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+            Icon(Icons.Outlined.Place, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
         }
     }
 }
@@ -95,10 +97,10 @@ fun RatingRow(rating: Double, reviews: Int, modifier: Modifier = Modifier) {
     val description = stringResource(R.string.place_rating_a11y, ratingLabel(rating), reviews)
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(Spacing.XS),
         modifier = modifier.semantics(mergeDescendants = true) { contentDescription = description }
     ) {
-        Icon(Icons.Filled.Star, contentDescription = null, tint = Gold, modifier = Modifier.size(16.dp))
+        Icon(Icons.Filled.Star, contentDescription = null, tint = Gold, modifier = Modifier.size(Sizes.IconS))
         Text(ratingLabel(rating), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
         Text(
             stringResource(R.string.place_reviews_count, reviews),
@@ -116,7 +118,7 @@ fun PlaceMetaLine(category: String, priceLevel: Int, distanceMeters: Double?, op
         if (priceLevel > 0) add(priceSymbols(priceLevel))
         distanceMeters?.let { add(distanceLabel(it)) }
     }
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.S)) {
         Text(
             parts.joinToString(" · "),
             style = MaterialTheme.typography.bodySmall,
@@ -144,10 +146,10 @@ fun PlaceCardItem(
 ) {
     SurfaceCard(modifier = modifier.testTag("place_card_${place.id}")) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(6.dp),
-            modifier = Modifier.clickable(onClick = onClick).padding(12.dp)
+            verticalArrangement = Arrangement.spacedBy(Spacing.S),
+            modifier = Modifier.clickable(onClick = onClick).padding(Spacing.M)
         ) {
-            PlacePhoto(place.coverUrl, height = 132.dp)
+            PlacePhoto(place.coverUrl, height = Sizes.CardImage)
             Text(
                 place.name,
                 style = MaterialTheme.typography.titleMedium,
@@ -166,11 +168,19 @@ fun PlaceCardItem(
 fun PlaceCardSkeleton(modifier: Modifier = Modifier) {
     val loading = stringResource(R.string.common_loading)
     SurfaceCard(modifier = modifier.semantics { contentDescription = loading }.testTag("place_skeleton")) {
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(12.dp)) {
+        Column(verticalArrangement = Arrangement.spacedBy(Spacing.S), modifier = Modifier.padding(Spacing.M)) {
             val shade = MaterialTheme.colorScheme.surfaceVariant
-            Box(Modifier.fillMaxWidth().height(132.dp).clip(RoundedCornerShape(16.dp)).background(shade))
-            Box(Modifier.fillMaxWidth(fraction = 0.6f).height(18.dp).clip(RoundedCornerShape(6.dp)).background(shade))
-            Box(Modifier.fillMaxWidth(fraction = 0.4f).height(14.dp).clip(RoundedCornerShape(6.dp)).background(shade))
+            Box(Modifier.fillMaxWidth().height(Sizes.CardImage).clip(RoundedCornerShape(Radius.L)).background(shade))
+            Box(
+                Modifier.fillMaxWidth(
+                    fraction = 0.6f
+                ).height(Sizes.SkeletonLineL).clip(RoundedCornerShape(Radius.S)).background(shade)
+            )
+            Box(
+                Modifier.fillMaxWidth(
+                    fraction = 0.4f
+                ).height(Sizes.SkeletonLineS).clip(RoundedCornerShape(Radius.S)).background(shade)
+            )
         }
     }
 }

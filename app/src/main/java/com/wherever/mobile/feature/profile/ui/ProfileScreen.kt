@@ -1,18 +1,20 @@
 package com.wherever.mobile.feature.profile.ui
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +27,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -42,10 +43,13 @@ import com.wherever.mobile.core.designsystem.MainTab
 import com.wherever.mobile.core.designsystem.NavRow
 import com.wherever.mobile.core.designsystem.PhaseCrossfade
 import com.wherever.mobile.core.designsystem.ScreenPhase
+import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.StatusPill
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.WhereverBottomBar
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
+import com.wherever.mobile.core.designsystem.WhereverSnackbarHost
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.feature.profile.domain.NotificationSettings
@@ -80,11 +84,14 @@ fun ProfileRoute(
         }
     }
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbar) },
+        snackbarHost = { WhereverSnackbarHost(snackbar) },
         bottomBar = { WhereverBottomBar(MainTab.PROFILE, onSelect = onTab) }
     ) { padding ->
         val profile = state.profile
-        val modifier = Modifier.padding(bottom = padding.calculateBottomPadding())
+        // La barra inferior ya incluye la de navegación del sistema; sin consumirla, FormScreen la volvía a sumar
+        // y el menú se cortaba antes de la barra. Solo abajo: arriba FormScreen sigue apartando la barra de estado.
+        val bottom = PaddingValues(bottom = padding.calculateBottomPadding())
+        val modifier = Modifier.padding(bottom).consumeWindowInsets(bottom)
         val phase = when {
             profile != null -> ScreenPhase.CONTENT
             state.loading -> ScreenPhase.LOADING
@@ -129,15 +136,15 @@ private fun ProfileContent(
     onBadges: () -> Unit,
     onVerifyEmail: () -> Unit,
     modifier: Modifier = Modifier,
-    avatar: @Composable () -> Unit = { ProfileAvatar(profile.name, profile.photoUrl, 88.dp) }
+    avatar: @Composable () -> Unit = { ProfileAvatar(profile.name, profile.photoUrl, Sizes.AvatarL) }
 ) {
     FormScreen(modifier = modifier) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            CircleIconButton(Icons.Filled.Settings, stringResource(R.string.profile_settings), onSettings)
+            CircleIconButton(Icons.Outlined.Settings, stringResource(R.string.profile_settings), onSettings)
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             avatar()
-            Spacer(Modifier.width(16.dp))
+            Spacer(Modifier.width(Spacing.L))
             Column {
                 Text(
                     text = profile.name,
@@ -155,7 +162,7 @@ private fun ProfileContent(
         WhereverOutlinedButton(
             text = stringResource(R.string.profile_edit),
             onClick = onEdit,
-            icon = Icons.Filled.Edit,
+            icon = Icons.Outlined.Edit,
             modifier = Modifier.fillMaxWidth(),
             tag = "profile_edit"
         )
@@ -183,7 +190,7 @@ private fun ProfileContent(
 @Composable
 private fun Stats(profile: UserProfile) {
     SurfaceCard {
-        Row(modifier = Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
+        Row(modifier = Modifier.fillMaxWidth().padding(Spacing.M), horizontalArrangement = Arrangement.SpaceEvenly) {
             Stat(profile.points.toString(), stringResource(R.string.profile_points))
             Stat(profile.level, stringResource(R.string.profile_level))
             Stat(profile.weekStreak.toString(), stringResource(R.string.profile_streak))
@@ -212,9 +219,10 @@ private fun tasteLabel(key: String): String =
     tasteLabelRes(key)?.let { stringResource(it) } ?: key.replace('_', ' ').replaceFirstChar { it.uppercase() }
 
 @Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun ProfilePreview() {
-    WhereverTheme(darkTheme = false) {
+internal fun ProfilePreview() {
+    WhereverTheme {
         ProfileContent(
             UserProfile(
                 id = "1",

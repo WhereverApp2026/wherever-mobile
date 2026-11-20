@@ -22,11 +22,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -45,21 +45,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.wherever.mobile.R
+import com.wherever.mobile.core.designsystem.Radius
+import com.wherever.mobile.core.designsystem.Spacing
+import com.wherever.mobile.core.designsystem.Strokes
 
 @Composable
 fun SurfaceCard(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
     Surface(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(Radius.XL),
         color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        border = BorderStroke(Strokes.Hairline, MaterialTheme.colorScheme.outline),
         modifier = modifier.fillMaxWidth()
     ) {
-        Column(modifier = Modifier.padding(vertical = 4.dp), content = content)
+        Column(modifier = Modifier.padding(vertical = Spacing.XS), content = content)
     }
 }
 
@@ -74,15 +78,15 @@ fun InfoBanner(
     tag: String = ""
 ) {
     Surface(
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(Radius.L),
         color = container,
         contentColor = contentColor,
         modifier = modifier.fillMaxWidth().testTag(tag)
     ) {
-        Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(modifier = Modifier.padding(Spacing.L), verticalAlignment = Alignment.CenterVertically) {
             if (icon != null) {
-                Icon(icon, contentDescription = null, tint = RouteBlue, modifier = Modifier.size(22.dp))
-                Spacer(Modifier.width(10.dp))
+                Icon(icon, contentDescription = null, tint = RouteBlue, modifier = Modifier.size(Sizes.IconL))
+                Spacer(Modifier.width(Spacing.M))
             }
             Text(text = text, style = MaterialTheme.typography.bodyMedium)
         }
@@ -93,12 +97,12 @@ fun InfoBanner(
 @Composable
 fun ErrorBanner(text: String, modifier: Modifier = Modifier) {
     Surface(
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(Radius.L),
         color = MaterialTheme.colorScheme.errorContainer,
         contentColor = MaterialTheme.colorScheme.onErrorContainer,
         modifier = modifier.fillMaxWidth().testTag("common_error")
     ) {
-        Text(text = text, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(14.dp))
+        Text(text = text, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(Spacing.L))
     }
 }
 
@@ -115,9 +119,9 @@ fun NavRow(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = 52.dp)
+            .heightIn(min = Sizes.RowMinHeight)
             .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = Spacing.L)
             .testTag(tag)
     ) {
         Text(
@@ -132,11 +136,11 @@ fun NavRow(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier.padding(start = Spacing.S)
             )
         }
         Icon(
-            Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            Icons.AutoMirrored.Outlined.KeyboardArrowRight,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -155,7 +159,9 @@ fun ToggleRow(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.fillMaxWidth().heightIn(min = 52.dp).padding(horizontal = 16.dp, vertical = 6.dp)
+        modifier = modifier.fillMaxWidth().heightIn(
+            min = Sizes.RowMinHeight
+        ).padding(horizontal = Spacing.L, vertical = Spacing.S)
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(text = title, style = MaterialTheme.typography.bodyLarge)
@@ -208,14 +214,18 @@ fun StatusPill(
             text = text,
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+            modifier = Modifier.padding(horizontal = Spacing.M, vertical = Spacing.XS)
         )
     }
 }
 
 @Composable
 fun LoadingState(modifier: Modifier = Modifier) {
-    Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxSize().testTag("common_loading")) {
+    val loading = stringResource(R.string.common_loading)
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier.fillMaxSize().semantics { contentDescription = loading }.testTag("common_loading")
+    ) {
         CircularProgressIndicator(color = RouteBlue)
     }
 }
@@ -224,8 +234,8 @@ fun LoadingState(modifier: Modifier = Modifier) {
 fun ErrorState(message: String, onRetry: () -> Unit, modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
-        modifier = modifier.fillMaxSize().padding(24.dp).testTag("common_error_state")
+        verticalArrangement = Arrangement.spacedBy(Spacing.L, Alignment.CenterVertically),
+        modifier = modifier.fillMaxSize().padding(Spacing.XXL).testTag("common_error_state")
     ) {
         Text(text = message, style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
         WhereverOutlinedButton(text = stringResource(R.string.common_retry), onClick = onRetry)
@@ -238,16 +248,16 @@ enum class MainTab { HOME, EXPLORE, PLANS, PROFILE }
 @Composable
 fun WhereverBottomBar(selected: MainTab, onSelect: (MainTab) -> Unit, modifier: Modifier = Modifier) {
     NavigationBar(containerColor = MaterialTheme.colorScheme.surface, modifier = modifier.navigationBarsPadding()) {
-        BarItem(selected == MainTab.HOME, Icons.Filled.Home, stringResource(R.string.tab_home)) {
+        BarItem(selected == MainTab.HOME, Icons.Outlined.Home, stringResource(R.string.tab_home)) {
             onSelect(MainTab.HOME)
         }
-        BarItem(selected == MainTab.EXPLORE, Icons.Filled.Search, stringResource(R.string.tab_explore)) {
+        BarItem(selected == MainTab.EXPLORE, Icons.Outlined.Search, stringResource(R.string.tab_explore)) {
             onSelect(MainTab.EXPLORE)
         }
-        BarItem(selected == MainTab.PLANS, Icons.Filled.DateRange, stringResource(R.string.tab_plans)) {
+        BarItem(selected == MainTab.PLANS, Icons.Outlined.DateRange, stringResource(R.string.tab_plans)) {
             onSelect(MainTab.PLANS)
         }
-        BarItem(selected == MainTab.PROFILE, Icons.Filled.Person, stringResource(R.string.tab_profile)) {
+        BarItem(selected == MainTab.PROFILE, Icons.Outlined.Person, stringResource(R.string.tab_profile)) {
             onSelect(MainTab.PROFILE)
         }
     }

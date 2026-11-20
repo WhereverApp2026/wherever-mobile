@@ -16,7 +16,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,17 +24,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.ErrorBanner
-import com.wherever.mobile.core.designsystem.LoadingState
+import com.wherever.mobile.core.designsystem.ListSkeleton
 import com.wherever.mobile.core.designsystem.ScreenPadding
+import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.Sunset
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.TopTitleRow
+import com.wherever.mobile.core.designsystem.WhereverIconButton
 import com.wherever.mobile.feature.places.domain.FavoritePlace
 
 /** 35_Favoritos (US-029). Se recarga al volver de una ficha. */
@@ -50,7 +51,7 @@ fun FavoritesRoute(onBack: () -> Unit, onPlace: (String) -> Unit, viewModel: Fav
         TopTitleRow(stringResource(R.string.favorites_title), onBack, Modifier.padding(ScreenPadding))
         state.error?.let { ErrorBanner(it.asString(), Modifier.padding(horizontal = ScreenPadding)) }
         when {
-            state.loading -> LoadingState()
+            state.loading -> ListSkeleton()
             state.items.isEmpty() -> Text(
                 stringResource(R.string.favorites_empty),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -58,7 +59,7 @@ fun FavoritesRoute(onBack: () -> Unit, onPlace: (String) -> Unit, viewModel: Fav
             )
             else -> LazyColumn(
                 contentPadding = PaddingValues(ScreenPadding),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(Spacing.M)
             ) {
                 items(state.items, key = { it.id }) { favorite ->
                     FavoriteRow(favorite, onClick = {
@@ -75,10 +76,10 @@ private fun FavoriteRow(favorite: FavoritePlace, onClick: () -> Unit, onRemove: 
     SurfaceCard(modifier = Modifier.testTag("favorite_${favorite.id}")) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).padding(12.dp)
+            modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).padding(Spacing.M)
         ) {
-            PlacePhoto(favorite.photoUrl, height = 64.dp, modifier = Modifier.width(64.dp))
-            Column(modifier = Modifier.weight(1f).padding(horizontal = 12.dp)) {
+            PlacePhoto(favorite.photoUrl, height = Sizes.Thumbnail, modifier = Modifier.width(Sizes.Thumbnail))
+            Column(modifier = Modifier.weight(1f).padding(horizontal = Spacing.M)) {
                 Text(favorite.name, style = MaterialTheme.typography.titleSmall)
                 favorite.category?.let {
                     Text(
@@ -88,7 +89,7 @@ private fun FavoriteRow(favorite: FavoritePlace, onClick: () -> Unit, onRemove: 
                     )
                 }
             }
-            IconButton(onClick = onRemove) {
+            WhereverIconButton(onClick = onRemove) {
                 Icon(
                     Icons.Filled.Favorite,
                     contentDescription = stringResource(R.string.place_favorite_remove),
