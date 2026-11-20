@@ -19,19 +19,19 @@
 | Modo negocio | nv-34 a nv-38 | 26 | 0 | 0 % |
 | **Total** | | **162** | **57** | **35,2 %** |
 
-## ⏸ Pausa (2026-11-19, noche): dónde me quedé
+## Estado (2026-11-20)
 
-- **Meta en curso:** Área 1 (Cuenta y acceso) al 100 %, luego Área 2 (Descubrir). No empezar otras áreas.
-- **En `main`:** `8c306fc` 08_Permisos (nv-11) con sus compuertas locales en verde (worktree `wm-gates`).
-- **En `wip/pausa` (`8f0004c`, sin tocar `main`):** 89_SinConexion (nv-16) escrito pero **sin compilar ni probar**: `core/network/ConnectivityMonitor.kt` (+ `ACCESS_NETWORK_STATE`), `feature/status/` (`GET /configuracion`, `AppStatusViewModel`, `AppStatusScreens.kt`), capa en `MainActivity`, pruebas `AppStatusViewModelTest`, `VersionTest`, `StatusIntegrationTest`.
-- **Siguiente paso exacto:**
-  1. `git merge --ff-only origin/wip/pausa` sobre `main` (o `git cherry-pick 8f0004c`), compilar (`assembleDebug`) y correr `testDebugUnitTest --tests '*Status*' --tests '*Version*' --tests '*PlatformSecurityTest*'`.
-  2. Agregar `OfflinePreview` y `UpdateRequiredContent` a `ScreenshotTest` y grabar capturas.
-  3. Probar en el teléfono: modo avión → aparece Sin conexión → Reintentar → atrás; actualizar `docs/pendientes.md` (fila 17) y `specs/nv-16/task.md`.
-  4. Compuertas una por una (`scratchpad/gates.sh <sha>`), push a `main`, CI verde, borrar `wip/pausa`.
-  5. Seguir el inventario del Área 1: vistas previas y capturas de NuevaContrasena, Ajustes, Insignias, Privacidad y EliminarCuenta; luego la prueba de punta a punta en el teléfono (registro → Gustos → Permisos, login, recuperar, foto, cerrar sesión).
-- **Bloqueo del backend:** Insignias (`GET /usuarios/yo/insignias` no existe).
-- **Pendiente de otras áreas:** "Disponible sin internet" necesita que planes y reservas se guarden en Room.
+- **Área 1 (Cuenta y acceso): 16/17.** Solo falta `83_Insignias`, bloqueada por backend (`GET /usuarios/yo/insignias` no existe). Todo lo demás tiene captura y se probó en el teléfono (Xiaomi 2207117BPG, Android 12) contra staging.
+- **Área 2 (Descubrir): 14/29.** nv-19 Búsqueda y nv-22 Favoritos completas. Lo que falta está bloqueado:
+  - nv-17 Inicio (12 frames: feed de amigos, historias, publicaciones, reacciones, Me apunto, hoja Crear, plan de amigo): `/feed`, `/publicaciones` e `/historias` dan 404 en staging (2026-11-20).
+  - nv-21 `32_ExpMapa`: falta decidir el proveedor de mapa (D25). `34_Sello`: `GET /lugares` no filtra por Sello y la tarjeta no trae `sello_excelencia`. Staging sin negocios (no se ve una ficha real).
+- **Pruebas en teléfono que quedan** (juntas, para cuando haya con qué):
+  1. Diálogo de avisos de `08_Permisos` en Android 13+ (este teléfono es Android 12).
+  2. `NuevaContrasena` con un enlace real (staging no manda correos).
+  3. Foto en Editar perfil (cámara y galería) tras los últimos cambios.
+  4. Ficha de lugar, reservas y Explorar con negocios reales (cuando se importe la semilla).
+  5. APK de release en el teléfono (aviso de R8, nv-41).
+- **Cuentas QA en staging:** A (teléfono), B (`qa_b92693`, amiga de A), C (`qa_c91961`, solicitud pendiente de A). Credenciales solo en el scratchpad local, nunca en el repo.
 
 ## Área 1 — Cuenta y acceso: inventario (2026-11-20, revisado en el código y en el teléfono)
 

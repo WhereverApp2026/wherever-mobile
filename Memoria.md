@@ -234,6 +234,13 @@
 - A recordar: las compuertas se corren en un worktree aparte (`../wm-gates`) con `scratchpad/gates.sh <sha>` para seguir trabajando mientras tanto.
 - A evitar: rutas con `/` en argumentos de scripts Python desde Git Bash: usar `MSYS_NO_PATHCONV=1`.
 
+- Estado (2026-11-20): nv-16 Sin conexión, mantenimiento y versión mínima; previsualizaciones y capturas de NuevaContrasena, Ajustes, Privacidad y EliminarCuenta; Buscar Personas con Amigos/Solicitud enviada. Área 1 16/17 (Insignias bloqueada por backend), Descubrir 14/29 (resto bloqueado por backend o D25). 57/162 = 35,2 %.
+- Decisión (2026-11-20): Reintentar de Sin conexión siempre intenta la llamada; el monitor de red (`core/common/ConnectivityMonitor`) solo informa a la UI. Por qué: la regla de nv-40 (`ConnectionSecurityTest`) prohíbe frenar peticiones con un chequeo previo de red, que en datos móviles daba falsos "sin conexión".
+- Decisión (2026-11-20): `GET /personas/buscar` no trae la relación; la búsqueda la cruza con `amistades?estado=amigos|enviadas`. En Personas no se ofrece la IA.
+- A evitar: `lintDebug` no corre en el ciclo rápido (ktlint/detekt/tests); fallos de lint (`InlinedApi`, `UseKtx`) y de Konsist aparecieron solo en las compuertas completas. Correr `lintDebug` y `testDebugUnitTest` completo antes de dar algo por listo.
+- A evitar: `adb` no está en el PATH de Git Bash (`$LOCALAPPDATA/Android/Sdk/platform-tools/adb.exe`); un `| tail` escondió "command not found" y se reportó "sin teléfono" por error.
+- A evitar: el interruptor apagado de Material usa `outline`/`surfaceContainerHighest` por defecto; con `OutlineSoft` no llegaba a 3:1. `ToggleRow` fija los colores de apagado.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).
