@@ -230,6 +230,10 @@
 - A evitar: `colorScheme.primaryContainer`/`surfaceVariant` iguales a `surface` en oscuro; `RouteBlue` fijo en textos sobre superficies del tema. `FormScreen` dentro de un `Scaffold` con barra inferior necesita `consumeWindowInsets(padding)`.
 - A evitar: detener con TaskStop un script que lanza `./gradlew` deja el daemon vivo y bloquea el siguiente build; usar `./gradlew --stop`.
 
+- Pausa (2026-11-19, noche): Área 1 en curso. `main` = `8c306fc` (08_Permisos, nv-11). `wip/pausa` = `8f0004c` con 89_SinConexion (nv-16) sin compilar. Siguiente paso exacto en `docs/pendientes.md` ("⏸ Pausa"). Decisiones del área en `docs/revision-jorge.md`.
+- A recordar: las compuertas se corren en un worktree aparte (`../wm-gates`) con `scratchpad/gates.sh <sha>` para seguir trabajando mientras tanto.
+- A evitar: rutas con `/` en argumentos de scripts Python desde Git Bash: usar `MSYS_NO_PATHCONV=1`.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

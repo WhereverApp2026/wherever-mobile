@@ -19,6 +19,20 @@
 | Modo negocio | nv-34 a nv-38 | 26 | 0 | 0 % |
 | **Total** | | **162** | **54** | **33,3 %** |
 
+## ⏸ Pausa (2026-11-19, noche): dónde me quedé
+
+- **Meta en curso:** Área 1 (Cuenta y acceso) al 100 %, luego Área 2 (Descubrir). No empezar otras áreas.
+- **En `main`:** `8c306fc` 08_Permisos (nv-11) con sus compuertas locales en verde (worktree `wm-gates`).
+- **En `wip/pausa` (`8f0004c`, sin tocar `main`):** 89_SinConexion (nv-16) escrito pero **sin compilar ni probar**: `core/network/ConnectivityMonitor.kt` (+ `ACCESS_NETWORK_STATE`), `feature/status/` (`GET /configuracion`, `AppStatusViewModel`, `AppStatusScreens.kt`), capa en `MainActivity`, pruebas `AppStatusViewModelTest`, `VersionTest`, `StatusIntegrationTest`.
+- **Siguiente paso exacto:**
+  1. `git merge --ff-only origin/wip/pausa` sobre `main` (o `git cherry-pick 8f0004c`), compilar (`assembleDebug`) y correr `testDebugUnitTest --tests '*Status*' --tests '*Version*' --tests '*PlatformSecurityTest*'`.
+  2. Agregar `OfflinePreview` y `UpdateRequiredContent` a `ScreenshotTest` y grabar capturas.
+  3. Probar en el teléfono: modo avión → aparece Sin conexión → Reintentar → atrás; actualizar `docs/pendientes.md` (fila 17) y `specs/nv-16/task.md`.
+  4. Compuertas una por una (`scratchpad/gates.sh <sha>`), push a `main`, CI verde, borrar `wip/pausa`.
+  5. Seguir el inventario del Área 1: vistas previas y capturas de NuevaContrasena, Ajustes, Insignias, Privacidad y EliminarCuenta; luego la prueba de punta a punta en el teléfono (registro → Gustos → Permisos, login, recuperar, foto, cerrar sesión).
+- **Bloqueo del backend:** Insignias (`GET /usuarios/yo/insignias` no existe).
+- **Pendiente de otras áreas:** "Disponible sin internet" necesita que planes y reservas se guarden en Room.
+
 ## Área 1 — Cuenta y acceso: inventario (2026-11-19, revisado en el código)
 
 | # | Frame | Pantalla / archivo | Estado | Falta para "terminada" |
@@ -39,7 +53,7 @@
 | 14 | `84_DatosPers` | unido a `EditProfileScreen.kt` (D09) | funciona | — |
 | 15 | `28_PrivSocial` | `PrivacyScreen.kt` | a medias | vista previa y captura |
 | 16 | `EliminarCuenta` | `DeleteAccountScreen.kt` | a medias | vista previa y captura |
-| 17 | `89_SinConexion` | — | **falta** | pantalla completa con Reintentar (`GET /configuracion`) |
+| 17 | `89_SinConexion` | `feature/status/` en `wip/pausa` | a medias | compilar, pruebas, captura y prueba en teléfono |
 
 Bugs conocidos del área: Bienvenida en horizontal (✅ nv-55); enlaces corridos (✅ nv-55); tema oscuro sin selección visible (✅ nv-55); Perfil cortado (✅ nv-55).
 
