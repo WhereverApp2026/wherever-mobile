@@ -8,9 +8,9 @@
 
 | | Pantallas | % de 162 |
 |---|---|---|
-| Funcionan con la API real | 54 | **33,3 %** |
+| Funcionan con la API real | 55 | **34,0 %** |
 | Con datos locales (falta endpoint) | 1 | 0,6 % |
-| Total con UI terminada | 55 | 34,0 % |
+| Total con UI terminada | 56 | 34,6 % |
 
 | Spec | Tema | Frames | Funcionan | Datos locales | Nota |
 |---|---|---|---|---|---|
@@ -23,7 +23,7 @@
 | nv-13 | Ajustes y cerrar sesión | 1 | 1 | 0 |  |
 | nv-14 | Perfil, edición e insignias | 4 | 3 | 1 | Insignias con catálogo local (sin endpoint) |
 | nv-15 | Privacidad, mis datos, eliminar | 2 | 2 | 0 |  |
-| nv-16 | Sin conexión | 1 | 0 | 0 |  |
+| nv-16 | Sin conexión | 1 | 1 | 0 | más mantenimiento y versión mínima; probado en teléfono 2026-11-20 |
 | nv-17 | Inicio y feed | 15 | 3 | 0 | feed social pendiente |
 | nv-18 | Notificaciones | 4 | 4 | 0 | aviso en la app, bloqueo y Aceptar; pushes de reserva/reseña pendientes de backend |
 | nv-19 | Búsqueda | 4 | 3 | 0 | Buscar unificado en `main`; falta "solicitud enviada" en el teléfono |
@@ -56,6 +56,7 @@
 | 2026-11-19 | después de `c528045` | Recuperar contraseña: Nueva contraseña y enlaces del correo | 53 (+1 locales) | 32,7 % |
 | 2026-11-19 | después de `7f8866f` | Notificaciones: aviso en la app, bloqueo y Aceptar | 54 (+1 locales) | 33,3 % |
 | 2026-11-19 | después de `76718f1` | Búsqueda unificada integrada (las 3 ya contadas pasan a tener su pantalla propia) | 54 (+1 locales) | 33,3 % |
+| 2026-11-20 | nv-16 integrado | 89_SinConexion, mantenimiento y versión mínima | 55 (+1 locales) | 34,0 % |
 
 ---
 

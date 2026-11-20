@@ -6,18 +6,18 @@
 
 ## % real
 
-**54 de 162 = 33,3 %** con la API real, más 1 con datos locales (Insignias, sin endpoint) que no suma.
+**55 de 162 = 34,0 %** con la API real, más 1 con datos locales (Insignias, sin endpoint) que no suma.
 
 | Área | Specs | Frames | Funcionan | % |
 |---|---|---|---|---|
-| Cuenta y acceso | nv-06 a nv-16 | 17 | 14 (+1 local) | 82 % |
+| Cuenta y acceso | nv-06 a nv-16 | 17 | 15 (+1 local) | 88 % |
 | Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 13 | 45 % |
 | Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 14 | 45 % |
 | Planes: IA, detalle, Vaca, Mis planes, día del plan | nv-23, nv-24, nv-26, nv-28, nv-30 | 22 | 9 | 41 % |
 | Reserva, pago y cupones | nv-27, nv-29 | 15 | 4 | 27 % |
 | Después del plan: Recuerdos, Reseñas, Ayuda | nv-31 a nv-33 | 22 | 0 | 0 % |
 | Modo negocio | nv-34 a nv-38 | 26 | 0 | 0 % |
-| **Total** | | **162** | **54** | **33,3 %** |
+| **Total** | | **162** | **55** | **34,0 %** |
 
 ## ⏸ Pausa (2026-11-19, noche): dónde me quedé
 
@@ -37,7 +37,7 @@
 
 | # | Frame | Pantalla / archivo | Estado | Falta para "terminada" |
 |---|---|---|---|---|
-| 1 | `01_Bienvenida` | `WelcomeScreen.kt` | a medias | Splash sin versión mínima ni mantenimiento (`GET /configuracion`, 426) |
+| 1 | `01_Bienvenida` | `WelcomeScreen.kt` | funciona | — (versión mínima y mantenimiento por nv-16, `GET /configuracion`) |
 | 2 | `03_Login` | `LoginScreen.kt` | funciona | prueba en teléfono (doble toque, giro, sin red) |
 | 3 | `03_Recuperar` | `RecoverScreen.kt` | funciona | prueba en teléfono |
 | 4 | `04_RevisaCorreo` | `CheckEmailScreen.kt` | funciona | prueba en teléfono |
@@ -53,7 +53,7 @@
 | 14 | `84_DatosPers` | unido a `EditProfileScreen.kt` (D09) | funciona | — |
 | 15 | `28_PrivSocial` | `PrivacyScreen.kt` | a medias | vista previa y captura |
 | 16 | `EliminarCuenta` | `DeleteAccountScreen.kt` | a medias | vista previa y captura |
-| 17 | `89_SinConexion` | `feature/status/` en `wip/pausa` | a medias | compilar, pruebas, captura y prueba en teléfono |
+| 17 | `89_SinConexion` | `feature/status/` (capa en `MainActivity`) | hecha (2026-11-20) | — (probada en teléfono; "Disponible sin internet" espera Room de planes/reservas) |
 
 Bugs conocidos del área: Bienvenida en horizontal (✅ nv-55); enlaces corridos (✅ nv-55); tema oscuro sin selección visible (✅ nv-55); Perfil cortado (✅ nv-55).
 
