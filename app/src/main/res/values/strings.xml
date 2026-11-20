@@ -728,4 +728,14 @@
     <string name="my_reservations_past">Pasadas</string>
     <string name="my_reservations_empty">No tienes reservas próximas. Reserva desde la ficha de un lugar.</string>
     <string name="my_reservations_empty_past">Aún no tienes reservas pasadas.</string>
+    <!-- 89_SinConexion y estado de la app (nv-16) -->
+    <string name="offline_title">Sin conexión</string>
+    <string name="offline_body">No podemos armar planes ni reservar sin internet. Lo que ya guardaste sigue aquí.</string>
+    <string name="offline_still">Sigues sin conexión. Revisa el wifi o los datos y vuelve a intentar.</string>
+    <string name="offline_server_down">Tienes internet, pero el servicio no responde. Intenta en unos minutos.</string>
+    <string name="maintenance_title">Estamos en mantenimiento</string>
+    <string name="maintenance_body">Estamos mejorando Wherever. Vuelve en unos minutos; lo que ya guardaste sigue aquí.</string>
+    <string name="update_title">Actualiza Wherever</string>
+    <string name="update_body">Esta versión ya no funciona con el servicio. Descarga la más reciente para seguir.</string>
+    <string name="update_action">Actualizar</string>
 </resources>

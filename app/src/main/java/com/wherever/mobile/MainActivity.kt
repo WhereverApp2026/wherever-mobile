@@ -15,6 +15,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.core.notifications.PushDestination
+import com.wherever.mobile.feature.status.ui.AppStatusOverlay
+import com.wherever.mobile.feature.status.ui.AppStatusViewModel
 import com.wherever.mobile.navigation.InAppPushBanner
 import com.wherever.mobile.navigation.MainViewModel
 import com.wherever.mobile.navigation.WhereverNavHost
@@ -23,6 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
+    private val status: AppStatusViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splash = installSplashScreen()
@@ -44,9 +47,12 @@ class MainActivity : ComponentActivity() {
             }
             WhereverTheme(darkTheme = dark) {
                 val banner by viewModel.banner.collectAsStateWithLifecycle()
+                val appStatus by status.state.collectAsStateWithLifecycle()
                 Box(Modifier.fillMaxSize()) {
                     start?.let { WhereverNavHost(it, viewModel.events, viewModel.pushes, viewModel.links) }
                     InAppPushBanner(banner, viewModel::onBannerOpen, viewModel::onBannerLater)
+                    // 89_SinConexion, mantenimiento y versión mínima (specs/nv-16) quedan sobre todo lo demás.
+                    AppStatusOverlay(appStatus, status::retry, status::dismiss)
                 }
             }
         }

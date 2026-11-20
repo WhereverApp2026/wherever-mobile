@@ -19,3 +19,8 @@ annotation class ApplicationScope
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class UploadClient
+
+/** `versionName` de la app, para comparar con `version_minima_app` (specs/nv-16). */
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class AppVersion

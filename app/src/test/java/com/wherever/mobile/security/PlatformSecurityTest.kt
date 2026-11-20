@@ -81,9 +81,11 @@ class PlatformSecurityTest {
         val nodes = manifest.getElementsByTagName("uses-permission")
         val permissions = (0 until nodes.length).map { (nodes.item(it) as Element).android("name") }
         // POST_NOTIFICATIONS: push de specs/nv-46, pedido en contexto; nv-47: ubicación solo aproximada (US-004).
+        // ACCESS_NETWORK_STATE (normal, sin diálogo): detectar Sin conexión con ConnectivityManager (nv-16).
         assertEquals(
             listOf(
                 "android.permission.INTERNET",
+                "android.permission.ACCESS_NETWORK_STATE",
                 "android.permission.POST_NOTIFICATIONS",
                 "android.permission.ACCESS_COARSE_LOCATION"
             ),
