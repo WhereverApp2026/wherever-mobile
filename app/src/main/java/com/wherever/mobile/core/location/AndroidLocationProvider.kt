@@ -76,8 +76,15 @@ class SharedLocationPermissionPreferences @Inject constructor(@ApplicationContex
         prefs.edit { putBoolean(KEY_DISMISSED, true) }
     }
 
+    override val notificationsDecided: Boolean get() = prefs.getBoolean(KEY_NOTIFICATIONS, false)
+
+    override fun recordNotificationsDecided() {
+        prefs.edit { putBoolean(KEY_NOTIFICATIONS, true) }
+    }
+
     private companion object {
         const val KEY_DENIED = "ubicacion_negada"
         const val KEY_DISMISSED = "ubicacion_ahora_no"
+        const val KEY_NOTIFICATIONS = "avisos_decididos"
     }
 }

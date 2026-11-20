@@ -80,6 +80,7 @@ import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverSnackbarHost
 import com.wherever.mobile.core.designsystem.WhereverTextButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
+import com.wherever.mobile.core.notifications.RequestNotificationPermission
 import com.wherever.mobile.core.ui.formatDateTime
 import com.wherever.mobile.feature.home.domain.Company
 import com.wherever.mobile.feature.home.domain.Event
@@ -115,6 +116,7 @@ fun HomeRouteScreen(
     val undoMessage = stringResource(R.string.home_not_interested_done)
     val undoLabel = stringResource(R.string.home_undo)
     LaunchedEffect(viewModel) { viewModel.openPlan.collect(navigation.onPlan) }
+    if (state.askNotifications) RequestNotificationPermission()
     LifecycleResumeEffect(viewModel) {
         viewModel.onResume()
         badge.refresh()

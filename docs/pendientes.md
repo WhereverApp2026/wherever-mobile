@@ -19,6 +19,30 @@
 | Modo negocio | nv-34 a nv-38 | 26 | 0 | 0 % |
 | **Total** | | **162** | **54** | **33,3 %** |
 
+## Área 1 — Cuenta y acceso: inventario (2026-11-19, revisado en el código)
+
+| # | Frame | Pantalla / archivo | Estado | Falta para "terminada" |
+|---|---|---|---|---|
+| 1 | `01_Bienvenida` | `WelcomeScreen.kt` | a medias | Splash sin versión mínima ni mantenimiento (`GET /configuracion`, 426) |
+| 2 | `03_Login` | `LoginScreen.kt` | funciona | prueba en teléfono (doble toque, giro, sin red) |
+| 3 | `03_Recuperar` | `RecoverScreen.kt` | funciona | prueba en teléfono |
+| 4 | `04_RevisaCorreo` | `CheckEmailScreen.kt` | funciona | prueba en teléfono |
+| 5 | `NuevaContrasena` | `NewPasswordScreen.kt` | a medias | vista previa y captura |
+| 6 | `05_Registro` | `RegisterScreen.kt` | funciona | prueba en teléfono |
+| 7 | `06_Gustos` | `TastesScreen.kt` | funciona | prueba en teléfono |
+| 8 | `08_Permisos` | `PermissionsScreen.kt` | hecha (2026-11-19) | prueba en teléfono |
+| 9 | `06_PermisoSys` | diálogo del sistema | hecha | se dispara desde `08_Permisos` y desde Inicio |
+| 10 | `85_Ajustes` | `SettingsScreen.kt` | a medias | vista previa y captura |
+| 11 | `81_Perfil` | `ProfileScreen.kt` | funciona | — (arreglado el corte sobre la barra, nv-55) |
+| 12 | `82_EditarPerfil` | `EditProfileScreen.kt` | funciona | prueba en teléfono de la foto |
+| 13 | `83_Insignias` | `BadgesScreen.kt` | **bloqueo backend** | `GET /usuarios/yo/insignias` no existe (404 en staging, no está en el backend); vista previa y captura |
+| 14 | `84_DatosPers` | unido a `EditProfileScreen.kt` (D09) | funciona | — |
+| 15 | `28_PrivSocial` | `PrivacyScreen.kt` | a medias | vista previa y captura |
+| 16 | `EliminarCuenta` | `DeleteAccountScreen.kt` | a medias | vista previa y captura |
+| 17 | `89_SinConexion` | — | **falta** | pantalla completa con Reintentar (`GET /configuracion`) |
+
+Bugs conocidos del área: Bienvenida en horizontal (✅ nv-55); enlaces corridos (✅ nv-55); tema oscuro sin selección visible (✅ nv-55); Perfil cortado (✅ nv-55).
+
 ## Lo que falta, en orden de prioridad
 
 ### 1. Subir todo a GitHub

@@ -20,6 +20,11 @@ interface LocationPermissionPreferences {
     fun recordDenied()
 
     fun dismiss()
+
+    /** Ya se decidió sobre los avisos en `08_Permisos` (Ahora no o rechazo): Inicio no vuelve a pedirlos. */
+    val notificationsDecided: Boolean
+
+    fun recordNotificationsDecided()
 }
 
 /** Después de 2 rechazos el sistema ya no muestra el diálogo: solo queda mandar a Ajustes (US-004). */

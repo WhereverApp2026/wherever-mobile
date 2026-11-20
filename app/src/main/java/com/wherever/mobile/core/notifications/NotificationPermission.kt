@@ -1,4 +1,4 @@
-package com.wherever.mobile.navigation
+package com.wherever.mobile.core.notifications
 
 import android.Manifest
 import android.content.pm.PackageManager

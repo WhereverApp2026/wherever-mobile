@@ -22,3 +22,9 @@
 
 ## T3 — Aprobación
 - [x] Revisor: Jorge — fecha: 2026-11-06
+## Estado real (2026-11-19)
+- [x] `08_Permisos` (`feature/auth/ui/PermissionsScreen.kt`, `PermissionsRoute`): paso 3 de 3 tras Gustos; ubicación y avisos con `RequestMultiplePermissions`; decisión de ubicación a `PATCH /usuarios/yo/privacidad` con Reintentar / Continuar sin guardar.
+- [x] `06_PermisoSys`: el sistema lo muestra desde `08_Permisos` y desde Inicio.
+- [x] Unit: `test/.../feature/auth/ui/PermissionsViewModelTest.kt` (permitir, rechazar, Ahora no, sin red y reintentar, doble toque) y `HomeViewModelTest` (avisos ya decididos).
+- [x] Captura: `08_permisos_{claro,oscuro,chica_letra_grande}.png`.
+- Cámara no se pide: no hay permiso `CAMERA` (matriz de permisos).

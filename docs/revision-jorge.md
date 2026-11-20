@@ -1,3 +1,17 @@
+# Revisión para Jorge — 2026-11-19 (madrugada): Área 1 Cuenta y acceso al 100 %
+
+> Pedido: dejar al 100 % y sin bugs Cuenta y acceso, luego Descubrir. Lo ambiguo se decide y se anota aquí.
+
+## Decisiones tomadas sin preguntarte
+- **Alta de 3 pasos, no 4:** el paso 3 de la maqueta (`07_EncuentraAmigos`) es del área Social (D12). Registro "Paso 1 de 3", Gustos "Paso 2 de 3", Permisos "Paso 3 de 3".
+- **08_Permisos pide ubicación y avisos juntos** (`RequestMultiplePermissions`). Cámara solo se muestra: la app no declara `CAMERA` (la foto usa la cámara del sistema y el Photo Picker, `docs/permissions-matrix.md`); se pedirá cuando existan las postales.
+- **La decisión de ubicación se guarda en `PATCH /usuarios/yo/privacidad`.** Si falla (sin red), la pantalla ofrece Reintentar o "Continuar sin guardar": la privacidad se cambia luego en Ajustes y no conviene trabar el alta.
+- **"Ahora no" y rechazos:** Inicio ya no vuelve a pedir avisos en cuanto llegas si los rechazaste o dijiste "Ahora no" en Permisos. La tarjeta de ubicación de Inicio respeta el mismo "Ahora no".
+- **Insignias sigue con catálogo local:** `GET /usuarios/yo/insignias` no existe (404 en staging; tampoco está en `wherever-backend`). Nivel, puntos y progreso sí vienen de `/usuarios/yo`. Es bloqueo del backend: la pantalla no cuenta al 100 %.
+- **Referencia de la API (artifact que mandaste):** se usa `GET /api/v1/configuracion` (responde siempre) para el Reintentar de Sin conexión y para la versión mínima (426) y el mantenimiento en el arranque.
+
+---
+
 # Revisión para Jorge — 2026-11-19 (noche): todo a GitHub y diseño normativo
 
 > Pedido: subir todo, lista de pendientes y diseño igual a la maqueta. Sin preguntas; lo ambiguo queda aquí.

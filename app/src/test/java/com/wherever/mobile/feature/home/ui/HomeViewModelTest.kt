@@ -66,6 +66,14 @@ class HomeViewModelTest {
     }
 
     @Test
+    fun `pide avisos solo si no se decidieron en Permisos`() = runTest(mainDispatcher.dispatcher) {
+        assertTrue(viewModel().state.value.askNotifications)
+
+        prefs.notificationsDecided = true
+        assertFalse(viewModel().state.value.askNotifications)
+    }
+
+    @Test
     fun `con permiso manda lat y lng y trae eventos`() = runTest(mainDispatcher.dispatcher) {
         location.granted = true
         val vm = viewModel()

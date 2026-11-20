@@ -67,7 +67,7 @@
     <string name="login_error_locked">Demasiados intentos fallidos. Tu acceso quedó bloqueado por 15 minutos.</string>
 
     <!-- 05_Registro -->
-    <string name="register_step">Paso 1 de 2</string>
+    <string name="register_step">Paso 1 de 3</string>
     <string name="register_title">Crea tu cuenta</string>
     <string name="register_subtitle">Tardas menos de un minuto.</string>
     <string name="register_name_placeholder">Cómo te llamas</string>
@@ -113,7 +113,23 @@
     <string name="verify_email_expired">El enlace venció o ya se usó. Desde tu perfil puedes pedir otro.</string>
 
     <!-- 06_Gustos -->
-    <string name="tastes_step">Paso 2 de 2</string>
+    <string name="tastes_step">Paso 2 de 3</string>
+    <!-- 08_Permisos (nv-11) -->
+    <string name="permissions_step">Paso 3 de 3</string>
+    <string name="permissions_title">Antes de empezar</string>
+    <string name="permissions_subtitle">Para armar tu plan y llevarte a cada lugar necesitamos unos permisos. Tú decides.</string>
+    <string name="permissions_location_title">Ubicación</string>
+    <string name="permissions_location_body">Para calcular rutas y tiempos de llegada. Solo mientras usas la app.</string>
+    <string name="permissions_notifications_title">Notificaciones</string>
+    <string name="permissions_notifications_body">Recordatorios de reservación, votaciones del grupo y respuestas a tus reseñas.</string>
+    <string name="permissions_camera_title">Cámara</string>
+    <string name="permissions_camera_body">Solo cuando abras las postales de recuerdo.</string>
+    <string name="permissions_required">Necesario</string>
+    <string name="permissions_optional">Opcional</string>
+    <string name="permissions_privacy_note">Wherever no vende tu ubicación. Puedes cambiar esto cuando quieras en Ajustes.</string>
+    <string name="permissions_allow">Permitir y continuar</string>
+    <string name="permissions_not_now">Ahora no</string>
+    <string name="permissions_continue">Continuar sin guardar</string>
     <string name="tastes_title">¿Qué te gusta?</string>
     <string name="tastes_subtitle">La IA lo usa para armar planes a tu medida. Lo cambias cuando quieras.</string>
     <string name="tastes_settings_title">Tus gustos</string>

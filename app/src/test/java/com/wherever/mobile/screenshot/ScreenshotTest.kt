@@ -13,6 +13,7 @@ import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.wherever.mobile.feature.auth.ui.CheckEmailPreview
 import com.wherever.mobile.feature.auth.ui.LoginPreview
+import com.wherever.mobile.feature.auth.ui.PermissionsPreview
 import com.wherever.mobile.feature.auth.ui.RecoverPreview
 import com.wherever.mobile.feature.auth.ui.RegisterPreview
 import com.wherever.mobile.feature.auth.ui.WelcomePreview
@@ -48,6 +49,7 @@ class ScreenshotTest {
         "04_revisa_correo" to { CheckEmailPreview() },
         "05_registro" to { RegisterPreview() },
         "06_gustos" to { TastesPreview() },
+        "08_permisos" to { PermissionsPreview() },
         "perfil" to { ProfilePreview() },
         "editar_perfil" to { EditProfilePreview() }
     )

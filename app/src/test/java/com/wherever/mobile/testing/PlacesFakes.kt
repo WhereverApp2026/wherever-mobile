@@ -35,8 +35,15 @@ class FakeLocationProvider(var granted: Boolean = false, var point: GeoPoint? = 
     override suspend fun current(): GeoPoint? = point.takeIf { granted }
 }
 
-class FakeLocationPermissionPreferences(override var deniedCount: Int = 0, override var dismissed: Boolean = false) :
-    LocationPermissionPreferences {
+class FakeLocationPermissionPreferences(
+    override var deniedCount: Int = 0,
+    override var dismissed: Boolean = false,
+    override var notificationsDecided: Boolean = false
+) : LocationPermissionPreferences {
+    override fun recordNotificationsDecided() {
+        notificationsDecided = true
+    }
+
     override fun recordDenied() {
         deniedCount++
     }

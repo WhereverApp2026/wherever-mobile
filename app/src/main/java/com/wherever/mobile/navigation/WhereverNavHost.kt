@@ -24,6 +24,7 @@ import com.wherever.mobile.feature.auth.ui.CheckEmailMode
 import com.wherever.mobile.feature.auth.ui.CheckEmailRoute as CheckEmailScreen
 import com.wherever.mobile.feature.auth.ui.LoginRoute as LoginScreen
 import com.wherever.mobile.feature.auth.ui.NewPasswordRoute as NewPasswordScreen
+import com.wherever.mobile.feature.auth.ui.PermissionsRoute as PermissionsScreen
 import com.wherever.mobile.feature.auth.ui.RecoverRoute as RecoverScreen
 import com.wherever.mobile.feature.auth.ui.RegisterRoute as RegisterScreen
 import com.wherever.mobile.feature.auth.ui.VerifyEmailRoute as VerifyEmailScreen
@@ -169,13 +170,19 @@ fun WhereverNavHost(
                     if (navController.previousBackStackEntry != null) {
                         navController.popOnResult(e)
                     } else {
-                        navController.navigateOnResult(e, HomeRoute) { clearStack(navController) }
+                        // Alta: Gustos → Permisos (paso 3 de 3); "atrás" en Permisos regresa a Gustos.
+                        navController.navigateOnResult(e, PermissionsRoute)
                     }
                 }
             )
         }
+        composable<PermissionsRoute> { e ->
+            PermissionsScreen(
+                onBack = { navController.popFrom(e) },
+                onFinished = { navController.navigateOnResult(e, HomeRoute) { clearStack(navController) } }
+            )
+        }
         composable<HomeRoute> { e ->
-            RequestNotificationPermission()
             HomeRouteScreen(
                 HomeNavigation(
                     onTab = { navController.openTab(e, it) },

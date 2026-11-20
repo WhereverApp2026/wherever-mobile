@@ -202,12 +202,13 @@ fun InitialAvatar(name: String, size: Dp, modifier: Modifier = Modifier) {
 fun StatusPill(
     text: String,
     modifier: Modifier = Modifier,
-    container: Color = MaterialTheme.colorScheme.tertiaryContainer
+    container: Color = MaterialTheme.colorScheme.tertiaryContainer,
+    contentColor: Color = MaterialTheme.colorScheme.onTertiaryContainer
 ) {
     Surface(
         shape = CircleShape,
         color = container,
-        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+        contentColor = contentColor,
         modifier = modifier
     ) {
         Text(

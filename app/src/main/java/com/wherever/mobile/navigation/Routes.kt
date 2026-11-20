@@ -32,6 +32,9 @@ data object VerifyEmailRoute
 data class TastesRoute(val fromSettings: Boolean = false)
 
 @Serializable
+data object PermissionsRoute
+
+@Serializable
 data object HomeRoute
 
 @Serializable

@@ -52,7 +52,9 @@ data class HomeUiState(
     val locationPrompt: LocationPrompt = LocationPrompt.NONE,
     val usingLocation: Boolean = false,
     /** Último descarte, para "Deshacer" (US-053). */
-    val dismissed: PlaceCard? = null
+    val dismissed: PlaceCard? = null,
+    /** Pedir avisos al llegar (nv-46) solo si no se decidió ya en `08_Permisos` (nv-11). */
+    val askNotifications: Boolean = false
 )
 
 /** 10_Inicio (US-025, US-032, US-037, US-047, US-053, US-062, US-030). */
@@ -86,6 +88,7 @@ class HomeViewModel @Inject constructor(
                 }
             }
         }
+        mutableState.update { it.copy(askNotifications = !permissionPrefs.notificationsDecided) }
         updatePrompt()
         load(refresh = false)
     }
