@@ -21,7 +21,13 @@
 ## Pendiente de ti
 - Invitar a **DiegoLopEs1250** como colaborador (hoy no lo es; por eso sus Issues no tienen asignado).
 - Dar acceso a Osmar y Diego al archivo de Figma.
-- Si la protección de `main` no quedó aplicada (tu usuario tiene permiso de escritura, no de administrador), correr el comando de la sección "Protección" con la cuenta `WhereverApp2026`.
+- **Proteger `main` (no quedó aplicada):** `gh api -X PUT .../branches/main/protection` respondió 404 con JaRe0528 (permiso de escritura; el único administrador es `WhereverApp2026`). Con esa cuenta, desde la raíz del repo:
+
+  ```bash
+  gh api -X PUT repos/WhereverApp2026/wherever-mobile/branches/main/protection --input .github/branch-protection/main.json
+  ```
+
+  O en GitHub: Settings → Branches → Add rule `main`: Require a pull request (0 aprobaciones), Require status checks `gates (constitución §8)` y rama al día, Require conversation resolution, Do not allow bypassing, sin force push ni borrado. Otra opción: darle a JaRe0528 rol de administrador y lo aplico yo.
 
 ---
 
