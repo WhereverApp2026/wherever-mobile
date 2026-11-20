@@ -1,24 +1,46 @@
+Responsable: Diego
+
 # NV-33 — Ayuda
 
-> Sin ejecutar. Plantilla: `.specify/templates/tasks-template.md`.
+> Spec: `specs/nv-33/spec.md`. Plan: `specs/nv-33/plan.md`. Reglas: `CONTRIBUTING.md`. Rama: `feat/nv-33-help`.
 
-## T1 — Slice liberable
-- [ ] 1. Spec en `specs/nv-33/spec.md` aprobada
-- [ ] 2. Entidad Room + DAO + esquema exportado + migración
-- [ ] 3. DTO de red + mapeos + `AppError`
-- [ ] 4. Repositorio (Room fuente de verdad) sin Dispatchers fijos
-- [ ] 5. ViewModel con `UiState` y `StateFlow`
-- [ ] 6. Pantalla Compose sin lógica; textos en `strings.xml`; ruta en `docs/routes.md`
-- [ ] 7. Pruebas de los tres tipos (T2)
-- [ ] 8. Gates: cobertura ≥45% + `routes.md` + `permissions-matrix.md` + `masvs-checklist.md` vivos
-- [ ] 9. APK + verificación en emulador + tag `vX.Y.Z-featN`
-- [ ] 10. Actualizar `Memoria.md` + `CHECKLIST_PR.md`
-- **No hacer**: implementar lo marcado "Pendiente de backend" con datos simulados.
+## T0 — Preparación
 
-## T2 — Pruebas previstas
-- [ ] Unit: Unit: filtro.
-- [ ] Integración: Data: las entradas de ayuda se cachean en Room y se muestran sin red.
-- [ ] Seguridad: Security: el reporte de problema no incluye datos personales automáticos.
+- [ ] `git switch main && git pull` y crear la rama desde ahí.
+- [ ] Leer la spec completa, la constitución y `CONTRIBUTING.md`.
+- [ ] Abrir en Figma (`9IjBujkogqaUPAkDbluclQ`, «Boceto 2») los frames: `86_Ayuda`.
+- [ ] Probar los endpoints en staging con una cuenta de prueba (`@example.com`) y comparar con `wherever-backend/docs/endpoints.md`.
 
-## T3 — Aprobación
-- [x] Revisor: Jorge — fecha: 2026-11-06
+## T1 — Datos
+
+- [ ] `POST /errores`: DTO, método en la API y en el repositorio, con su caso en MockWebServer.
+
+## T2 — Pantallas
+
+- [ ] `86_Ayuda`: ViewModel + `UiState`, `Content` con `@Preview` y estados (cargando, vacío, error, sin red), `Route`, captura.
+
+## T3 — Navegación y entrada
+
+- [ ] Ajustes (`85_Ajustes`) → `Ayuda` (fila nueva, punto de entrada permitido).
+- [ ] Rutas en `docs/routes.md` (y `scripts/check_routes.sh` en verde).
+
+## T4 — Pruebas
+
+- [ ] Unit: `HelpViewModel`: filtro sin acentos, vacío y envío del reporte (éxito, 422, sin red).
+- [ ] Data: MockWebServer: `POST /errores` manda `modulo`, `mensaje` y `version`; 202 sin cuerpo.
+- [ ] Security: El mensaje se recorta a 500 y no agrega correo ni teléfono del perfil.
+- [ ] UI: Compose: el acordeón abre y cierra; sin resultados muestra contactos.
+
+## T5 — Cierre
+
+- [ ] Compuertas una por una en verde (`CONTRIBUTING.md`).
+- [ ] Probado en teléfono o emulador contra staging; capturas adjuntas al PR.
+- [ ] `CHECKLIST_PR.md` completo y PR a `main` con Jorge como revisor; CI en verde.
+- [ ] Marcar la casilla en `docs/equipo/diego.md` y avisar a Jorge para sumar las pantallas en `docs/avance.md`.
+
+## Terminado cuando
+
+Todas las casillas de arriba están marcadas y cada frame cumple la DoD de la spec (§6).
+
+## Aprobación
+- [x] Revisor: Jorge — fecha: 2026-11-20

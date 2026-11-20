@@ -1,122 +1,142 @@
 # NV-38 — Negocio: perfil, fotos y cobros
 
-> Rector: `.specify/memory/constitution.md`. Plantilla: `.specify/templates/spec-template.md`. Arquitectura: `specs/nv-04/spec.md`. Mapa: `specs/nv-05/spec.md`.
-> Sección de la maqueta: 11 · Negocio. Posterior al Sprint 1. La implementación queda sujeta a la etapa vigente (`nv-00…nv-03` sin pantallas del producto).
+> Rector: `.specify/memory/constitution.md`. Plantilla: `.specify/templates/spec-template.md`. Arquitectura: `specs/nv-04/spec.md`.
+> Sección de la maqueta: 11 · Negocio. **Responsable: Osmar.** Lista para ejecutar (2026-11-20). Reglas de trabajo: `CONTRIBUTING.md`.
 
 ## 1. Objetivo
 
-Administrar datos, fotos, cobros y facturación del negocio.
+Mantener al día el perfil y las fotos del negocio, cobrar los anticipos y volver al modo explorar.
 
 ## 2. Alcance / No-alcance
 
 ### Historias y criterios de aceptación
 
-**HU propuesta.** Como negocio quiero mantener mis datos y fotos.
+**HU.** Como dueño quiero editar mi negocio.
 
-- [ ] Reordeno fotos y elijo portada.
-- [ ] Cada foto se revisa antes de publicarse.
-- [ ] Puedo pausar Recibir reservaciones.
+- [ ] `58_NegPerfil`: datos y horario con `PATCH /negocios/{id}` (`If-Match`); Recibir reservaciones = `acepta_reservas` en `PUT reservas-config`; Pausar con `POST /negocios/{id}/pausa`.
+- [ ] `87_NegGaleria`: hasta 10 fotos, arrastrar para ordenar (`PUT fotos/orden`), borrar (mínimo 3 en revisión o aprobado).
+- [ ] `88_NegAgregarFoto`: Tomar foto o Elegir de la galería → `PhotoRepository` + `POST /negocios/{id}/fotos`.
 
-**HU propuesta.** Como negocio quiero ver y recibir mis cobros.
+**HU.** Como dueño quiero cobrar.
 
-- [ ] Veo saldo, en espera y depósitos.
-- [ ] Registro mi CLABE, verificada con un depósito.
-- [ ] Guardo datos fiscales.
+- [ ] `57_NegCobros`: `GET saldo` (disponible, en espera, próximo depósito) y `GET liquidaciones` paginado; Conectar cobros abre la URL de Stripe (`POST cobros/conectar`) en Custom Tabs.
+- [ ] `89_NegBanco`: titular y CLABE de 18 dígitos (dígito verificador) → `PUT cuenta-deposito`.
+- [ ] `90_NegFiscal`: RFC, razón social, régimen, uso CFDI, C.P. → `PUT datos-fiscales` (422 `rfc_invalido` explicado).
 
-### UI
+**HU.** Como dueño quiero salir del modo negocio.
+
+- [ ] Volver a Wherever = `POST /usuarios/yo/modo` con `explorar` → Inicio.
+- [ ] Eliminar negocio: escribir el nombre exacto → `DELETE /negocios/{id}`; Cerrar sesión reutiliza la de Ajustes.
+
+### UI (frames de Figma)
+
+Fuente: Figma `9IjBujkogqaUPAkDbluclQ`, página «Boceto 2» (canvas `96:130`). Cada frame se busca por su nombre. Si tienes la carpeta local `maqueta/figma-frames/` (no está en Git), el PNG se llama `<frame> 1.png`.
 
 | Frame | Contenido |
 |---|---|
-| `58_NegPerfil` | Portada, Sello, datos y horario, fotos, cobros, Recibir reservaciones, Volver a Wherever, facturación, Cerrar sesión, Eliminar mi cuenta. |
-| `87_NegGaleria` | Portada, galería de 6 de 12 con arrastrar, consejo, Guardar cambios. |
+| `58_NegPerfil` | Portada, Sello, datos y horario, fotos, cobros, Recibir reservaciones, Volver a Wherever, facturación, Cerrar sesión, Eliminar. |
+| `87_NegGaleria` | Portada, galería con arrastrar, consejo, Guardar cambios. |
 | `88_NegAgregarFoto` | Hoja: Tomar foto, Elegir de la galería, Importar de Instagram, Cancelar. |
 | `57_NegCobros` | Disponible para depositar, en espera, depósitos, Descargar estado de cuenta. |
 | `89_NegBanco` | Titular, banco, CLABE con validación, depósito de prueba, cuenta principal, Guardar cuenta. |
 | `90_NegFiscal` | Razón social, RFC, C.P. fiscal, régimen, correo, constancia, factura mensual, Guardar datos. |
 
-Colores y tipografía desde `core/designsystem`; textos en `strings.xml`; áreas táctiles de 48 dp.
+Colores, tipografía, espacios y componentes solo desde `core/designsystem`; textos en `strings.xml`; áreas táctiles de 48 dp.
 
 ### Estados
 
 | Estado | Comportamiento |
 |---|---|
-| Cargando | Esqueleto; avance de subida por foto. |
-| Vacío | Sin depósitos: mensaje (sin frame). |
-| Error | 422 bajo el campo. `AppError` con mensaje y Reintentar; conserva los datos en pantalla. |
-| Sin red | Lectura desde Room con aviso; acciones que escriben, deshabilitadas o encoladas. |
-| Éxito | Datos guardados. |
+| Cargando | `ListSkeleton` en listas; botón con `loading` en envíos. |
+| Vacío | Texto y acción propios de la pantalla (nunca una lista en blanco). |
+| Error | `ErrorBanner` con el mensaje de `AppError` y Reintentar; lo escrito no se pierde. |
+| Sin red | La pantalla muestra su error de red; la capa global `89_SinConexion` (nv-16) avisa sola. |
+| Éxito | Datos de la API; envíos con confirmación (`WhereverSnackbar`). |
 
-### Validaciones
+### Decisiones tomadas (revisables en `docs/revision-jorge.md`)
 
-- CLABE de 18 dígitos con dígito verificador.
-- RFC con formato válido.
-- C.P. de 5 dígitos.
-- Hasta 12 fotos, hasta 6 a la vez.
-
-### Dudas abiertas
-
-- **D27** Cuenta de negocio (`specs/README.md`)
-- **D33** Datos fiscales y bancarios (`specs/README.md`)
-- **D34** Subir fotos (`specs/README.md`)
+- Modo negocio vive en `feature/business` con su propio `NavHost` interno y su barra (Panel, Reservas, Cupones, Reseñas, Perfil) armada con componentes de `core/designsystem`. En el grafo principal solo se registra una ruta, `BusinessHomeRoute` (una línea en `WhereverNavHost`, revisada por Jorge).
+- Importar de Instagram, Descargar estado de cuenta, facturación y depósito de prueba están diferidos en el backend: esas opciones no se dibujan (D-38a).
+- Custom Tabs para Stripe: si `androidx.browser` no está en el stack, se abre con `ACTION_VIEW` y Osmar abre un Issue para acordarlo.
+- Los montos llegan en centavos y se muestran en pesos con el formato de México.
 
 ### No-alcance
 
-- Lo marcado como "Pendiente de backend" no se implementa con datos simulados (constitución §2.7).
+- Nada con datos simulados o locales (constitución §2.7): si falta un endpoint, el control no se dibuja y se anota.
+- No se tocan theme, navegación compartida ni cliente de API (`CONTRIBUTING.md`); lo que haga falta se pide con un Issue.
 
 ## 3. Contratos (API y navegación)
 
 ### Navegación
 
-- Barra → `NegPerfil` → `NegGaleria` → hoja `NegAgregarFoto`.
-- `NegPerfil` → `NegCobros`, `NegBanco`, `NegFiscal`, `EliminarCuenta`.
-- Volver a Wherever → `POST /usuarios/yo/modo` con `explorar` → `Inicio`.
+- Barra de negocio → `NegPerfil` → `NegGaleria` → hoja `NegAgregarFoto`.
+- `NegPerfil` → `NegCobros`, `NegBanco`, `NegFiscal`, `NegHoras` (nv-37).
+- Volver a Wherever → Inicio del modo explorar.
 
-Nombres de ruta propuestos. Se registran en `docs/routes.md` al implementar la spec.
+Rutas tipadas nuevas en `docs/routes.md`. Puntos de entrada permitidos: una fila o botón en la pantalla indicada y una línea en `WhereverNavHost` (`CONTRIBUTING.md`).
 
 ### Endpoints
 
-| Método | Ruta | Auth | Envía | Recibe | Errores |
-|---|---|---|---|---|---|
-| `POST` | `/api/v1/usuarios/yo/modo` | JWT | modo: explorar | negocio | 200: modo_actual | 400, 401, 403, 422 |
-| `POST` | `/api/v1/auth/logout` | JWT | — | 204 | 401, 503 |
+Base `BuildConfig.API_BASE_URL` (`/api/v1`). Contrato completo y vivo: `wherever-backend/docs/endpoints.md` (manda ante cualquier diferencia). Errores `{codigo, mensaje, campos[], traza_id}` → `AppError`; listas `PageResult{items, siguiente_cursor, limite}`.
 
-Errores con forma `{codigo, mensaje, campos[], traza_id}`, mapeados a `AppError` (`specs/nv-04 §3.3`). Detalle en `docs/contexto_api_sprint1.md`.
-
-### Pendiente de backend
-
-Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
-
-- Datos del negocio y pausa de reservaciones.
-- Galería y revisión de fotos.
-- Importar de Instagram.
-- Saldos, depósitos y estado de cuenta.
-- Cuenta bancaria y datos fiscales.
+| Método | Ruta | Qué hace (resumen) | Auth | Códigos |
+|---|---|---|---|---|
+| GET | `/negocios/{id}/panel` | → `{negocio_id, nombre, estado, pausado{desde, hasta, motivo}?, cambios_pendientes{campos, enviado_en}?, datos_fiscales_completos?, cuenta_deposito{clabe_ultimos4, ban… | JWT dueño | 200/401/403/404 |
+| PATCH | `/negocios/{id}` | con `If-Match` y los campos a cambiar (`descripcion`, `categoria`, `horarios`, `nivel_precio`, `precio_promedio`, `servicios`, `opciones_dieta`, `alergenos`, `accesibi… | JWT dueño | 200/400/401/403/404/409/422 |
+| DELETE | `/negocios/{id}` | con `{confirmacion}` (nombre exacto | JWT dueño | 204/401/403/404/409/422 |
+| POST | `/negocios/{id}/pausa` | con `{pausado, hasta? (futura, ≤ 90 días), motivo? (≤ 120)}` → el perfil | JWT dueño | 200/401/403/404/409/422 |
+| PUT | `/negocios/{id}/reservas-config` | con `If-Match` y `{acepta_reservas, capacidad_por_horario (1–500), duracion_turno_min (15–240, múltiplo de 15), anticipo{tipo: fijo, porcentaje o por_persona, valor},… | JWT dueño | 200/400/401/403/404/409/422 |
+| POST | `/negocios/{id}/fotos` | con `{imagen_id, tipo (fachada, interior o producto)}` → 201 el negocio | JWT dueño | 201/401/403/404/409/422/503 |
+| PUT | `/negocios/{id}/fotos/orden` | con `{fotos_ids[]}` (todas las de la galería, sin repetir | JWT dueño | 200/401/403/404/409/422 |
+| DELETE | `/negocios/{id}/fotos/{foto_id}` | → 204 | JWT dueño | 204/401/403/404/409/422 |
+| POST | `/imagenes/subida` | con `{tipo}` (`image/jpeg`, `image/png` o `image/webp`) → `{id, url, campos{}, vence_en, max_bytes}`: formulario POST firmado de S3 que solo acepta la clave `cuarenten… | JWT | 201/400/401/403/422/429/503 |
+| POST | `/imagenes/{id}/confirmar` | → `{id, estado, motivo?, url_1080?, url_320?}` | JWT, dueño | 200/401/403/404/409/422/503 |
+| POST | `/negocios/{id}/cobros/conectar` | → `{url}` (registro de Stripe) | JWT dueño del negocio | 200/401/403/404/503 |
+| GET | `/negocios/{id}/saldo` | → `{disponible, en_espera, proximo_deposito}` en centavos | JWT dueño del negocio | 200/401/403/404 |
+| GET | `/negocios/{id}/liquidaciones` | con `?cursor=&limite=` → `PageResult[{id, semana_inicio, pagos, total_anticipos, comision, reembolsos, neto, estado}]` de la más nueva a la más vieja | JWT dueño del negocio | 200/401/403/404/422 |
+| PUT | `/negocios/{id}/cuenta-deposito` | con `{clabe, titular}` → `{clabe_ultimos4, banco, titular, estado: sin_verificar}` | JWT dueño | 200/401/403/404/422/429/503 |
+| PUT | `/negocios/{id}/datos-fiscales` | con `{rfc, razon_social, regimen_fiscal, uso_cfdi, cp_fiscal}` → 200 metadatos | JWT dueño | 200/401/403/404/422/429/503 |
+| POST | `/usuarios/yo/modo` | → `{modo: explorar\|negocio}` | JWT | 200/400/401/403/422 |
 
 ## 4. Modelo de datos
 
-Solo los últimos 4 dígitos de la cuenta en caché.
+Sin Room nuevo. La CLABE y el RFC no se guardan en el teléfono.
 
 ## 5. Seguridad y privacidad
 
-- CLABE, RFC y constancia fuera de Room y logs; `FLAG_SECURE`.
-- 403 si el rol no corresponde.
+- CLABE y RFC solo viajan en el `PUT`; en pantalla se muestran los últimos 4 dígitos que devuelve la API.
+- Eliminar exige el nombre exacto; nada del expediente queda en caché.
 - Sin tokens ni datos personales en logs; solo HTTPS (constitución §6).
 
 ## 6. Tests / Gates
 
-- Unit: CLABE y RFC.
-- Security: sin datos fiscales en logs.
-- UI: reordenar fotos.
-- Data: la configuración del negocio se guarda en Room tras el PATCH y se lee sin red.
-- Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
+- Unit: `BusinessProfileViewModel`: `If-Match`, 409 → recargar, pausa hasta ≤ 90 días.
+- Unit: `GalleryViewModel`: orden, mínimo 3 fotos y máximo 10.
+- Unit: `BankAccountViewModel`: CLABE de 18 dígitos con dígito verificador 3-7-1.
+- Data: MockWebServer: `PUT cuenta-deposito` (422 `clabe_invalida`), `GET liquidaciones` con cursor, `POST cobros/conectar` devuelve `url`.
+- Security: Ningún log ni archivo guarda CLABE completa ni RFC.
+- UI: Compose: Eliminar negocio habilita el botón solo con el nombre exacto.
+- Capturas Roborazzi de cada frame (claro, oscuro, chica con letra grande). Cobertura ≥ 45 %.
+
+### Definición de "terminado" (DoD)
+
+Una pantalla cuenta como terminada solo si cumple todo (`docs/avance.md`):
+
+- [ ] Se ve igual al frame de Figma en claro y oscuro: tokens de `core/designsystem` (sin `dp`, colores ni tamaños sueltos; la regla `HardcodedDesignValue` lo vigila) y componentes `Wherever*`.
+- [ ] Llama a la API real de la tabla de endpoints; nada de datos locales ni simulados.
+- [ ] Tiene los estados cargando, vacío, error con Reintentar y sin red (`89_SinConexion` lo maneja la app; la pantalla muestra su propio error).
+- [ ] Textos en `strings.xml`; `testTag` en lo que se prueba; áreas táctiles de 48 dp; funciona con letra grande y en pantalla chica.
+- [ ] Pruebas unitarias del ViewModel, de datos (MockWebServer) y de UI (Compose), y su captura en `ScreenshotTest` (claro, oscuro, chica con letra grande).
+- [ ] Ruta en `docs/routes.md`; si pide un permiso, fila en `docs/permissions-matrix.md`.
+- [ ] Las seis compuertas en verde, una por una (`CONTRIBUTING.md`), y probada en un teléfono o emulador contra staging.
 
 ## 7. Plan de entrega
 
-Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas, y los endpoints de "Pendiente de backend". Ver `plan.md`, `task.md` y `checklists/gates.md`.
+Rama `feat/nv-38-business` desde `main` actualizado → `plan.md` → `task.md` → PR a `main` con Jorge como revisor y el CI en verde.
 
 ## Aprobación
-- [x] Revisor: Jorge — fecha: 2026-11-06
+- [x] Revisor: Jorge — fecha: 2026-11-06 (actualizada para ejecución el 2026-11-20)
 - [ ] CHECKLIST_PR.md OK
-- [ ] Sin conflicto con constitución
+- [x] Sin conflicto con constitución
 
-**Estado:** ✅ Aprobada (Jorge, 2026-11-06).
+**Estado:** ✅ Aprobada y lista para ejecutar. Responsable: Osmar.

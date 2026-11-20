@@ -19,6 +19,21 @@
 | Modo negocio | nv-34 a nv-38 | 26 | 0 | 0 % |
 | **Total** | | **162** | **57** | **35,2 %** |
 
+## Reparto del equipo (desde 2026-11-20)
+
+Reglas: `CONTRIBUTING.md`. Cada spec es una rama y un PR a `main` con Jorge como revisor.
+
+| Responsable | Área | Specs | Frames | Funcionan | Lista de trabajo |
+|---|---|---|---|---|---|
+| Jorge | Cuenta y acceso | nv-06 a nv-16 | 17 | 16 (+1 local) | `docs/pendientes.md` |
+| Jorge | Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 14 | `docs/pendientes.md` |
+| Jorge | Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 14 | `docs/pendientes.md` |
+| Jorge | Planes: IA, detalle, Vaca, Mis planes, día del plan | nv-23, nv-24, nv-26, nv-28, nv-30 | 22 | 9 | `docs/pendientes.md` |
+| Jorge | Reserva, pago y cupones | nv-27, nv-29 | 15 | 4 | `docs/pendientes.md` |
+| Jorge | Compartido: theme y `core/designsystem`, navegación, cliente de API, CI | — | — | — | Issues de Osmar y Diego |
+| Diego | Recuerdos, Reseñas y Ayuda | nv-31 a nv-33 | 22 | 0 | `docs/equipo/diego.md` |
+| Osmar | Modo negocio | nv-34 a nv-38 | 26 | 0 | `docs/equipo/osmar.md` |
+
 ## Estado (2026-11-20)
 
 - **Área 1 (Cuenta y acceso): 16/17.** Solo falta `83_Insignias`, bloqueada por backend (`GET /usuarios/yo/insignias` no existe). Todo lo demás tiene captura y se probó en el teléfono (Xiaomi 2207117BPG, Android 12) contra staging.

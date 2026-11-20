@@ -1,45 +1,46 @@
 # plan.md — NV-31 — Recuerdos y postales
 
-> Deriva de `specs/nv-31/spec.md`. Respeta constitución §4 (cadena de red y capas). Plantilla: `.specify/templates/plan-template.md`.
+> Deriva de `specs/nv-31/spec.md`. Responsable: Diego. Respeta constitución §4 (cadena de red y capas).
 
-## 1. Mapeo
-- Sin código todavía. Paquete `feature/<nombre>/{ui,domain,data}` según `specs/nv-04`; los archivos se fijan al tomar la spec.
-- Ruta en `docs/routes.md` al implementar.
+## 1. Mapeo (archivos a crear)
+
+- `app/src/main/java/com/wherever/mobile/feature/memories/data/`: interfaz Retrofit, DTOs `@Serializable` (`snake_case` con `@SerialName`), `...RepositoryImpl` con `safeApiCall`, módulo Hilt en `data/di/`.
+- `feature/memories/domain/`: modelos y la interfaz del repositorio (sin Android).
+- `feature/memories/ui/`: un `UiState` y un `@HiltViewModel` por pantalla (`StateFlow`), `<Pantalla>Route` (con ViewModel) y `<Pantalla>Content` (sin ViewModel, con `@Preview` claro y oscuro).
+- Reutilizar sin modificar: `PhotoRepository` (subida de fotos, nv-45), `core/designsystem`, `core/network`, `safeApiCall`, `AppError`, `PageResult`.
+- Pruebas en `app/src/test/java/com/wherever/mobile/feature/memories/` y capturas en `ScreenshotTest`.
 
 ## 2. Guardarraíles
-- Constitución §2-§6: Room como fuente de verdad, cadena de red, textos en `strings.xml`, sin secretos.
-- Sin lógica de negocio en Composables.
-- Lo marcado "Pendiente de backend" no se implementa con datos simulados (constitución §2.7).
+
+- Constitución §2-§6 y `CONTRIBUTING.md`: sin lógica en Composables, dispatchers inyectados, textos en `strings.xml`, sin secretos.
+- Konsist (`ArchitectureTest`) prohíbe que `ui` importe `core.network`, Room o `data`.
+- Nada simulado: si falta un endpoint, se oculta el control y se anota en la spec.
 
 ## 3. Pruebas
-Previstas, sin implementar (de `spec.md §6`):
 
 ### Unitarias
-- Unit: cola de subida.
+- `MemoriesViewModel`: paginación, vacío, error y reintentar.
+- `PostcardViewModel`: estilo, texto ≤ 80, guardar, compartir y eliminar con confirmación.
+- `CreateMomentViewModel`: etiquetados ≤ 10, visibilidad y doble toque en Publicar.
 
-### Integración (MockWebServer con el contrato publicado; Room real instrumentada; sin staging)
-- Data: la cola de subida de postales persiste en Room y se reanuda tras reiniciar.
+### Datos (MockWebServer)
+- MockWebServer: `POST /postales` + `GET /postales` con cursor; `DELETE` manda `If-Match`; 404 de postal ajena → `AppError.NotFound`.
 
-### Seguridad (`docs/masvs-checklist.md`)
-- Security: sin EXIF de ubicación.
+### Seguridad
+- El archivo que se sube no trae EXIF GPS (prueba sobre un JPEG con ubicación).
 
-### Otras
-- UI: estado vacío.
-- Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
+### UI (Compose)
+- Compose: `76_RecVacio` con Ver mis planes; Eliminar abre la confirmación.
 
 ## 4. Secuencia
-1. Spec aprobada.
-2. Entidad Room + DAO + migración.
-3. DTO + mapeos + `AppError`.
-4. Repositorio.
-5. ViewModel con `UiState`.
-6. Pantalla y ruta.
-7. Pruebas de los tres tipos.
-8. Gates.
+
+1. Datos: DTOs, API y repositorio con su prueba de MockWebServer.
+2. Dominio y ViewModels con pruebas unitarias.
+3. Pantallas (`Content` + `Route`) frame por frame, con `@Preview` y captura.
+4. Rutas y punto de entrada; `docs/routes.md`.
+5. Compuertas una por una; prueba en teléfono o emulador contra staging.
+6. PR a `main`.
 
 ## 5. Verificación
-- `./gradlew assembleDebug → BUILD SUCCESSFUL`
-- `./gradlew ktlintCheck detekt lintDebug → sin errores` (detekt con JDK 17)
-- `./gradlew testDebugUnitTest → verdes` (unitarias, integración con MockWebServer y seguridad)
-- `./gradlew koverVerifyDebug → ≥ 45 %`
-- `./gradlew connectedDebugAndroidTest → verdes` (Room real; requiere emulador o teléfono)
+
+Ver `CONTRIBUTING.md` §Compuertas: `ktlintCheck`, `detekt`, `lintDebug`, `testDebugUnitTest`, `koverVerifyDebug`, `assembleDebug`, cada una con `--no-daemon --max-workers=1`.

@@ -1,3 +1,30 @@
+# Revisión para Jorge — 2026-11-20: reparto del equipo y specs nv-31 a nv-38
+
+> Pedido: repartir áreas (Jorge, Osmar, Diego), dejar nv-31 a nv-38 listas para ejecutar, `CONTRIBUTING.md`, listas por persona, Issues, proteger `main` y subir todo. Lo ambiguo se decidió aquí.
+
+## Decisiones tomadas sin preguntarte
+- **Endpoints reales:** las specs nv-31 a nv-38 decían "Pendiente de backend", pero `wherever-backend/docs/endpoints.md` (en `origin/main`; la copia local tenía 249 commits de atraso) ya publica postales, recuerdos, momentos, reseñas, check-ins, negocios, cupones y cobros. Cada spec trae su tabla con método, ruta, resumen, auth y códigos, y remite al backend como contrato vivo.
+- **`GET /momentos/feed` sí existe:** el bloqueo del feed de Inicio (nv-17) que anoté hoy usaba rutas equivocadas (`/feed`, `/publicaciones`). Nv-17 queda para Jorge y se reevalúa con ese endpoint.
+- **Figma:** `maqueta/` está en `.gitignore`, así que las specs nombran cada frame dentro de Figma `9IjBujkogqaUPAkDbluclQ` («Boceto 2»). Osmar y Diego necesitan acceso a ese archivo.
+- **Puntos de entrada y rutas:** "no tocar navegación" se interpreta como no cambiar la infraestructura (grafo base, barra, `NavMotion`). Sí pueden agregar sus rutas en `Routes.kt`, una línea en `WhereverNavHost` y la fila o botón de entrada que pide su spec (Perfil, Ajustes, ficha). Jorge lo revisa en el PR.
+- **Modo negocio con su propio `NavHost`:** `feature/business` arma su barra interna con componentes del designsystem; en el grafo principal solo entra `BusinessHomeRoute`.
+- **D-31a Estilos de postal:** la API acepta `clasica`, `polaroid` y `pasaporte`; la maqueta muestra Clásica, Atardecer y Minimal. Manda la API. La pestaña Plan de `70_CrearPub` queda deshabilitada: no hay endpoint.
+- **D-32a Reseñas:** "Publicar en el feed", "Con quién" y "Quién lo ve" no existen en `POST /resenas`; no se dibujan. `78_ResCom` muestra los cinco aspectos de la API (se suma Espera). Deshacer al eliminar lo resuelve la app con 5 s de espera.
+- **D-33a Ayuda:** preguntas frecuentes como textos de la app (`strings.xml`); "Reportar un problema" usa `POST /errores` con `modulo = reporte_usuario`; correo y WhatsApp de soporte irán en `BuildConfig` (Diego abre Issue; Jorge los agrega).
+- **D-34a Ubicación del negocio:** sin proveedor de mapa (D25) ni `GET /geo/direcciones`, el paso 3 toma la ubicación con "Estoy en mi negocio" (GPS del teléfono). "Tipo de experiencia" y "año de apertura" no existen en la API.
+- **D-35a Check-in:** por código escrito; el QR espera acordar librería (constitución §3). "Reprogramar" no existe para el negocio: se cambia por Contactar. Estadísticas: Semana, Mes y Trimestre (90 días máx.).
+- **D-36a / D-38a Diferidos del backend:** insignia del Sello, Instagram, estado de cuenta, facturación y depósito de prueba no se dibujan.
+- **D-37a Cupo:** la API tiene un solo `capacidad_por_horario`; `55_NegHoras` muestra ocupación por hora y edita ese valor.
+- **Revisor automático:** `.github/CODEOWNERS` con `@JaRe0528` para que cada PR pida tu revisión.
+- **Protección de `main`:** PR obligatorio, check `gates (constitución §8)` en verde y rama al día, sin push directo (también para administradores), sin force push ni borrado. Aprobaciones requeridas: 0, porque tú no puedes aprobar tus propios PR; la revisión la garantiza `CODEOWNERS` y que solo se integra con tu visto bueno.
+
+## Pendiente de ti
+- Invitar a **DiegoLopEs1250** como colaborador (hoy no lo es; por eso sus Issues no tienen asignado).
+- Dar acceso a Osmar y Diego al archivo de Figma.
+- Si la protección de `main` no quedó aplicada (tu usuario tiene permiso de escritura, no de administrador), correr el comando de la sección "Protección" con la cuenta `WhereverApp2026`.
+
+---
+
 # Revisión para Jorge — 2026-11-19 (madrugada): Área 1 Cuenta y acceso al 100 %
 
 > Pedido: dejar al 100 % y sin bugs Cuenta y acceso, luego Descubrir. Lo ambiguo se decide y se anota aquí.

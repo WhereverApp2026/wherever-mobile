@@ -1,100 +1,119 @@
 # NV-36 — Negocio: reseñas y momentos
 
-> Rector: `.specify/memory/constitution.md`. Plantilla: `.specify/templates/spec-template.md`. Arquitectura: `specs/nv-04/spec.md`. Mapa: `specs/nv-05/spec.md`.
-> Sección de la maqueta: 11 · Negocio. Posterior al Sprint 1. La implementación queda sujeta a la etapa vigente (`nv-00…nv-03` sin pantallas del producto).
+> Rector: `.specify/memory/constitution.md`. Plantilla: `.specify/templates/spec-template.md`. Arquitectura: `specs/nv-04/spec.md`.
+> Sección de la maqueta: 11 · Negocio. **Responsable: Osmar.** Lista para ejecutar (2026-11-20). Reglas de trabajo: `CONTRIBUTING.md`.
 
 ## 1. Objetivo
 
-Responder reseñas, cuidar el Sello y agradecer publicaciones de clientes.
+Leer y responder las reseñas del negocio, ver el avance del Sello y agradecer o destacar los momentos de los clientes.
 
 ## 2. Alcance / No-alcance
 
 ### Historias y criterios de aceptación
 
-**HU propuesta.** Como negocio quiero responder reseñas.
+**HU.** Como dueño quiero responder reseñas.
 
-- [ ] Uso respuestas rápidas o texto propio.
-- [ ] Responder cuenta para el Sello.
+- [ ] `51_NegResenas`: resumen (`GET /negocios/{id}/resenas/resumen?periodo=mes|trimestre`) con promedio, aspectos y distribución; lista con `GET /lugares/{id}/resenas`.
+- [ ] `52_NegResp`: Respuesta rápida = `POST .../sugerir-respuesta` (IA); texto 1–500 → `PUT .../respuesta`; moderación rechazada = 422 explicado.
 
-**HU propuesta.** Como negocio quiero agradecer los momentos públicos.
+**HU.** Como dueño quiero ver el Sello y los momentos.
 
-- [ ] Solo veo lo marcado como público.
-- [ ] Puedo destacar y agradecer.
+- [ ] Avance del Sello con `avance_sello` del panel (criterios con meta y si cumple).
+- [ ] `NegMomentos`: Nuevos y Destacados (`GET /negocios/{id}/momentos?destacados=`); Agradecer y Destacar con `PATCH`.
 
-### UI
+### UI (frames de Figma)
+
+Fuente: Figma `9IjBujkogqaUPAkDbluclQ`, página «Boceto 2» (canvas `96:130`). Cada frame se busca por su nombre. Si tienes la carpeta local `maqueta/figma-frames/` (no está en Git), el PNG se llama `<frame> 1.png`.
 
 | Frame | Contenido |
 |---|---|
 | `51_NegResenas` | Sello con requisitos, Descargar insignia digital, rubros, reseñas, Momentos de clientes. |
-| `52_NegResp` | Reseña, Respuesta rápida, texto (300), aviso de Sello, Publicar respuesta. |
+| `52_NegResp` | Reseña, Respuesta rápida, texto, aviso de Sello, Publicar respuesta. |
 | `NegMomentos` | Nuevos y Destacados; tarjetas con Agradecer; aviso de privacidad. |
 
-Colores y tipografía desde `core/designsystem`; textos en `strings.xml`; áreas táctiles de 48 dp.
+Colores, tipografía, espacios y componentes solo desde `core/designsystem`; textos en `strings.xml`; áreas táctiles de 48 dp.
 
 ### Estados
 
 | Estado | Comportamiento |
 |---|---|
-| Cargando | Esqueleto. |
-| Vacío | Sin reseñas: mensaje (sin frame). |
-| Error | `AppError` con mensaje y Reintentar; conserva los datos en pantalla. |
-| Sin red | Lectura desde Room con aviso; acciones que escriben, deshabilitadas o encoladas. |
-| Éxito | Respuesta publicada. |
+| Cargando | `ListSkeleton` en listas; botón con `loading` en envíos. |
+| Vacío | Texto y acción propios de la pantalla (nunca una lista en blanco). |
+| Error | `ErrorBanner` con el mensaje de `AppError` y Reintentar; lo escrito no se pierde. |
+| Sin red | La pantalla muestra su error de red; la capa global `89_SinConexion` (nv-16) avisa sola. |
+| Éxito | Datos de la API; envíos con confirmación (`WhereverSnackbar`). |
 
-### Validaciones
+### Decisiones tomadas (revisables en `docs/revision-jorge.md`)
 
-- Respuesta no vacía, hasta 300 caracteres.
-
-### Dudas abiertas
-
-- **D27** Cuenta de negocio (`specs/README.md`)
+- Modo negocio vive en `feature/business` con su propio `NavHost` interno y su barra (Panel, Reservas, Cupones, Reseñas, Perfil) armada con componentes de `core/designsystem`. En el grafo principal solo se registra una ruta, `BusinessHomeRoute` (una línea en `WhereverNavHost`, revisada por Jorge).
+- Descargar insignia digital: `GET /negocios/{id}/sello/insignia` está diferido en el backend; el botón no se dibuja (D-36a).
+- La maqueta limita la respuesta a 300; la API a 500. Se usa 500.
 
 ### No-alcance
 
-- Lo marcado como "Pendiente de backend" no se implementa con datos simulados (constitución §2.7).
+- Nada con datos simulados o locales (constitución §2.7): si falta un endpoint, el control no se dibuja y se anota.
+- No se tocan theme, navegación compartida ni cliente de API (`CONTRIBUTING.md`); lo que haga falta se pide con un Issue.
 
 ## 3. Contratos (API y navegación)
 
 ### Navegación
 
-- `NegResenas` → `NegResp`, `NegMomentos`.
+- Barra de negocio → `NegResenas` → `NegResp`, `NegMomentos`.
 
-Nombres de ruta propuestos. Se registran en `docs/routes.md` al implementar la spec.
+Rutas tipadas nuevas en `docs/routes.md`. Puntos de entrada permitidos: una fila o botón en la pantalla indicada y una línea en `WhereverNavHost` (`CONTRIBUTING.md`).
 
 ### Endpoints
 
-### Pendiente de backend
+Base `BuildConfig.API_BASE_URL` (`/api/v1`). Contrato completo y vivo: `wherever-backend/docs/endpoints.md` (manda ante cualquier diferencia). Errores `{codigo, mensaje, campos[], traza_id}` → `AppError`; listas `PageResult{items, siguiente_cursor, limite}`.
 
-Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
-
-- Reseñas del negocio y responder.
-- Estado del Sello e insignia.
-- Momentos y agradecer.
+| Método | Ruta | Qué hace (resumen) | Auth | Códigos |
+|---|---|---|---|---|
+| GET | `/negocios/{id}/resenas/resumen` | con `?periodo=mes o trimestre` → `{periodo, desde, actual{total, promedio, aspectos{…}}, anterior{…}, distribucion{1..5}}` (P-50) de las publicadas | JWT dueño del negocio | 200/401/403/404/422 |
+| GET | `/lugares/{id}/resenas` | con `?estrellas=&aspecto=&con_fotos=&q=&orden=&cursor=&limite=` → `PageResult[{id, autor{nombre_usuario, foto_url?}, calificacion, aspectos, chips, comentario, fotos,… | no | 200/404/422/429 |
+| PUT | `/negocios/{id}/resenas/{rid}/respuesta` | con `{texto (1–500)}` → `{id, respuesta_negocio{texto, fecha, estado}}` | JWT dueño del negocio | 200/400/401/403/404/422 |
+| POST | `/negocios/{id}/resenas/{rid}/sugerir-respuesta` | → `{texto}` (≤ 500, sin datos personales) con la `ia.Guardia` de nv-26 a nv-28 | JWT dueño del negocio | 200/401/403/404/429/503 |
+| GET | `/negocios/{id}/panel` | → `{negocio_id, nombre, estado, pausado{desde, hasta, motivo}?, cambios_pendientes{campos, enviado_en}?, datos_fiscales_completos?, cuenta_deposito{clabe_ultimos4, ban… | JWT dueño | 200/401/403/404 |
+| GET | `/negocios/{id}/momentos` | con `?destacados=&cursor=&limite=` → `PageResult[momento]` públicos y publicados del negocio con `autor{id, nombre_usuario, foto_url}` | JWT comerciante, propietario | 200/401/403/404/422 |
+| PATCH | `/negocios/{id}/momentos/{mid}` | con `{agradecido?, destacado?}` (al menos uno | JWT comerciante, propietario | 200/400/401/403/404/422 |
 
 ## 4. Modelo de datos
 
-Caché de reseñas del negocio.
+Sin Room nuevo.
 
 ## 5. Seguridad y privacidad
 
-- La insignia se descarga solo si el Sello está vigente.
+- De los clientes solo se muestra `nombre_usuario` y foto, como entrega la API.
+- La respuesta sugerida por IA se puede editar antes de publicar; nunca se publica sola.
 - Sin tokens ni datos personales en logs; solo HTTPS (constitución §6).
 
 ## 6. Tests / Gates
 
-- Unit: límite de texto.
-- UI: chips que llenan la respuesta.
-- Data: las respuestas del negocio se guardan en Room y se leen sin red.
-- Security: los datos del cliente en la reseña no aparecen en logs.
-- Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
+- Unit: `BusinessReviewsViewModel`: periodo mes/trimestre, respuesta 1–500, 422 de moderación.
+- Unit: `BusinessMomentsViewModel`: Agradecer y Destacar sin duplicar al tocar dos veces.
+- Data: MockWebServer: `PUT respuesta`, `POST sugerir-respuesta` (sin IA → aviso), `PATCH momentos/{mid}` con al menos un campo.
+- Security: La sugerencia de IA no manda datos del autor (solo `rid`).
+- UI: Compose: Publicar respuesta deshabilitado con texto vacío.
+- Capturas Roborazzi de cada frame (claro, oscuro, chica con letra grande). Cobertura ≥ 45 %.
+
+### Definición de "terminado" (DoD)
+
+Una pantalla cuenta como terminada solo si cumple todo (`docs/avance.md`):
+
+- [ ] Se ve igual al frame de Figma en claro y oscuro: tokens de `core/designsystem` (sin `dp`, colores ni tamaños sueltos; la regla `HardcodedDesignValue` lo vigila) y componentes `Wherever*`.
+- [ ] Llama a la API real de la tabla de endpoints; nada de datos locales ni simulados.
+- [ ] Tiene los estados cargando, vacío, error con Reintentar y sin red (`89_SinConexion` lo maneja la app; la pantalla muestra su propio error).
+- [ ] Textos en `strings.xml`; `testTag` en lo que se prueba; áreas táctiles de 48 dp; funciona con letra grande y en pantalla chica.
+- [ ] Pruebas unitarias del ViewModel, de datos (MockWebServer) y de UI (Compose), y su captura en `ScreenshotTest` (claro, oscuro, chica con letra grande).
+- [ ] Ruta en `docs/routes.md`; si pide un permiso, fila en `docs/permissions-matrix.md`.
+- [ ] Las seis compuertas en verde, una por una (`CONTRIBUTING.md`), y probada en un teléfono o emulador contra staging.
 
 ## 7. Plan de entrega
 
-Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas, y los endpoints de "Pendiente de backend". Ver `plan.md`, `task.md` y `checklists/gates.md`.
+Rama `feat/nv-36-business` desde `main` actualizado → `plan.md` → `task.md` → PR a `main` con Jorge como revisor y el CI en verde.
 
 ## Aprobación
-- [x] Revisor: Jorge — fecha: 2026-11-06
+- [x] Revisor: Jorge — fecha: 2026-11-06 (actualizada para ejecución el 2026-11-20)
 - [ ] CHECKLIST_PR.md OK
-- [ ] Sin conflicto con constitución
+- [x] Sin conflicto con constitución
 
-**Estado:** ✅ Aprobada (Jorge, 2026-11-06).
+**Estado:** ✅ Aprobada y lista para ejecutar. Responsable: Osmar.

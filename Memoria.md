@@ -241,6 +241,10 @@
 - A evitar: `adb` no está en el PATH de Git Bash (`$LOCALAPPDATA/Android/Sdk/platform-tools/adb.exe`); un `| tail` escondió "command not found" y se reportó "sin teléfono" por error.
 - A evitar: el interruptor apagado de Material usa `outline`/`surfaceContainerHighest` por defecto; con `OutlineSoft` no llegaba a 3:1. `ToggleRow` fija los colores de apagado.
 
+- Estado (2026-11-20, tarde): equipo de tres. Jorge = Social, Planes, Reserva y lo compartido; Osmar = Modo negocio (nv-34 a nv-38); Diego = Recuerdos, Reseñas y Ayuda (nv-31 a nv-33). Specs listas con endpoints reales del backend, `CONTRIBUTING.md`, `docs/equipo/`, Issues por spec y `main` protegida (solo PR con CI verde). Decisiones en `docs/revision-jorge.md`.
+- A recordar: el contrato de la API está en `wherever-backend/docs/endpoints.md` de `origin/main`; la copia local del backend puede ir atrasada (`git fetch` y `git show origin/main:docs/endpoints.md`).
+- A recordar: desde la protección de `main`, también Jorge (y Claude) integra por PR; nada de push directo.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

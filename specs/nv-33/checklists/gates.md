@@ -1,16 +1,16 @@
 # Checklist — NV-33 — Ayuda
 
-> Trazabilidad: `spec §1-§7 ↔ plan §1-§5 ↔ task T1-T3`. Estado: aprobada (Jorge, 2026-11-06), sin código.
-> Orden CI-PR: deps → build → lint → unit → data → security → ui → critic → routes → sdd → coverage → delta-check → mutation → semgrep → deps-scan.
+> Responsable: Diego. Trazabilidad: `spec §1-§7 ↔ plan §1-§5 ↔ task T0-T5`. Estado: lista para ejecutar (2026-11-20).
 
-- [ ] `./gradlew assembleDebug` y lint (ktlint, detekt, Android Lint) sin errores
-- [ ] Unitarias verdes (previstas en `plan.md §3`)
-- [ ] Integración: Room real + MockWebServer con el contrato publicado, sin staging
-- [ ] Seguridad verde y `docs/masvs-checklist.md` verificado
-- [ ] `docs/routes.md` actualizado y enlazado desde la spec
-- [ ] Cobertura ≥45% (`scripts/check_coverage.sh --min 45`)
-- [ ] Puerta incremental advisory: delta ≥80% + mutación enfocada sin break (no bloquea)
+- [ ] `ktlintCheck` (con `--no-daemon --max-workers=1`)
+- [ ] `detekt`
+- [ ] `lintDebug`
+- [ ] `testDebugUnitTest` (unit, data, security, arquitectura y capturas)
+- [ ] `koverVerifyDebug` (≥ 45 %)
+- [ ] `assembleDebug`
+- [ ] Scripts: `critic-guardrails.sh` PASS, `check_routes.sh` OK, `check_strings.sh` OK, `check_specs.sh` SPECS-OK
 - [ ] Sin secretos, sin tokens en logs, solo HTTPS
 - [ ] Estados cubiertos: cargando, vacío, error, sin red
-- [ ] `Memoria.md` actualizada, sin secretos
+- [ ] Probado en teléfono o emulador contra staging
+- [ ] PR con Jorge como revisor y CI en verde
 - [x] Aprobación: Revisor Jorge — 2026-11-06
