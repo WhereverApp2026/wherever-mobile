@@ -112,7 +112,7 @@ internal fun NewPasswordContent(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 internal fun NewPasswordPreview() {
-    WhereverTheme { NewPasswordContent(NewPasswordUiState(password = "Wherever2026"), {}, {}, {}, {}, {}, {}) }
+    WhereverTheme { NewPasswordContent(NewPasswordUiState(), {}, {}, {}, {}, {}, {}) }
 }
 
 @Preview
