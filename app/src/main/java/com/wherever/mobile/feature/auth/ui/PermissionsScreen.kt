@@ -68,7 +68,8 @@ fun PermissionsRoute(onBack: () -> Unit, onFinished: () -> Unit, viewModel: Perm
         viewModel.onSystemResult(
             location = result[Manifest.permission.ACCESS_COARSE_LOCATION] == true,
             // Antes de Android 13 los avisos no necesitan permiso.
-            notifications = result[Manifest.permission.POST_NOTIFICATIONS] ?: true
+            notifications = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+                result[Manifest.permission.POST_NOTIFICATIONS] == true
         )
     }
     PermissionsContent(
