@@ -77,20 +77,34 @@ Nombres de ruta propuestos. Se registran en `docs/routes.md` al implementar la s
 
 ### Endpoints
 
-### Pendiente de backend
+### Endpoints (cotejo del 2026-11-21 con `wherever-backend` `origin/main`, `docs/endpoints.md`)
 
-Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
+El bloqueo "Pendiente de backend" ya no aplica para grupos, chat y votaciones (backend nv-37, nv-39, nv-57, nv-69).
 
-- Grupos e integrantes.
-- Mensajes y tiempo real.
-- Votaciones.
-- Punto de encuentro con tiempos y costos.
-- Enlaces compartidos con permisos.
-- Chat 1 a 1 e invitaciones.
+| Necesidad | Endpoint | En la app |
+|---|---|---|
+| Mis grupos con cursor y último mensaje | `GET /grupos?cursor=&limite=` | sí (44_MisGrupos, 2026-11-21) |
+| Detalle del grupo | `GET /grupos/{id}` | sí (cabecera del chat) |
+| Aceptar o rechazar la invitación | `PATCH /grupos/{id}/integrantes/yo` `{estado}` | sí (44_MisGrupos) |
+| Mensajes: página, más viejos y nuevos | `GET /grupos/{id}/mensajes?cursor=&despues_de=&limite=` | sí (45_GrupoChat) |
+| Enviar sin duplicar | `POST /grupos/{id}/mensajes` `{texto, id_cliente}` | sí: envío optimista; el reintento usa el mismo `id_cliente` |
+| Plan fijado | `GET /planes/{id}` (los integrantes lo leen) | sí |
+| Crear grupo desde un plan | `POST /grupos` `{plan_id, invitados}` | no (43_CrearGrupo, siguiente PR) |
+| Votaciones | `GET /grupos/{id}/votaciones`, `PUT /votaciones/{id}/voto` | no (48_Votar, siguiente PR) |
+| Punto de encuentro | `PUT/GET /grupos/{id}/punto-encuentro…` | no (D25 mapa) |
+| Compartir plan | `POST /planes/{id}/compartir` | ya en nv-24 |
+| Chat 1 a 1 (ChatAmigo) | — | **no existe en el backend**: no se dibuja (constitución §2.7) |
+
+### Decisiones (2026-11-21)
+
+- **Tiempo real (D28):** sin WebSocket en el backend; el chat pregunta por lo nuevo cada 5 s con `despues_de` **solo mientras está a la vista** (`LifecycleResumeEffect`).
+- **Nuevo grupo:** un grupo nace de un plan (`plan_id` obligatorio); mientras no exista 43_CrearGrupo, "Nuevo grupo" lleva a Planes.
+- **Título del grupo:** `nombre` (nv-69) o, si no tiene, los integrantes ("Ana, Luis y 2 más").
+- **Invitado:** el chat es solo para confirmados (404 si no); en la lista, la tarjeta muestra Unirme / No voy en lugar de abrir el chat.
 
 ## 4. Modelo de datos
 
-`GroupEntity`, `MessageEntity`, `VoteEntity`.
+`GroupMessageEntity` (Room v5, `MIGRATION_4_5`): mensajes por grupo con estado `SENT`/`PENDING`/`FAILED`. Los grupos no se guardan (lista viva con cursor).
 
 ## 5. Seguridad y privacidad
 

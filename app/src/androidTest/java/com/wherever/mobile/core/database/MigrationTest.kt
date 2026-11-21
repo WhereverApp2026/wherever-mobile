@@ -105,6 +105,23 @@ class MigrationTest {
         }
     }
 
+    @Test
+    fun migration4To5AddsGroupMessagesAndKeepsProfile() {
+        helper.createDatabase(DB_NAME, 4).close()
+
+        helper.runMigrationsAndValidate(DB_NAME, 5, true, MIGRATION_4_5).use { db ->
+            db.execSQL(
+                "INSERT INTO group_message (id, groupId, clientId, authorId, authorName, authorPhoto, system, " +
+                    "text, deleted, sentAt, status) VALUES ('m1', 'g1', NULL, 'u1', 'Ana', NULL, 0, 'hola', 0, " +
+                    "'2026-11-20T18:00:00Z', 'SENT')"
+            )
+            db.query("SELECT COUNT(*) FROM group_message").use { cursor ->
+                assertTrue(cursor.moveToFirst())
+                assertEquals(1, cursor.getInt(0))
+            }
+        }
+    }
+
     private companion object {
         const val DB_NAME = "migration-test.db"
     }
