@@ -19,6 +19,9 @@ class FakeFriendsRepository : FriendsRepository {
     var personResult: Result<PersonDetail> = Result.Failure(AppError.NotFound())
     var requestResult: Result<Friendship>? = null
     var actionResult: Result<Unit> = Result.Success(Unit)
+
+    /** `null` = la API confirma lo pedido. */
+    var muteResult: Result<Boolean>? = null
     val calls = mutableListOf<String>()
 
     override suspend fun list(which: FriendshipList, query: String): Result<FriendshipPage> {
@@ -61,5 +64,10 @@ class FakeFriendsRepository : FriendsRepository {
     override suspend fun block(friendshipId: String): Result<Unit> {
         calls += "block:$friendshipId"
         return actionResult
+    }
+
+    override suspend fun setMuted(friendshipId: String, muted: Boolean): Result<Boolean> {
+        calls += "mute:$friendshipId:$muted"
+        return muteResult ?: Result.Success(muted)
     }
 }

@@ -596,6 +596,9 @@
     <string name="friends_remove_title">¿Eliminar a %1$s?</string>
     <string name="friends_remove_message">Dejarán de ser amigos. No le avisamos.</string>
     <string name="friends_block">Bloquear</string>
+    <string name="friends_options_button">Amigos</string>
+    <string name="friends_mute">Silenciar</string>
+    <string name="friends_mute_hint">No verás sus avisos. No se entera.</string>
     <string name="friends_block_title">¿Bloquear a %1$s?</string>
     <string name="friends_block_message">No podrá encontrarte, mandarte solicitudes ni invitarte a planes. No se entera.</string>
     <plurals name="friends_mutual">

@@ -248,6 +248,9 @@
 - A evitar: en Xiaomi sin "Instalar vía USB" activo, `installDebug`/`connectedDebugAndroidTest` se quedan colgados o fallan con `INSTALL_FAILED_USER_RESTRICTED`; y detener un `connectedDebugAndroidTest` desinstala la app y el APK de pruebas. Instalar con `adb install -r` y correr con `adb shell am instrument -w -e class …`.
 - A evitar: una tarjeta `clickable` fusiona la semántica de sus hijos; un `testTag` en un texto interno se busca con `useUnmergedTree = true` o `assertIsDisplayed` falla aunque esté en pantalla.
 - A evitar: en el teléfono, tocar por coordenadas de una captura falla si la lista aún carga; sacar los límites con `uiautomator dump` justo antes del toque. Escribir credenciales con `adb input text` y pasar de campo con Tab (keyevent 61), nunca tocando el segundo campo con el teclado abierto.
+- Estado (2026-11-20, noche): nv-20 27_AmigoOpc (Silenciar con `PUT /amistades/{id}/silencio`, Eliminar, Bloquear) en `feat/nv-20-amigo-opciones`, apilada sobre nv-17. 62/162 = 38,3 %. Silenciar probado contra staging y devuelto a apagado.
+- A evitar: probar una `ModalBottomSheet` con `createComposeRule` en el Xiaomi deja la prueba colgada; se prueba el contenido aparte (`FriendOptionsContent`) y la hoja a mano en el teléfono.
+- A evitar: `uiautomator dump` da `bounds=[0,0][0,0]` en etiquetas de la barra inferior (semántica fusionada); el helper `scratchpad/tap.sh` las salta.
 - A recordar: desde la protección de `main`, también Jorge (y Claude) integra por PR; nada de push directo.
 
 - Pausa (2026-11-20, tarde): `main` = `810b91e`. nv-17 (feed de amigos) en `wip/pausa`, compilado y con la suite unitaria verde, sin compuertas ni teléfono ni PR. Bug de `mapApiError` (códigos específicos → `Unknown`) corregido ahí con prueba. Siguiente paso exacto en `docs/pendientes.md` ("⏸ Pausa (2026-11-20, tarde)").

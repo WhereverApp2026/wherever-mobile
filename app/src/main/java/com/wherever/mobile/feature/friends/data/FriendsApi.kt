@@ -7,6 +7,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -27,7 +28,8 @@ data class PersonDetailDto(
     @SerialName("relacion") val relation: String = "ninguna",
     @SerialName("nivel") val level: String? = null,
     @SerialName("amigos_en_comun") val mutualFriends: Int? = null,
-    @SerialName("grupos_en_comun") val mutualGroups: Int? = null
+    @SerialName("grupos_en_comun") val mutualGroups: Int? = null,
+    @SerialName("silenciado") val muted: Boolean = false
 )
 
 @Serializable
@@ -62,6 +64,12 @@ data class FriendRequestDto(@SerialName("usuario_id") val userId: String)
 @Serializable
 data class RespondDto(@SerialName("accion") val action: String)
 
+@Serializable
+data class MuteDto(@SerialName("silenciado") val muted: Boolean)
+
+@Serializable
+data class MuteResultDto(@SerialName("id") val id: String, @SerialName("silenciado") val muted: Boolean)
+
 /** wherever-backend `docs/endpoints.md`: personas (nv-35, nv-64, nv-70) y amistades (nv-36, nv-53). */
 interface FriendsApi {
     @GET("amistades")
@@ -90,4 +98,7 @@ interface FriendsApi {
 
     @POST("amistades/{id}/bloquear")
     suspend fun block(@Path("id") id: String)
+
+    @PUT("amistades/{id}/silencio")
+    suspend fun setMuted(@Path("id") id: String, @Body body: MuteDto): MuteResultDto
 }
