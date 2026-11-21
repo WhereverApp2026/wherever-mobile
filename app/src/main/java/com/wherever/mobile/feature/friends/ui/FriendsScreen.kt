@@ -49,6 +49,7 @@ fun FriendsRoute(
     onBack: () -> Unit,
     onAdd: () -> Unit,
     onPerson: (String) -> Unit,
+    onGroups: () -> Unit,
     viewModel: FriendsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -59,6 +60,7 @@ fun FriendsRoute(
     Column(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).safeDrawingPadding()) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(ScreenPadding)) {
             TopTitleRow(stringResource(R.string.friends_title), onBack, Modifier.weight(1f))
+            WhereverTextLink(stringResource(R.string.groups_title), onGroups, Modifier.testTag("friends_groups"))
             WhereverTextLink(stringResource(R.string.friends_add), onAdd)
         }
         Column(

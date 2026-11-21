@@ -564,6 +564,44 @@
     <string name="friends_reject">Rechazar</string>
     <string name="friends_cancel_request">Cancelar solicitud</string>
     <string name="friends_username_at">\@%1$s</string>
+    <string name="groups_title">Mis grupos</string>
+    <string name="groups_more">Ver más grupos</string>
+    <string name="groups_accept">Unirme</string>
+    <string name="groups_decline">No voy</string>
+    <string name="groups_joined">Te uniste al grupo</string>
+    <string name="groups_declined">Rechazaste la invitación</string>
+    <string name="groups_status_invited">Te invitaron</string>
+    <plurals name="groups_confirmed">
+        <item quantity="one">%1$d confirmado</item>
+        <item quantity="many">%1$d confirmados</item>
+        <item quantity="other">%1$d confirmados</item>
+    </plurals>
+    <plurals name="groups_people">
+        <item quantity="one">%1$d persona</item>
+        <item quantity="many">%1$d personas</item>
+        <item quantity="other">%1$d personas</item>
+    </plurals>
+    <plurals name="groups_stops">
+        <item quantity="one">%1$d parada</item>
+        <item quantity="many">%1$d paradas</item>
+        <item quantity="other">%1$d paradas</item>
+    </plurals>
+    <string name="groups_untitled">Grupo</string>
+    <string name="groups_members_more">%1$s y %2$d más</string>
+    <string name="groups_last_message">%1$s: %2$s</string>
+    <string name="groups_new">Nuevo grupo</string>
+    <string name="groups_new_hint">Elige un plan, invita a tus amigos y chateen para decidir.</string>
+    <string name="groups_empty_title">Aún no estás en ningún grupo</string>
+    <string name="groups_chat_offline">Sin conexión: ves los mensajes guardados. Lo que escribas se manda al volver la red.</string>
+    <string name="groups_chat_empty">Aún no hay mensajes. Escribe el primero.</string>
+    <string name="groups_chat_hint">Escribe un mensaje…</string>
+    <string name="groups_chat_send">Enviar mensaje</string>
+    <string name="groups_chat_plan_line">%1$s · %2$s · $%3$d por persona</string>
+    <string name="groups_chat_see_plan">Ver plan</string>
+    <string name="groups_chat_deleted">Mensaje eliminado</string>
+    <string name="groups_chat_sending">Enviando…</string>
+    <string name="groups_chat_failed">No se envió</string>
+    <string name="groups_chat_rate_limited">Vas muy rápido. Espera un momento y vuelve a intentar.</string>
     <string name="my_code_title">Mi código</string>
     <string name="my_code_scan_tab">Escanear</string>
     <string name="my_code_scan_row">Escanear un código</string>

@@ -29,6 +29,8 @@
 | `ReservationRoute(id)` | Reserva: código, detalle, calendario, cambiar hora y cancelar | ninguno | release | nv-54 |
 | `MyReservationsRoute` | Mis reservas: próximas y pasadas | ninguno | release | nv-54 |
 | `FriendsRoute` | Amigos: lista, solicitudes recibidas y enviadas | ninguno | release | nv-53 |
+| `MyGroupsRoute` | Mis grupos: grupos por actividad, aceptar o rechazar la invitación | ninguno | release | nv-25 |
+| `GroupChatRoute(id)` | Chat del grupo con plan fijado, envío optimista y lectura sin red | ninguno | release | nv-25 |
 | `AddFriendRoute` | Agregar amigos: buscar, código, sugerencias y mi usuario | ninguno | release | nv-53 |
 | `MyCodeRoute(scan)` | Mi código: QR para que me agreguen y Escanear (cámara del lector ZXing) | cámara, solo al escanear y en contexto | release | nv-20 |
 | `PersonRoute(id)` | Perfil de otra persona con su acción | ninguno | release | nv-53 |

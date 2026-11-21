@@ -7,6 +7,7 @@ import com.wherever.mobile.core.common.DispatcherProvider
 import com.wherever.mobile.core.database.MIGRATION_1_2
 import com.wherever.mobile.core.database.MIGRATION_2_3
 import com.wherever.mobile.core.database.MIGRATION_3_4
+import com.wherever.mobile.core.database.MIGRATION_4_5
 import com.wherever.mobile.core.database.WhereverDatabase
 import dagger.Module
 import dagger.Provides
@@ -42,5 +43,6 @@ object AppModule {
             .addMigrations(MIGRATION_1_2)
             .addMigrations(MIGRATION_2_3)
             .addMigrations(MIGRATION_3_4)
+            .addMigrations(MIGRATION_4_5)
             .build()
 }
