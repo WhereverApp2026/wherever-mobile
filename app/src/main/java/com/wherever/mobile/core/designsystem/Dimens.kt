@@ -93,6 +93,9 @@ object Sizes {
     val AvatarXL: Dp = 96.dp
 
     val Thumbnail: Dp = 64.dp
+
+    /** Ancho máximo del QR de Mi código (25_MiCodigo). */
+    val QrCode: Dp = 280.dp
     val ThumbnailL: Dp = 72.dp
     val CardImage: Dp = 132.dp
     val HeroImage: Dp = 240.dp

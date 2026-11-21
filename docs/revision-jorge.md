@@ -1,3 +1,19 @@
+# Revisión para Jorge — 2026-11-21: pantallas y evaluación alternadas
+
+> Pedido: alternar una pantalla y una mejora de la evaluación, un PR por cosa, compuertas una por una, integrar con CI verde. Lo ambiguo se decide y se anota aquí.
+
+## Decisiones tomadas sin preguntarte
+- **QR con ZXing (tu decisión):** `com.google.zxing:core` 3.5.3 genera el QR y `com.journeyapps:zxing-android-embedded` 4.3.0 lo lee (excepción de stack en `specs/nv-20` §2.5). Sin ML Kit ni CameraX.
+- **Contenido del QR:** `wherever:amigo:<codigo_amigo>`. Lo escaneado se valida (largo ≤ 64, prefijo y alfabeto) antes de llamar a la API y nunca se abre como enlace.
+- **Permiso de cámara:** lo pide la app al tocar Escanear (no el lector), para mostrar un aviso propio si se niega; en el teléfono, negar dejaba el diálogo genérico del lector. El lector sigue el giro del teléfono (abría en horizontal).
+- **Guardar imagen en Android 8 y 9:** pediría `WRITE_EXTERNAL_STORAGE`; ahí se ofrece Compartir. En 10+ se guarda con MediaStore sin permiso.
+- **La imagen guardada lleva solo el QR** (con zona de silencio), sin nombre ni foto: lo personal no sale del teléfono en un archivo que se puede reenviar.
+- **Sin servidor el QR se sigue mostrando** desde Room: el código no cambia.
+- **PR #34 cerrado** como "Reemplazado por #35"; #36 se integró en la rama de #35 y #35 en `main`.
+- **`check_strings.sh` daba FAIL falso** ("Broken pipe" de `printf | grep -q` con `pipefail`): se corrigió en #35.
+
+---
+
 # Revisión para Jorge — 2026-11-20: reparto del equipo y specs nv-31 a nv-38
 
 > Pedido: repartir áreas (Jorge, Osmar, Diego), dejar nv-31 a nv-38 listas para ejecutar, `CONTRIBUTING.md`, listas por persona, Issues, proteger `main` y subir todo. Lo ambiguo se decidió aquí.

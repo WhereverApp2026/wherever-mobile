@@ -5,6 +5,7 @@ import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.security.SessionTokens
 import com.wherever.mobile.feature.friends.data.FriendsApi
 import com.wherever.mobile.feature.friends.data.FriendsRepositoryImpl
+import com.wherever.mobile.feature.friends.domain.FriendQr
 import com.wherever.mobile.feature.friends.domain.FriendshipList
 import com.wherever.mobile.feature.friends.domain.Relation
 import com.wherever.mobile.testing.ApiDoc
@@ -149,5 +150,23 @@ class FriendsIntegrationTest {
 
         assertTrue((repository.request("u1") as Result.Failure).error is AppError.Conflict)
         assertTrue((repository.byCode("K7M2P9QX") as Result.Failure).error is AppError.NotFound)
+    }
+
+    @Test
+    fun `QR escaneado viaja solo como codigo a personas codigo`() = runTest {
+        server.reply(
+            200,
+            """{"id":"u1","nombre":"Ana","nombre_usuario":"ana_l","foto_url":null,"relacion":"ninguna"}"""
+        )
+
+        val code = checkNotNull(FriendQr.parse(" wherever:amigo:k7m2p9qx "))
+        val found = (repository.byCode(code) as Result.Success).data
+
+        val request = server.takeRequest()
+        assertEquals("GET", request.method)
+        assertEquals("/api/v1/personas/codigo/K7M2P9QX", request.url.encodedPath)
+        assertNull(request.url.query)
+        assertEquals("u1", found.person.id)
+        assertEquals(1, server.requestCount)
     }
 }

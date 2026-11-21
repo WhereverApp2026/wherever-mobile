@@ -1,6 +1,5 @@
 package com.wherever.mobile.feature.friends.ui
 
-import android.content.Intent
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -14,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -41,13 +39,18 @@ import com.wherever.mobile.feature.friends.domain.Relation
 
 /** 26_AgregarAmigos (US-232, US-234, US-235). */
 @Composable
-fun AddFriendRoute(onBack: () -> Unit, onPerson: (String) -> Unit, viewModel: AddFriendViewModel = hiltViewModel()) {
+fun AddFriendRoute(
+    onBack: () -> Unit,
+    onPerson: (String) -> Unit,
+    onMyCode: (scan: Boolean) -> Unit,
+    viewModel: AddFriendViewModel = hiltViewModel()
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     FormScreen {
         TopTitleRow(stringResource(R.string.friends_add_title), onBack)
         state.message?.let { InfoBanner(it.asString(), icon = Icons.Outlined.Check, tag = "add_friend_message") }
         state.error?.let { ErrorBanner(it.asString()) }
-        MyIdentity(state, viewModel)
+        MyIdentity(state, viewModel, onMyCode)
         LabeledTextField(
             label = stringResource(R.string.friends_search_label),
             value = state.query,
@@ -100,9 +103,7 @@ fun AddFriendRoute(onBack: () -> Unit, onPerson: (String) -> Unit, viewModel: Ad
 }
 
 @Composable
-private fun MyIdentity(state: AddFriendUiState, viewModel: AddFriendViewModel) {
-    val context = LocalContext.current
-    val shareText = state.myCode?.let { stringResource(R.string.friends_share_text, it) }
+private fun MyIdentity(state: AddFriendUiState, viewModel: AddFriendViewModel, onMyCode: (scan: Boolean) -> Unit) {
     SurfaceCard {
         NavRow(
             stringResource(R.string.friends_my_username),
@@ -111,17 +112,13 @@ private fun MyIdentity(state: AddFriendUiState, viewModel: AddFriendViewModel) {
                 ?: stringResource(R.string.friends_username_missing),
             tag = "add_friend_username"
         )
-        state.myCode?.let { code ->
-            NavRow(
-                stringResource(R.string.friends_my_code),
-                {
-                    val send = Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, shareText)
-                    context.startActivity(Intent.createChooser(send, null))
-                },
-                value = code,
-                tag = "add_friend_my_code"
-            )
-        }
+        NavRow(
+            stringResource(R.string.friends_my_code),
+            { onMyCode(false) },
+            value = state.myCode,
+            tag = "add_friend_my_code"
+        )
+        NavRow(stringResource(R.string.my_code_scan_row), { onMyCode(true) }, tag = "add_friend_scan")
     }
     if (state.myCode != null) {
         InfoBanner(stringResource(R.string.friends_my_code_hint), icon = Icons.Outlined.Share)

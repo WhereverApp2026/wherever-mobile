@@ -35,6 +35,7 @@ import com.wherever.mobile.feature.feed.ui.MomentDetailRoute
 import com.wherever.mobile.feature.feed.ui.MomentNavigation
 import com.wherever.mobile.feature.friends.ui.AddFriendRoute as AddFriendScreen
 import com.wherever.mobile.feature.friends.ui.FriendsRoute as FriendsScreen
+import com.wherever.mobile.feature.friends.ui.MyCodeRoute as MyCodeScreen
 import com.wherever.mobile.feature.friends.ui.PersonRoute as PersonScreen
 import com.wherever.mobile.feature.home.ui.HomeNavigation
 import com.wherever.mobile.feature.home.ui.HomeRouteScreen
@@ -306,6 +307,13 @@ fun WhereverNavHost(
         }
         composable<AddFriendRoute> { e ->
             AddFriendScreen(
+                onBack = { navController.popFrom(e) },
+                onPerson = { navController.navigateFrom(e, PersonRoute(it)) },
+                onMyCode = { scan -> navController.navigateFrom(e, MyCodeRoute(scan)) }
+            )
+        }
+        composable<MyCodeRoute> { e ->
+            MyCodeScreen(
                 onBack = { navController.popFrom(e) },
                 onPerson = { navController.navigateFrom(e, PersonRoute(it)) }
             )

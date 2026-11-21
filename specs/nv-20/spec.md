@@ -55,6 +55,12 @@ Colores y tipografía desde `core/designsystem`; textos en `strings.xml`; áreas
 - **D18** Permisos (`specs/README.md`)
 - **D22** Barra inferior inconsistente (`specs/README.md`)
 
+### 2.5 Excepción de stack: ZXing (decisión de Jorge, 2026-11-20)
+
+- `com.google.zxing:core` 3.5.3 genera el QR (`core/common/QrMatrix`) y `com.journeyapps:zxing-android-embedded` 4.3.0 lo lee con su propia actividad de cámara (`ScanContract`). Sin ML Kit ni CameraX: no suman Google Play Services ni otra dependencia de cámara.
+- El lector declara `CAMERA` y lo pide **en contexto**, solo al tocar Escanear (`docs/permissions-matrix.md`). Sin cámara, el código se sigue escribiendo a mano en Agregar amigos.
+- Contenido del QR: `wherever:amigo:<codigo_amigo>`. Lo escaneado se valida con `FriendQr.parse` (largo ≤ 64, prefijo y alfabeto del código) antes de llamar a `GET /personas/codigo/{codigo}`; nunca se abre como enlace.
+
 ### No-alcance
 
 - Lo marcado como "Pendiente de backend" no se implementa con datos simulados (constitución §2.7).
@@ -86,7 +92,7 @@ El bloqueo del 2026-11-08 ya no aplica: el backend publicó amistades (nv-36, nv
 |---|---|---|
 | Solicitudes: enviar, aceptar, rechazar, cancelar | `POST /amistades`, `PATCH /amistades/{id}`, `DELETE /amistades/{id}` | sí |
 | Lista de amigos y sugerencias | `GET /amistades?estado=&q=`, `GET /amistades/sugerencias` | sí |
-| Búsqueda por usuario y `codigo_amigo` | `GET /personas/buscar`, `GET /personas/codigo/{codigo}` | sí (código escrito; el QR espera librería, constitución §3) |
+| Búsqueda por usuario y `codigo_amigo` | `GET /personas/buscar`, `GET /personas/codigo/{codigo}` | sí: código escrito y QR (25_MiCodigo, 2026-11-20) |
 | Perfil de otra persona | `GET /personas/{id}` (con `silenciado` si son amigos) | sí |
 | Silenciar, eliminar y bloquear (27_AmigoOpc) | `PUT /amistades/{id}/silencio`, `DELETE /amistades/{id}`, `POST /amistades/{id}/bloquear` | sí (2026-11-20). "Invitar a un grupo" espera nv-25 |
 | Coincidencia con contactos | `POST /personas/contactos` (teléfonos, HMAC en el servidor, nunca se guardan) | no (07_EncuentraAmigos pendiente) |

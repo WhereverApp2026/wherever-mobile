@@ -23,6 +23,8 @@ import com.wherever.mobile.feature.feed.ui.FriendPlanPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedEmptyPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedPreview
 import com.wherever.mobile.feature.feed.ui.MomentDetailPreview
+import com.wherever.mobile.feature.friends.ui.MyCodePreview
+import com.wherever.mobile.feature.friends.ui.MyCodeScanPreview
 import com.wherever.mobile.feature.profile.ui.EditProfilePreview
 import com.wherever.mobile.feature.profile.ui.ProfilePreview
 import com.wherever.mobile.feature.settings.ui.DeleteAccountPreview
@@ -74,6 +76,8 @@ class ScreenshotTest {
         "11_inicio_amigos_vacio" to { FriendsFeedEmptyPreview() },
         "17_post_detalle" to { MomentDetailPreview() },
         "29_plan_amigo" to { FriendPlanPreview() },
+        "25_mi_codigo" to { MyCodePreview() },
+        "25_mi_codigo_escanear" to { MyCodeScanPreview() },
         "89_sin_conexion" to { OfflinePreview() },
         "89_sin_conexion_aviso" to { OfflineNoticePreview() },
         "mantenimiento" to { MaintenancePreview() },

@@ -256,6 +256,12 @@
 - Pausa (2026-11-20, tarde): `main` = `810b91e`. nv-17 (feed de amigos) en `wip/pausa`, compilado y con la suite unitaria verde, sin compuertas ni teléfono ni PR. Bug de `mapApiError` (códigos específicos → `Unknown`) corregido ahí con prueba. Siguiente paso exacto en `docs/pendientes.md` ("⏸ Pausa (2026-11-20, tarde)").
 - A recordar: desde el 2026-11-20 todo va por PR a `main`, también el trabajo de Jorge.
 
+- Estado (2026-11-21): 25_MiCodigo con ZXing (generar con `core`, leer con `zxing-android-embedded`); #34 cerrado, #35/#36/#37 en `main`. Pantallas 63/162. Pruebas que esperan el teléfono en `docs/pruebas-telefono.md`.
+- A evitar: dejar que el lector de ZXing pida la cámara: si se niega muestra "la cámara ha encontrado un problema". Pedirla antes con `RequestPermission` y mostrar un aviso propio.
+- A evitar: `printf | grep -q` con `set -o pipefail` en scripts: falla al azar con "Broken pipe". Usar `grep -q … <<<"$var"`.
+- A recordar: QR en Compose con celdas de píxeles enteros (`floor`); con fracciones el antialias deja rayas.
+- A recordar: staging se apaga 22:00–08:00; de noche solo se prueba el modo sin servidor.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).
