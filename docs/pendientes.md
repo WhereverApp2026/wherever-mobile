@@ -1,38 +1,31 @@
 # Pendientes — Wherever Móvil
 
-> Actualizado: 2026-11-19 (noche). Trabajo directo en `main`, un commit por parte.
+> Actualizado: 2026-11-20 (noche). Una rama y un PR por spec.
 > Métrica: pantallas que funcionan de verdad / 162 frames de la maqueta (detalle y registro de cortes en `docs/avance.md`).
 > Una pantalla cuenta si tiene código, llama a la API real, maneja carga, error y vacío, tiene pruebas y se probó en el teléfono.
 
 ## % real
 
-**57 de 162 = 35,2 %** con la API real, más 1 con datos locales (Insignias, sin endpoint) que no suma.
+**61 de 162 = 37,7 %** con la API real, más 1 con datos locales (Insignias, sin endpoint) que no suma.
 
 | Área | Specs | Frames | Funcionan | % |
 |---|---|---|---|---|
 | Cuenta y acceso | nv-06 a nv-16 | 17 | 16 (+1 local) | 94 % |
-| Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 14 | 48 % |
+| Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 18 | 62 % |
 | Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 14 | 45 % |
 | Planes: IA, detalle, Vaca, Mis planes, día del plan | nv-23, nv-24, nv-26, nv-28, nv-30 | 22 | 9 | 41 % |
 | Reserva, pago y cupones | nv-27, nv-29 | 15 | 4 | 27 % |
 | Después del plan: Recuerdos, Reseñas, Ayuda | nv-31 a nv-33 | 22 | 0 | 0 % |
 | Modo negocio | nv-34 a nv-38 | 26 | 0 | 0 % |
-| **Total** | | **162** | **57** | **35,2 %** |
+| **Total** | | **162** | **61** | **37,7 %** |
 
-## ⏸ Pausa (2026-11-20, tarde): dónde me quedé
+## nv-17 feed de amigos (2026-11-20, noche)
 
-- **En `main`:** sin cambios de código desde `810b91e` (reparto del equipo). 57/162 = 35,2 %.
-- **En `wip/pausa` (sin tocar `main`):** nv-17 feed de amigos, compilado y con toda la suite unitaria en verde, **sin compuertas completas, sin prueba en teléfono y sin PR**:
-  - `feature/feed/` (`GET /momentos/feed`, `GET /momentos/{id}`, `POST /planes/{id}/me-apunto`), pestañas Cerca de ti / Amigos en Inicio (`UnderlineTabs` nuevo en designsystem), 11_InicioAmigos + 12_InicioMas (sugerencias con Agregar → Pendiente), 17_PostDetalle (`MomentRoute`), 29_PlanAmigo con hoja 14_MeApunto (`FriendPlanRoute`, `WhereverBottomSheet` nuevo) y Hacer mi versión (clona para mañana).
-  - **Bug corregido con prueba:** `mapApiError` convertía en `Unknown` los códigos específicos de módulo (`grupo_lleno`, `codigo_ya_usado`…); ahora siguen al estado HTTP (`SafeApiCallTest`).
-  - Pruebas: `FeedViewModelsTest`, `FeedTimeTest`, `FeedIntegrationTest`; capturas `11_inicio_amigos*`, `17_post_detalle`, `29_plan_amigo` grabadas **sin revisar a ojo**.
-- **Siguiente paso exacto:**
-  1. `git switch wip/pausa` → `git switch -c feat/nv-17-feed` (o renombrar), revisar las 12 capturas nuevas contra Figma (`11_InicioAmigos`, `12_InicioMas`, `17_PostDetalle`, `29_PlanAmigo`, `14_MeApunto`).
-  2. Prueba de UI en `androidTest` (pestaña Amigos: vacío, Agregar → Pendiente) y correrla en el teléfono.
-  3. Registrar `MomentRoute` y `FriendPlanRoute` en `docs/routes.md` (`check_routes.sh`).
-  4. Compuertas una por una (`scratchpad/gates.sh <sha>`), instalar y probar en el teléfono con las cuentas QA (B ya tiene un momento en staging; A lo ve en Amigos).
-  5. PR a `main`, CI verde, sumar en `docs/avance.md`: nv-17 pasa de 3 a 3 + 11_InicioAmigos, 12_InicioMas, InicioMas · solicitud enviada, 14_MeApunto, 17_PostDetalle, 29_PlanAmigo (+ variante) si todo queda verde. Sin API: Historias, Reacciones y comentarios.
-  6. Después: Social (nv-18, nv-20, nv-25), una rama y un PR por spec; luego Planes y Reserva.
+- Rama `feat/nv-17-feed` (sale de `wip/pausa`), PR a `main`. Compuertas locales en verde: ktlint, detekt, lint, unitarias + capturas, kover, debug y release, critic, sdd, specs, routes, strings, coverage 79,7 %, semgrep 0. Delta 27,5 % (advisory).
+- **Probado en el teléfono (Xiaomi, staging):** cuenta A ve el momento de B en Amigos con foto real; abre 17_PostDetalle. `FriendsFeedTest` (vacío; Agregar → Solicitud enviada) verde en el teléfono.
+- **Arreglos de esta vuelta:** botones de 29_PlanAmigo apilados ("Hacer mi versión" se cortaba); tinte de fondo mientras carga la foto del momento (se veía un hueco gris/blanco); plurales `many`; rutas `MomentRoute` y `FriendPlanRoute` en `docs/routes.md`.
+- **Falta:** 29_PlanAmigo y 14_MeApunto en el teléfono: hace falta un momento de staging con `plan_id` (B publica un momento desde un plan público). Sin API: historias, reacciones, comentarios.
+- **Siguiente:** Social (nv-18, nv-20, nv-25), una rama y un PR por spec; luego Planes y Reserva.
 - **Protección de `main`:** sigue sin aplicar (JaRe0528 tiene WRITE). Comando en `docs/revision-jorge.md`.
 
 ## Reparto del equipo (desde 2026-11-20)

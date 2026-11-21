@@ -70,7 +70,7 @@ internal fun MomentDetailContent(state: MomentDetailUiState, navigation: MomentN
                         model = item.moment.imageUrl,
                         contentDescription = item.moment.text,
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxWidth().aspectRatio(PHOTO_RATIO)
+                        modifier = Modifier.fillMaxWidth().aspectRatio(PHOTO_RATIO).background(RouteBlueTint)
                     )
                 } else {
                     Box(Modifier.fillMaxWidth().aspectRatio(PHOTO_RATIO).background(RouteBlueTint))

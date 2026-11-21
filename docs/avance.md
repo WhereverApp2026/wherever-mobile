@@ -8,9 +8,9 @@
 
 | | Pantallas | % de 162 |
 |---|---|---|
-| Funcionan con la API real | 57 | **35,2 %** |
+| Funcionan con la API real | 61 | **37,7 %** |
 | Con datos locales (falta endpoint) | 1 | 0,6 % |
-| Total con UI terminada | 58 | 35,8 % |
+| Total con UI terminada | 62 | 38,3 % |
 
 | Spec | Tema | Frames | Funcionan | Datos locales | Nota |
 |---|---|---|---|---|---|
@@ -24,7 +24,7 @@
 | nv-14 | Perfil, edición e insignias | 4 | 3 | 1 | Insignias con catálogo local (sin endpoint) |
 | nv-15 | Privacidad, mis datos, eliminar | 2 | 2 | 0 |  |
 | nv-16 | Sin conexión | 1 | 1 | 0 | más mantenimiento y versión mínima; probado en teléfono 2026-11-20 |
-| nv-17 | Inicio y feed | 15 | 3 | 0 | feed social pendiente |
+| nv-17 | Inicio y feed | 15 | 7 | 0 | Amigos y PostDetalle probados en teléfono 2026-11-20 con datos de staging; PlanAmigo y MeApunto sin probar en teléfono (ningún momento de staging enlaza un plan); sin API: historias, reacciones, comentarios |
 | nv-18 | Notificaciones | 4 | 4 | 0 | aviso en la app, bloqueo y Aceptar; pushes de reserva/reseña pendientes de backend |
 | nv-19 | Búsqueda | 4 | 4 | 0 | Personas: Amigos, Agregar o Solicitud enviada probado en teléfono 2026-11-20 |
 | nv-20 | Amigos | 15 | 10 | 0 | falta QR y variantes |
@@ -59,6 +59,7 @@
 | 2026-11-20 | nv-16 integrado | 89_SinConexion, mantenimiento y versión mínima | 55 (+1 locales) | 34,0 % |
 | 2026-11-20 | `099142e` + prueba | 08_Permisos probado en teléfono | 56 (+1 locales) | 34,6 % |
 | 2026-11-20 | nv-19 Personas | BuscarPersonas · solicitud enviada (y Amigos) | 57 (+1 locales) | 35,2 % |
+| 2026-11-20 | nv-17 feed de amigos | 11_InicioAmigos, 12_InicioMas, InicioMas · solicitud enviada, 17_PostDetalle | 61 (+1 locales) | 37,7 % |
 
 ---
 

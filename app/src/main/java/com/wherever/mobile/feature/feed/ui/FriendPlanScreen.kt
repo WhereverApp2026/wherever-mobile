@@ -3,7 +3,7 @@ package com.wherever.mobile.feature.feed.ui
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -102,13 +102,13 @@ internal fun FriendPlanContent(state: FriendPlanUiState, onBack: () -> Unit, act
         else -> {
             FormScreen(
                 footer = {
-                    Row(horizontalArrangement = Arrangement.spacedBy(Spacing.M), modifier = Modifier.fillMaxWidth()) {
+                    Column(verticalArrangement = Arrangement.spacedBy(Spacing.S), modifier = Modifier.fillMaxWidth()) {
                         WhereverPrimaryButton(
                             text = stringResource(if (state.joined) R.string.feed_joined_short else R.string.feed_join),
                             onClick = actions.onAskJoin,
                             enabled = !state.joined,
                             icon = Icons.Outlined.Add,
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier.fillMaxWidth(),
                             tag = "friend_plan_join"
                         )
                         WhereverOutlinedButton(
@@ -116,7 +116,7 @@ internal fun FriendPlanContent(state: FriendPlanUiState, onBack: () -> Unit, act
                             onClick = actions.onCopy,
                             enabled = !state.copying,
                             icon = Icons.Outlined.Edit,
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier.fillMaxWidth(),
                             tag = "friend_plan_copy"
                         )
                     }

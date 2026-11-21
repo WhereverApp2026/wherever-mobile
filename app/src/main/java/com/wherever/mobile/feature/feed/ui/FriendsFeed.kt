@@ -58,6 +58,9 @@ private const val SCRIM_ALPHA = 0.72f
 /** Después de cuántos momentos aparecen "Personas que quizá conozcas" (12_InicioMas). */
 private const val SUGGESTIONS_AFTER = 2
 
+/** Amigos en común de la sugerencia de la vista previa. */
+private const val PREVIEW_MUTUAL = 3
+
 /** 11_InicioAmigos y 12_InicioMas: feed de momentos de amigos y sugerencias de personas. */
 fun LazyListScope.friendsFeedItems(state: FriendsFeedUiState, actions: FriendsFeedActions) {
     state.error?.let { error ->
@@ -144,7 +147,8 @@ internal fun MomentCard(item: FeedItem, actions: FriendsFeedActions, modifier: M
                         model = moment.imageUrl,
                         contentDescription = moment.text,
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxWidth().height(Sizes.HeroImage)
+                        // Mientras carga, el mismo tinte que sin foto: el degradado no deja un hueco blanco.
+                        modifier = Modifier.fillMaxWidth().height(Sizes.HeroImage).background(RouteBlueTint)
                     )
                 } else {
                     Box(modifier = Modifier.fillMaxWidth().height(Sizes.HeroImage).background(RouteBlueTint))
@@ -319,7 +323,7 @@ internal fun FriendsFeedPreview() {
                     loading = false,
                     items = listOf(PREVIEW_FEED_ITEM),
                     suggestions = listOf(
-                        FriendSuggestion(Person("u2", "Luis Mendoza", "luis", null), 3),
+                        FriendSuggestion(Person("u2", "Luis Mendoza", "luis", null), PREVIEW_MUTUAL),
                         FriendSuggestion(Person("u3", "Sofía Ramírez", "sofia", null), 2)
                     ),
                     sent = setOf("u3")

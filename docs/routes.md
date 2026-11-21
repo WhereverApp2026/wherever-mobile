@@ -15,6 +15,8 @@
 | `HomeRoute` | Inicio con recomendaciones, clima y eventos | ubicación aproximada (opcional, en contexto) | release | nv-47 |
 | `ExploreRoute(query, category)` | Explorar: búsqueda, filtros y recientes | ubicación aproximada (opcional) | release | nv-47 |
 | `PlaceRoute(id, origin)` | Ficha del lugar | ninguno | release | nv-47 |
+| `MomentRoute(id)` | Publicación de un amigo (17_PostDetalle) | ninguno | release | nv-17 |
+| `FriendPlanRoute(id)` | Plan de un amigo con Me apunto y Hacer mi versión (29_PlanAmigo) | ninguno | release | nv-17 |
 | `NewPasswordRoute(token)` | Nueva contraseña desde el enlace del correo | ninguno | release | nv-08 |
 | `VerifyEmailRoute(token)` | Verificar correo desde el enlace | ninguno | release | nv-08 |
 | `SearchRoute(query)` | Buscar: lugares, personas y planes; recientes, ideas y sin resultados | ninguno | release | nv-19 |

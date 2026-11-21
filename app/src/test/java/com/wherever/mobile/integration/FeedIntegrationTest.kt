@@ -44,7 +44,8 @@ class FeedIntegrationTest {
             """{"items":[{"id":"m1","autor":{"id":"u1","nombre_usuario":"qa_b"},""" +
                 """"postal":{"id":"p1","imagen_url":"https://cdn/i/1080.jpg","estilo":"clasica","texto":"Tacos"},""" +
                 """"negocio_id":null,"texto":"","visibilidad":"amigos","estado":"publicado","etiquetados":[],""" +
-                """"plan_id":"","reacciones_total":0,"propio":false,"version":1,"creado_en":"2026-11-20T18:21:20.453Z"}],""" +
+                """"plan_id":"","reacciones_total":0,"propio":false,"version":1,""" +
+                """"creado_en":"2026-11-20T18:21:20.453Z"}],""" +
                 """"siguiente_cursor":"","limite":20}"""
         )
 

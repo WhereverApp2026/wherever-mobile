@@ -762,6 +762,7 @@
     <string name="feed_see_more">Ver más</string>
     <plurals name="feed_mutual">
         <item quantity="one">%1$d en común</item>
+        <item quantity="many">%1$d en común</item>
         <item quantity="other">%1$d en común</item>
     </plurals>
     <string name="feed_post_title">Publicación</string>
@@ -775,6 +776,7 @@
     <string name="feed_join_title">Apuntarte al plan</string>
     <plurals name="feed_join_stops">
         <item quantity="one">%1$d parada</item>
+        <item quantity="many">%1$d paradas</item>
         <item quantity="other">%1$d paradas</item>
     </plurals>
     <string name="feed_join_info">Tu amigo recibe el aviso y entras al grupo del plan.</string>
