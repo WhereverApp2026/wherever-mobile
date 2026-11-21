@@ -22,7 +22,9 @@ data class PersonDetail(
     val relation: Relation,
     val level: String? = null,
     val mutualFriends: Int? = null,
-    val mutualGroups: Int? = null
+    val mutualGroups: Int? = null,
+    /** Mi marca de silencio (nv-70): no veo sus avisos; la otra persona no se entera. */
+    val muted: Boolean = false
 )
 
 /** Bandejas de `GET /amistades?estado=`. */
@@ -55,4 +57,7 @@ interface FriendsRepository {
     suspend fun remove(friendshipId: String): Result<Unit>
 
     suspend fun block(friendshipId: String): Result<Unit>
+
+    /** `PUT /amistades/{id}/silencio`; devuelve cómo quedó la marca. */
+    suspend fun setMuted(friendshipId: String, muted: Boolean): Result<Boolean>
 }

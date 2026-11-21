@@ -34,7 +34,9 @@ data class PersonUiState(
     val confirm: PersonConfirm? = null,
     val error: UiText? = null,
     /** Bloqueada: la pantalla se cierra. */
-    val blocked: Boolean = false
+    val blocked: Boolean = false,
+    /** Hoja 27_AmigoOpc abierta. */
+    val options: Boolean = false
 )
 
 /** Perfil de otra persona con la acción que toca según la relación (US-232, US-233, US-238). */
@@ -92,9 +94,28 @@ class PersonViewModel @Inject constructor(
     /** Cancela la solicitud enviada sin preguntar; eliminar a un amigo pide confirmación. */
     fun cancelRequest() = withFriendship { repository.remove(it) }
 
-    fun askRemove() = mutableState.update { it.copy(confirm = PersonConfirm.REMOVE) }
+    fun openOptions() = mutableState.update { it.copy(options = true) }
 
-    fun askBlock() = mutableState.update { it.copy(confirm = PersonConfirm.BLOCK) }
+    fun closeOptions() = mutableState.update { it.copy(options = false) }
+
+    /** Silenciar o quitar el silencio; la hoja sigue abierta con la marca que confirma la API. */
+    fun setMuted(muted: Boolean) {
+        val id = state.value.friendshipId ?: return
+        if (state.value.working) return
+        mutableState.update { it.copy(working = true, error = null) }
+        viewModelScope.launch {
+            when (val result = repository.setMuted(id, muted)) {
+                is Result.Success -> mutableState.update { state ->
+                    state.copy(working = false, detail = state.detail?.copy(muted = result.data))
+                }
+                is Result.Failure -> mutableState.update { it.copy(working = false, error = result.error.toUiText()) }
+            }
+        }
+    }
+
+    fun askRemove() = mutableState.update { it.copy(options = false, confirm = PersonConfirm.REMOVE) }
+
+    fun askBlock() = mutableState.update { it.copy(options = false, confirm = PersonConfirm.BLOCK) }
 
     fun dismissConfirm() = mutableState.update { it.copy(confirm = null) }
 
@@ -124,3 +145,11 @@ class PersonViewModel @Inject constructor(
         }
     }
 }
+
+/** Eventos de 27_AmigoOpc. */
+internal data class FriendOptionsActions(
+    val onMute: (Boolean) -> Unit,
+    val onRemove: () -> Unit,
+    val onBlock: () -> Unit,
+    val onDismiss: () -> Unit
+)

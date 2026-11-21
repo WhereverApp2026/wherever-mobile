@@ -78,16 +78,18 @@ Nombres de ruta propuestos. Se registran en `docs/routes.md` al implementar la s
 
 Errores con forma `{codigo, mensaje, campos[], traza_id}`, mapeados a `AppError` (`specs/nv-04 §3.3`). Detalle en `docs/contexto_api_sprint1.md`.
 
-### Pendiente de backend
+### Endpoints (cotejo del 2026-11-20 con `wherever-backend` `origin/main`, `docs/endpoints.md`)
 
-Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato. Cotejado el 2026-11-08 con todas las ramas de `wherever-backend` (`main` = `f79917e`): sin rutas de amigos; solo existe `codigo_amigo` en el perfil. Implementación bloqueada hasta que existan.
+El bloqueo del 2026-11-08 ya no aplica: el backend publicó amistades (nv-36, nv-53, nv-70) y personas (nv-35, nv-64, nv-70).
 
-- Solicitudes: enviar, aceptar, rechazar, cancelar.
-- Lista de amigos y sugerencias.
-- Búsqueda por usuario, teléfono y `codigo_amigo`.
-- Perfil público de otra persona.
-- Silenciar, eliminar y bloquear.
-- Coincidencia con contactos.
+| Necesidad | Endpoint | En la app |
+|---|---|---|
+| Solicitudes: enviar, aceptar, rechazar, cancelar | `POST /amistades`, `PATCH /amistades/{id}`, `DELETE /amistades/{id}` | sí |
+| Lista de amigos y sugerencias | `GET /amistades?estado=&q=`, `GET /amistades/sugerencias` | sí |
+| Búsqueda por usuario y `codigo_amigo` | `GET /personas/buscar`, `GET /personas/codigo/{codigo}` | sí (código escrito; el QR espera librería, constitución §3) |
+| Perfil de otra persona | `GET /personas/{id}` (con `silenciado` si son amigos) | sí |
+| Silenciar, eliminar y bloquear (27_AmigoOpc) | `PUT /amistades/{id}/silencio`, `DELETE /amistades/{id}`, `POST /amistades/{id}/bloquear` | sí (2026-11-20). "Invitar a un grupo" espera nv-25 |
+| Coincidencia con contactos | `POST /personas/contactos` (teléfonos, HMAC en el servidor, nunca se guardan) | no (07_EncuentraAmigos pendiente) |
 
 ## 4. Modelo de datos
 

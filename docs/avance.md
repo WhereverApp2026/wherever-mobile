@@ -8,9 +8,9 @@
 
 | | Pantallas | % de 162 |
 |---|---|---|
-| Funcionan con la API real | 61 | **37,7 %** |
+| Funcionan con la API real | 62 | **38,3 %** |
 | Con datos locales (falta endpoint) | 1 | 0,6 % |
-| Total con UI terminada | 62 | 38,3 % |
+| Total con UI terminada | 63 | 38,9 % |
 
 | Spec | Tema | Frames | Funcionan | Datos locales | Nota |
 |---|---|---|---|---|---|
@@ -27,7 +27,7 @@
 | nv-17 | Inicio y feed | 15 | 7 | 0 | Amigos y PostDetalle probados en teléfono 2026-11-20 con datos de staging; PlanAmigo y MeApunto sin probar en teléfono (ningún momento de staging enlaza un plan); sin API: historias, reacciones, comentarios |
 | nv-18 | Notificaciones | 4 | 4 | 0 | aviso en la app, bloqueo y Aceptar; pushes de reserva/reseña pendientes de backend |
 | nv-19 | Búsqueda | 4 | 4 | 0 | Personas: Amigos, Agregar o Solicitud enviada probado en teléfono 2026-11-20 |
-| nv-20 | Amigos | 15 | 10 | 0 | falta QR y variantes |
+| nv-20 | Amigos | 15 | 11 | 0 | 27_AmigoOpc (silenciar en staging) probado en teléfono 2026-11-20; falta QR (librería por acordar), 07_EncuentraAmigos (contactos) y variantes |
 | nv-21 | Explorar y lugares | 8 | 5 | 0 | staging sin negocios |
 | nv-22 | Favoritos | 2 | 2 | 0 |  |
 | nv-23 | Crear plan con IA | 6 | 4 | 0 |  |
@@ -60,6 +60,7 @@
 | 2026-11-20 | `099142e` + prueba | 08_Permisos probado en teléfono | 56 (+1 locales) | 34,6 % |
 | 2026-11-20 | nv-19 Personas | BuscarPersonas · solicitud enviada (y Amigos) | 57 (+1 locales) | 35,2 % |
 | 2026-11-20 | nv-17 feed de amigos | 11_InicioAmigos, 12_InicioMas, InicioMas · solicitud enviada, 17_PostDetalle | 61 (+1 locales) | 37,7 % |
+| 2026-11-20 | nv-20 opciones de amigo | 27_AmigoOpc: Silenciar, Eliminar, Bloquear | 62 (+1 locales) | 38,3 % |
 
 ---
 
