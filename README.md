@@ -35,3 +35,12 @@ gradlew.bat testDebugUnitTest
 ```
 
 En debug, sin `API_BASE_URL`, la app usa staging (`gradle.properties`). `google-services.json` no se sube a Git. `detekt` requiere JDK 17 a 22 (ver `Memoria.md`).
+
+## Figma por MCP
+El diseño vive en el archivo de Figma `9IjBujkogqaUPAkDbluclQ` («Boceto 2»); cada spec nombra sus frames. `.mcp.json` registra el servidor MCP remoto de Figma (`https://mcp.figma.com/mcp`) para que Claude Code (u otro cliente MCP) lea los frames al implementar una pantalla.
+
+1. Abre Claude Code en la raíz del repo y acepta el servidor `figma` del proyecto (`/mcp` lo muestra).
+2. En `/mcp` → `figma` → *Authenticate*: inicia sesión con una cuenta con acceso al archivo. No hay claves en el repo; el token lo guarda el cliente.
+3. Pide el frame por su liga (`https://www.figma.com/design/9IjBujkogqaUPAkDbluclQ/...?node-id=…`) o por su nombre (`25_MiCodigo`).
+
+Sin acceso a Figma, `maqueta/figma-frames/` (local, fuera de Git) tiene las exportaciones PNG y `docs/figma-inventory.md` el inventario de los 198 frames.
