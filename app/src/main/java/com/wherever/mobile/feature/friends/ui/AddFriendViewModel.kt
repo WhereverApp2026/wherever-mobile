@@ -8,6 +8,7 @@ import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.ui.UiText
 import com.wherever.mobile.core.ui.fieldErrors
 import com.wherever.mobile.core.ui.toUiText
+import com.wherever.mobile.feature.friends.domain.FriendQr
 import com.wherever.mobile.feature.friends.domain.FriendSuggestion
 import com.wherever.mobile.feature.friends.domain.FriendsRepository
 import com.wherever.mobile.feature.friends.domain.Person
@@ -23,7 +24,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 private val USERNAME = Regex("^[a-z0-9_]{3,20}$")
-private val FRIEND_CODE = Regex("^[23456789ABCDEFGHJKMNPQRSTUVWXYZ]{8}$")
 private const val MIN_QUERY = 3
 
 /** Regla de la API (backend nv-34): 3 a 20 de `[a-z0-9_]`; `@` y mayúsculas se normalizan. */
@@ -31,7 +31,7 @@ fun normalizeUsername(value: String): String = value.trim().removePrefix("@").lo
 
 fun isValidUsername(value: String): Boolean = USERNAME.matches(normalizeUsername(value))
 
-fun isValidFriendCode(value: String): Boolean = FRIEND_CODE.matches(value.trim().uppercase())
+fun isValidFriendCode(value: String): Boolean = FriendQr.isValidCode(value)
 
 data class AddFriendUiState(
     val myUsername: String? = null,

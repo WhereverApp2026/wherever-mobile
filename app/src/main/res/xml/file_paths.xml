@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Solo comparte cache/fotos/ con la app de cámara (specs/nv-50). -->
+<!-- cache/fotos/: foto de la cámara (specs/nv-50). cache/qr/: imagen de Mi código para compartir (nv-20). -->
 <paths>
     <cache-path name="fotos" path="fotos/" />
+    <cache-path name="qr" path="qr/" />
 </paths>

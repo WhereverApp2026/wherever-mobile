@@ -4,6 +4,13 @@
 > **Código evaluado:** commit `5c9ffa6` (rama `feat/nv-20-amigo-opciones`, que es `main` `810b91e` + PR #35 + PR #36, aún sin integrar). Donde `main` difiere, se indica.
 > **Método:** lectura del código, `AndroidManifest.xml`, Gradle, `.github/workflows/ci-pr.yml`, `.claude/`, `Memoria.md` y docs. Pruebas JVM corridas en primer plano (`./gradlew --rerun-tasks testDebugUnitTest`, resultados XML en `app/build/test-results/testDebugUnitTest/`). Las instrumentadas se tomaron del CI (emulador API 35, run `44855399398`) porque el teléfono se desconectó durante la evaluación. Backend consultado solo para saber qué hace con lo que la app le manda (`wherever-backend` `origin/main`).
 
+## Reevaluaciones (se agrega una fila por cada integración a `main`)
+
+| Fecha | Integrado | Pantallas | Seguridad DevSecOps | Pruebas JVM | Qué cambió en la calificación |
+|---|---|---|---|---|---|
+| 2026-11-20 | Línea base (este documento) | 62/162 = 38,3 % | 16,5/25 = 66 % | 480 | — |
+| 2026-11-21 | #35 feed y opciones de amigo; #38 MCP de Figma; 25_MiCodigo con ZXing | 63/162 = 38,9 % | 16,5/25 = 66 % | 492 | Sin cambio en seguridad: el QR suma 4 pruebas de seguridad (contenido y entrada escaneada no confiable), pero ningún control de la tabla pasa de 0 a 1. `.mcp.json` es de flujo de trabajo, no de seguridad. |
+
 ## Resumen de números reales
 
 | Pregunta | Respuesta | Evidencia |

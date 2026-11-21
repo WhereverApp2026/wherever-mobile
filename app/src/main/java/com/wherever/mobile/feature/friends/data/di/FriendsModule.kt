@@ -2,7 +2,9 @@ package com.wherever.mobile.feature.friends.data.di
 
 import com.wherever.mobile.feature.friends.data.FriendsApi
 import com.wherever.mobile.feature.friends.data.FriendsRepositoryImpl
+import com.wherever.mobile.feature.friends.data.QrImageRepositoryImpl
 import com.wherever.mobile.feature.friends.domain.FriendsRepository
+import com.wherever.mobile.feature.friends.domain.QrImageRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -15,6 +17,9 @@ import retrofit2.Retrofit
 abstract class FriendsModule {
     @Binds
     abstract fun bindRepository(impl: FriendsRepositoryImpl): FriendsRepository
+
+    @Binds
+    abstract fun bindQrImages(impl: QrImageRepositoryImpl): QrImageRepository
 
     companion object {
         @Provides

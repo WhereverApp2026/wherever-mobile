@@ -116,6 +116,10 @@ data object MyReservationsRoute
 @Serializable
 data object AddFriendRoute
 
+/** 25_MiCodigo; `scan` lo lee MyCodeViewModel para abrir en la pestaña Escanear (specs/nv-20). */
+@Serializable
+data class MyCodeRoute(val scan: Boolean = false)
+
 /** `id` lo lee PersonViewModel de SavedStateHandle por su nombre. */
 @Serializable
 data class PersonRoute(val id: String)

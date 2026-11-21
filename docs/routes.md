@@ -30,6 +30,7 @@
 | `MyReservationsRoute` | Mis reservas: próximas y pasadas | ninguno | release | nv-54 |
 | `FriendsRoute` | Amigos: lista, solicitudes recibidas y enviadas | ninguno | release | nv-53 |
 | `AddFriendRoute` | Agregar amigos: buscar, código, sugerencias y mi usuario | ninguno | release | nv-53 |
+| `MyCodeRoute(scan)` | Mi código: QR para que me agreguen y Escanear (cámara del lector ZXing) | cámara, solo al escanear y en contexto | release | nv-20 |
 | `PersonRoute(id)` | Perfil de otra persona con su acción | ninguno | release | nv-53 |
 | `MyPlansRoute` | Mis planes (próximos, guardados y pasados) | ninguno | release | nv-48 |
 | `ProfileRoute` | Perfil | ninguno | release | nv-14 |

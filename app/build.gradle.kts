@@ -207,6 +207,8 @@ dependencies {
     implementation(libs.androidx.datastore)
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+    implementation(libs.zxing.core)
+    implementation(libs.zxing.android.embedded)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging)
