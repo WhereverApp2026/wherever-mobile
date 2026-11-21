@@ -37,6 +37,8 @@ import com.wherever.mobile.feature.friends.ui.AddFriendRoute as AddFriendScreen
 import com.wherever.mobile.feature.friends.ui.FriendsRoute as FriendsScreen
 import com.wherever.mobile.feature.friends.ui.MyCodeRoute as MyCodeScreen
 import com.wherever.mobile.feature.friends.ui.PersonRoute as PersonScreen
+import com.wherever.mobile.feature.groups.ui.GroupChatRoute as GroupChatScreen
+import com.wherever.mobile.feature.groups.ui.MyGroupsRoute as MyGroupsScreen
 import com.wherever.mobile.feature.home.ui.HomeNavigation
 import com.wherever.mobile.feature.home.ui.HomeRouteScreen
 import com.wherever.mobile.feature.notifications.ui.NotificationsRoute as NotificationsScreen
@@ -280,7 +282,23 @@ fun WhereverNavHost(
             MyPlansScreen(
                 onTab = { navController.openTab(e, it) },
                 onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
-                onCreate = { navController.navigateFrom(e, CreatePlanRoute()) }
+                onCreate = { navController.navigateFrom(e, CreatePlanRoute()) },
+                onGroups = { navController.navigateFrom(e, MyGroupsRoute) }
+            )
+        }
+        composable<MyGroupsRoute> { e ->
+            MyGroupsScreen(
+                onBack = { navController.popFrom(e) },
+                onGroup = { navController.navigateFrom(e, GroupChatRoute(it)) },
+                // Un grupo nace de un plan (POST /grupos con plan_id): se elige el plan en Planes.
+                onNewGroup = { navController.openTab(e, MainTab.PLANS) }
+            )
+        }
+        composable<GroupChatRoute> { e ->
+            GroupChatScreen(
+                onBack = { navController.popFrom(e) },
+                onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
+                onGone = { navController.popOnResult(e) }
             )
         }
         composable<FavoritesRoute> { e ->
@@ -302,7 +320,8 @@ fun WhereverNavHost(
             FriendsScreen(
                 onBack = { navController.popFrom(e) },
                 onAdd = { navController.navigateFrom(e, AddFriendRoute) },
-                onPerson = { navController.navigateFrom(e, PersonRoute(it)) }
+                onPerson = { navController.navigateFrom(e, PersonRoute(it)) },
+                onGroups = { navController.navigateFrom(e, MyGroupsRoute) }
             )
         }
         composable<AddFriendRoute> { e ->

@@ -114,6 +114,13 @@ data class ReservationRoute(val id: String)
 data object MyReservationsRoute
 
 @Serializable
+data object MyGroupsRoute
+
+/** 45_GrupoChat; `id` lo lee GroupChatViewModel de SavedStateHandle por su nombre (specs/nv-25). */
+@Serializable
+data class GroupChatRoute(val id: String)
+
+@Serializable
 data object AddFriendRoute
 
 /** 25_MiCodigo; `scan` lo lee MyCodeViewModel para abrir en la pestaña Escanear (specs/nv-20). */

@@ -13,6 +13,9 @@
 | 6 | Editar perfil (nv-50) | Foto con cámara y galería tras los últimos cambios | — | abierto |
 | 7 | Ficha, reservas y Explorar | Con negocios reales | staging sin negocios | abierto |
 | 8 | APK de release (nv-41) | Instalar y abrir el APK firmado | — | abierto |
+| 9 | 44_MisGrupos (nv-25) | Lista real, unirse y rechazar una invitación con la cuenta QA B | 2026-11-21 12:43: staging en 503 (sábado) | abierto |
+| 10 | 45_GrupoChat (nv-25) | Enviar mensaje, recibirlo en el otro teléfono (sondeo de 5 s) y Reintentar sin red | idem | abierto |
 
 ## Hecho
+- 2026-11-21, nv-25: instalado sobre la build anterior (migración Room 4→5 sin cierre y con la sesión intacta); Planes → Mis grupos abre la pantalla, sin servidor muestra error con Reintentar y Volver regresa a Mis planes.
 - 2026-11-21, 25_MiCodigo: el QR se dibuja con el código real de la cuenta del teléfono (`QA282D68`) desde Room, sin servidor; Guardar imagen deja el PNG en `Imágenes/Wherever` (se leyó de vuelta: QR correcto); Escanear pide la cámara en contexto y abre el lector.

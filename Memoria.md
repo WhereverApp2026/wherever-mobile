@@ -262,6 +262,10 @@
 - A recordar: QR en Compose con celdas de píxeles enteros (`floor`); con fracciones el antialias deja rayas.
 - A recordar: staging se apaga 22:00–08:00; de noche solo se prueba el modo sin servidor.
 
+- Estado (2026-11-21, mediodía): nv-25 44_MisGrupos y 45_GrupoChat en `feat/nv-25-grupos`. Compuertas locales en verde (ktlint, detekt, debug, androidTest compila, unitarias + capturas, lint, kover) y scripts (critic, sdd, specs, routes, strings). En el teléfono solo sin servidor (staging 503); no suman al % hasta probarlas con la API (`docs/pruebas-telefono.md` #9-#10).
+- A evitar: correr `ScreenshotTest` con el JDK 17 descargado: falla con `Could not initialize class sun.awt.Win32FontManager`. detekt con JDK 17 y pruebas/capturas con el JBR de Android Studio.
+- A recordar: revisar las capturas grabadas en claro y oscuro; así salieron los chips sin contraste en oscuro (`StatusPill` con tintes fijos necesita `contentColor = Ink`).
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

@@ -2,6 +2,7 @@ package com.wherever.mobile.feature.auth.data
 
 import com.wherever.mobile.BuildConfig
 import com.wherever.mobile.core.common.Result
+import com.wherever.mobile.core.common.SessionCleaner
 import com.wherever.mobile.core.common.map
 import com.wherever.mobile.core.network.AuthTokensDto
 import com.wherever.mobile.core.network.safeApiCall
@@ -28,7 +29,9 @@ class AuthRepositoryImpl @Inject constructor(
     private val profileDao: UserProfileDao,
     private val onboarding: OnboardingPreferences,
     private val deviceInfo: DeviceInfoProvider,
-    private val deviceRegistration: DeviceRegistration
+    private val deviceRegistration: DeviceRegistration,
+    /** Cachés de datos personales de otras features (chat de grupos...): se vacían con la sesión. */
+    private val sessionCleaners: Set<@JvmSuppressWildcards SessionCleaner> = emptySet()
 ) : AuthRepository {
     override suspend fun hasSession(): Boolean = tokenStore.current() != null
 
@@ -104,6 +107,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun clearLocalSession() {
         tokenStore.clear()
         profileDao.clear()
+        sessionCleaners.forEach { it.clear() }
         onboarding.clear()
     }
 
