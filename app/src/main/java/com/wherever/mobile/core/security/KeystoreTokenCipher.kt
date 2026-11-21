@@ -16,15 +16,20 @@ private const val TAG_BITS = 128
 private const val IV_BYTES = 12
 
 /** AES-256-GCM con clave de Android Keystore. El IV aleatorio va antes del texto cifrado. */
+// Semgrep gcm-detection pide revisar que el IV no se repita: en encrypt lo genera Keystore en cada llamada
+// (randomizedEncryptionRequired por defecto) y decrypt usa el IV guardado con el texto. Revisado en nv-40.
 class KeystoreTokenCipher : TokenCipher {
     override fun encrypt(plain: ByteArray): ByteArray {
+        // nosemgrep: kotlin.lang.security.gcm-detection.gcm-detection
         val cipher = Cipher.getInstance(TRANSFORMATION)
         cipher.init(Cipher.ENCRYPT_MODE, key())
         return cipher.iv + cipher.doFinal(plain)
     }
 
     override fun decrypt(encrypted: ByteArray): ByteArray {
+        // nosemgrep: kotlin.lang.security.gcm-detection.gcm-detection
         val cipher = Cipher.getInstance(TRANSFORMATION)
+        // nosemgrep: kotlin.lang.security.gcm-detection.gcm-detection
         cipher.init(Cipher.DECRYPT_MODE, key(), GCMParameterSpec(TAG_BITS, encrypted, 0, IV_BYTES))
         return cipher.doFinal(encrypted, IV_BYTES, encrypted.size - IV_BYTES)
     }

@@ -20,7 +20,8 @@ jobs:
   gates:
     # Orden de constitución §8: deps → build → lint → unit → data → security →
     # ui → critic → routes → sdd → coverage → delta-check → mutation → semgrep →
-    # deps-scan. mutation (Pitest) no está configurado: specs/nv-39 §2.6.
+    # deps-scan → sbom. mutation (Pitest) no está configurado: specs/nv-39 §2.6.
+    # CodeQL corre aparte en codeql.yml (necesita permiso security-events).
     name: gates (constitución §8)
     runs-on: ubuntu-latest
     timeout-minutes: 90
@@ -141,21 +142,37 @@ jobs:
 
       - name: delta-check (advisory)
         continue-on-error: true
-        run: python3 scripts/check_delta_coverage.py --min 80 --advisory
+        run: |
+          python3 -m pip install --quiet defusedxml
+          python3 scripts/check_delta_coverage.py --min 80 --advisory
 
       - name: semgrep (reglas propias)
         run: |
           python3 -m pip install --quiet semgrep
           semgrep scan --config=.semgrep/semgrep.yaml --error
 
-      - name: semgrep (registry, advisory)
-        continue-on-error: true
+      # Bloqueante desde 2026-11-21 (evaluación, mejora 2). Excepciones revisadas con `nosemgrep` y su porqué
+      # en el mismo archivo (KeystoreTokenCipher, launcher del manifiesto).
+      - name: semgrep (registro)
         run: semgrep scan --config=auto --error
 
-      # Informativo (constitución §6): base pública OSV, sin clave.
-      - name: "deps-scan (OSV, advisory)"
-        continue-on-error: true
-        run: python3 scripts/check_deps_osv.py build/deps.txt --advisory | tee -a "$GITHUB_STEP_SUMMARY"
+      # Bloqueante desde 2026-11-21: una vulnerabilidad alta o crítica conocida en OSV frena el PR.
+      - name: "deps-scan (OSV)"
+        run: |
+          set -o pipefail
+          python3 scripts/check_deps_osv.py build/deps.txt --fail-on high | tee -a "$GITHUB_STEP_SUMMARY"
+
+      # SBOM CycloneDX 1.6 de lo que viaja en el APK de release (specs/nv-39 §2.7).
+      - name: sbom (CycloneDX)
+        run: ./gradlew :app:cyclonedxDirectBom
+
+      - name: SBOM
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: wherever-sbom
+          path: app/build/reports/cyclonedx-direct/bom.json
+          if-no-files-found: error
+          retention-days: 30
 
       - name: Reports
         if: always()

@@ -78,6 +78,13 @@ Traslada a CI lo que `nv-03` dejó escrito pero no ejecutable: los scripts de pu
 - **[Decisión propuesta]** `deps-scan` usa la base pública OSV (`api.osv.dev`) con `scripts/check_deps_osv.py` en lugar del plugin OWASP Dependency-Check. Porqué: Dependency-Check descarga la base NVD completa en cada run sin clave de API (decenas de minutos), y la clave sería un secreto en CI; OSV no pide clave ni librería nueva. Si el equipo prefiere Dependency-Check, cambia solo este paso.
 - Sin despliegue de APK ni publicación ([Constitución §8]).
 
+### 2.7 DevSecOps reforzado (2026-11-21, evaluación mejora 2)
+
+- **Semgrep del registro** (`--config=auto`) pasa a **bloqueante**. Baseline en 0: los 5 hallazgos del 2026-11-20 se resolvieron (`defusedxml` en `check_delta_coverage.py`) o se marcaron con `nosemgrep` y su porqué en el mismo archivo (`gcm-detection` en `KeystoreTokenCipher`: el IV lo genera Keystore en cada cifrado; `exported_activity`: el launcher, única actividad exportada, verificado por `PlatformSecurityTest`).
+- **OSV bloqueante** con `--fail-on high`: una vulnerabilidad conocida alta o crítica frena el PR; las moderadas y bajas se informan en el resumen del job. Si `api.osv.dev` no responde, el paso falla (falla cerrado).
+- **CodeQL** (`.github/workflows/codeql.yml`): `java-kotlin` con `security-extended`, en PR a `main`, push a `main` y semanal. Los hallazgos van a la pestaña Security del repo.
+- **SBOM CycloneDX 1.6**: plugin `org.cyclonedx.bom` 3.5.1 (excepción de stack: solo herramienta de build, no entra al APK). `./gradlew :app:cyclonedxDirectBom` sobre `releaseRuntimeClasspath`; el CI lo sube como artefacto `wherever-sbom` (30 días).
+
 ## 3. Contratos (API y navegación)
 
 ### 3.1 Workflow
@@ -86,7 +93,7 @@ Traslada a CI lo que `nv-03` dejó escrito pero no ejecutable: los scripts de pu
 - **Runner:** `ubuntu-latest`, 90 min. Java 17 (temurin) para todo el build, porque detekt 1.23 no corre sobre JDK > 22. Android SDK con `platforms;android-36`, `gradle/actions/setup-gradle@v4` para caché.
 - **Sin `local.properties`:** `app/build.gradle.kts` aporta `wherever.stagingApiBaseUrl` de respaldo, así que `build` no depende de un archivo no versionado. Ninguna prueba llama a esa URL.
 - **Emulador:** `reactivecircus/android-emulator-runner@v2`, API 35 `google_apis` x86_64 con KVM, sin ventana ni animaciones.
-- **Artefactos:** `wherever-debug-apk` y `reports`, 14 días.
+- **Artefactos:** `wherever-debug-apk` y `reports`, 14 días; `wherever-sbom`, 30 días.
 - **Gitleaks:** binario oficial `v8.28.0` de GitHub Releases, verificado con su `checksums.txt`. No se usa `gitleaks-action` porque en cuentas de organización pide una licencia como secreto.
 - **Dependabot:** `.github/dependabot.yml` semanal para Gradle y Actions ([AGENTS.md §6]).
 
@@ -101,7 +108,7 @@ Traslada a CI lo que `nv-03` dejó escrito pero no ejecutable: los scripts de pu
 | `check_sdd.sh` | `SDD-OK` |
 | `check_coverage.sh --min 45` | `COVERAGE-OK` |
 | `check_delta_coverage.py --min 80 --advisory` | informa siempre, sale `0` |
-| `check_deps_osv.py build/deps.txt --advisory` | `DEPS-OK` o `DEPS-ADVISORY` con la lista; sale `0` |
+| `check_deps_osv.py build/deps.txt --fail-on high` | `DEPS-OK`; sale `1` con una vulnerabilidad alta o crítica |
 
 ### 3.3 Kover
 
@@ -109,7 +116,7 @@ Traslada a CI lo que `nv-03` dejó escrito pero no ejecutable: los scripts de pu
 
 ### 3.4 Semgrep
 
-`.semgrep/semgrep.yaml` con dos reglas propias, ambas en 0 hallazgos: `wherever-no-destructive-migration` (`fallbackToDestructiveMigration`, prohibido por [Constitución §5]) y `wherever-no-cleartext-http` (`http://` en `app/src/main/java`). El registry (`--config=auto`) corre con `continue-on-error` hasta afinar el baseline.
+`.semgrep/semgrep.yaml` con dos reglas propias, ambas en 0 hallazgos: `wherever-no-destructive-migration` (`fallbackToDestructiveMigration`, prohibido por [Constitución §5]) y `wherever-no-cleartext-http` (`http://` en `app/src/main/java`). El registry (`--config=auto`) es bloqueante desde 2026-11-21 (§2.7).
 
 ## 4. Modelo de datos
 
