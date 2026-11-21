@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -43,7 +44,10 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -74,6 +78,7 @@ import com.wherever.mobile.core.designsystem.Sizes
 import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.Sunset
 import com.wherever.mobile.core.designsystem.SurfaceCard
+import com.wherever.mobile.core.designsystem.UnderlineTabs
 import com.wherever.mobile.core.designsystem.WhereverBottomBar
 import com.wherever.mobile.core.designsystem.WhereverIconButton
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
@@ -82,6 +87,10 @@ import com.wherever.mobile.core.designsystem.WhereverTextButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.core.notifications.RequestNotificationPermission
 import com.wherever.mobile.core.ui.formatDateTime
+import com.wherever.mobile.feature.feed.ui.FriendsFeedActions
+import com.wherever.mobile.feature.feed.ui.FriendsFeedUiState
+import com.wherever.mobile.feature.feed.ui.FriendsFeedViewModel
+import com.wherever.mobile.feature.feed.ui.friendsFeedItems
 import com.wherever.mobile.feature.home.domain.Company
 import com.wherever.mobile.feature.home.domain.Event
 import com.wherever.mobile.feature.notifications.ui.UnreadBadgeViewModel
@@ -100,7 +109,11 @@ data class HomeNavigation(
     val onCategory: (String) -> Unit,
     val onPlace: (String) -> Unit,
     val onPlan: (String) -> Unit,
-    val onNotifications: () -> Unit
+    val onNotifications: () -> Unit,
+    val onMoment: (String) -> Unit,
+    val onFriendPlan: (String) -> Unit,
+    val onPerson: (String) -> Unit,
+    val onAddFriends: () -> Unit
 )
 
 /** 10_Inicio. */
@@ -108,9 +121,13 @@ data class HomeNavigation(
 fun HomeRouteScreen(
     navigation: HomeNavigation,
     viewModel: HomeViewModel = hiltViewModel(),
-    badge: UnreadBadgeViewModel = hiltViewModel()
+    badge: UnreadBadgeViewModel = hiltViewModel(),
+    feed: FriendsFeedViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val feedState by feed.state.collectAsStateWithLifecycle()
+    var tab by rememberSaveable { mutableIntStateOf(HomeTab.NEARBY.ordinal) }
+    LaunchedEffect(tab) { if (tab == HomeTab.FRIENDS.ordinal) feed.onShown() }
     val unread by badge.count.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     val undoMessage = stringResource(R.string.home_not_interested_done)
@@ -139,6 +156,21 @@ fun HomeRouteScreen(
             state = state,
             unread = unread,
             navigation = navigation,
+            friends = HomeFriendsTab(
+                selected = tab == HomeTab.FRIENDS.ordinal,
+                state = feedState,
+                onSelectTab = { tab = it },
+                actions = FriendsFeedActions(
+                    onMoment = navigation.onMoment,
+                    onPlace = navigation.onPlace,
+                    onPlan = navigation.onFriendPlan,
+                    onPerson = navigation.onPerson,
+                    onAddFriends = navigation.onAddFriends,
+                    onRequest = feed::request,
+                    onRetry = feed::refresh,
+                    onLoadMore = feed::loadMore
+                )
+            ),
             actions = HomeActions(
                 onRefresh = viewModel::refresh,
                 onCompany = viewModel::onCompany,
@@ -151,6 +183,17 @@ fun HomeRouteScreen(
         )
     }
 }
+
+/** Pestañas de 10_Inicio y 11_InicioAmigos. */
+enum class HomeTab { NEARBY, FRIENDS }
+
+/** Estado y acciones de la pestaña Amigos (specs/nv-17). */
+data class HomeFriendsTab(
+    val selected: Boolean,
+    val state: FriendsFeedUiState,
+    val onSelectTab: (Int) -> Unit,
+    val actions: FriendsFeedActions
+)
 
 data class HomeActions(
     val onRefresh: () -> Unit,
@@ -167,12 +210,13 @@ private fun HomeContent(
     state: HomeUiState,
     unread: Int,
     navigation: HomeNavigation,
+    friends: HomeFriendsTab,
     actions: HomeActions,
     modifier: Modifier
 ) {
     PullToRefreshBox(
-        isRefreshing = state.refreshing,
-        onRefresh = actions.onRefresh,
+        isRefreshing = if (friends.selected) false else state.refreshing,
+        onRefresh = if (friends.selected) friends.actions.onRetry else actions.onRefresh,
         modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).testTag("home_refresh")
     ) {
         LazyColumn(
@@ -181,78 +225,104 @@ private fun HomeContent(
             modifier = Modifier.fillMaxSize().testTag("home_list")
         ) {
             item { Header(state, unread, navigation) }
-            item { CompanyChips(state.company, actions.onCompany) }
-            if (state.chips.isNotEmpty()) item { MoodChips(state, navigation.onCategory) }
-            if (state.locationPrompt != LocationPrompt.NONE) item { LocationCard(state.locationPrompt, actions) }
-            state.error?.let { error ->
-                item { ErrorBanner(error.asString(), Modifier.padding(horizontal = ScreenPadding)) }
-            }
             item {
-                Text(
-                    stringResource(R.string.home_for_you),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(horizontal = ScreenPadding)
+                UnderlineTabs(
+                    options = listOf(
+                        stringResource(R.string.home_tab_nearby),
+                        stringResource(R.string.home_tab_friends)
+                    ),
+                    selectedIndex = if (friends.selected) HomeTab.FRIENDS.ordinal else HomeTab.NEARBY.ordinal,
+                    onSelect = friends.onSelectTab,
+                    modifier = Modifier.padding(horizontal = ScreenPadding),
+                    tag = "home_tabs"
                 )
             }
-            when {
-                state.loading -> items(SKELETON_CARDS) {
-                    PlaceCardSkeleton(Modifier.padding(horizontal = ScreenPadding))
-                }
-                state.recommendations.isEmpty() && state.error == null -> item {
-                    EmptyRecommendations(navigation.onSearch)
-                }
-                else -> items(state.recommendations, key = { it.id }) { place ->
-                    PlaceCardItem(
-                        place = place,
-                        onClick = { navigation.onPlace(place.id) },
-                        modifier = Modifier.padding(horizontal = ScreenPadding).animateItem()
-                    ) {
-                        place.why?.let { why ->
-                            Text(
-                                stringResource(R.string.home_why, why),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.testTag("home_why_${place.id}")
-                            )
-                        }
-                        WhereverTextLink(
-                            stringResource(R.string.home_not_interested),
-                            onClick = { actions.onNotInterested(place) }
-                        )
-                    }
-                }
+            if (friends.selected) {
+                friendsFeedItems(friends.state, friends.actions)
+            } else {
+                nearbyItems(state, navigation, actions)
             }
-            if (state.popular.isNotEmpty()) {
-                item {
+        }
+    }
+}
+
+/** Contenido de "Cerca de ti" (10_Inicio). */
+private fun LazyListScope.nearbyItems(state: HomeUiState, navigation: HomeNavigation, actions: HomeActions) {
+    item { CompanyChips(state.company, actions.onCompany) }
+    if (state.chips.isNotEmpty()) item { MoodChips(state, navigation.onCategory) }
+    if (state.locationPrompt != LocationPrompt.NONE) item { LocationCard(state.locationPrompt, actions) }
+    state.error?.let { error ->
+        item { ErrorBanner(error.asString(), Modifier.padding(horizontal = ScreenPadding)) }
+    }
+    item {
+        Text(
+            stringResource(R.string.home_for_you),
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(horizontal = ScreenPadding)
+        )
+    }
+    when {
+        state.loading -> items(SKELETON_CARDS) {
+            PlaceCardSkeleton(Modifier.padding(horizontal = ScreenPadding))
+        }
+        state.recommendations.isEmpty() && state.error == null -> item {
+            EmptyRecommendations(navigation.onSearch)
+        }
+        else -> items(state.recommendations, key = { it.id }) { place ->
+            PlaceCardItem(
+                place = place,
+                onClick = { navigation.onPlace(place.id) },
+                modifier = Modifier.padding(horizontal = ScreenPadding).animateItem()
+            ) {
+                place.why?.let { why ->
                     Text(
-                        stringResource(R.string.home_popular),
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(horizontal = ScreenPadding)
+                        stringResource(R.string.home_why, why),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.testTag("home_why_${place.id}")
                     )
                 }
-                items(state.popular, key = { "popular_${it.id}" }) { plan ->
-                    PopularPlanCard(plan) { actions.onCopyPlan(plan) }
-                }
+                WhereverTextLink(
+                    stringResource(R.string.home_not_interested),
+                    onClick = { actions.onNotInterested(place) }
+                )
             }
-            if (state.events.isNotEmpty()) {
-                item {
-                    Text(
-                        stringResource(R.string.home_events),
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(horizontal = ScreenPadding)
-                    )
-                }
-                item {
-                    LazyRow(
-                        contentPadding = PaddingValues(horizontal = ScreenPadding),
-                        horizontalArrangement = Arrangement.spacedBy(Spacing.M)
-                    ) {
-                        items(state.events, key = { it.id }) { EventCard(it) }
-                    }
-                }
+        }
+    }
+    popularAndEvents(state, actions)
+}
+
+/** Planes populares y eventos al final de "Cerca de ti". */
+private fun LazyListScope.popularAndEvents(state: HomeUiState, actions: HomeActions) {
+    if (state.popular.isNotEmpty()) {
+        item {
+            Text(
+                stringResource(R.string.home_popular),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = ScreenPadding)
+            )
+        }
+        items(state.popular, key = { "popular_${it.id}" }) { plan ->
+            PopularPlanCard(plan) { actions.onCopyPlan(plan) }
+        }
+    }
+    if (state.events.isNotEmpty()) {
+        item {
+            Text(
+                stringResource(R.string.home_events),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = ScreenPadding)
+            )
+        }
+        item {
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = ScreenPadding),
+                horizontalArrangement = Arrangement.spacedBy(Spacing.M)
+            ) {
+                items(state.events, key = { it.id }) { EventCard(it) }
             }
         }
     }

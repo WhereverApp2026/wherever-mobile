@@ -1,23 +1,32 @@
 # Pendientes — Wherever Móvil
 
-> Actualizado: 2026-11-19 (noche). Trabajo directo en `main`, un commit por parte.
+> Actualizado: 2026-11-20 (noche). Una rama y un PR por spec.
 > Métrica: pantallas que funcionan de verdad / 162 frames de la maqueta (detalle y registro de cortes en `docs/avance.md`).
 > Una pantalla cuenta si tiene código, llama a la API real, maneja carga, error y vacío, tiene pruebas y se probó en el teléfono.
 
 ## % real
 
-**57 de 162 = 35,2 %** con la API real, más 1 con datos locales (Insignias, sin endpoint) que no suma.
+**62 de 162 = 38,3 %** con la API real, más 1 con datos locales (Insignias, sin endpoint) que no suma.
 
 | Área | Specs | Frames | Funcionan | % |
 |---|---|---|---|---|
 | Cuenta y acceso | nv-06 a nv-16 | 17 | 16 (+1 local) | 94 % |
-| Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 14 | 48 % |
-| Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 14 | 45 % |
+| Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 18 | 62 % |
+| Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 15 | 48 % |
 | Planes: IA, detalle, Vaca, Mis planes, día del plan | nv-23, nv-24, nv-26, nv-28, nv-30 | 22 | 9 | 41 % |
 | Reserva, pago y cupones | nv-27, nv-29 | 15 | 4 | 27 % |
 | Después del plan: Recuerdos, Reseñas, Ayuda | nv-31 a nv-33 | 22 | 0 | 0 % |
 | Modo negocio | nv-34 a nv-38 | 26 | 0 | 0 % |
-| **Total** | | **162** | **57** | **35,2 %** |
+| **Total** | | **162** | **62** | **38,3 %** |
+
+## nv-17 feed de amigos (2026-11-20, noche)
+
+- Rama `feat/nv-17-feed` (sale de `wip/pausa`), PR a `main`. Compuertas locales en verde: ktlint, detekt, lint, unitarias + capturas, kover, debug y release, critic, sdd, specs, routes, strings, coverage 79,7 %, semgrep 0. Delta 27,5 % (advisory).
+- **Probado en el teléfono (Xiaomi, staging):** cuenta A ve el momento de B en Amigos con foto real; abre 17_PostDetalle. `FriendsFeedTest` (vacío; Agregar → Solicitud enviada) verde en el teléfono.
+- **Arreglos de esta vuelta:** botones de 29_PlanAmigo apilados ("Hacer mi versión" se cortaba); tinte de fondo mientras carga la foto del momento (se veía un hueco gris/blanco); plurales `many`; rutas `MomentRoute` y `FriendPlanRoute` en `docs/routes.md`.
+- **Falta:** 29_PlanAmigo y 14_MeApunto en el teléfono: hace falta un momento de staging con `plan_id` (B publica un momento desde un plan público). Sin API: historias, reacciones, comentarios.
+- **Siguiente:** nv-20 27_AmigoOpc en PR apilado (base `feat/nv-17-feed`). Luego nv-25 Grupos y chats; QR en cuanto se acuerde la librería.
+- **Protección de `main`:** sigue sin aplicar (JaRe0528 tiene WRITE). Comando en `docs/revision-jorge.md`.
 
 ## Reparto del equipo (desde 2026-11-20)
 
@@ -94,7 +103,7 @@ Bugs conocidos del área: Bienvenida en horizontal (✅ nv-55); enlaces corridos
 - [ ] nv-21 Explorar y lugares (5/8).
 - [ ] nv-23 Crear plan con IA (4/6).
 - [ ] nv-24 Plan: detalle y edición (3/5).
-- [ ] nv-20 Amigos (10/15): QR (requiere acordar la librería, constitución §3) y variantes.
+- [ ] nv-20 Amigos (11/15): 27_AmigoOpc hecho (rama `feat/nv-20-amigo-opciones`, apilada sobre nv-17). Falta QR (requiere acordar la librería, constitución §3), 07_EncuentraAmigos (contactos: permiso `READ_CONTACTS` en la matriz) y variantes.
 - [ ] nv-27 Reserva y pago (4/10): pago.
 - [ ] nv-17 Inicio y feed (3/15): feed social.
 - [x] nv-19 Búsqueda (4/4).

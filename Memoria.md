@@ -243,7 +243,18 @@
 
 - Estado (2026-11-20, tarde): equipo de tres. Jorge = Social, Planes, Reserva y lo compartido; Osmar = Modo negocio (nv-34 a nv-38); Diego = Recuerdos, Reseñas y Ayuda (nv-31 a nv-33). Specs listas con endpoints reales del backend, `CONTRIBUTING.md`, `docs/equipo/`, Issues por spec y `main` protegida (solo PR con CI verde). Decisiones en `docs/revision-jorge.md`.
 - A recordar: el contrato de la API está en `wherever-backend/docs/endpoints.md` de `origin/main`; la copia local del backend puede ir atrasada (`git fetch` y `git show origin/main:docs/endpoints.md`).
+
+- Estado (2026-11-20, noche): nv-17 feed de amigos en `feat/nv-17-feed` con compuertas verdes y PR a `main`. 61/162 = 37,7 %. Falta 29_PlanAmigo/14_MeApunto en teléfono (ningún momento de staging enlaza un plan).
+- A evitar: en Xiaomi sin "Instalar vía USB" activo, `installDebug`/`connectedDebugAndroidTest` se quedan colgados o fallan con `INSTALL_FAILED_USER_RESTRICTED`; y detener un `connectedDebugAndroidTest` desinstala la app y el APK de pruebas. Instalar con `adb install -r` y correr con `adb shell am instrument -w -e class …`.
+- A evitar: una tarjeta `clickable` fusiona la semántica de sus hijos; un `testTag` en un texto interno se busca con `useUnmergedTree = true` o `assertIsDisplayed` falla aunque esté en pantalla.
+- A evitar: en el teléfono, tocar por coordenadas de una captura falla si la lista aún carga; sacar los límites con `uiautomator dump` justo antes del toque. Escribir credenciales con `adb input text` y pasar de campo con Tab (keyevent 61), nunca tocando el segundo campo con el teclado abierto.
+- Estado (2026-11-20, noche): nv-20 27_AmigoOpc (Silenciar con `PUT /amistades/{id}/silencio`, Eliminar, Bloquear) en `feat/nv-20-amigo-opciones`, apilada sobre nv-17. 62/162 = 38,3 %. Silenciar probado contra staging y devuelto a apagado.
+- A evitar: probar una `ModalBottomSheet` con `createComposeRule` en el Xiaomi deja la prueba colgada; se prueba el contenido aparte (`FriendOptionsContent`) y la hoja a mano en el teléfono.
+- A evitar: `uiautomator dump` da `bounds=[0,0][0,0]` en etiquetas de la barra inferior (semántica fusionada); el helper `scratchpad/tap.sh` las salta.
 - A recordar: desde la protección de `main`, también Jorge (y Claude) integra por PR; nada de push directo.
+
+- Pausa (2026-11-20, tarde): `main` = `810b91e`. nv-17 (feed de amigos) en `wip/pausa`, compilado y con la suite unitaria verde, sin compuertas ni teléfono ni PR. Bug de `mapApiError` (códigos específicos → `Unknown`) corregido ahí con prueba. Siguiente paso exacto en `docs/pendientes.md` ("⏸ Pausa (2026-11-20, tarde)").
+- A recordar: desde el 2026-11-20 todo va por PR a `main`, también el trabajo de Jorge.
 
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).

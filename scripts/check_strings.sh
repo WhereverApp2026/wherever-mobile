@@ -24,7 +24,8 @@ defined="$(sed -n 's/.*<string name="\([^"]*\)".*/\1/p' "$STRINGS_XML" | sort -u
 refs="$(grep -rhoE 'R\.string\.[A-Za-z0-9_]+' "$MAIN_DIR" | sed 's/^R\.string\.//' | sort -u)"
 
 for ref in $refs; do
-    printf '%s\n' "$defined" | grep -qx "$ref" || fail "string usado sin definir: R.string.$ref"
+    # Sin tubería: con pipefail, `grep -q` cierra antes y `printf` falla con "Broken pipe" (falso FAIL).
+    grep -qx "$ref" <<<"$defined" || fail "string usado sin definir: R.string.$ref"
 done
 
 duplicates="$(sed -n 's/.*<string name="\([^"]*\)".*/\1/p' "$STRINGS_XML" | sort | uniq -d)"

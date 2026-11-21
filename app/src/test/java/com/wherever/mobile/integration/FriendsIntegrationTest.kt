@@ -102,6 +102,18 @@ class FriendsIntegrationTest {
     }
 
     @Test
+    fun `silenciar manda PUT con la marca y devuelve como quedo`() = runTest {
+        server.reply(200, """{"id":"f1","silenciado":true}""")
+
+        assertEquals(true, (repository.setMuted("f1", muted = true) as Result.Success).data)
+
+        val request = server.takeRequest()
+        assertEquals("PUT", request.method)
+        assertEquals("/api/v1/amistades/f1/silencio", request.url.encodedPath)
+        assertEquals("""{"silenciado":true}""", request.body?.utf8())
+    }
+
+    @Test
     fun `solicitar, aceptar, eliminar y bloquear`() = runTest {
         server.reply(
             201,

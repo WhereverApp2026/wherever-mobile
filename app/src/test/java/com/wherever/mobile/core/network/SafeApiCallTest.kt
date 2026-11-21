@@ -74,6 +74,21 @@ class SafeApiCallTest {
     }
 
     @Test
+    fun `un codigo especifico del modulo sigue al estado HTTP`() = runTest {
+        val cases = listOf(
+            Triple("grupo_lleno", 409, AppError.Conflict("mensaje api", "t1")),
+            Triple("codigo_ya_usado", 409, AppError.Conflict("mensaje api", "t1")),
+            Triple("cobros_no_activos", 422, AppError.Validation(emptyList(), "mensaje api", "t1")),
+            Triple("limite_altas", 404, AppError.NotFound("mensaje api", "t1")),
+            Triple("plan_privado", 403, AppError.Forbidden("mensaje api", "t1"))
+        )
+        cases.forEach { (code, status, expected) ->
+            error(code, status)
+            assertEquals(expected, failure())
+        }
+    }
+
+    @Test
     fun `validacion conserva los campos`() = runTest {
         error("validacion", 422, """[{"campo":"correo","mensaje":"no es un correo válido"}]""")
         val failure = failure() as AppError.Validation

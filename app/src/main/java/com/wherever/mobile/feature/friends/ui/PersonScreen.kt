@@ -3,6 +3,8 @@ package com.wherever.mobile.feature.friends.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,17 +24,18 @@ import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.ErrorState
 import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.LoadingState
+import com.wherever.mobile.core.designsystem.NavRow
 import com.wherever.mobile.core.designsystem.Sizes
 import com.wherever.mobile.core.designsystem.Spacing
-import com.wherever.mobile.core.designsystem.WhereverDangerButton
+import com.wherever.mobile.core.designsystem.ToggleRow
+import com.wherever.mobile.core.designsystem.WhereverBottomSheet
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
-import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.feature.friends.domain.PersonDetail
 import com.wherever.mobile.feature.friends.domain.Relation
 import com.wherever.mobile.feature.profile.ui.ProfileAvatar
 
-/** 25_PerfilAmigo (US-233, US-238). */
+/** 26_PerfilAmigo con la hoja 27_AmigoOpc (US-233, US-238). */
 @Composable
 fun PersonRoute(onBack: () -> Unit, onBlocked: () -> Unit, viewModel: PersonViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -46,6 +49,19 @@ fun PersonRoute(onBack: () -> Unit, onBlocked: () -> Unit, viewModel: PersonView
             ErrorState(loadError.asString(), viewModel::load)
         }
         detail != null -> PersonContent(detail, state, viewModel, onBack)
+    }
+    if (state.options && detail != null) {
+        FriendOptionsSheet(
+            detail = detail,
+            working = state.working,
+            error = state.error?.asString(),
+            actions = FriendOptionsActions(
+                onMute = viewModel::setMuted,
+                onRemove = viewModel::askRemove,
+                onBlock = viewModel::askBlock,
+                onDismiss = viewModel::closeOptions
+            )
+        )
     }
     when (state.confirm) {
         PersonConfirm.REMOVE -> ConfirmDialog(
@@ -148,18 +164,54 @@ private fun Actions(relation: Relation, state: PersonUiState, viewModel: PersonV
                 tag = "person_reject"
             )
         }
-        Relation.FRIEND -> {
-            WhereverDangerButton(
-                text = stringResource(R.string.friends_remove),
-                onClick = viewModel::askRemove,
-                enabled = !working && hasFriendship,
-                tag = "person_remove"
-            )
-            WhereverTextLink(
-                stringResource(R.string.friends_block),
-                viewModel::askBlock,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+        Relation.FRIEND -> WhereverOutlinedButton(
+            stringResource(R.string.friends_options_button),
+            viewModel::openOptions,
+            enabled = !working && hasFriendship,
+            icon = Icons.Outlined.Check,
+            tag = "person_options"
+        )
+    }
+}
+
+/** 27_AmigoOpc: Silenciar, Eliminar de mis amigos y Bloquear. "Invitar a un grupo" llega con nv-25. */
+@Composable
+internal fun FriendOptionsSheet(detail: PersonDetail, working: Boolean, error: String?, actions: FriendOptionsActions) {
+    WhereverBottomSheet(onDismissRequest = actions.onDismiss, tag = "person_options_sheet") {
+        FriendOptionsContent(detail, working, error, actions)
+    }
+}
+
+/** Contenido de 27_AmigoOpc, aparte de la hoja para probarlo sin la ventana modal. */
+@Composable
+internal fun FriendOptionsContent(
+    detail: PersonDetail,
+    working: Boolean,
+    error: String?,
+    actions: FriendOptionsActions
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(Spacing.L)) {
+        Text(detail.person.name, style = MaterialTheme.typography.titleLarge)
+        ToggleRow(
+            title = stringResource(R.string.friends_mute),
+            subtitle = stringResource(R.string.friends_mute_hint),
+            checked = detail.muted,
+            onCheckedChange = actions.onMute,
+            enabled = !working,
+            tag = "person_mute"
+        )
+        NavRow(
+            title = stringResource(R.string.friends_remove),
+            onClick = actions.onRemove,
+            titleColor = MaterialTheme.colorScheme.error,
+            tag = "person_remove"
+        )
+        NavRow(
+            title = stringResource(R.string.friends_block),
+            onClick = actions.onBlock,
+            titleColor = MaterialTheme.colorScheme.error,
+            tag = "person_block"
+        )
+        error?.let { ErrorBanner(it) }
     }
 }

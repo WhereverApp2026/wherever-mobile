@@ -43,6 +43,10 @@ class FriendsRepositoryImpl @Inject constructor(private val api: FriendsApi) : F
     override suspend fun remove(friendshipId: String): Result<Unit> = safeApiCall { api.remove(friendshipId) }
 
     override suspend fun block(friendshipId: String): Result<Unit> = safeApiCall { api.block(friendshipId) }
+
+    override suspend fun setMuted(friendshipId: String, muted: Boolean): Result<Boolean> = safeApiCall {
+        api.setMuted(friendshipId, MuteDto(muted)).muted
+    }
 }
 
 internal fun PersonDto.toDomain() = Person(
@@ -57,7 +61,8 @@ internal fun PersonDetailDto.toDomain() = PersonDetail(
     relation = Relation.from(relation),
     level = level?.takeIf { it.isNotBlank() },
     mutualFriends = mutualFriends,
-    mutualGroups = mutualGroups
+    mutualGroups = mutualGroups,
+    muted = muted
 )
 
 internal fun FriendshipDto.toDomain() = Friendship(

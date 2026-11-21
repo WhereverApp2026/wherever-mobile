@@ -75,11 +75,27 @@ private fun HttpException.toAppError(): AppError {
     return mapApiError(code(), body, retryAfter)
 }
 
-/** El `codigo` decide; el estado HTTP solo se usa si el cuerpo no se pudo leer. */
+/** Códigos genéricos de la API. Los específicos (`grupo_lleno`, `codigo_ya_usado`, `con_canjes`…) siguen al estado. */
+private val GENERIC_CODES = setOf(
+    "no_autenticado",
+    "prohibido",
+    "no_encontrado",
+    "conflicto",
+    "vencido",
+    "validacion",
+    "bloqueado",
+    "demasiadas_peticiones",
+    "no_disponible"
+)
+
+/**
+ * El `codigo` genérico decide; si el cuerpo no se pudo leer o trae un código específico de un módulo, decide el
+ * estado HTTP (un 409 `grupo_lleno` sigue siendo `Conflict`).
+ */
 fun mapApiError(status: Int, body: ApiErrorDto?, retryAfterSeconds: Long?): AppError {
     val message = body?.message
     val trace = body?.traceId
-    return when (body?.code ?: codeForStatus(status)) {
+    return when (body?.code?.takeIf { it in GENERIC_CODES } ?: codeForStatus(status)) {
         "no_autenticado" -> AppError.Unauthorized(message, trace)
         "prohibido" -> AppError.Forbidden(message, trace)
         "no_encontrado" -> AppError.NotFound(message, trace)

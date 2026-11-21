@@ -20,6 +20,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -203,6 +204,33 @@ class FriendsViewModelsTest {
 
         assertTrue("block:f5" in repository.calls)
         assertTrue(vm.state.value.blocked)
+    }
+
+    @Test
+    fun `opciones de amigo silencian con la marca que confirma la API`() = runTest(mainDispatcher.dispatcher) {
+        repository.personResult = Result.Success(PersonDetail(person("5"), Relation.FRIEND))
+        repository.lists[FriendshipList.FRIENDS] = Result.Success(FriendshipPage(listOf(friendship("f5", "5")), 0))
+        val vm = PersonViewModel(SavedStateHandle(mapOf("id" to "5")), repository)
+        advanceUntilIdle()
+
+        vm.openOptions()
+        assertTrue(vm.state.value.options)
+        vm.setMuted(true)
+        advanceUntilIdle()
+        assertTrue("mute:f5:true" in repository.calls)
+        assertTrue(vm.state.value.detail!!.muted)
+        assertTrue(vm.state.value.options)
+
+        repository.muteResult = Result.Failure(AppError.Network)
+        vm.setMuted(false)
+        advanceUntilIdle()
+        assertTrue(vm.state.value.detail!!.muted)
+        assertNotNull(vm.state.value.error)
+
+        // Eliminar y bloquear cierran la hoja y piden confirmación.
+        vm.askBlock()
+        assertFalse(vm.state.value.options)
+        assertEquals(PersonConfirm.BLOCK, vm.state.value.confirm)
     }
 
     @Test
