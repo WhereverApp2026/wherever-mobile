@@ -138,3 +138,28 @@ data class MomentRoute(val id: String)
 /** 29_PlanAmigo: plan público de un amigo, con Me apunto y Hacer mi versión (specs/nv-17). */
 @Serializable
 data class FriendPlanRoute(val id: String)
+
+/** 77_ResPend (specs/nv-32). */
+@Serializable
+data object PendingReviewsRoute
+
+/** 79_MisRes (specs/nv-32). */
+@Serializable
+data object MyReviewsRoute
+
+/**
+ * 68_PostVisita → 78_ResCom → 69_Publicado (specs/nv-32). Crear: `checkinId`; editar: `reviewId`.
+ * ReviewFormViewModel lee los campos de SavedStateHandle por su nombre.
+ */
+@Serializable
+data class ReviewFormRoute(
+    val checkinId: String = "",
+    val placeId: String = "",
+    val placeName: String = "",
+    val day: String = "",
+    val reviewId: String = ""
+)
+
+/** 80_ResLugar (specs/nv-32). PlaceReviewsViewModel lee `placeId` y `placeName`. */
+@Serializable
+data class PlaceReviewsRoute(val placeId: String, val placeName: String = "")

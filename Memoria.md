@@ -266,6 +266,12 @@
 - A evitar: correr `ScreenshotTest` con el JDK 17 descargado: falla con `Could not initialize class sun.awt.Win32FontManager`. detekt con JDK 17 y pruebas/capturas con el JBR de Android Studio.
 - A recordar: revisar las capturas grabadas en claro y oscuro; así salieron los chips sin contraste en oscuro (`StatusPill` con tintes fijos necesita `contentColor = Ink`).
 
+- Estado (2026-11-21, noche): nv-32 Reseñas (Diego) en `feat/nv-32-reviews`: 68_PostVisita → 78_ResCom → 69_Publicado (un solo ViewModel por pasos), 77_ResPend, 79_MisRes con eliminar + Deshacer de 5 s y 80_ResLugar con filtros, Útil y Reportar. Entradas: filas en Perfil y «Ver reseñas» en la ficha. Sin probar contra staging (fin de semana) ni en teléfono; falta una cuenta con check-ins. Decisiones D-32b a D-32h en `docs/revision-jorge.md`; pendientes del backend: catálogo de chips y distribución por estrellas.
+- A evitar: `x in mapa` sobre un `ConcurrentHashMap` en Kotlin llama a `contains(value)` y no compila (KT-18053); usar `containsKey`.
+- A evitar: en `ProfileContent` y demás Composables, los parámetros con valor por omisión van después de `modifier` (lint `ModifierParameter`); si no, se dejan obligatorios.
+- A recordar: los números de las vistas previas van como argumento con nombre o constante; detekt (`MagicNumber`) no excluye los `@Preview`.
+- A recordar: una espera que debe sobrevivir a la pantalla (Deshacer) corre en `@ApplicationScope`; en las pruebas se pasa un `TestScope` con el despachador de `MainDispatcherRule` para mover el reloj.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

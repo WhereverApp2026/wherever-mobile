@@ -15,17 +15,17 @@ Orden recomendado: de arriba hacia abajo. Cada spec es una rama y un PR.
 
 ## nv-32 — Reseñas
 
-- [ ] Spec leída: `specs/nv-32/spec.md`, `plan.md`, `task.md`
-- [ ] Rama `feat/nv-32-reviews` desde `main` actualizado
-- [ ] Pantalla `68_PostVisita`
-- [ ] Pantalla `69_Publicado`
-- [ ] Pantalla `77_ResPend`
-- [ ] Pantalla `78_ResCom`
-- [ ] Pantalla `79_MisRes`
-- [ ] Pantalla `MisRes · confirmar eliminar`
-- [ ] Pantalla `MisRes · reseña eliminada`
-- [ ] Pantalla `80_ResLugar`
-- [ ] Compuertas una por una en verde
+- [x] Spec leída: `specs/nv-32/spec.md`, `plan.md`, `task.md`
+- [x] Rama `feat/nv-32-reviews` desde `main` actualizado
+- [x] Pantalla `68_PostVisita`
+- [x] Pantalla `69_Publicado`
+- [x] Pantalla `77_ResPend`
+- [x] Pantalla `78_ResCom`
+- [x] Pantalla `79_MisRes`
+- [x] Pantalla `MisRes · confirmar eliminar`
+- [x] Pantalla `MisRes · reseña eliminada`
+- [x] Pantalla `80_ResLugar`
+- [x] Compuertas una por una en verde
 - [ ] Probada en teléfono o emulador contra staging
 - [ ] PR a `main` integrado (CI en verde)
 

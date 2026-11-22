@@ -29,6 +29,14 @@ import com.wherever.mobile.feature.groups.ui.GroupChatPreview
 import com.wherever.mobile.feature.groups.ui.MyGroupsPreview
 import com.wherever.mobile.feature.profile.ui.EditProfilePreview
 import com.wherever.mobile.feature.profile.ui.ProfilePreview
+import com.wherever.mobile.feature.reviews.ui.MyReviewsConfirmPreview
+import com.wherever.mobile.feature.reviews.ui.MyReviewsPreview
+import com.wherever.mobile.feature.reviews.ui.PendingReviewsEmptyPreview
+import com.wherever.mobile.feature.reviews.ui.PendingReviewsPreview
+import com.wherever.mobile.feature.reviews.ui.PlaceReviewsPreview
+import com.wherever.mobile.feature.reviews.ui.ReviewDetailPreview
+import com.wherever.mobile.feature.reviews.ui.ReviewFormPreview
+import com.wherever.mobile.feature.reviews.ui.ReviewPublishedPreview
 import com.wherever.mobile.feature.settings.ui.DeleteAccountPreview
 import com.wherever.mobile.feature.settings.ui.PrivacyPreview
 import com.wherever.mobile.feature.settings.ui.SettingsPreview
@@ -85,7 +93,15 @@ class ScreenshotTest {
         "89_sin_conexion" to { OfflinePreview() },
         "89_sin_conexion_aviso" to { OfflineNoticePreview() },
         "mantenimiento" to { MaintenancePreview() },
-        "actualizar" to { UpdateRequiredPreview() }
+        "actualizar" to { UpdateRequiredPreview() },
+        "68_post_visita" to { ReviewFormPreview() },
+        "78_res_com" to { ReviewDetailPreview() },
+        "69_publicado" to { ReviewPublishedPreview() },
+        "77_res_pend" to { PendingReviewsPreview() },
+        "77_res_pend_vacio" to { PendingReviewsEmptyPreview() },
+        "79_mis_res" to { MyReviewsPreview() },
+        "mis_res_confirmar_eliminar" to { MyReviewsConfirmPreview() },
+        "80_res_lugar" to { PlaceReviewsPreview() }
     )
 
     @Test

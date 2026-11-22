@@ -88,6 +88,7 @@ private val STAR_FILTERS = (MAX_RATING.toInt() downTo 1).toList()
 fun PlaceDetailRoute(
     onBack: () -> Unit,
     onReserve: (id: String, name: String) -> Unit,
+    onReviews: (id: String, name: String) -> Unit = { _, _ -> },
     viewModel: PlaceDetailViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -103,7 +104,7 @@ fun PlaceDetailRoute(
         val place = state.place
         Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).padding(padding)) {
             when {
-                place != null -> PlaceContent(place, state, viewModel, onBack, onReserve)
+                place != null -> PlaceContent(place, state, viewModel, onBack, onReserve, onReviews)
                 state.loading -> LoadingState()
                 else -> ErrorState(state.error?.asString().orEmpty(), onRetry = viewModel::load)
             }
@@ -129,7 +130,8 @@ private fun PlaceContent(
     state: PlaceDetailUiState,
     viewModel: PlaceDetailViewModel,
     onBack: () -> Unit,
-    onReserve: (id: String, name: String) -> Unit
+    onReserve: (id: String, name: String) -> Unit,
+    onReviews: (id: String, name: String) -> Unit
 ) {
     val context = LocalContext.current
     LazyColumn(
@@ -177,6 +179,16 @@ private fun PlaceContent(
             item { Section(R.string.place_services) { Features(place) } }
         }
         item { ReviewsHeader(state, viewModel) }
+        // specs/nv-32: entrada a 80_ResLugar (filtros, Útil y Reportar).
+        if (place.reviews > 0) {
+            item {
+                WhereverTextLink(
+                    stringResource(R.string.place_see_reviews),
+                    { onReviews(place.id, place.name) },
+                    modifier = Modifier.padding(horizontal = ScreenPadding).testTag("place_see_reviews")
+                )
+            }
+        }
         if (state.reviews.isEmpty()) {
             item {
                 Text(

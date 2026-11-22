@@ -69,6 +69,8 @@ fun ProfileRoute(
     onBadges: () -> Unit,
     onSettings: () -> Unit,
     onVerifyEmail: (String) -> Unit,
+    onMyReviews: () -> Unit,
+    onPendingReviews: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel(),
     photoViewModel: ProfilePhotoViewModel = hiltViewModel()
 ) {
@@ -110,6 +112,8 @@ fun ProfileRoute(
                     onReservations = onReservations,
                     onBadges = onBadges,
                     onVerifyEmail = { onVerifyEmail(current.email) },
+                    onMyReviews = onMyReviews,
+                    onPendingReviews = onPendingReviews,
                     avatar = { EditableProfileAvatar(current.name, current.photoUrl, photoState, photoActions) },
                     modifier = modifier
                 )
@@ -135,6 +139,8 @@ private fun ProfileContent(
     onReservations: () -> Unit,
     onBadges: () -> Unit,
     onVerifyEmail: () -> Unit,
+    onMyReviews: () -> Unit,
+    onPendingReviews: () -> Unit,
     modifier: Modifier = Modifier,
     avatar: @Composable () -> Unit = { ProfileAvatar(profile.name, profile.photoUrl, Sizes.AvatarL) }
 ) {
@@ -177,6 +183,9 @@ private fun ProfileContent(
             NavRow(stringResource(R.string.profile_reservations), onReservations, tag = "profile_reservations")
             NavRow(stringResource(R.string.profile_friends), onFriends, tag = "profile_friends")
             NavRow(stringResource(R.string.profile_favorites), onFavorites, tag = "profile_favorites")
+            // specs/nv-32: entradas a 79_MisRes y 77_ResPend.
+            NavRow(stringResource(R.string.profile_my_reviews), onMyReviews, tag = "profile_my_reviews")
+            NavRow(stringResource(R.string.profile_pending_reviews), onPendingReviews, tag = "profile_pending_reviews")
         }
         profile.tastes?.let { tastes ->
             Text(text = stringResource(R.string.profile_tastes), style = MaterialTheme.typography.titleMedium)
@@ -247,6 +256,8 @@ internal fun ProfilePreview() {
                 deleteAt = null,
                 version = 1
             ),
+            {},
+            {},
             {},
             {},
             {},
