@@ -276,7 +276,9 @@
 - A recordar: `OutlinedTextField` fija 56 dp de alto mínimo; para 52 hay que usar `BasicTextField` con `OutlinedTextFieldDefaults.DecorationBox` y relleno vertical de 14.
 - A evitar: correr la suite de UI en el Xiaomi en horizontal: 4 pruebas fallan porque la pantalla queda baja. Fijar vertical (`settings put system accelerometer_rotation 0` y `user_rotation 0`) y devolver `accelerometer_rotation 1` al terminar.
 - A evitar: instalar el APK de debug mientras otro Gradle reempaqueta (`assembleDebugAndroidTest` en paralelo): quedó sin `Hilt_WhereverApp` y la app se cerraba al abrir. Volver a generar con `assembleDebug` solo.
-- Pendiente para Jorge: Home de Figma (portada con foto, buscador con botón IA, carrusel con fotos) y los enlaces de términos y aviso en Registro siguen sin hacer.
+- Pendiente para Jorge: los enlaces de términos y aviso en Registro esperan 87_Ayuda (nv-33).
+- Estado (2026-11-22, mañana): PR #44 integrado (`5b68152`). 10_Inicio de Figma en `feat/boceto2-inicio`: `HomeCover.kt` (portada, buscador con chispa IA) y `HomeCarousels.kt` (carrusel "Cerca de ti" 160 × 184, "Planes de tus amigos"); captura `10_inicio_*`; espacio en "¿No tienes cuenta? Crea una". Decisiones en `docs/revision-jorge.md`.
+- A recordar: el MCP de Figma (plan Starter) tiene límite de llamadas; si se acaba, trabajar con la captura ya descargada y `docs/diseno_boceto2.md`.
 
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).

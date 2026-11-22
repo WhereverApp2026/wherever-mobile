@@ -107,6 +107,16 @@ object Sizes {
     /** Cuadro del ícono en las filas de la hoja 15_Crear. */
     val CreateTile: Dp = 52.dp
 
+    /** 10_Inicio: portada (390 × 244), tarjeta-foto de "Cerca de ti" (160 × 184) y de "Planes de tus amigos". */
+    val HomeCover: Dp = 244.dp
+    val NearbyCardWidth: Dp = 160.dp
+    val NearbyCardHeight: Dp = 184.dp
+    val FriendPlanCardWidth: Dp = 294.dp
+    val FriendPlanPhoto: Dp = 118.dp
+
+    /** Botón redondo dentro del buscador (chispa de IA de 10_Inicio). */
+    val SearchAction: Dp = 44.dp
+
     /** Ancho máximo del QR de Mi código (25_MiCodigo). */
     val QrCode: Dp = 280.dp
     val ThumbnailL: Dp = 72.dp

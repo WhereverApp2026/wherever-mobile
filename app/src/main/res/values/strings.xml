@@ -289,11 +289,9 @@
     <string name="deletion_pending_cancel">Cancelar eliminación</string>
 
     <!-- Inicio (nv-47) -->
-    <string name="home_search_hint">¿Qué se te antoja?</string>
-    <string name="home_weather">%1$d °C · %2$s</string>
+    <string name="home_search_hint">Tacos, relax, aventura…</string>
     <string name="home_weather_adverse">El clima no ayuda: te sugerimos lugares techados.</string>
     <string name="home_cravings">Para este momento</string>
-    <string name="home_for_you">Para ti</string>
     <string name="home_why">Por qué: %1$s</string>
     <string name="home_not_interested">No me interesa</string>
     <string name="home_not_interested_done">Ya no te lo mostraremos</string>
@@ -556,6 +554,11 @@
     <string name="notification_vote_opened">Hay una votación abierta en tu grupo</string>
     <string name="notification_vote_closed">Terminó una votación de tu grupo</string>
     <string name="notification_other">Tienes un aviso nuevo</string>
+    <plurals name="home_walk_minutes">
+        <item quantity="one">%1$d min a pie</item>
+        <item quantity="many">%1$d min a pie</item>
+        <item quantity="other">%1$d min a pie</item>
+    </plurals>
     <plurals name="home_notifications_unread">
         <item quantity="one">Avisos: %1$d sin leer</item>
         <item quantity="many">Avisos: %1$d sin leer</item>
@@ -819,6 +822,10 @@
     <!-- Inicio: pestaña Amigos, publicación y plan de un amigo (specs/nv-17) -->
     <string name="home_tab_nearby">Cerca de ti</string>
     <string name="home_tab_friends">Amigos</string>
+    <string name="home_see_all">Ver todo</string>
+    <string name="home_friend_plans">Planes de tus amigos</string>
+    <string name="home_tag_for_you">Para ti</string>
+    <string name="home_tag_near">Cerca</string>
     <string name="feed_time_now">Ahora</string>
     <string name="feed_time_minutes">Hace %1$d min</string>
     <string name="feed_time_hours">Hace %1$d h</string>
