@@ -300,6 +300,13 @@
 - A recordar: en el Xiaomi `svc wifi disable` no apaga el Wi-Fi (MIUI); usar `cmd wifi set-wifi-enabled disabled|enabled`. Sin red la app pone la pantalla global 89_SinConexion encima de todo.
 - A recordar: la moderación de staging rechaza a veces textos repetidos («el texto no cumple las normas»), 422 con `campos[texto]`.
 
+## Reparto entre cuatro y revisor único (2026-11-22)
+- Estado: reparto de lo que falta entre Jorge (nv-20, nv-21, nv-25 y lo compartido), Diego (nv-23, nv-24, nv-26, nv-30, nv-37), Borre (nv-35, nv-36, nv-38) y Osmar (nv-17, nv-27, nv-29 y backend). Listas en `docs/equipo/`. Avance al corte: 63/162 en `main`.
+- Decisión (Osmar): solo Osmar aprueba los PR a `main`. `CODEOWNERS` = `@OsmarYahir @WhereverApp2026` y regla `.github/rulesets/main.json` (1 aprobación de code owner, se anula con commits nuevos, CI `gates` en verde y al día, conversaciones resueltas, sin push directo ni force push), sin excepciones. Porqué: 15 commits entraron a `main` sin PR el 2026-11-19.
+- Decisión: la cuenta dueña `WhereverApp2026` solo la usa Osmar, para aprobar sus propios PR. Porqué: GitHub no deja aprobar un PR propio, y con la cuenta dueña cualquiera podía saltarse la regla (Diego abría sus PR con ella).
+- Límite: en un repo de cuenta personal no se puede restringir quién presiona "Merge"; la regla lo cubre exigiendo la aprobación.
+- A evitar: activar la regla antes de integrar este `CODEOWNERS`, porque el code owner sería Jorge.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).
