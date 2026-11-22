@@ -32,6 +32,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.ChipGroup
 import com.wherever.mobile.core.designsystem.CircleIconButton
+import com.wherever.mobile.core.designsystem.CreateOption
 import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.ErrorState
 import com.wherever.mobile.core.designsystem.FormScreen
@@ -62,6 +63,7 @@ import com.wherever.mobile.feature.tastes.ui.tasteLabelRes
 @Composable
 fun ProfileRoute(
     onTab: (MainTab) -> Unit,
+    onCreate: (CreateOption) -> Unit,
     onEdit: () -> Unit,
     onFavorites: () -> Unit,
     onFriends: () -> Unit,
@@ -89,7 +91,7 @@ fun ProfileRoute(
     }
     Scaffold(
         snackbarHost = { WhereverSnackbarHost(snackbar) },
-        bottomBar = { WhereverBottomBar(MainTab.PROFILE, onSelect = onTab) }
+        bottomBar = { WhereverBottomBar(MainTab.PROFILE, onSelect = onTab, onCreate = onCreate) }
     ) { padding ->
         val profile = state.profile
         // La barra inferior ya incluye la de navegación del sistema; sin consumirla, FormScreen la volvía a sumar

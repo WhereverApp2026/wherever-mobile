@@ -30,6 +30,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
+import com.wherever.mobile.core.designsystem.CreateOption
 import com.wherever.mobile.core.designsystem.ErrorState
 import com.wherever.mobile.core.designsystem.ListSkeleton
 import com.wherever.mobile.core.designsystem.MainTab
@@ -54,6 +55,7 @@ private val TABS = listOf(
 @Composable
 fun MyPlansRoute(
     onTab: (MainTab) -> Unit,
+    onCreateOption: (CreateOption) -> Unit,
     onPlan: (String) -> Unit,
     onCreate: () -> Unit,
     onGroups: () -> Unit,
@@ -65,7 +67,7 @@ fun MyPlansRoute(
         onPauseOrDispose { }
     }
     Scaffold(
-        bottomBar = { WhereverBottomBar(MainTab.PLANS, onSelect = onTab) },
+        bottomBar = { WhereverBottomBar(MainTab.PLANS, onSelect = onTab, onCreate = onCreateOption) },
         floatingActionButton = {
             SmallFloatingActionButton(onClick = onCreate, modifier = Modifier.testTag("plans_create")) {
                 Icon(Icons.Outlined.Add, contentDescription = stringResource(R.string.plan_create_title))

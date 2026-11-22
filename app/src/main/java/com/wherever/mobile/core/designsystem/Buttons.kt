@@ -1,6 +1,7 @@
 package com.wherever.mobile.core.designsystem
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.wherever.mobile.R
@@ -96,6 +98,25 @@ fun WhereverOutlinedButton(
     }
 }
 
+/** Botón secundario "Continuar con Google" (03_Login y 05_Registro): blanco, borde suave y la "G" a color. */
+@Composable
+fun WhereverGoogleButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier, tag: String = "") {
+    OutlinedButton(
+        onClick = onClick,
+        shape = CircleShape,
+        border = BorderStroke(Strokes.Hairline, MaterialTheme.colorScheme.outline),
+        colors = ButtonDefaults.outlinedButtonColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        ),
+        modifier = modifier.fillMaxWidth().height(ButtonHeight).testTag(tag)
+    ) {
+        Image(painterResource(R.drawable.ic_google), contentDescription = null, modifier = Modifier.size(Sizes.IconM))
+        Spacer(Modifier.width(Spacing.M))
+        Text(text = text, style = ButtonText)
+    }
+}
+
 @Composable
 fun WhereverDangerButton(
     text: String,
@@ -142,7 +163,7 @@ fun WhereverTextLink(
         contentPadding = PaddingValues(horizontal = Spacing.None, vertical = Spacing.S),
         modifier = modifier.height(Sizes.TouchTarget)
     ) {
-        Text(text = text, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+        Text(text = text, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -186,6 +207,6 @@ private fun ButtonContent(text: String, icon: ImageVector?) {
             Icon(icon, contentDescription = null, modifier = Modifier.size(Sizes.IconM))
             Spacer(Modifier.width(Spacing.S))
         }
-        Text(text = text, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Text(text = text, style = ButtonText)
     }
 }
