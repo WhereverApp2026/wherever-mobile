@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -39,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -111,6 +114,7 @@ fun HomeRouteScreen(
     LaunchedEffect(feed) { feed.onShown() }
     val unread by badge.count.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
+    val layoutDirection = LocalLayoutDirection.current
     val undoMessage = stringResource(R.string.home_not_interested_done)
     val undoLabel = stringResource(R.string.home_undo)
     LaunchedEffect(viewModel) { viewModel.openPlan.collect(navigation.onPlan) }
@@ -160,7 +164,13 @@ fun HomeRouteScreen(
                 onLocationNotNow = viewModel::onLocationNotNow,
                 onCopyPlan = viewModel::copyPopular
             ),
-            modifier = Modifier.padding(bottom = padding.calculateBottomPadding())
+            // Sin el margen de arriba (la portada va bajo la barra de estado), pero sí los laterales: en
+            // horizontal la barra de navegación del sistema tapaba la campana y la chispa de IA.
+            modifier = Modifier.padding(
+                start = padding.calculateStartPadding(layoutDirection),
+                end = padding.calculateEndPadding(layoutDirection),
+                bottom = padding.calculateBottomPadding()
+            )
         )
     }
 }
@@ -246,18 +256,21 @@ private fun LazyListScope.nearbyItems(
     state.error?.let { error ->
         item { ErrorBanner(error.asString(), Modifier.padding(horizontal = ScreenPadding)) }
     }
-    item {
-        SectionHeader(
-            title = stringResource(R.string.home_tab_nearby),
-            action = stringResource(R.string.home_see_all),
-            onAction = { navigation.onTab(MainTab.EXPLORE) },
-            tag = "home_see_all"
-        )
-    }
-    when {
-        state.loading -> item { NearbySkeleton() }
-        state.recommendations.isEmpty() && state.error == null -> item { EmptyRecommendations(navigation.onSearch) }
-        else -> item { NearbyCarousel(state.recommendations, navigation.onPlace, actions.onNotInterested) }
+    // Con error y sin lugares solo queda el aviso: el título con "Ver todo" no tendría nada debajo.
+    if (state.error == null || state.recommendations.isNotEmpty()) {
+        item {
+            SectionHeader(
+                title = stringResource(R.string.home_tab_nearby),
+                action = stringResource(R.string.home_see_all),
+                onAction = { navigation.onTab(MainTab.EXPLORE) },
+                tag = "home_see_all"
+            )
+        }
+        when {
+            state.loading -> item { NearbySkeleton() }
+            state.recommendations.isEmpty() -> item { EmptyRecommendations(navigation.onSearch) }
+            else -> item { NearbyCarousel(state.recommendations, navigation.onPlace, actions.onNotInterested) }
+        }
     }
     val friendPlans = friends.state.items.filter { it.moment.planId != null }
     if (friendPlans.isNotEmpty()) {

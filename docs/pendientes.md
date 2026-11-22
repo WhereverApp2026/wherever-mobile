@@ -159,6 +159,8 @@ Bugs conocidos del área: Bienvenida en horizontal (✅ nv-55); enlaces corridos
 | Barra inferior estirada a toda la pantalla tras agregar el "+" (Boceto 2) | ✅ arreglado antes de integrar (`BottomBarCreateTest`) |
 | Hoja inferior sin scroll: en horizontal las últimas opciones quedaban fuera | ✅ arreglado (`WhereverBottomSheet` con scroll) |
 | Login: "¿No tienes cuenta?Crea una" sin espacio entre texto y enlace | arreglado (espacio de 4 dp) |
+| Inicio en horizontal: la barra de navegación del sistema tapaba la campana y la chispa de IA (visto en el Xiaomi) | arreglado (márgenes laterales del Scaffold) |
+| Inicio sin servidor: "Cerca de ti" con "Ver todo" quedaba sin nada debajo del aviso de error | arreglado (se oculta con error y sin lugares) |
 | `GroupsContentTest.chatEnviaReintentaYAvisaSinRed` falla en el Xiaomi: el teclado tapa "No se envió" en la actividad de prueba | abierto (pasa en el emulador de la CI) |
 | Pruebas de UI en el teléfono en horizontal: 4 fallan porque la pantalla queda baja (Fecha, Mi código, Grupos, Insignias) | correr con el teléfono en vertical |
 
