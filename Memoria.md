@@ -279,6 +279,10 @@
 - Pendiente para Jorge: los enlaces de términos y aviso en Registro esperan 87_Ayuda (nv-33).
 - Estado (2026-11-22, mañana): PR #44 integrado (`5b68152`). 10_Inicio de Figma en `feat/boceto2-inicio`: `HomeCover.kt` (portada, buscador con chispa IA) y `HomeCarousels.kt` (carrusel "Cerca de ti" 160 × 184, "Planes de tus amigos"); captura `10_inicio_*`; espacio en "¿No tienes cuenta? Crea una". Decisiones en `docs/revision-jorge.md`.
 - A recordar: el MCP de Figma (plan Starter) tiene límite de llamadas; si se acaba, trabajar con la captura ya descargada y `docs/diseno_boceto2.md`.
+- Estado (2026-11-21, noche): nv-33 86_Ayuda (Diego) en `feat/nv-33-help`: buscador sin acentos, 9 preguntas en acordeón, contacto y «Reportar un problema» con `POST /errores`; fila Ayuda en Ajustes. Compuertas locales en verde (ktlint, detekt, lint, 527 unitarias + capturas, kover 81,24 %, assembleDebug) y scripts. Sin probar contra staging (503 en fin de semana) ni en teléfono. Correo y WhatsApp ocultos hasta que existan `SUPPORT_EMAIL`/`SUPPORT_WHATSAPP` en `BuildConfig` (Jorge). Decisiones D-33b a D-33e en `docs/revision-jorge.md`.
+- A evitar: pruebas de Compose con Robolectric en un paquete que corre antes que `integration/`: dejan Conscrypt instalado en la JVM y `ConnectionIntegrationTest` (certificado no confiable) falla con `JarVerifier`/`SecurityException` en el JDK 21 de Oracle. Las pruebas de UI van en `androidTest`.
+- A recordar: el JDK 21 de Oracle (`C:\Program Files\Java\jdk-21`) corre todas las compuertas, capturas incluidas; no hay JDK 17 en el equipo de Diego. Semgrep no está instalado: lo corre la CI.
+- A recordar: el frame de Figma se abre sin sesión en el navegador con `?node-id=`; 86_Ayuda es `298:7902`. Así no se gastan llamadas del MCP de Figma (plan Starter).
 
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).

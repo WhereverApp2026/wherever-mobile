@@ -6,10 +6,10 @@ Orden recomendado: de arriba hacia abajo. Cada spec es una rama y un PR.
 
 ## nv-33 — Ayuda
 
-- [ ] Spec leída: `specs/nv-33/spec.md`, `plan.md`, `task.md`
-- [ ] Rama `feat/nv-33-help` desde `main` actualizado
-- [ ] Pantalla `86_Ayuda`
-- [ ] Compuertas una por una en verde
+- [x] Spec leída: `specs/nv-33/spec.md`, `plan.md`, `task.md`
+- [x] Rama `feat/nv-33-help` desde `main` actualizado
+- [x] Pantalla `86_Ayuda`
+- [x] Compuertas una por una en verde
 - [ ] Probada en teléfono o emulador contra staging
 - [ ] PR a `main` integrado (CI en verde)
 

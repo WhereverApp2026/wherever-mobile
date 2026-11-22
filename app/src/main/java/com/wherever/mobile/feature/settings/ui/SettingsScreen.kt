@@ -60,6 +60,7 @@ data class SettingsNavigation(
     val onChangeEmail: () -> Unit,
     val onChangePassword: () -> Unit,
     val onPrivacy: () -> Unit,
+    val onHelp: () -> Unit,
     val onLoggedOut: () -> Unit
 )
 
@@ -173,6 +174,10 @@ private fun SettingsContent(
                 onCheckedChange = actions.onUseLocation,
                 enabled = !state.saving
             )
+        }
+        // 85_Ajustes: tarjeta final con Ayuda (specs/nv-33, punto de entrada de 86_Ayuda).
+        SurfaceCard {
+            NavRow(stringResource(R.string.settings_help), navigation.onHelp, tag = "settings_help")
         }
         Box(modifier = Modifier.fillMaxWidth().padding(top = Spacing.S), contentAlignment = Alignment.Center) {
             // 85_Ajustes: "Cerrar sesión" va en gris, no en azul de enlace.
@@ -325,7 +330,7 @@ internal fun SettingsPreview() {
             state = SettingsUiState(profile = PREVIEW_PROFILE),
             profile = PREVIEW_PROFILE,
             actions = SettingsActions({}, {}, {}, {}, {}, {}, {}),
-            navigation = SettingsNavigation({}, {}, {}, {}, {}, {}, {}, {}),
+            navigation = SettingsNavigation({}, {}, {}, {}, {}, {}, {}, {}, {}),
             onLogout = {}
         )
     }

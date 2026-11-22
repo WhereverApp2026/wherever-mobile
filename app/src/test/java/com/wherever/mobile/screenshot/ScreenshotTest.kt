@@ -27,6 +27,9 @@ import com.wherever.mobile.feature.friends.ui.MyCodePreview
 import com.wherever.mobile.feature.friends.ui.MyCodeScanPreview
 import com.wherever.mobile.feature.groups.ui.GroupChatPreview
 import com.wherever.mobile.feature.groups.ui.MyGroupsPreview
+import com.wherever.mobile.feature.help.ui.HelpNoResultsPreview
+import com.wherever.mobile.feature.help.ui.HelpPreview
+import com.wherever.mobile.feature.help.ui.HelpReportPreview
 import com.wherever.mobile.feature.home.ui.HomePreview
 import com.wherever.mobile.feature.profile.ui.EditProfilePreview
 import com.wherever.mobile.feature.profile.ui.ProfilePreview
@@ -87,7 +90,10 @@ class ScreenshotTest {
         "89_sin_conexion" to { OfflinePreview() },
         "89_sin_conexion_aviso" to { OfflineNoticePreview() },
         "mantenimiento" to { MaintenancePreview() },
-        "actualizar" to { UpdateRequiredPreview() }
+        "actualizar" to { UpdateRequiredPreview() },
+        "86_ayuda" to { HelpPreview() },
+        "86_ayuda_sin_resultados" to { HelpNoResultsPreview() },
+        "86_ayuda_reportar" to { HelpReportPreview() }
     )
 
     @Test

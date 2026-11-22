@@ -40,6 +40,7 @@ import com.wherever.mobile.feature.friends.ui.MyCodeRoute as MyCodeScreen
 import com.wherever.mobile.feature.friends.ui.PersonRoute as PersonScreen
 import com.wherever.mobile.feature.groups.ui.GroupChatRoute as GroupChatScreen
 import com.wherever.mobile.feature.groups.ui.MyGroupsRoute as MyGroupsScreen
+import com.wherever.mobile.feature.help.ui.HelpRoute as HelpScreen
 import com.wherever.mobile.feature.home.ui.HomeNavigation
 import com.wherever.mobile.feature.home.ui.HomeRouteScreen
 import com.wherever.mobile.feature.notifications.ui.NotificationsRoute as NotificationsScreen
@@ -380,6 +381,7 @@ fun WhereverNavHost(
                     onChangeEmail = { navController.navigateFrom(e, ChangeEmailRoute) },
                     onChangePassword = { navController.navigateFrom(e, ChangePasswordRoute) },
                     onPrivacy = { navController.navigateFrom(e, PrivacyRoute) },
+                    onHelp = { navController.navigateFrom(e, HelpRoute) },
                     onLoggedOut = { navController.navigateOnResult(e, LoginRoute) { clearStack(navController) } }
                 )
             )
@@ -398,6 +400,7 @@ fun WhereverNavHost(
         }
         composable<ChangePasswordRoute> { e -> ChangePasswordScreen(onBack = { navController.popFrom(e) }) }
         composable<ChangeEmailRoute> { e -> ChangeEmailScreen(onBack = { navController.popFrom(e) }) }
+        composable<HelpRoute> { e -> HelpScreen(onBack = { navController.popFrom(e) }) }
         composable<MyDataRoute> { e -> MyDataScreen(onBack = { navController.popFrom(e) }) }
         composable<DeleteAccountRoute> { e ->
             DeleteAccountScreen(

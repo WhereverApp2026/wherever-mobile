@@ -11,6 +11,25 @@
 
 ---
 
+# Revisión para Jorge — 2026-11-21: nv-33 Ayuda (Diego)
+
+> Rama `feat/nv-33-help`, Issue #28. Una pantalla: `86_Ayuda` (nodo Figma `298:7902`), con entrada desde Ajustes.
+
+## Decisiones tomadas sin preguntarte
+- **D-33b Buscador con etiqueta:** la maqueta dibuja el campo sin etiqueta; `LabeledTextField` siempre la pinta, así que dice «Buscar en la ayuda», como Explorar y Amigos. No se tocó `core/designsystem`.
+- **D-33c Preguntas:** nueve. Las cuatro de la maqueta (cancelar, anticipo, Sello, Vaca virtual) y las de `plan.md` §6 (IA, amigos, ubicación, cupón, eliminar cuenta); «Cómo reservo y cuánto cuesta el anticipo» quedó dentro de «¿Por qué pago un anticipo?». Las respuestas solo dicen lo que confirma la API o la app (p. ej., el reembolso «sigue la política del lugar», sin porcentajes). **Revísalas.**
+- **D-33d `traza_id`:** la app no guarda el último `traza_id` en ningún lado, así que el reporte no lo manda (el campo es opcional). Si quieres que lo lleve, hace falta guardarlo en `core/network`.
+- **D-33e Prueba de UI en `androidTest`:** `HelpContentTest` va junto a las demás de Compose y corre en el paso `ui` de la CI. Con Robolectric en `src/test` corría antes que `ConnectionIntegrationTest` en la misma JVM y Conscrypt lo rompía (`JarVerifier`, en el JDK 21 de Oracle); solo, ese test pasa.
+- **Correo y WhatsApp:** `HelpRepositoryImpl.contacts()` devuelve nulos hasta que existan `SUPPORT_EMAIL` y `SUPPORT_WHATSAPP` en `BuildConfig`; mientras, solo se ve «Reportar un problema». Las capturas usan datos de vista previa para mostrar las tres filas de la maqueta.
+- **Íconos:** `ic_chat` (WhatsApp, genérico, sin logo de marca) e `ic_flag` (reportar) en `res/drawable`, de Material Icons (Apache 2.0).
+
+## Pendiente de ti
+- Agregar `SUPPORT_EMAIL` y `SUPPORT_WHATSAPP` a `app/build.gradle.kts` (Issue que abre Diego) y cambiar `contacts()` para leerlos.
+- Revisar las respuestas de las preguntas frecuentes (D-33c).
+- Prueba en teléfono contra staging: Ajustes → Ayuda, buscar, abrir preguntas y mandar un reporte.
+
+---
+
 # Revisión para Jorge — 2026-11-21: pantallas y evaluación alternadas
 
 > Pedido: alternar una pantalla y una mejora de la evaluación, un PR por cosa, compuertas una por una, integrar con CI verde. Lo ambiguo se decide y se anota aquí.
