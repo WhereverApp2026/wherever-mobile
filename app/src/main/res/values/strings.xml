@@ -16,6 +16,24 @@
     <string name="tab_home">Inicio</string>
     <string name="tab_profile">Perfil</string>
     <string name="tab_explore">Explorar</string>
+    <string name="tab_create">Crear</string>
+    <!-- Hoja 15_Crear (Boceto 2) -->
+    <string name="create_sheet_title">¿Qué quieres hacer?</string>
+    <string name="create_ai_plan">Armar un plan con IA</string>
+    <string name="create_ai_plan_hint">Dime una palabra y lo armo</string>
+    <string name="create_manual_plan">Crear un plan a mano</string>
+    <string name="create_manual_plan_hint">Ponle nombre, fecha y paradas</string>
+    <string name="create_with_friends">Planear con amigos</string>
+    <string name="create_with_friends_hint">Crea un grupo, chateen y voten</string>
+    <string name="create_moment">Compartir un momento</string>
+    <string name="create_moment_hint">Foto o postal de hoy</string>
+    <string name="create_review">Escribir una reseña</string>
+    <string name="create_review_hint">De un lugar que ya visitaste</string>
+    <string name="create_coming_soon">Próximamente</string>
+    <!-- "Continuar con Google" en Login y Registro (Boceto 2) -->
+    <string name="auth_or">o</string>
+    <string name="auth_google">Continuar con Google</string>
+    <string name="auth_google_soon">Entrar con Google llega pronto. Por ahora usa tu correo.</string>
 
     <!-- Notificaciones push (specs/nv-46) -->
     <string name="notifications_channel_general">Avisos</string>
@@ -271,11 +289,9 @@
     <string name="deletion_pending_cancel">Cancelar eliminación</string>
 
     <!-- Inicio (nv-47) -->
-    <string name="home_search_hint">¿Qué se te antoja?</string>
-    <string name="home_weather">%1$d °C · %2$s</string>
+    <string name="home_search_hint">Tacos, relax, aventura…</string>
     <string name="home_weather_adverse">El clima no ayuda: te sugerimos lugares techados.</string>
     <string name="home_cravings">Para este momento</string>
-    <string name="home_for_you">Para ti</string>
     <string name="home_why">Por qué: %1$s</string>
     <string name="home_not_interested">No me interesa</string>
     <string name="home_not_interested_done">Ya no te lo mostraremos</string>
@@ -538,6 +554,11 @@
     <string name="notification_vote_opened">Hay una votación abierta en tu grupo</string>
     <string name="notification_vote_closed">Terminó una votación de tu grupo</string>
     <string name="notification_other">Tienes un aviso nuevo</string>
+    <plurals name="home_walk_minutes">
+        <item quantity="one">%1$d min a pie</item>
+        <item quantity="many">%1$d min a pie</item>
+        <item quantity="other">%1$d min a pie</item>
+    </plurals>
     <plurals name="home_notifications_unread">
         <item quantity="one">Avisos: %1$d sin leer</item>
         <item quantity="many">Avisos: %1$d sin leer</item>
@@ -801,6 +822,10 @@
     <!-- Inicio: pestaña Amigos, publicación y plan de un amigo (specs/nv-17) -->
     <string name="home_tab_nearby">Cerca de ti</string>
     <string name="home_tab_friends">Amigos</string>
+    <string name="home_see_all">Ver todo</string>
+    <string name="home_friend_plans">Planes de tus amigos</string>
+    <string name="home_tag_for_you">Para ti</string>
+    <string name="home_tag_near">Cerca</string>
     <string name="feed_time_now">Ahora</string>
     <string name="feed_time_minutes">Hace %1$d min</string>
     <string name="feed_time_hours">Hace %1$d h</string>
@@ -933,4 +958,44 @@
     <string name="reviews_reason_spam">Es spam</string>
     <string name="reviews_reason_personal">Tiene datos personales</string>
     <string name="reviews_reason_other">Otro motivo</string>
+    <!-- 86_Ayuda (specs/nv-33) -->
+    <string name="settings_help">Ayuda</string>
+    <string name="help_title">Ayuda</string>
+    <string name="help_search_label">Buscar en la ayuda</string>
+    <string name="help_search_placeholder">¿Con qué te ayudamos?</string>
+    <string name="help_search_clear">Borrar búsqueda</string>
+    <string name="help_faq_section">Preguntas frecuentes</string>
+    <string name="help_no_results">No encontramos esa pregunta. Escríbenos o repórtalo y te ayudamos.</string>
+    <string name="help_contact_section">¿Sigues con dudas?</string>
+    <string name="help_whatsapp_title">Escríbenos por WhatsApp</string>
+    <string name="help_whatsapp_subtitle">Respondemos en menos de 1 hora</string>
+    <string name="help_email_title">Mándanos un correo</string>
+    <string name="help_report_title">Reportar un problema</string>
+    <string name="help_report_subtitle">Con un lugar o una reseña</string>
+    <string name="help_report_label">¿Qué pasó?</string>
+    <string name="help_report_placeholder">Cuéntanos qué pasó y en qué pantalla</string>
+    <string name="help_report_privacy">No escribas datos personales como correos o teléfonos: los quitamos antes de guardar el reporte.</string>
+    <string name="help_report_send">Enviar reporte</string>
+    <string name="help_report_sent">Gracias, recibimos tu reporte.</string>
+    <string name="help_no_app">No encontramos una app para abrir esto.</string>
+    <string name="help_expand">Mostrar respuesta</string>
+    <string name="help_collapse">Ocultar respuesta</string>
+    <string name="help_faq_plan_ai_q">¿Cómo armo un plan con la IA?</string>
+    <string name="help_faq_plan_ai_a">Toca + y escribe una frase, como «tacos con amigos el sábado». La IA arma de 2 a 4 paradas; puedes cambiarlas, quitarlas o pedir otra idea.</string>
+    <string name="help_faq_cancel_q">¿Cómo cancelo una reservación?</string>
+    <string name="help_faq_cancel_a">Entra a Perfil, abre Mis reservas, elige la reserva y toca Cancelar. Antes de confirmar te mostramos cuánto del anticipo te regresamos.</string>
+    <string name="help_faq_deposit_q">¿Por qué pago un anticipo?</string>
+    <string name="help_faq_deposit_a">Algunos lugares piden un anticipo para apartar tu lugar. Se paga en la pasarela segura al reservar; Wherever no guarda los datos de tu tarjeta. Si cancelas, el reembolso sigue la política del lugar.</string>
+    <string name="help_faq_seal_q">¿Qué es el Sello de Excelencia?</string>
+    <string name="help_faq_seal_a">Es la insignia que Wherever da a los lugares que revisa y destacan por su calidad y su atención. La ves en la ficha del lugar.</string>
+    <string name="help_faq_kitty_q">¿Wherever mueve mi dinero en la Vaca virtual?</string>
+    <string name="help_faq_kitty_a">No. La Vaca solo calcula cuánto puso cada quien y quién le debe a quién. Los pagos los hacen entre ustedes y los marcan como pagados.</string>
+    <string name="help_faq_friends_q">¿Cómo agrego amigos?</string>
+    <string name="help_faq_friends_a">En Amigos, toca Agregar amigo y búscalos por su nombre de usuario o escanea su código. Cuando acepten tu solicitud, verán sus planes.</string>
+    <string name="help_faq_location_q">¿Quién ve mi ubicación?</string>
+    <string name="help_faq_location_a">Tu ubicación solo se usa para recomendarte lugares cercanos y armar planes. Puedes apagarla en Ajustes, en «Usar mi ubicación para armar planes».</string>
+    <string name="help_faq_coupon_q">¿Cómo uso un cupón?</string>
+    <string name="help_faq_coupon_a">Guárdalo en tus cupones y, ya en el lugar, toca Canjear: te damos un código y un QR que duran 5 minutos para que el negocio lo valide.</string>
+    <string name="help_faq_delete_q">¿Cómo elimino mi cuenta?</string>
+    <string name="help_faq_delete_a">En Perfil, entra a Editar perfil y toca Eliminar cuenta. Tienes 30 días para arrepentirte antes de que se borre.</string>
 </resources>

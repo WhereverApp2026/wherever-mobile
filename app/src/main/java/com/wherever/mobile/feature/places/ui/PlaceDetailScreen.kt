@@ -312,7 +312,7 @@ private fun Section(title: Int, content: @Composable () -> Unit) {
         modifier = Modifier.padding(horizontal = ScreenPadding),
         verticalArrangement = Arrangement.spacedBy(Spacing.S)
     ) {
-        Text(stringResource(title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+        Text(stringResource(title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
         content()
     }
 }
@@ -360,7 +360,7 @@ private fun ReviewsHeader(state: PlaceDetailUiState, viewModel: PlaceDetailViewM
         Text(
             stringResource(R.string.place_reviews),
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.Bold
         )
         LazyRow(horizontalArrangement = Arrangement.spacedBy(Spacing.S)) {
             item {

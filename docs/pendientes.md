@@ -1,6 +1,6 @@
 # Pendientes — Wherever Móvil
 
-> Actualizado: 2026-11-21. Una rama y un PR por spec. Pruebas que esperan el teléfono: `docs/pruebas-telefono.md`.
+> Actualizado: 2026-11-22. Una rama y un PR por spec. Pruebas que esperan el teléfono: `docs/pruebas-telefono.md`.
 > Métrica: pantallas que funcionan de verdad / 162 frames de la maqueta (detalle y registro de cortes en `docs/avance.md`).
 > Una pantalla cuenta si tiene código, llama a la API real, maneja carga, error y vacío, tiene pruebas y se probó en el teléfono.
 
@@ -19,6 +19,14 @@
 | Modo negocio | nv-34 a nv-38 | 26 | 0 | 0 % |
 | **Total** | | **162** | **63** | **38,9 %** |
 
+## Rediseño Boceto 2 (2026-11-22)
+
+- Rama `feat/boceto2-rediseno`, guía `docs/diseno_boceto2.md`. Hecho: tokens exactos de Figma, logo nuevo, barra de 5 con "+" y hoja 15_Crear, "Continuar con Google" (avisa "llega pronto": la API no lo tiene) y campos de 52 dp.
+- **No cambia el %:** 15_Crear funciona a medias (navegan "Armar un plan con IA" y "Planear con amigos"; las otras 3 dicen "Próximamente" hasta que existan sus pantallas).
+- **Probado en el Xiaomi (sin servidor, de noche):** barra, hoja con scroll en horizontal, IA → Armar un plan, amigos → Mis grupos. Suite de UI en el teléfono: 38/43 en horizontal; en vertical solo falla `GroupsContentTest.chatEnviaReintentaYAvisaSinRed` (ver Bugs).
+- **10_Inicio de Figma (rama `feat/boceto2-inicio`):** portada con la foto del primer lugar recomendado (sin foto, degradado azul) y degradado de Figma; chip de ciudad y campana en círculo translúcido; "¿Qué hacemos hoy, Osmar?"; buscador "Tacos, relax, aventura…" con chispa naranja → Armar un plan con IA; "Cerca de ti" en carrusel de tarjetas-foto de 160 × 184 ("Para ti"/"Cerca", nombre, "8 min a pie · 4.8") con "Ver todo" → Explorar; "Planes de tus amigos" (momentos con plan, "Ver más" → pestaña Amigos). Mantener presionada una tarjeta = "No me interesa" (con Deshacer). Compañía y "Para este momento" bajan al final; el chip de clima sale de la portada (`docs/revision-jorge.md`).
+- **Falta del Boceto 2:** enlaces de términos y aviso en Registro (llevan a 87_Ayuda, que aún no existe: nv-33), corazón de favoritos y paradas en las tarjetas de Inicio (la API del feed no trae esos datos), íconos SVG de Figma en el resto de la app, fotos en el resto de las tarjetas.
+
 ## nv-17 feed de amigos (2026-11-20, noche)
 
 - Rama `feat/nv-17-feed` (sale de `wip/pausa`), PR a `main`. Compuertas locales en verde: ktlint, detekt, lint, unitarias + capturas, kover, debug y release, critic, sdd, specs, routes, strings, coverage 79,7 %, semgrep 0. Delta 27,5 % (advisory).
@@ -35,7 +43,7 @@ Reglas: `CONTRIBUTING.md`. Cada spec es una rama y un PR a `main` con Jorge como
 | Responsable | Área | Specs | Frames | Funcionan | Lista de trabajo |
 |---|---|---|---|---|---|
 | Jorge | Cuenta y acceso | nv-06 a nv-16 | 17 | 16 (+1 local) | `docs/pendientes.md` |
-| Jorge | Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 14 | `docs/pendientes.md` |
+| Jorge | Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 18 | `docs/pendientes.md` |
 | Jorge | Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 16 | `docs/pendientes.md` |
 | Jorge | Planes: IA, detalle, Vaca, Mis planes, día del plan | nv-23, nv-24, nv-26, nv-28, nv-30 | 22 | 9 | `docs/pendientes.md` |
 | Jorge | Reserva, pago y cupones | nv-27, nv-29 | 15 | 4 | `docs/pendientes.md` |
@@ -148,6 +156,13 @@ Bugs conocidos del área: Bienvenida en horizontal (✅ nv-55); enlaces corridos
 | Búsqueda de personas daba 422 con menos de 3 caracteres | ✅ arreglado (valida en la app) |
 | Gustos con alergias daba 422 | ✅ arreglado (nv-43) |
 | Fila de solicitud ya respondida en Avisos sin mensaje | ✅ arreglado (nv-18) |
+| Barra inferior estirada a toda la pantalla tras agregar el "+" (Boceto 2) | ✅ arreglado antes de integrar (`BottomBarCreateTest`) |
+| Hoja inferior sin scroll: en horizontal las últimas opciones quedaban fuera | ✅ arreglado (`WhereverBottomSheet` con scroll) |
+| Login: "¿No tienes cuenta?Crea una" sin espacio entre texto y enlace | arreglado (espacio de 4 dp) |
+| Inicio en horizontal: la barra de navegación del sistema tapaba la campana y la chispa de IA (visto en el Xiaomi) | arreglado (márgenes laterales del Scaffold) |
+| Inicio sin servidor: "Cerca de ti" con "Ver todo" quedaba sin nada debajo del aviso de error | arreglado (se oculta con error y sin lugares) |
+| `GroupsContentTest.chatEnviaReintentaYAvisaSinRed` falla en el Xiaomi: el teclado tapa "No se envió" en la actividad de prueba | abierto (pasa en el emulador de la CI) |
+| Pruebas de UI en el teléfono en horizontal: 4 fallan porque la pantalla queda baja (Fecha, Mi código, Grupos, Insignias) | correr con el teléfono en vertical |
 
 ## Ramas y PR sin integrar
 

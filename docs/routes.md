@@ -46,6 +46,7 @@
 | `PrivacyRoute` | Privacidad | ninguno | release | nv-15 |
 | `ChangePasswordRoute` | Cambiar contraseña | ninguno | release | nv-51 |
 | `ChangeEmailRoute` | Cambiar correo | ninguno | release | nv-51 |
+| `HelpRoute` | Ayuda: preguntas frecuentes, contacto y reportar un problema | ninguno | release | nv-33 |
 | `MyDataRoute` | Mis datos: descargar copia y borrar historial | ninguno | release | nv-51 |
 | `DeleteAccountRoute` | Eliminar cuenta | ninguno | release | nv-15 |
 | `DeletionPendingRoute` | Eliminación pendiente | ninguno | release | nv-15 |

@@ -61,6 +61,10 @@ data object ChangePasswordRoute
 @Serializable
 data object ChangeEmailRoute
 
+/** 86_Ayuda (specs/nv-33). */
+@Serializable
+data object HelpRoute
+
 @Serializable
 data object MyDataRoute
 

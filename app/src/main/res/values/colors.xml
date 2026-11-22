@@ -3,4 +3,5 @@
     <!-- Solo para el ícono y la ventana previa a Compose. En la UI, usar core/designsystem. -->
     <color name="wherever_route_blue">#2455E8</color>
     <color name="wherever_mist">#F4F7FC</color>
+    <color name="wherever_icon_background">#FFFFFF</color>
 </resources>
