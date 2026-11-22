@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,16 +22,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
-import androidx.compose.material.icons.outlined.DateRange
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -248,45 +240,4 @@ fun ErrorState(message: String, onRetry: () -> Unit, modifier: Modifier = Modifi
         Text(text = message, style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
         WhereverOutlinedButton(text = stringResource(R.string.common_retry), onClick = onRetry)
     }
-}
-
-enum class MainTab { HOME, EXPLORE, PLANS, PROFILE }
-
-/** Pestañas principales que ya existen (ver specs/README.md, D22). */
-@Composable
-fun WhereverBottomBar(selected: MainTab, onSelect: (MainTab) -> Unit, modifier: Modifier = Modifier) {
-    NavigationBar(containerColor = MaterialTheme.colorScheme.surface, modifier = modifier.navigationBarsPadding()) {
-        BarItem(selected == MainTab.HOME, Icons.Outlined.Home, stringResource(R.string.tab_home)) {
-            onSelect(MainTab.HOME)
-        }
-        BarItem(selected == MainTab.EXPLORE, Icons.Outlined.Search, stringResource(R.string.tab_explore)) {
-            onSelect(MainTab.EXPLORE)
-        }
-        BarItem(selected == MainTab.PLANS, Icons.Outlined.DateRange, stringResource(R.string.tab_plans)) {
-            onSelect(MainTab.PLANS)
-        }
-        BarItem(selected == MainTab.PROFILE, Icons.Outlined.Person, stringResource(R.string.tab_profile)) {
-            onSelect(MainTab.PROFILE)
-        }
-    }
-}
-
-@Composable
-private fun androidx.compose.foundation.layout.RowScope.BarItem(
-    selected: Boolean,
-    icon: ImageVector,
-    label: String,
-    onClick: () -> Unit
-) {
-    NavigationBarItem(
-        selected = selected,
-        onClick = onClick,
-        icon = { Icon(icon, contentDescription = null) },
-        label = { Text(label) },
-        colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = MaterialTheme.colorScheme.primary,
-            selectedTextColor = MaterialTheme.colorScheme.primary,
-            indicatorColor = MaterialTheme.colorScheme.primaryContainer
-        )
-    )
 }

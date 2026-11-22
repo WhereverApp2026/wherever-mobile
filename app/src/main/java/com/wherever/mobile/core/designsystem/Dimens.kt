@@ -74,6 +74,10 @@ object Sizes {
     val ButtonHeight: Dp = 52.dp
     val RowMinHeight: Dp = 52.dp
 
+    /** Campo de texto del Boceto 2: 52 de alto = 14 + línea de 24 + 14. */
+    val FieldHeight: Dp = 52.dp
+    val FieldVerticalPadding: Dp = 14.dp
+
     val IconXS: Dp = 12.dp
     val IconS: Dp = 16.dp
     val IconM: Dp = 20.dp
@@ -99,6 +103,9 @@ object Sizes {
     val AvatarXL: Dp = 96.dp
 
     val Thumbnail: Dp = 64.dp
+
+    /** Cuadro del ícono en las filas de la hoja 15_Crear. */
+    val CreateTile: Dp = 52.dp
 
     /** Ancho máximo del QR de Mi código (25_MiCodigo). */
     val QrCode: Dp = 280.dp

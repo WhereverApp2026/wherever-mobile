@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
+import com.wherever.mobile.core.designsystem.CreateOption
 import com.wherever.mobile.core.designsystem.ErrorState
 import com.wherever.mobile.core.designsystem.LabeledTextField
 import com.wherever.mobile.core.designsystem.LoadingState
@@ -49,9 +50,14 @@ private val PRICE_LEVELS = (1..MAX_PRICE_FILTER).toList()
 
 /** 18_Explorar (US-027, US-028, US-034, US-187). Sin mapa: falta decidir el proveedor (D25). */
 @Composable
-fun ExploreRoute(onTab: (MainTab) -> Unit, onPlace: (String) -> Unit, viewModel: ExploreViewModel = hiltViewModel()) {
+fun ExploreRoute(
+    onTab: (MainTab) -> Unit,
+    onCreate: (CreateOption) -> Unit,
+    onPlace: (String) -> Unit,
+    viewModel: ExploreViewModel = hiltViewModel()
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    Scaffold(bottomBar = { WhereverBottomBar(MainTab.EXPLORE, onSelect = onTab) }) { padding ->
+    Scaffold(bottomBar = { WhereverBottomBar(MainTab.EXPLORE, onSelect = onTab, onCreate = onCreate) }) { padding ->
         LazyColumn(
             contentPadding = PaddingValues(bottom = padding.calculateBottomPadding() + Spacing.L),
             verticalArrangement = Arrangement.spacedBy(Spacing.M),

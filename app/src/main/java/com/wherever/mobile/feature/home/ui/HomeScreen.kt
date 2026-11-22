@@ -66,6 +66,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
+import com.wherever.mobile.core.designsystem.CreateOption
 import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.InfoBanner
 import com.wherever.mobile.core.designsystem.Ink
@@ -105,6 +106,7 @@ private const val SKELETON_CARDS = 3
 
 data class HomeNavigation(
     val onTab: (MainTab) -> Unit,
+    val onCreate: (CreateOption) -> Unit,
     val onSearch: () -> Unit,
     val onCategory: (String) -> Unit,
     val onPlace: (String) -> Unit,
@@ -150,7 +152,7 @@ fun HomeRouteScreen(
     }
     Scaffold(
         snackbarHost = { WhereverSnackbarHost(snackbar) },
-        bottomBar = { WhereverBottomBar(MainTab.HOME, onSelect = navigation.onTab) }
+        bottomBar = { WhereverBottomBar(MainTab.HOME, onSelect = navigation.onTab, onCreate = navigation.onCreate) }
     ) { padding ->
         HomeContent(
             state = state,

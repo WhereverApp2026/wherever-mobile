@@ -22,6 +22,10 @@ val DangerTint = Color(0xFFFBE4E4)
 val SegmentTrack = Color(0xFFE2E7F0)
 val InkDeep = Color(0xFF16305C)
 
+// Ícono morado de "Crear un plan a mano" en la hoja 15_Crear (§2.3).
+val Grape = Color(0xFF7A4DE0)
+val GrapeTint = Color(0xFFEFE8FF)
+
 // Tema oscuro: primario legible sobre Ink, contenedor distinto de la superficie y riel del selector (nv-55).
 val RouteBlueLight = Color(0xFF9BB4FF)
 val InkRaised = Color(0xFF274A8C)

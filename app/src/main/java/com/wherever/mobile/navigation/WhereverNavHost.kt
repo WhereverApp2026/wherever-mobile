@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.wherever.mobile.core.designsystem.CreateOption
 import com.wherever.mobile.core.designsystem.LocalMotionEnabled
 import com.wherever.mobile.core.designsystem.MainTab
 import com.wherever.mobile.core.designsystem.NavMotion
@@ -193,6 +194,7 @@ fun WhereverNavHost(
             HomeRouteScreen(
                 HomeNavigation(
                     onTab = { navController.openTab(e, it) },
+                    onCreate = { navController.openCreate(e, it) },
                     onSearch = { navController.navigateFrom(e, SearchRoute()) },
                     onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
                     onCategory = { navController.navigateFrom(e, ExploreRoute(category = it)) },
@@ -237,6 +239,7 @@ fun WhereverNavHost(
         composable<ExploreRoute> { e ->
             ExploreScreen(
                 onTab = { navController.openTab(e, it) },
+                onCreate = { navController.openCreate(e, it) },
                 onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "busqueda")) }
             )
         }
@@ -281,6 +284,7 @@ fun WhereverNavHost(
         composable<MyPlansRoute> { e ->
             MyPlansScreen(
                 onTab = { navController.openTab(e, it) },
+                onCreateOption = { navController.openCreate(e, it) },
                 onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
                 onCreate = { navController.navigateFrom(e, CreatePlanRoute()) },
                 onGroups = { navController.navigateFrom(e, MyGroupsRoute) }
@@ -343,6 +347,7 @@ fun WhereverNavHost(
         composable<ProfileRoute> { e ->
             ProfileScreen(
                 onTab = { navController.openTab(e, it) },
+                onCreate = { navController.openCreate(e, it) },
                 onEdit = { navController.navigateFrom(e, EditProfileRoute) },
                 onFavorites = { navController.navigateFrom(e, FavoritesRoute) },
                 onFriends = { navController.navigateFrom(e, FriendsRoute) },
@@ -412,6 +417,17 @@ fun WhereverNavHost(
             )
         }
     }
+}
+
+/** Hoja 15_Crear: solo navegan las opciones que ya tienen pantalla. */
+private fun NavHostController.openCreate(from: NavBackStackEntry, option: CreateOption) {
+    val route: Any = when (option) {
+        CreateOption.AI_PLAN -> CreatePlanRoute()
+        // Un grupo nace de un plan (POST /grupos con plan_id): Mis grupos explica cómo crearlo.
+        CreateOption.WITH_FRIENDS -> MyGroupsRoute
+        CreateOption.MANUAL_PLAN, CreateOption.MOMENT, CreateOption.REVIEW -> return
+    }
+    navigateFrom(from, route)
 }
 
 /** Las pestañas comparten la raíz Inicio y guardan su estado (scroll, filtros) al cambiar. */
