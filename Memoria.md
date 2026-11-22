@@ -281,6 +281,10 @@
 - Estado (2026-11-22): nv-34 Negocio, registro (Osmar, hecho por Claude con su autorización) en `feat/nv-34-business`: 43 a 47 en un asistente que retoma en `paso_alta`; entrada «Registrar mi negocio» en Ajustes. Sin probar contra staging. Decisiones D-34a a D-34d y bloqueos en `docs/revision-jorge.md`.
 - A evitar: un campo de un DTO de petición con valor por omisión no viaja (`ApiJson` no codifica los valores por omisión). Lo que la API exige va sin valor por omisión (`BizPointDto.type`).
 - A evitar: helpers de prueba con nombres genéricos (`sampleDraft`, `FakeLocationProvider`) ya existen en `testing/`; buscar antes de crear uno.
+- Estado (2026-11-22): nv-35 Negocio, panel, reservas y check-in (Osmar, hecho por Claude) en `feat/nv-35-business` (sale de nv-34). Modo negocio con `NavHost` y barra propios (Panel, Reservas); 48, 49, 50 y 56 contra la API real. Sin probar contra staging. Decisiones D-35a a D-35j y bloqueos en `docs/revision-jorge.md`; QR en el Issue #54.
+- A recordar: los IDs de los frames de Figma salen de `get_metadata` del canvas `96:130` (respuesta enorme: filtrarla con Python por `name`); mapa de negocio en `docs/revision-jorge.md`.
+- A evitar: datos de ejemplo de las vistas previas dentro de cada pantalla: detekt marca cada número (MagicNumber). Juntarlos en un archivo `*Samples.kt` con la supresión justificada.
+- A evitar: en `strings.xml`, los `plurals` en español piden también `many` (lint `MissingQuantity`).
 
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).

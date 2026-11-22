@@ -142,3 +142,7 @@ data class FriendPlanRoute(val id: String)
 /** Alta del negocio: 43_NegRegistro a 47_NegListo (specs/nv-34). 42_NegCuenta se salta con sesión. */
 @Serializable
 data object BusinessOnboardingRoute
+
+/** Modo negocio: Panel, Reservas, Estadísticas y Check-in con su barra interna (specs/nv-35). */
+@Serializable
+data object BusinessHomeRoute

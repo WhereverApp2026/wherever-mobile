@@ -1,3 +1,28 @@
+# Revisión para Jorge — 2026-11-22: nv-35 Negocio, panel, reservas y check-in (Osmar)
+
+> Rama `feat/nv-35-business` (sale de `feat/nv-34-business`, que aún no está en `main`), Issue #30. Hecho por Claude con la autorización de Osmar. Frames: `48_NegPanel` (`120:7089`), `49_NegReservas` (`120:7457`), `50_NegCheckin` (`120:7307`), `NegCheckin · *` (`349:788`, `349:862`, `349:936`, `349:1010`), `56_NegStats` (`120:1989`).
+
+## Decisiones tomadas sin preguntarte
+- **D-35a QR:** el check-in es por código escrito; el botón de QR no se dibuja. Issue #54 propone reusar el lector ZXing de nv-20.
+- **D-35b Cifras de la portada (48):** la API del panel no trae Anticipos ni Ocupación; se muestran Reservas hoy, Llegadas hoy y Cupones hoy (cada una se oculta si llega nula). Calificación de la semana, reseñas por responder, cupones activos y próxima reserva van en «Tu semana»; el avance del Sello en su tarjeta si aún no lo tiene.
+- **D-35c Gráfica semanal del Panel:** `GET estadisticas` de los 7 días hasta ayer, agrupado por día, con su `cambio.reservas`. Tocarla abre 56.
+- **D-35d Estadísticas (56):** Semana, Mes y Trimestre (90 días, el máximo de la API). «Anticipos» no existe en la API: va «Vistas de tu ficha». «De dónde llegan» solo con premium (`avanzadas`); sin premium, aviso. Reporte del mes en PDF a Descargas (MediaStore en 10+, carpeta de la app en 8 y 9; sin permisos).
+- **D-35e Próximas y Pasadas (49):** `GET reservas` es por día; Próximas empieza mañana y Pasadas ayer, con flechas para recorrer días.
+- **D-35f Acciones de la reserva:** hoja con Confirmar (pendiente), Llegó / No llegó (confirmada), registrar llegada con su código (hoy) y Contactar (confirmada o de las últimas 24 h). 409 al cambiar estado recarga el día.
+- **D-35g Reprogramar → Contactar** (no existe en la API), también en 50.
+- **D-35h Barra del negocio:** solo Panel y Reservas por ahora; Cupones, Reseñas y Perfil llegan con nv-37, nv-36 y nv-38 (nada sin pantalla). Rutas internas en un `NavHost` propio; en el grafo principal solo `BusinessHomeRoute`.
+- **D-35i Entrada:** fila «Modo negocio» en Ajustes. `POST /usuarios/yo/modo`; 403 o sin negocio enviado (borrador o rechazado) → alta (nv-34). «Ir al panel» de 47 ya abre el Panel. Si hay varios negocios, chips arriba del Panel.
+- **D-35j Dinero en centavos:** `anticipo` de reservas se toma en centavos como `cobro` (la doc lo dice solo de `cobro`).
+
+## Bloqueos
+- **Backend:** no hay `GET /negocios/{id}/bloqueos`; un horario cerrado solo se puede reabrir en la misma visita (la app guarda el id que regresó el `POST`).
+- **Backend:** `GET reservas` no trae cupón; la fila «Cupón» de 50 no se dibuja.
+
+## Pendiente de ti
+- Revisar la fila «Modo negocio» en Ajustes (punto de entrada) y la línea de `BusinessHomeRoute` en `WhereverNavHost`.
+
+---
+
 # Revisión para Jorge — 2026-11-22: nv-34 Negocio, registro (Osmar)
 
 > Rama `feat/nv-34-business`, Issue #29. Hecho por Claude con la autorización de Osmar. Frames: `42_NegCuenta` (`120:6489`), `43_NegRegistro` (`120:6903`), `44_NegUbic` (`120:6588`), `45_NegOper` (`120:7195`), `46_NegVerif` (`120:6790`), `47_NegListo` (`120:7089`).

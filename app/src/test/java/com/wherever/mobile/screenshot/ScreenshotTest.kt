@@ -23,8 +23,14 @@ import com.wherever.mobile.feature.business.ui.BusinessDonePreview
 import com.wherever.mobile.feature.business.ui.BusinessLocationPreview
 import com.wherever.mobile.feature.business.ui.BusinessMissingPreview
 import com.wherever.mobile.feature.business.ui.BusinessOperationPreview
+import com.wherever.mobile.feature.business.ui.BusinessPanelPreview
 import com.wherever.mobile.feature.business.ui.BusinessRegisterPreview
+import com.wherever.mobile.feature.business.ui.BusinessReservationsEmptyPreview
+import com.wherever.mobile.feature.business.ui.BusinessReservationsPreview
+import com.wherever.mobile.feature.business.ui.BusinessStatsPreview
 import com.wherever.mobile.feature.business.ui.BusinessVerifyPreview
+import com.wherever.mobile.feature.business.ui.CheckinEmptyPreview
+import com.wherever.mobile.feature.business.ui.CheckinPreview
 import com.wherever.mobile.feature.feed.ui.FriendPlanPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedEmptyPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedPreview
@@ -97,7 +103,13 @@ class ScreenshotTest {
         "45_neg_oper" to { BusinessOperationPreview() },
         "46_neg_verif" to { BusinessVerifyPreview() },
         "46_neg_verif_faltantes" to { BusinessMissingPreview() },
-        "47_neg_listo" to { BusinessDonePreview() }
+        "47_neg_listo" to { BusinessDonePreview() },
+        "48_neg_panel" to { BusinessPanelPreview() },
+        "49_neg_reservas" to { BusinessReservationsPreview() },
+        "49_neg_reservas_vacio" to { BusinessReservationsEmptyPreview() },
+        "50_neg_checkin" to { CheckinPreview() },
+        "50_neg_checkin_vacio" to { CheckinEmptyPreview() },
+        "56_neg_stats" to { BusinessStatsPreview() }
     )
 
     @Test

@@ -30,6 +30,7 @@ import com.wherever.mobile.feature.auth.ui.RecoverRoute as RecoverScreen
 import com.wherever.mobile.feature.auth.ui.RegisterRoute as RegisterScreen
 import com.wherever.mobile.feature.auth.ui.VerifyEmailRoute as VerifyEmailScreen
 import com.wherever.mobile.feature.auth.ui.WelcomeScreen
+import com.wherever.mobile.feature.business.ui.BusinessHomeRoute as BusinessHomeScreen
 import com.wherever.mobile.feature.business.ui.BusinessOnboardingRoute as BusinessOnboardingScreen
 import com.wherever.mobile.feature.business.ui.OnboardingNavigation
 import com.wherever.mobile.feature.feed.ui.FriendPlanNavigation
@@ -383,6 +384,7 @@ fun WhereverNavHost(
                     onChangePassword = { navController.navigateFrom(e, ChangePasswordRoute) },
                     onPrivacy = { navController.navigateFrom(e, PrivacyRoute) },
                     onRegisterBusiness = { navController.navigateFrom(e, BusinessOnboardingRoute) },
+                    onBusinessMode = { navController.navigateFrom(e, BusinessHomeRoute) },
                     onLoggedOut = { navController.navigateOnResult(e, LoginRoute) { clearStack(navController) } }
                 )
             )
@@ -391,9 +393,21 @@ fun WhereverNavHost(
             BusinessOnboardingScreen(
                 OnboardingNavigation(
                     onExit = { navController.popFrom(e) },
-                    // El Panel (BusinessHomeRoute) llega con nv-35; mientras, se regresa a Ajustes.
-                    onPanel = { navController.popFrom(e) }
+                    onPanel = {
+                        navController.navigateFrom(e, BusinessHomeRoute) {
+                            popUpTo<BusinessOnboardingRoute> { inclusive = true }
+                        }
+                    }
                 )
+            )
+        }
+        composable<BusinessHomeRoute> { e ->
+            BusinessHomeScreen(
+                onOnboarding = {
+                    navController.navigateOnResult(e, BusinessOnboardingRoute) {
+                        popUpTo<BusinessHomeRoute> { inclusive = true }
+                    }
+                }
             )
         }
         composable<SessionsRoute> { e ->

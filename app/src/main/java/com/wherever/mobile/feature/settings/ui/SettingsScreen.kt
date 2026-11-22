@@ -61,6 +61,7 @@ data class SettingsNavigation(
     val onChangePassword: () -> Unit,
     val onPrivacy: () -> Unit,
     val onRegisterBusiness: () -> Unit,
+    val onBusinessMode: () -> Unit,
     val onLoggedOut: () -> Unit
 )
 
@@ -175,12 +176,18 @@ private fun SettingsContent(
                 enabled = !state.saving
             )
         }
-        // 85_Ajustes: entrada al alta del negocio (specs/nv-34).
+        // 85_Ajustes: entrada al alta del negocio (specs/nv-34) y al modo negocio (specs/nv-35).
         SurfaceCard {
             NavRow(
                 stringResource(R.string.settings_register_business),
                 navigation.onRegisterBusiness,
                 tag = "settings_register_business"
+            )
+            // Modo negocio (specs/nv-35): sin rol comerciante manda al alta.
+            NavRow(
+                stringResource(R.string.settings_business_mode),
+                navigation.onBusinessMode,
+                tag = "settings_business_mode"
             )
         }
         Box(modifier = Modifier.fillMaxWidth().padding(top = Spacing.S), contentAlignment = Alignment.Center) {
@@ -334,7 +341,7 @@ internal fun SettingsPreview() {
             state = SettingsUiState(profile = PREVIEW_PROFILE),
             profile = PREVIEW_PROFILE,
             actions = SettingsActions({}, {}, {}, {}, {}, {}, {}),
-            navigation = SettingsNavigation({}, {}, {}, {}, {}, {}, {}, {}, {}),
+            navigation = SettingsNavigation({}, {}, {}, {}, {}, {}, {}, {}, {}, {}),
             onLogout = {}
         )
     }

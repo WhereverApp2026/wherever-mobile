@@ -39,6 +39,11 @@
 | `EditProfileRoute` | Editar perfil | ninguno | release | nv-14 |
 | `SettingsRoute` | Ajustes | ninguno | release | nv-13 |
 | `BusinessOnboardingRoute` | Alta del negocio: registro, ubicación, operación, verificación y solicitud enviada (43 a 47) | ubicación aproximada al tocar «Estoy en mi negocio» | release | nv-34 |
+| `BusinessHomeRoute` | Modo negocio: entra con `POST /usuarios/yo/modo` y abre el Panel del negocio activo (barra interna Panel y Reservas; Cupones, Reseñas y Perfil llegan con nv-36 a nv-38) | ninguno | release | nv-35 |
+| `BusinessPanelDestination` (interna) | 48_NegPanel | ninguno | release | nv-35 |
+| `BusinessStatsDestination` (interna) | 56_NegStats y reporte mensual PDF (Descargas, sin permisos) | ninguno | release | nv-35 |
+| `BusinessReservationsDestination` (interna) | 49_NegReservas: Hoy, Próximas, Pasadas, acciones y cerrar horarios | ninguno | release | nv-35 |
+| `BusinessCheckinDestination(code)` (interna) | 50_NegCheckin por código escrito (QR en D-35a) | ninguno | release | nv-35 |
 | `SessionsRoute` | Sesiones abiertas | ninguno | release | nv-13 |
 | `PrivacyRoute` | Privacidad | ninguno | release | nv-15 |
 | `ChangePasswordRoute` | Cambiar contraseña | ninguno | release | nv-51 |

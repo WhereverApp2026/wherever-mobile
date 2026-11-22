@@ -20,14 +20,14 @@ Orden recomendado: de arriba hacia abajo. Cada spec es una rama y un PR.
 
 ## nv-35 — Negocio: panel, reservas y check-in
 
-- [ ] Spec leída: `specs/nv-35/spec.md`, `plan.md`, `task.md`
-- [ ] Rama `feat/nv-35-business` desde `main` actualizado
-- [ ] Pantalla `48_NegPanel`
-- [ ] Pantalla `49_NegReservas`
-- [ ] Pantalla `50_NegCheckin`
-- [ ] Pantalla `NegCheckin · *`
-- [ ] Pantalla `56_NegStats`
-- [ ] Compuertas una por una en verde
+- [x] Spec leída: `specs/nv-35/spec.md`, `plan.md`, `task.md`
+- [x] Rama `feat/nv-35-business` desde `main` actualizado
+- [x] Pantalla `48_NegPanel`
+- [x] Pantalla `49_NegReservas`
+- [x] Pantalla `50_NegCheckin`
+- [x] Pantalla `NegCheckin · *`
+- [x] Pantalla `56_NegStats`
+- [x] Compuertas una por una en verde
 - [ ] Probada en teléfono o emulador contra staging
 - [ ] PR a `main` integrado (CI en verde)
 
