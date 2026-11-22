@@ -1,3 +1,26 @@
+# Revisión para Jorge — 2026-11-22: nv-34 Negocio, registro (Osmar)
+
+> Rama `feat/nv-34-business`, Issue #29. Hecho por Claude con la autorización de Osmar. Frames: `42_NegCuenta` (`120:6489`), `43_NegRegistro` (`120:6903`), `44_NegUbic` (`120:6588`), `45_NegOper` (`120:7195`), `46_NegVerif` (`120:6790`), `47_NegListo` (`120:7089`).
+
+## Decisiones tomadas sin preguntarte
+- **D-34b 42_NegCuenta se salta:** la entrada es Ajustes, que exige sesión, así que el paso 1 nunca se ve (la spec dice «con sesión, se salta»). Sin sesión, la cuenta se crea en Registro. El alta empieza en 43 con «Paso 2 de 5», como la maqueta.
+- **D-34c Un ViewModel para los cinco pasos:** `BusinessOnboardingViewModel` retoma en el paso que sigue a `paso_alta` (`GET /negocios/mios`). Orden en la app: 43 crea, 44 = paso 2, 45 = pasos 3 y 5, 46 = pasos 4 y 6 y el envío.
+- **D-34d Lo que no existe en la API no se dibuja:** tipo de experiencia y año de apertura (43); WhatsApp e Instagram (44, el paso 2 solo lleva dirección y ubicación); mesas, máximo de personas y anticipo (45, son de reservas); logo y constancia fiscal (46).
+- **D-34a Sin mapa:** «Estoy en mi negocio» toma la ubicación aproximada del teléfono (permiso en contexto) y la manda como GeoJSON.
+- **Horario:** siete filas con interruptor y HH:MM (la maqueta resume «Lun a sáb 08:00 a 20:00 · Dom cerrado»).
+- **Documentos:** multipart directo a la API; el archivo se manda como `tipo.extensión` (nunca el nombre original) y se valida JPEG, PNG o PDF de hasta 5 MB antes de subir.
+- **Ir al panel:** regresa a Ajustes hasta que nv-35 cree `BusinessHomeRoute`.
+- **Encontrado al probar:** `ApiJson` no manda los campos que quedan en su valor por omisión; `"type": "Point"` no viajaba. `BizPointDto.type` ya no tiene valor por omisión.
+
+## Bloqueos
+- **Backend:** no hay ruta para dar el consentimiento `datos_negocio` que exige `POST /negocios/{id}/documentos` (422 `consentimiento_requerido`). Se muestra el mensaje de la API.
+- **`core/network`:** `requiere_refresh` necesita renovar el token a propósito y el único refresco es el `Authenticator` (ante un 401). No se tocó `core/network`; se pide en un Issue. En el alta no estorba: los pasos piden «dueño», no el rol comerciante.
+
+## Pendiente de ti
+- Aprobar el negocio de prueba en staging para que Osmar pruebe el panel (nv-35).
+
+---
+
 # Revisión para Jorge — 2026-11-21: pantallas y evaluación alternadas
 
 > Pedido: alternar una pantalla y una mejora de la evaluación, un PR por cosa, compuertas una por una, integrar con CI verde. Lo ambiguo se decide y se anota aquí.

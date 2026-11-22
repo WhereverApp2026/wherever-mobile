@@ -138,3 +138,7 @@ data class MomentRoute(val id: String)
 /** 29_PlanAmigo: plan público de un amigo, con Me apunto y Hacer mi versión (specs/nv-17). */
 @Serializable
 data class FriendPlanRoute(val id: String)
+
+/** Alta del negocio: 43_NegRegistro a 47_NegListo (specs/nv-34). 42_NegCuenta se salta con sesión. */
+@Serializable
+data object BusinessOnboardingRoute

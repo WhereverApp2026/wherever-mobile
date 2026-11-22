@@ -6,15 +6,15 @@ Orden recomendado: de arriba hacia abajo. Cada spec es una rama y un PR.
 
 ## nv-34 — Negocio: registro
 
-- [ ] Spec leída: `specs/nv-34/spec.md`, `plan.md`, `task.md`
-- [ ] Rama `feat/nv-34-business` desde `main` actualizado
-- [ ] Pantalla `42_NegCuenta`
-- [ ] Pantalla `43_NegRegistro`
-- [ ] Pantalla `44_NegUbic`
-- [ ] Pantalla `45_NegOper`
-- [ ] Pantalla `46_NegVerif`
-- [ ] Pantalla `47_NegListo`
-- [ ] Compuertas una por una en verde
+- [x] Spec leída: `specs/nv-34/spec.md`, `plan.md`, `task.md`
+- [x] Rama `feat/nv-34-business` desde `main` actualizado
+- [ ] Pantalla `42_NegCuenta` (se salta con sesión, D-34b en `docs/revision-jorge.md`)
+- [x] Pantalla `43_NegRegistro`
+- [x] Pantalla `44_NegUbic`
+- [x] Pantalla `45_NegOper`
+- [x] Pantalla `46_NegVerif`
+- [x] Pantalla `47_NegListo`
+- [x] Compuertas una por una en verde
 - [ ] Probada en teléfono o emulador contra staging
 - [ ] PR a `main` integrado (CI en verde)
 

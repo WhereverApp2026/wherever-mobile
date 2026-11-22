@@ -19,6 +19,12 @@ import com.wherever.mobile.feature.auth.ui.PermissionsPreview
 import com.wherever.mobile.feature.auth.ui.RecoverPreview
 import com.wherever.mobile.feature.auth.ui.RegisterPreview
 import com.wherever.mobile.feature.auth.ui.WelcomePreview
+import com.wherever.mobile.feature.business.ui.BusinessDonePreview
+import com.wherever.mobile.feature.business.ui.BusinessLocationPreview
+import com.wherever.mobile.feature.business.ui.BusinessMissingPreview
+import com.wherever.mobile.feature.business.ui.BusinessOperationPreview
+import com.wherever.mobile.feature.business.ui.BusinessRegisterPreview
+import com.wherever.mobile.feature.business.ui.BusinessVerifyPreview
 import com.wherever.mobile.feature.feed.ui.FriendPlanPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedEmptyPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedPreview
@@ -85,7 +91,13 @@ class ScreenshotTest {
         "89_sin_conexion" to { OfflinePreview() },
         "89_sin_conexion_aviso" to { OfflineNoticePreview() },
         "mantenimiento" to { MaintenancePreview() },
-        "actualizar" to { UpdateRequiredPreview() }
+        "actualizar" to { UpdateRequiredPreview() },
+        "43_neg_registro" to { BusinessRegisterPreview() },
+        "44_neg_ubic" to { BusinessLocationPreview() },
+        "45_neg_oper" to { BusinessOperationPreview() },
+        "46_neg_verif" to { BusinessVerifyPreview() },
+        "46_neg_verif_faltantes" to { BusinessMissingPreview() },
+        "47_neg_listo" to { BusinessDonePreview() }
     )
 
     @Test
