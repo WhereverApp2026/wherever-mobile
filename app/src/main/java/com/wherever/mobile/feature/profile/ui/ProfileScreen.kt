@@ -71,6 +71,8 @@ fun ProfileRoute(
     onVerifyEmail: (String) -> Unit,
     onMyReviews: () -> Unit,
     onPendingReviews: () -> Unit,
+    onMemories: () -> Unit,
+    onNewMoment: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel(),
     photoViewModel: ProfilePhotoViewModel = hiltViewModel()
 ) {
@@ -114,6 +116,8 @@ fun ProfileRoute(
                     onVerifyEmail = { onVerifyEmail(current.email) },
                     onMyReviews = onMyReviews,
                     onPendingReviews = onPendingReviews,
+                    onMemories = onMemories,
+                    onNewMoment = onNewMoment,
                     avatar = { EditableProfileAvatar(current.name, current.photoUrl, photoState, photoActions) },
                     modifier = modifier
                 )
@@ -141,6 +145,8 @@ private fun ProfileContent(
     onVerifyEmail: () -> Unit,
     onMyReviews: () -> Unit,
     onPendingReviews: () -> Unit,
+    onMemories: () -> Unit,
+    onNewMoment: () -> Unit,
     modifier: Modifier = Modifier,
     avatar: @Composable () -> Unit = { ProfileAvatar(profile.name, profile.photoUrl, Sizes.AvatarL) }
 ) {
@@ -186,6 +192,9 @@ private fun ProfileContent(
             // specs/nv-32: entradas a 79_MisRes y 77_ResPend.
             NavRow(stringResource(R.string.profile_my_reviews), onMyReviews, tag = "profile_my_reviews")
             NavRow(stringResource(R.string.profile_pending_reviews), onPendingReviews, tag = "profile_pending_reviews")
+            // specs/nv-31: álbum de recuerdos y Nuevo momento (hasta que exista la hoja Crear, nv-17).
+            NavRow(stringResource(R.string.profile_memories), onMemories, tag = "profile_memories")
+            NavRow(stringResource(R.string.profile_new_moment), onNewMoment, tag = "profile_new_moment")
         }
         profile.tastes?.let { tastes ->
             Text(text = stringResource(R.string.profile_tastes), style = MaterialTheme.typography.titleMedium)
@@ -256,6 +265,8 @@ internal fun ProfilePreview() {
                 deleteAt = null,
                 version = 1
             ),
+            {},
+            {},
             {},
             {},
             {},

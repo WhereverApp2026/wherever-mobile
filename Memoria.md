@@ -272,6 +272,12 @@
 - A recordar: los números de las vistas previas van como argumento con nombre o constante; detekt (`MagicNumber`) no excluye los `@Preview`.
 - A recordar: una espera que debe sobrevivir a la pantalla (Deshacer) corre en `@ApplicationScope`; en las pruebas se pasa un `TestScope` con el despachador de `MainDispatcherRule` para mover el reloj.
 
+- Estado (2026-11-22): nv-31 Recuerdos y postales (Diego) en `feat/nv-31-memories`, apilada sobre nv-32: 73/74/76 (álbum), 71 (cámara del sistema), 72 (postal dibujada en la app y subida), 75 (detalle con Compartir, Descargar y Eliminar) y 70 (Nuevo momento). Sin probar contra staging ni en teléfono. Decisiones D-31b a D-31f en `docs/revision-jorge.md`.
+- A evitar: con `Response<T>` en Retrofit un 4xx no lanza `HttpException`: `safeApiCall` lo da por bueno. Traducir con `mapApiError` (lo hace `MemoriesRepositoryImpl` para el 202 + `Location` de `POST /postales`).
+- A evitar: `TakePicture` con `CAMERA` declarado en el manifiesto (lo mete ZXing) lanza `SecurityException` si el permiso no está concedido: pedirlo antes.
+- A recordar: Robolectric no soporta `ImageDecoder` (`DecodeException: Only supported on Android`); `BitmapFactory` sí. `ContentResolver` de Robolectric tampoco abre `file://`.
+- A recordar: `android.media.ExifInterface` no tiene `latLong` como propiedad: `getLatLong(FloatArray(2))` y GPS con `setAttribute` en formato racional.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

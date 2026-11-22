@@ -31,17 +31,17 @@ Orden recomendado: de arriba hacia abajo. Cada spec es una rama y un PR.
 
 ## nv-31 — Recuerdos y postales
 
-- [ ] Spec leída: `specs/nv-31/spec.md`, `plan.md`, `task.md`
-- [ ] Rama `feat/nv-31-memories` desde `main` actualizado
-- [ ] Pantalla `70_CrearPub`
-- [ ] Pantalla `71_Camara`
-- [ ] Pantalla `72_Postal`
-- [ ] Pantalla `73_Album`
-- [ ] Pantalla `74_RecPlan`
-- [ ] Pantalla `75_PostalVer`
-- [ ] Pantalla `PostalVer · *`
-- [ ] Pantalla `76_RecVacio`
-- [ ] Compuertas una por una en verde
+- [x] Spec leída: `specs/nv-31/spec.md`, `plan.md`, `task.md`
+- [x] Rama `feat/nv-31-memories` desde `main` actualizado
+- [x] Pantalla `70_CrearPub`
+- [x] Pantalla `71_Camara`
+- [x] Pantalla `72_Postal`
+- [x] Pantalla `73_Album`
+- [x] Pantalla `74_RecPlan`
+- [x] Pantalla `75_PostalVer`
+- [x] Pantalla `PostalVer · *`
+- [x] Pantalla `76_RecVacio`
+- [x] Compuertas una por una en verde
 - [ ] Probada en teléfono o emulador contra staging
 - [ ] PR a `main` integrado (CI en verde)
 

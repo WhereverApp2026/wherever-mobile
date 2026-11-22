@@ -4,12 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.wherever.mobile.core.designsystem.LocalMotionEnabled
 import com.wherever.mobile.core.designsystem.MainTab
 import com.wherever.mobile.core.designsystem.NavMotion
@@ -41,6 +43,13 @@ import com.wherever.mobile.feature.groups.ui.GroupChatRoute as GroupChatScreen
 import com.wherever.mobile.feature.groups.ui.MyGroupsRoute as MyGroupsScreen
 import com.wherever.mobile.feature.home.ui.HomeNavigation
 import com.wherever.mobile.feature.home.ui.HomeRouteScreen
+import com.wherever.mobile.feature.memories.ui.AlbumNavigation
+import com.wherever.mobile.feature.memories.ui.AlbumRoute as AlbumScreen
+import com.wherever.mobile.feature.memories.ui.CameraRoute as CameraScreen
+import com.wherever.mobile.feature.memories.ui.CreateMomentNavigation
+import com.wherever.mobile.feature.memories.ui.CreateMomentRoute as CreateMomentScreen
+import com.wherever.mobile.feature.memories.ui.PostcardDetailRoute as PostcardDetailScreen
+import com.wherever.mobile.feature.memories.ui.PostcardEditorRoute as PostcardEditorScreen
 import com.wherever.mobile.feature.notifications.ui.NotificationsRoute as NotificationsScreen
 import com.wherever.mobile.feature.places.ui.ExploreRoute as ExploreScreen
 import com.wherever.mobile.feature.places.ui.FavoritesRoute as FavoritesScreen
@@ -69,6 +78,7 @@ import com.wherever.mobile.feature.settings.ui.SessionsRoute as SessionsScreen
 import com.wherever.mobile.feature.settings.ui.SettingsNavigation
 import com.wherever.mobile.feature.settings.ui.SettingsRoute as SettingsScreen
 import com.wherever.mobile.feature.tastes.ui.TastesRoute as TastesScreen
+import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -254,6 +264,7 @@ fun WhereverNavHost(
             )
         }
         composable<PlaceReviewsRoute> { e -> PlaceReviewsScreen(onBack = { navController.popFrom(e) }) }
+        memoriesGraph(navController)
         composable<PendingReviewsRoute> { e ->
             PendingReviewsScreen(
                 onBack = { navController.popFrom(e) },
@@ -390,6 +401,8 @@ fun WhereverNavHost(
                 onBadges = { navController.navigateFrom(e, BadgesRoute) },
                 onMyReviews = { navController.navigateFrom(e, MyReviewsRoute) },
                 onPendingReviews = { navController.navigateFrom(e, PendingReviewsRoute) },
+                onMemories = { navController.navigateFrom(e, AlbumRoute) },
+                onNewMoment = { navController.navigateFrom(e, CreateMomentRoute()) },
                 onSettings = { navController.navigateFrom(e, SettingsRoute) },
                 onVerifyEmail = { email ->
                     navController.navigateFrom(e, CheckEmailRoute(CheckEmailMode.VERIFICATION.name, email))
@@ -495,3 +508,57 @@ private fun PendingReview.formRoute() = ReviewFormRoute(
     placeName = placeName,
     day = day
 )
+
+/** Recuerdos y postales (specs/nv-31): álbum, cámara, postal, detalle y Nuevo momento. */
+private fun NavGraphBuilder.memoriesGraph(navController: NavHostController) {
+    composable<AlbumRoute> { e ->
+        AlbumScreen(
+            AlbumNavigation(
+                onBack = { navController.popFrom(e) },
+                onPostcard = { navController.navigateFrom(e, PostcardRoute(it)) },
+                onCamera = { navController.navigateFrom(e, CameraRoute()) },
+                onPlans = { navController.openTab(e, MainTab.PLANS) }
+            )
+        )
+    }
+    composable<CameraRoute> { e ->
+        val route = e.toRoute<CameraRoute>()
+        CameraScreen(
+            placeName = route.placeName,
+            onClose = { navController.popFrom(e) },
+            onPicked = { source ->
+                val editor =
+                    PostcardEditorRoute(
+                        source,
+                        route.placeId,
+                        route.placeName,
+                        route.planId,
+                        LocalDate.now().toString()
+                    )
+                navController.navigateOnResult(e, editor) { popUpTo<CameraRoute> { inclusive = true } }
+            }
+        )
+    }
+    composable<PostcardEditorRoute> { e ->
+        PostcardEditorScreen(
+            onBack = { navController.popFrom(e) },
+            onSaved = {
+                navController.navigateOnResult(e, AlbumRoute) {
+                    popUpTo<PostcardEditorRoute> { inclusive = true }
+                    launchSingleTop = true
+                }
+            }
+        )
+    }
+    composable<PostcardRoute> { e -> PostcardDetailScreen(onBack = { navController.popFrom(e) }) }
+    composable<CreateMomentRoute> { e ->
+        CreateMomentScreen(
+            CreateMomentNavigation(
+                onCancel = { navController.popFrom(e) },
+                onPublished = { navController.popFrom(e) },
+                onCamera = { navController.navigateFrom(e, CameraRoute()) },
+                onReviews = { navController.navigateFrom(e, PendingReviewsRoute) }
+            )
+        )
+    }
+}
