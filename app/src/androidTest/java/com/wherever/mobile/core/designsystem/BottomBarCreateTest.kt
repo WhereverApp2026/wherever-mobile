@@ -51,10 +51,13 @@ class BottomBarCreateTest {
 
         compose.onNodeWithTag("create_option_ai_plan").performClick()
         compose.onNodeWithTag("create_option_with_friends").performClick()
+        compose.onNodeWithTag("create_option_moment").performClick()
+        compose.onNodeWithTag("create_option_review").performClick()
         compose.onNodeWithTag("create_option_manual_plan").assertIsNotEnabled()
-        compose.onNodeWithTag("create_option_moment").assertIsNotEnabled()
-        compose.onNodeWithTag("create_option_review").assertIsNotEnabled()
 
-        assertEquals(listOf(CreateOption.AI_PLAN, CreateOption.WITH_FRIENDS), chosen)
+        assertEquals(
+            listOf(CreateOption.AI_PLAN, CreateOption.WITH_FRIENDS, CreateOption.MOMENT, CreateOption.REVIEW),
+            chosen
+        )
     }
 }

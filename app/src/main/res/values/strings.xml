@@ -92,6 +92,8 @@
     <string name="register_birth_date_placeholder">Elige la fecha</string>
     <string name="register_password_placeholder">Mínimo 8 caracteres</string>
     <string name="register_terms">Acepto los términos y el aviso de privacidad.</string>
+    <string name="register_terms_link">términos</string>
+    <string name="register_privacy_link">aviso de privacidad</string>
     <string name="register_submit">Crear cuenta</string>
     <string name="register_email_checking">Revisando el correo…</string>
     <string name="register_email_available">Correo disponible</string>
@@ -554,6 +556,21 @@
     <string name="notification_vote_opened">Hay una votación abierta en tu grupo</string>
     <string name="notification_vote_closed">Terminó una votación de tu grupo</string>
     <string name="notification_other">Tienes un aviso nuevo</string>
+    <plurals name="reviews_place_count">
+        <item quantity="one">%1$d reseña</item>
+        <item quantity="many">%1$d reseñas</item>
+        <item quantity="other">%1$d reseñas</item>
+    </plurals>
+    <plurals name="memories_postcards">
+        <item quantity="one">%1$d postal</item>
+        <item quantity="many">%1$d postales</item>
+        <item quantity="other">%1$d postales</item>
+    </plurals>
+    <plurals name="memories_plans">
+        <item quantity="one">%1$d plan</item>
+        <item quantity="many">%1$d planes</item>
+        <item quantity="other">%1$d planes</item>
+    </plurals>
     <plurals name="home_walk_minutes">
         <item quantity="one">%1$d min a pie</item>
         <item quantity="many">%1$d min a pie</item>
@@ -939,7 +956,6 @@
     <string name="reviews_undo">Deshacer</string>
     <string name="reviews_load_more">Ver más</string>
     <string name="reviews_place_subtitle">Reseñas verificadas</string>
-    <string name="reviews_place_count">%1$d reseñas</string>
     <string name="reviews_filter_recent">Recientes</string>
     <string name="reviews_filter_photos">Con fotos</string>
     <string name="reviews_filter_five">5 estrellas</string>
@@ -958,6 +974,70 @@
     <string name="reviews_reason_spam">Es spam</string>
     <string name="reviews_reason_personal">Tiene datos personales</string>
     <string name="reviews_reason_other">Otro motivo</string>
+
+    <!-- Recuerdos y postales (specs/nv-31) -->
+    <string name="profile_memories">Recuerdos</string>
+    <string name="profile_new_moment">Nuevo momento</string>
+    <string name="memories_title">Recuerdos</string>
+    <string name="memories_subtitle">%1$s de %2$s</string>
+    <string name="memories_by_plan_empty">Todavía no hay recuerdos por plan. Cuando hagas check-in en un plan, sus fotos se juntan aquí.</string>
+    <string name="memories_tab_all">Todas</string>
+    <string name="memories_tab_plans">Por plan</string>
+    <string name="memories_plan_meta">%1$s · %2$d paradas</string>
+    <string name="memories_plan_postcards">%1$d postales</string>
+    <string name="memories_take_postcard">Tomar una postal</string>
+    <string name="memories_empty_title">Aún no tienes recuerdos</string>
+    <string name="memories_empty_body">Cuando hagas check-in en un lugar de tu plan, puedes tomarte una postal y se guarda aquí.</string>
+    <string name="memories_empty_how">Cómo tomar una postal</string>
+    <string name="memories_empty_plans">Ver mis planes</string>
+    <string name="memories_load_more">Ver más</string>
+    <string name="memories_in_review">En revisión</string>
+    <string name="memories_close">Cerrar</string>
+    <string name="memories_camera_hint">Toma una foto o elígela de tu galería para hacer tu postal.</string>
+    <string name="memories_camera_take">Tomar foto</string>
+    <string name="memories_camera_gallery">Elegir de la galería</string>
+    <string name="memories_camera_denied">Sin permiso de cámara puedes elegir una foto de tu galería.</string>
+    <string name="memories_editor_title">Tu postal</string>
+    <string name="memories_greeting">Saludos desde %1$s</string>
+    <string name="memories_stamp">Wherever</string>
+    <string name="memories_style">Estilo</string>
+    <string name="memories_style_classic">Clásica</string>
+    <string name="memories_style_polaroid">Polaroid</string>
+    <string name="memories_style_passport">Pasaporte</string>
+    <string name="memories_text_label">Texto de la postal</string>
+    <string name="memories_text_placeholder">Saludos desde…</string>
+    <string name="memories_save">Guardar en mi álbum</string>
+    <string name="memories_share">Compartir postal</string>
+    <string name="memories_photo_rejected">No pudimos usar esa foto. Prueba con otra.</string>
+    <string name="memories_postcard_title">Postal</string>
+    <string name="memories_postcard_gone">Esta postal ya no está disponible.</string>
+    <string name="memories_share_short">Compartir</string>
+    <string name="memories_download">Descargar</string>
+    <string name="memories_delete">Eliminar postal</string>
+    <string name="memories_delete_title">¿Eliminar esta postal?</string>
+    <string name="memories_delete_message">También se borra el momento que publicaste con ella. Esto no se puede deshacer.</string>
+    <string name="memories_downloaded">Guardamos la postal en tu galería.</string>
+    <string name="memories_download_use_share">En esta versión de Android usa Compartir para guardarla.</string>
+    <string name="memories_moment_title">Nuevo momento</string>
+    <string name="memories_tab_photo">Foto</string>
+    <string name="memories_tab_plan">Plan</string>
+    <string name="memories_tab_review">Reseña</string>
+    <string name="memories_plan_soon">Pronto podrás publicar un plan como momento.</string>
+    <string name="memories_review_body">Reseña un lugar que visitaste con check-in.</string>
+    <string name="memories_review_action">Ver visitas por reseñar</string>
+    <string name="memories_moment_label">¿Qué quieres contar?</string>
+    <string name="memories_moment_placeholder">Cuéntales a tus amigos cómo te fue</string>
+    <string name="memories_change_postcard">Cambiar postal</string>
+    <string name="memories_choose_postcard">Elige una postal</string>
+    <string name="memories_tag_row">Etiquetar amigos</string>
+    <string name="memories_tag_none">Nadie</string>
+    <string name="memories_tag_count">%1$d amigos</string>
+    <string name="memories_tag_limit">Puedes etiquetar hasta %1$d amigos.</string>
+    <string name="memories_visibility_row">Quién lo ve</string>
+    <string name="memories_visibility_friends">Solo amigos</string>
+    <string name="memories_visibility_public">Todos</string>
+    <string name="memories_publish">Publicar</string>
+    <string name="memories_no_postcards">Todavía no tienes postales listas para publicar.</string>
     <!-- 86_Ayuda (specs/nv-33) -->
     <string name="settings_help">Ayuda</string>
     <string name="help_title">Ayuda</string>
@@ -977,6 +1057,7 @@
     <string name="help_report_privacy">No escribas datos personales como correos o teléfonos: los quitamos antes de guardar el reporte.</string>
     <string name="help_report_send">Enviar reporte</string>
     <string name="help_report_sent">Gracias, recibimos tu reporte.</string>
+    <string name="help_report_sign_in">Para reportar un problema, inicia sesión primero.</string>
     <string name="help_no_app">No encontramos una app para abrir esto.</string>
     <string name="help_expand">Mostrar respuesta</string>
     <string name="help_collapse">Ocultar respuesta</string>

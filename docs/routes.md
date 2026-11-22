@@ -21,6 +21,11 @@
 | `MyReviewsRoute` | Mis reseñas, eliminar con Deshacer (79_MisRes) | ninguno | release | nv-32 |
 | `ReviewFormRoute(checkinId, placeId, placeName, day, reviewId)` | Reseñar o editar: 68_PostVisita, 78_ResCom y 69_Publicado | ninguno (fotos con el selector del sistema) | release | nv-32 |
 | `PlaceReviewsRoute(placeId, placeName)` | Reseñas del lugar con filtros, Útil y Reportar (80_ResLugar) | ninguno | release | nv-32 |
+| `AlbumRoute` | Recuerdos: Todas, Por plan y vacío (73_Album, 74_RecPlan, 76_RecVacio) | ninguno | release | nv-31 |
+| `CameraRoute(placeId, placeName, planId)` | Tomar una postal (71_Camara), cámara del sistema o galería | cámara (en contexto, al tocar el disparador; sin ella, galería) | release | nv-31 |
+| `PostcardEditorRoute(source, placeId, placeName, planId, date)` | Tu postal: estilo, texto, guardar y compartir (72_Postal) | ninguno | release | nv-31 |
+| `PostcardRoute(id)` | Postal con lugar y plan, compartir, descargar y eliminar (75_PostalVer) | ninguno | release | nv-31 |
+| `CreateMomentRoute(postcardId)` | Nuevo momento: Foto, Plan (pronto) y Reseña (70_CrearPub) | ninguno | release | nv-31 |
 | `NewPasswordRoute(token)` | Nueva contraseña desde el enlace del correo | ninguno | release | nv-08 |
 | `VerifyEmailRoute(token)` | Verificar correo desde el enlace | ninguno | release | nv-08 |
 | `SearchRoute(query)` | Buscar: lugares, personas y planes; recientes, ideas y sin resultados | ninguno | release | nv-19 |

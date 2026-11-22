@@ -1,3 +1,33 @@
+# Revisión para Jorge — 2026-11-22 (tarde): PR de Diego, staging y arreglos
+
+## Decisiones tomadas sin preguntarte
+- **Conflictos de #42, #43 y #45:** se conservó lo de `main` y lo de Diego; en `docs/equipo/diego.md` manda el reparto nuevo de `main` (#49) con nv-31/32/33 marcadas como integradas.
+- **#45 no se integró:** la regla «main: solo con aprobación de Osmar» está activa. Pediste hacerlo sin su aprobación; no se forzó (ni `--admin` ni desactivar la regla). Falta que Osmar apruebe #45 y el PR de arreglos.
+- **Ayuda sin sesión:** desde los términos de Registro se llega sin sesión y `POST /errores` pide JWT; en vez del error crudo dice «Para reportar un problema, inicia sesión primero».
+- **"+" del Inicio:** «Compartir un momento» abre 70_CrearPub y «Escribir una reseña» abre 77_ResPend; solo «Crear un plan a mano» sigue en «Próximamente».
+- **Deshacer de reseñas** no se pudo tocar a tiempo con adb (aviso de 5 s); lo cubre la prueba unitaria.
+
+---
+
+# Revisión para Jorge — 2026-11-22: nv-31 Recuerdos y postales (Diego)
+
+> Rama `feat/nv-31-memories`, apilada sobre `feat/nv-32-reviews` (la pestaña Reseña de 70_CrearPub abre 77_ResPend). Issue #26. Frames: `70_CrearPub` (`298:7516`), `71_Camara` (`298:7061`), `72_Postal` (`298:6874`), `73_Album` (`298:6943`), `74_RecPlan` (`298:7119`), `75_PostalVer` (`298:7269`), `PostalVer · *` (p. ej. `349:375`) y `76_RecVacio` (`298:7358`).
+
+## Decisiones tomadas sin preguntarte
+- **D-31b Cámara del sistema:** 71_Camara usa `TakePicture` y la galería, sin CameraX (fuera del stack). No hay vista en vivo ni el interruptor Postal/Normal: la pantalla es el marco, el disparador y la galería. Como ZXing ya declara `CAMERA` en el manifiesto, `TakePicture` lo necesita concedido: se pide al tocar el disparador y, si se niega, queda la galería.
+- **D-31c Álbum:** el botón de arriba a la derecha abre la cámara (en la maqueta es Compartir; Compartir vive en cada postal). Las miniaturas muestran el texto de la postal (la API no trae el nombre del lugar en la lista).
+- **D-31d La postal se dibuja en la app:** `AndroidPostcardRenderer` dibuja foto, «Saludos desde…», lugar, fecha y sello en 1080 × 1350 y la guarda como JPEG nuevo (sin EXIF); luego sube por `PhotoRepository` y crea la postal privada. Si `POST /postales` falla, se borra la imagen subida (`DELETE /imagenes/{id}`).
+- **D-31e Compartir:** en 72_Postal comparte la imagen dibujada (por el `FileProvider` de `cache/fotos/`); en 75_PostalVer comparte el enlace de la imagen publicada. Descargar guarda en `Pictures/Wherever` con MediaStore (Android 10+); en 8 y 9 sugiere Compartir.
+- **D-31f 70_CrearPub:** sin fila «Lugar» (la postal solo trae `negocio_id`) ni menciones con @ en el texto. Etiquetar muestra los amigos aceptados; si no hay, la fila no aparece.
+- **Rutas sin pantalla en mis frames:** `GET/POST /planes/{id}/recuerdo`, `DELETE /recuerdos/{id}`, `PATCH /postales/{id}` y `GET/PATCH/DELETE /momentos/{id}` no se conectaron (editar o borrar un momento vive en 17_PostDetalle; generar el recuerdo, en el plan pasado). No dejé código sin uso.
+- **Prueba de EXIF:** `PostcardExifSecurityTest` (Robolectric, en el paquete `security`) toma un JPEG con GPS y comprueba que la postal sale sin coordenadas en los tres estilos. Robolectric no soporta `ImageDecoder`; el renderizador tiene respaldo con `BitmapFactory`, que es el que corre ahí.
+
+## Pendiente de ti
+- Integrar #43 (nv-32) antes que este PR, o cambiar su base a `main` cuando se integre.
+- Probar en el teléfono contra staging: cámara, postal, álbum y momento.
+
+---
+
 # Revisión para Jorge — 2026-11-21: nv-32 Reseñas (Diego)
 
 > Rama `feat/nv-32-reviews`, Issue #27. Frames de Figma: `68_PostVisita` (`298:7592`), `69_Publicado`, `77_ResPend` (`298:8229`), `78_ResCom` (`298:8342`), `79_MisRes` (`298:8446`), `MisRes · confirmar eliminar`, `MisRes · reseña eliminada` (`340:681`) y `80_ResLugar` (`298:8578`).

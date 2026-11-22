@@ -6,18 +6,28 @@
 
 ## % real
 
-**63 de 162 = 38,9 %** con la API real, más 1 con datos locales (Insignias, sin endpoint) que no suma.
+**87 de 162 = 53,7 %** con la API real, más 1 con datos locales (Insignias, sin endpoint) que no suma.
 
 | Área | Specs | Frames | Funcionan | % |
 |---|---|---|---|---|
 | Cuenta y acceso | nv-06 a nv-16 | 17 | 16 (+1 local) | 94 % |
 | Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 18 | 62 % |
-| Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 16 | 52 % |
+| Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 18 | 58 % |
 | Planes: IA, detalle, Vaca, Mis planes, día del plan | nv-23, nv-24, nv-26, nv-28, nv-30 | 22 | 9 | 41 % |
 | Reserva, pago y cupones | nv-27, nv-29 | 15 | 4 | 27 % |
-| Después del plan: Recuerdos, Reseñas, Ayuda | nv-31 a nv-33 | 22 | 0 | 0 % |
+| Después del plan: Recuerdos, Reseñas, Ayuda | nv-31 a nv-33 | 22 | 22 | 100 % |
 | Modo negocio | nv-34 a nv-38 | 26 | 0 | 0 % |
-| **Total** | | **162** | **63** | **38,9 %** |
+| **Total** | | **162** | **87** | **53,7 %** |
+
+## Pruebas con staging en el Xiaomi (2026-11-22, domingo con staging encendido)
+
+- **Cuentas QA A y B** (datos de prueba creados por la API: check-in en Deportivo Hidalgo, reseña de B, dos planes de B con grupo e invitación a A).
+- **nv-33 Ayuda (1/1):** buscar sin acentos («cupon» → cupón), acordeón, reporte. Se llega también desde los enlaces de términos de 05_Registro.
+- **nv-32 Reseñas (8/8):** 77 con la visita real → 68 → 78 (cinco aspectos) → 69 publicada; 79 editar (`If-Match`) y eliminar con confirmación y «Reseña eliminada»; 80 con la reseña de B, Útil, filtro y Reportar.
+- **nv-31 Recuerdos (13/13):** 76 vacío, 71 con permiso de cámara en contexto, 72 postal (Clásica y Polaroid), 73 álbum, 74 por plan (vacío), 75 compartir, descargar (MediaStore) y eliminar, «ya no está disponible», 70 publicar un momento (B lo ve en su feed). Las variantes `PostalVer · *` son el mismo componente con otros datos.
+- **nv-25 (pruebas #9 y #10):** Mis grupos con dos invitaciones reales: «No voy» → `declinado`, «Unirme» → `confirmado`; chat en los dos sentidos (sondeo de 5 s); sin red el texto se conserva y se manda al volver.
+- **Bugs encontrados y arreglados** (rama `feat/boceto2-iconos-fotos`): Ayuda sin sesión mostraba «Autenticación requerida» al reportar; Mis reseñas con doble margen arriba; «1 reseñas» y «1 postales» sin plural; el álbum no se recargaba al volver de guardar o eliminar; «Por plan» vacío quedaba en blanco; el sello cortaba «Whereve / r»; el texto rechazado por la moderación solo decía «Datos inválidos» escondido bajo los botones.
+- **No se pudo en el teléfono:** Deshacer de «Reseña eliminada» (cada lectura de pantalla tarda más que los 5 s del aviso; lo cubre `MyReviewsViewModelTest`) y 74 con un recuerdo de plan (hace falta check-in dentro de un plan).
 
 ## Rediseño Boceto 2 (2026-11-22)
 
@@ -25,7 +35,7 @@
 - **No cambia el %:** 15_Crear funciona a medias (navegan "Armar un plan con IA" y "Planear con amigos"; las otras 3 dicen "Próximamente" hasta que existan sus pantallas).
 - **Probado en el Xiaomi (sin servidor, de noche):** barra, hoja con scroll en horizontal, IA → Armar un plan, amigos → Mis grupos. Suite de UI en el teléfono: 38/43 en horizontal; en vertical solo falla `GroupsContentTest.chatEnviaReintentaYAvisaSinRed` (ver Bugs).
 - **10_Inicio de Figma (rama `feat/boceto2-inicio`):** portada con la foto del primer lugar recomendado (sin foto, degradado azul) y degradado de Figma; chip de ciudad y campana en círculo translúcido; "¿Qué hacemos hoy, Osmar?"; buscador "Tacos, relax, aventura…" con chispa naranja → Armar un plan con IA; "Cerca de ti" en carrusel de tarjetas-foto de 160 × 184 ("Para ti"/"Cerca", nombre, "8 min a pie · 4.8") con "Ver todo" → Explorar; "Planes de tus amigos" (momentos con plan, "Ver más" → pestaña Amigos). Mantener presionada una tarjeta = "No me interesa" (con Deshacer). Compañía y "Para este momento" bajan al final; el chip de clima sale de la portada (`docs/revision-jorge.md`).
-- **Falta del Boceto 2:** enlaces de términos y aviso en Registro (llevan a 87_Ayuda, que aún no existe: nv-33), corazón de favoritos y paradas en las tarjetas de Inicio (la API del feed no trae esos datos), íconos SVG de Figma en el resto de la app, fotos en el resto de las tarjetas.
+- **Falta del Boceto 2:** corazón de favoritos y paradas en las tarjetas de Inicio (la API del feed no trae esos datos), íconos SVG de Figma en el resto de la app, fotos en el resto de las tarjetas.
 
 ## nv-17 feed de amigos (2026-11-20, noche)
 
@@ -46,6 +56,19 @@ Reglas: `CONTRIBUTING.md`. Cada spec es una rama y un PR a `main`, aprobado por 
 | Diego | Planes y cupones del negocio; cerrar #42, #45 y #48 | nv-23, nv-24, nv-26, nv-30, nv-37 | 16 | `docs/equipo/diego.md` |
 | Borre | Modo negocio | nv-35, nv-36, nv-38 | 17 | `docs/equipo/borre.md` |
 | Osmar | Reserva, pago y cupones; feed social; backend que bloquea; revisor único | nv-17, nv-27, nv-29 | 19 | `docs/equipo/osmar.md` |
+
+Reparto anterior (tres personas, 2026-11-20), con lo que funciona por área:
+
+| Responsable | Área | Specs | Frames | Funcionan | Lista de trabajo |
+|---|---|---|---|---|---|
+| Jorge | Cuenta y acceso | nv-06 a nv-16 | 17 | 16 (+1 local) | `docs/pendientes.md` |
+| Jorge | Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 18 | `docs/pendientes.md` |
+| Jorge | Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 18 | `docs/pendientes.md` |
+| Jorge | Planes: IA, detalle, Vaca, Mis planes, día del plan | nv-23, nv-24, nv-26, nv-28, nv-30 | 22 | 9 | `docs/pendientes.md` |
+| Jorge | Reserva, pago y cupones | nv-27, nv-29 | 15 | 4 | `docs/pendientes.md` |
+| Jorge | Compartido: theme y `core/designsystem`, navegación, cliente de API, CI | — | — | — | Issues de Osmar y Diego |
+| Diego | Recuerdos, Reseñas y Ayuda | nv-31 a nv-33 | 22 | 22 | `docs/equipo/diego.md` |
+| Osmar | Modo negocio | nv-34 a nv-38 | 26 | 0 | `docs/equipo/osmar.md` |
 
 ## Estado (2026-11-20)
 
@@ -115,13 +138,13 @@ Bugs conocidos del área: Bienvenida en horizontal (✅ nv-55); enlaces corridos
 
 ### 4. Lo que está en 0 %
 - [x] nv-16 Sin conexión (1), probado en teléfono 2026-11-20
-- [ ] nv-25 Compartir, grupos y chats (12)
+- [ ] nv-25 Compartir, grupos y chats (12): 44_MisGrupos y 45_GrupoChat funcionan (2 de 12)
 - [ ] nv-26 Vaca virtual y gastos (4)
 - [ ] nv-29 Cupones (5)
 - [ ] nv-30 El día del plan (5)
-- [ ] nv-31 Recuerdos y postales (13)
-- [ ] nv-32 Reseñas (8)
-- [ ] nv-33 Ayuda (1)
+- [x] nv-31 Recuerdos y postales (13)
+- [x] nv-32 Reseñas (8)
+- [x] nv-33 Ayuda (1)
 - [ ] nv-34 a nv-38 Modo negocio (26)
 
 ## Endpoints que faltan o fallan

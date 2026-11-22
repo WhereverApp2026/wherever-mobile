@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -158,7 +159,7 @@ private fun Summary(place: PlaceBrief) {
             Column {
                 StarsRow(place.average.roundToInt().coerceIn(0, MAX_STARS))
                 Text(
-                    stringResource(R.string.reviews_place_count, place.total),
+                    pluralStringResource(R.plurals.reviews_place_count, place.total, place.total),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

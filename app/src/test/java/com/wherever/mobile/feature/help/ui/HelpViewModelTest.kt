@@ -1,6 +1,7 @@
 package com.wherever.mobile.feature.help.ui
 
 import app.cash.turbine.test
+import com.wherever.mobile.R
 import com.wherever.mobile.core.common.AppError
 import com.wherever.mobile.core.common.FieldError
 import com.wherever.mobile.core.common.Result
@@ -152,6 +153,19 @@ class HelpViewModelTest {
         assertNotNull(report.error)
         assertEquals("Algo falló", report.text)
         assertTrue(report.canSend)
+    }
+
+    @Test
+    fun `sin sesion pide iniciar sesion en vez del error de la API`() = runTest {
+        repository.reportResult = Result.Failure(AppError.Unauthorized("Autenticación requerida"))
+        viewModel.onOpenReport()
+        viewModel.onReportChange("Algo falló")
+        viewModel.sendReport()
+        advanceUntilIdle()
+
+        val report = viewModel.state.value.report!!
+        assertEquals(UiText.Res(R.string.help_report_sign_in), report.error)
+        assertEquals("Algo falló", report.text)
     }
 
     @Test
