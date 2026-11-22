@@ -27,3 +27,35 @@ Desde el 2026-11-22, Planes (nv-23, nv-24, nv-26, nv-30) pasa a Borre: `docs/iti
 ## Notas
 
 - nv-31 y nv-32 reutilizan `PhotoRepository`; no lo modifiques sin Issue.
+
+## Historial: nv-32 y nv-31 (hecho)
+
+## nv-32 — Reseñas
+
+- [x] Spec leída: `specs/nv-32/spec.md`, `plan.md`, `task.md`
+- [x] Rama `feat/nv-32-reviews` desde `main` actualizado
+- [x] Pantalla `68_PostVisita`
+- [x] Pantalla `69_Publicado`
+- [x] Pantalla `77_ResPend`
+- [x] Pantalla `78_ResCom`
+- [x] Pantalla `79_MisRes`
+- [x] Pantalla `MisRes · confirmar eliminar`
+- [x] Pantalla `MisRes · reseña eliminada`
+- [x] Pantalla `80_ResLugar`
+- [x] Compuertas una por una en verde
+- [ ] Probada en teléfono o emulador contra staging
+- [ ] PR a `main` integrado (CI en verde)
+
+## nv-31 — Recuerdos y postales
+
+- [x] Spec leída: `specs/nv-31/spec.md`, `plan.md`, `task.md`
+- [x] Rama `feat/nv-31-memories` desde `main` actualizado
+- [x] Pantalla `70_CrearPub`
+- [x] Pantalla `71_Camara`
+- [x] Pantalla `72_Postal`
+- [x] Pantalla `73_Album`
+- [x] Pantalla `74_RecPlan`
+- [x] Pantalla `75_PostalVer`
+- [x] Pantalla `PostalVer · *`
+- [x] Pantalla `76_RecVacio`
+- [x] Compuertas una por una en verde

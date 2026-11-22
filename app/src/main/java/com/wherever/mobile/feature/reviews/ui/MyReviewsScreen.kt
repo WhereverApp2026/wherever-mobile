@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -76,7 +77,8 @@ fun MyReviewsRoute(
         }
     }
     Scaffold(snackbarHost = { WhereverSnackbarHost(snackbar) }) { padding ->
-        Column(modifier = Modifier.fillMaxSize().padding(padding)) {
+        // FormScreen ya pone el margen de la barra de estado: sin consumirlo aquí, se sumaba dos veces.
+        Column(modifier = Modifier.fillMaxSize().padding(padding).consumeWindowInsets(padding)) {
             MyReviewsContent(
                 state,
                 MyReviewsActions(

@@ -289,6 +289,17 @@
 - A recordar: los números de las vistas previas van como argumento con nombre o constante; detekt (`MagicNumber`) no excluye los `@Preview`.
 - A recordar: una espera que debe sobrevivir a la pantalla (Deshacer) corre en `@ApplicationScope`; en las pruebas se pasa un `TestScope` con el despachador de `MainDispatcherRule` para mover el reloj.
 
+- Estado (2026-11-22): nv-31 Recuerdos y postales (Diego) en `feat/nv-31-memories`, apilada sobre nv-32: 73/74/76 (álbum), 71 (cámara del sistema), 72 (postal dibujada en la app y subida), 75 (detalle con Compartir, Descargar y Eliminar) y 70 (Nuevo momento). Sin probar contra staging ni en teléfono. Decisiones D-31b a D-31f en `docs/revision-jorge.md`.
+- A evitar: con `Response<T>` en Retrofit un 4xx no lanza `HttpException`: `safeApiCall` lo da por bueno. Traducir con `mapApiError` (lo hace `MemoriesRepositoryImpl` para el 202 + `Location` de `POST /postales`).
+- A evitar: `TakePicture` con `CAMERA` declarado en el manifiesto (lo mete ZXing) lanza `SecurityException` si el permiso no está concedido: pedirlo antes.
+- A recordar: Robolectric no soporta `ImageDecoder` (`DecodeException: Only supported on Android`); `BitmapFactory` sí. `ContentResolver` de Robolectric tampoco abre `file://`.
+- A recordar: `android.media.ExifInterface` no tiene `latLong` como propiedad: `getLatLong(FloatArray(2))` y GPS con `setAttribute` en formato racional.
+
+- Estado (2026-11-22, tarde): #42 (nv-33) y #43 (nv-32) integrados; #45 (nv-31) con base `main`, CI verde y **bloqueado por la regla de `main` (aprobación de Osmar)**. Staging encendido: las 22 pantallas de Diego y 44/45 de nv-25 probadas en el Xiaomi con cuentas QA → 87/162 = 53,7 %. Arreglos de esa prueba y del Boceto 2 (términos → Ayuda, Momento y Reseña en el "+") en `feat/boceto2-iconos-fotos`.
+- A evitar: integrar a `main` sin la aprobación de Osmar: la regla «main: solo con aprobación de Osmar» está activa (code owner, se descarta con cada push). No se salta con `--admin` ni desactivándola.
+- A recordar: en el Xiaomi `svc wifi disable` no apaga el Wi-Fi (MIUI); usar `cmd wifi set-wifi-enabled disabled|enabled`. Sin red la app pone la pantalla global 89_SinConexion encima de todo.
+- A recordar: la moderación de staging rechaza a veces textos repetidos («el texto no cumple las normas»), 422 con `campos[texto]`.
+
 ## Reparto entre cuatro y revisor único (2026-11-22)
 - Estado: reparto de lo que falta entre Jorge (nv-20, nv-21, nv-25 y lo compartido), Diego (nv-23, nv-24, nv-26, nv-30, nv-37), Borre (nv-35, nv-36, nv-38) y Osmar (nv-17, nv-27, nv-29 y backend). Listas en `docs/equipo/`. Avance al corte: 63/162 en `main`.
 - Decisión (Osmar): solo Osmar aprueba los PR a `main`. `CODEOWNERS` = `@OsmarYahir @WhereverApp2026` y regla `.github/rulesets/main.json` (1 aprobación de code owner, se anula con commits nuevos, CI `gates` en verde y al día, conversaciones resueltas, sin push directo ni force push), sin excepciones. Porqué: 15 commits entraron a `main` sin PR el 2026-11-19.

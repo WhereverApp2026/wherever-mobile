@@ -31,6 +31,16 @@ import com.wherever.mobile.feature.help.ui.HelpNoResultsPreview
 import com.wherever.mobile.feature.help.ui.HelpPreview
 import com.wherever.mobile.feature.help.ui.HelpReportPreview
 import com.wherever.mobile.feature.home.ui.HomePreview
+import com.wherever.mobile.feature.memories.ui.AlbumByPlanPreview
+import com.wherever.mobile.feature.memories.ui.AlbumEmptyPreview
+import com.wherever.mobile.feature.memories.ui.AlbumPreview
+import com.wherever.mobile.feature.memories.ui.CameraPreview
+import com.wherever.mobile.feature.memories.ui.CreateMomentPreview
+import com.wherever.mobile.feature.memories.ui.PostcardDetailPassportPreview
+import com.wherever.mobile.feature.memories.ui.PostcardDetailPolaroidPreview
+import com.wherever.mobile.feature.memories.ui.PostcardDetailPreview
+import com.wherever.mobile.feature.memories.ui.PostcardEditorPreview
+import com.wherever.mobile.feature.memories.ui.PostcardGonePreview
 import com.wherever.mobile.feature.profile.ui.EditProfilePreview
 import com.wherever.mobile.feature.profile.ui.ProfilePreview
 import com.wherever.mobile.feature.reviews.ui.MyReviewsConfirmPreview
@@ -107,6 +117,16 @@ class ScreenshotTest {
         "79_mis_res" to { MyReviewsPreview() },
         "mis_res_confirmar_eliminar" to { MyReviewsConfirmPreview() },
         "80_res_lugar" to { PlaceReviewsPreview() },
+        "70_crear_pub" to { CreateMomentPreview() },
+        "71_camara" to { CameraPreview() },
+        "72_postal" to { PostcardEditorPreview() },
+        "73_album" to { AlbumPreview() },
+        "74_rec_plan" to { AlbumByPlanPreview() },
+        "75_postal_ver" to { PostcardDetailPreview() },
+        "postal_ver_polaroid" to { PostcardDetailPolaroidPreview() },
+        "postal_ver_pasaporte" to { PostcardDetailPassportPreview() },
+        "postal_no_disponible" to { PostcardGonePreview() },
+        "76_rec_vacio" to { AlbumEmptyPreview() },
         "86_ayuda" to { HelpPreview() },
         "86_ayuda_sin_resultados" to { HelpNoResultsPreview() },
         "86_ayuda_reportar" to { HelpReportPreview() }

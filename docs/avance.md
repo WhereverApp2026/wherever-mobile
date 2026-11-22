@@ -32,15 +32,15 @@
 | nv-22 | Favoritos | 2 | 2 | 0 |  |
 | nv-23 | Crear plan con IA | 6 | 4 | 0 | nv-48; falta `17_AjustaPlan` y el 4.º paso de `Generando` (spec conciliada 2026-11-22) |
 | nv-24 | Plan: detalle y edición | 5 | 3 | 0 | nv-48; faltan `CrearPlan` y `41_AgregarParada` completa (spec conciliada 2026-11-22) |
-| nv-25 | Compartir, grupos y chats | 12 | 0 | 0 |  |
+| nv-25 | Compartir, grupos y chats | 12 | 2 | 2 |  |
 | nv-26 | Vaca virtual y gastos | 4 | 0 | 0 | API lista (backend nv-58); espera `46_Grupo` |
 | nv-27 | Reserva y pago | 10 | 4 | 0 | sin pago; staging sin negocios |
 | nv-28 | Mis planes | 2 | 2 | 0 | nv-48; faltan etiqueta de estado y uso sin red (`nv-56`) |
 | nv-29 | Cupones | 5 | 0 | 0 |  |
 | nv-30 | El día del plan | 5 | 0 | 0 | check-in con API lista; mapa y rutas esperan D25 |
-| nv-31 | Recuerdos y postales | 13 | 0 | 0 |  |
-| nv-32 | Reseñas | 8 | 0 | 0 |  |
-| nv-33 | Ayuda | 1 | 0 | 0 |  |
+| nv-31 | Recuerdos y postales | 13 | 13 | 13 |  |
+| nv-32 | Reseñas | 8 | 8 | 8 |  |
+| nv-33 | Ayuda | 1 | 1 | 1 |  |
 | nv-34 | Negocio: registro | 6 | 0 | 0 |  |
 | nv-35 | Negocio: panel, reservas y check-in | 8 | 0 | 0 |  |
 | nv-36 | Negocio: reseñas y momentos | 3 | 0 | 0 |  |

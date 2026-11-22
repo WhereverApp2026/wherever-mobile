@@ -167,3 +167,29 @@ data class ReviewFormRoute(
 /** 80_ResLugar (specs/nv-32). PlaceReviewsViewModel lee `placeId` y `placeName`. */
 @Serializable
 data class PlaceReviewsRoute(val placeId: String, val placeName: String = "")
+
+/** 73_Album, 74_RecPlan y 76_RecVacio (specs/nv-31). */
+@Serializable
+data object AlbumRoute
+
+/** 71_Camara (specs/nv-31). Desde el check-in (nv-30) llegará con el lugar y el plan. */
+@Serializable
+data class CameraRoute(val placeId: String = "", val placeName: String = "", val planId: String = "")
+
+/** 72_Postal (specs/nv-31). PostcardEditorViewModel lee los campos de SavedStateHandle por su nombre. */
+@Serializable
+data class PostcardEditorRoute(
+    val source: String,
+    val placeId: String = "",
+    val placeName: String = "",
+    val planId: String = "",
+    val date: String = ""
+)
+
+/** 75_PostalVer (specs/nv-31). PostcardDetailViewModel lee `id`. */
+@Serializable
+data class PostcardRoute(val id: String)
+
+/** 70_CrearPub (specs/nv-31). CreateMomentViewModel lee `postcardId`. */
+@Serializable
+data class CreateMomentRoute(val postcardId: String = "")
