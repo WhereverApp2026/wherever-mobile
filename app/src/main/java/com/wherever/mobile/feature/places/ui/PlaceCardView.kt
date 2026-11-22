@@ -101,7 +101,7 @@ fun RatingRow(rating: Double, reviews: Int, modifier: Modifier = Modifier) {
         modifier = modifier.semantics(mergeDescendants = true) { contentDescription = description }
     ) {
         Icon(Icons.Filled.Star, contentDescription = null, tint = Gold, modifier = Modifier.size(Sizes.IconS))
-        Text(ratingLabel(rating), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+        Text(ratingLabel(rating), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
         Text(
             stringResource(R.string.place_reviews_count, reviews),
             style = MaterialTheme.typography.bodySmall,
@@ -131,7 +131,7 @@ fun PlaceMetaLine(category: String, priceLevel: Int, distanceMeters: Double?, op
             stringResource(if (openNow) R.string.place_open else R.string.place_closed),
             style = MaterialTheme.typography.labelMedium,
             color = if (openNow) Mint else MaterialTheme.colorScheme.error,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.Bold
         )
     }
 }

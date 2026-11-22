@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -31,9 +33,12 @@ fun WhereverBottomSheet(
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(Spacing.L),
-            modifier = Modifier.padding(
-                horizontal = ScreenPadding
-            ).padding(bottom = Spacing.XXL).navigationBarsPadding(),
+            // Con scroll: en horizontal o con letra grande la hoja no cabe y las últimas filas quedaban fuera.
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = ScreenPadding)
+                .padding(bottom = Spacing.XXL)
+                .navigationBarsPadding(),
             content = content
         )
     }

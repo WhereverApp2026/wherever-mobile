@@ -1,3 +1,16 @@
+# Revisión para Jorge — 2026-11-22: 10_Inicio del Boceto 2
+
+> Pedido: seguir el rediseño del Boceto 2 sin parar. Lo ambiguo se decide y se anota aquí.
+
+## Decisiones tomadas sin preguntarte
+- **Foto de portada:** Figma usa una foto fija de Tula; no se pudo exportar (límite de llamadas del MCP de Figma en el plan Starter) y una foto fija mentiría fuera de Tula. La portada usa la foto del primer lugar recomendado; sin foto queda el degradado azul de la marca.
+- **Clima, compañía y "Para este momento":** no están en el Boceto 2. El chip de clima sale de la portada (se queda el aviso de "clima no ayuda" cuando aplica); los chips de compañía (US-062) y de antojo (US-025) bajan al final de "Cerca de ti". **Decide:** ¿se quedan ahí, pasan a Ajustes o se eliminan?
+- **"No me interesa" (US-053):** el carrusel no tiene espacio para el enlace; ahora es mantener presionada la tarjeta (también como acción de accesibilidad), con el mismo Deshacer.
+- **"Planes de tus amigos":** sale de `GET /momentos/feed` (momentos con `plan_id`), por eso el feed se carga al abrir Inicio y no solo en la pestaña Amigos. El corazón con conteo y las fotos de paradas de Figma no se dibujan: el feed no trae esos datos.
+- **Enlaces de términos y aviso en Registro:** en Figma llevan a 87_Ayuda, que aún no existe (nv-33, Diego). Se dejan para esa spec.
+
+---
+
 # Revisión para Jorge — 2026-11-21: nv-33 Ayuda (Diego)
 
 > Rama `feat/nv-33-help`, Issue #28. Una pantalla: `86_Ayuda` (nodo Figma `298:7902`), con entrada desde Ajustes.

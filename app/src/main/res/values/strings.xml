@@ -16,6 +16,24 @@
     <string name="tab_home">Inicio</string>
     <string name="tab_profile">Perfil</string>
     <string name="tab_explore">Explorar</string>
+    <string name="tab_create">Crear</string>
+    <!-- Hoja 15_Crear (Boceto 2) -->
+    <string name="create_sheet_title">¿Qué quieres hacer?</string>
+    <string name="create_ai_plan">Armar un plan con IA</string>
+    <string name="create_ai_plan_hint">Dime una palabra y lo armo</string>
+    <string name="create_manual_plan">Crear un plan a mano</string>
+    <string name="create_manual_plan_hint">Ponle nombre, fecha y paradas</string>
+    <string name="create_with_friends">Planear con amigos</string>
+    <string name="create_with_friends_hint">Crea un grupo, chateen y voten</string>
+    <string name="create_moment">Compartir un momento</string>
+    <string name="create_moment_hint">Foto o postal de hoy</string>
+    <string name="create_review">Escribir una reseña</string>
+    <string name="create_review_hint">De un lugar que ya visitaste</string>
+    <string name="create_coming_soon">Próximamente</string>
+    <!-- "Continuar con Google" en Login y Registro (Boceto 2) -->
+    <string name="auth_or">o</string>
+    <string name="auth_google">Continuar con Google</string>
+    <string name="auth_google_soon">Entrar con Google llega pronto. Por ahora usa tu correo.</string>
 
     <!-- Notificaciones push (specs/nv-46) -->
     <string name="notifications_channel_general">Avisos</string>
@@ -271,11 +289,9 @@
     <string name="deletion_pending_cancel">Cancelar eliminación</string>
 
     <!-- Inicio (nv-47) -->
-    <string name="home_search_hint">¿Qué se te antoja?</string>
-    <string name="home_weather">%1$d °C · %2$s</string>
+    <string name="home_search_hint">Tacos, relax, aventura…</string>
     <string name="home_weather_adverse">El clima no ayuda: te sugerimos lugares techados.</string>
     <string name="home_cravings">Para este momento</string>
-    <string name="home_for_you">Para ti</string>
     <string name="home_why">Por qué: %1$s</string>
     <string name="home_not_interested">No me interesa</string>
     <string name="home_not_interested_done">Ya no te lo mostraremos</string>
@@ -538,6 +554,11 @@
     <string name="notification_vote_opened">Hay una votación abierta en tu grupo</string>
     <string name="notification_vote_closed">Terminó una votación de tu grupo</string>
     <string name="notification_other">Tienes un aviso nuevo</string>
+    <plurals name="home_walk_minutes">
+        <item quantity="one">%1$d min a pie</item>
+        <item quantity="many">%1$d min a pie</item>
+        <item quantity="other">%1$d min a pie</item>
+    </plurals>
     <plurals name="home_notifications_unread">
         <item quantity="one">Avisos: %1$d sin leer</item>
         <item quantity="many">Avisos: %1$d sin leer</item>
@@ -801,6 +822,10 @@
     <!-- Inicio: pestaña Amigos, publicación y plan de un amigo (specs/nv-17) -->
     <string name="home_tab_nearby">Cerca de ti</string>
     <string name="home_tab_friends">Amigos</string>
+    <string name="home_see_all">Ver todo</string>
+    <string name="home_friend_plans">Planes de tus amigos</string>
+    <string name="home_tag_for_you">Para ti</string>
+    <string name="home_tag_near">Cerca</string>
     <string name="feed_time_now">Ahora</string>
     <string name="feed_time_minutes">Hace %1$d min</string>
     <string name="feed_time_hours">Hace %1$d h</string>

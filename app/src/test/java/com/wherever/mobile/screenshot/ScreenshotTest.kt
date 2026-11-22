@@ -30,6 +30,7 @@ import com.wherever.mobile.feature.groups.ui.MyGroupsPreview
 import com.wherever.mobile.feature.help.ui.HelpNoResultsPreview
 import com.wherever.mobile.feature.help.ui.HelpPreview
 import com.wherever.mobile.feature.help.ui.HelpReportPreview
+import com.wherever.mobile.feature.home.ui.HomePreview
 import com.wherever.mobile.feature.profile.ui.EditProfilePreview
 import com.wherever.mobile.feature.profile.ui.ProfilePreview
 import com.wherever.mobile.feature.settings.ui.DeleteAccountPreview
@@ -77,6 +78,7 @@ class ScreenshotTest {
         "85_ajustes" to { SettingsPreview() },
         "28_priv_social" to { PrivacyPreview() },
         "eliminar_cuenta" to { DeleteAccountPreview() },
+        "10_inicio" to { HomePreview() },
         "11_inicio_amigos" to { FriendsFeedPreview() },
         "11_inicio_amigos_vacio" to { FriendsFeedEmptyPreview() },
         "17_post_detalle" to { MomentDetailPreview() },

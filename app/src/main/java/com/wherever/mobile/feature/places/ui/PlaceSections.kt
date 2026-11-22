@@ -126,7 +126,7 @@ internal fun Menu(sections: List<MenuSection>) {
                             )
                         }
                     }
-                    Text(stringResource(R.string.place_price, item.price), fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.place_price, item.price), fontWeight = FontWeight.Bold)
                 }
             }
         }
