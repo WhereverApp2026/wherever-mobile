@@ -106,19 +106,17 @@
 - **D-35a Check-in:** por código escrito; el QR espera acordar librería (constitución §3). "Reprogramar" no existe para el negocio: se cambia por Contactar. Estadísticas: Semana, Mes y Trimestre (90 días máx.).
 - **D-36a / D-38a Diferidos del backend:** insignia del Sello, Instagram, estado de cuenta, facturación y depósito de prueba no se dibujan.
 - **D-37a Cupo:** la API tiene un solo `capacidad_por_horario`; `55_NegHoras` muestra ocupación por hora y edita ese valor.
-- **Revisor automático:** `.github/CODEOWNERS` con `@JaRe0528` para que cada PR pida tu revisión.
+- **Revisor automático:** `.github/CODEOWNERS` con `@JaRe0528` para que cada PR pida tu revisión. *(Cambió el 2026-11-22: el revisor único es Osmar; ver `CONTRIBUTING.md`, "Aprobación".)*
 - **Protección de `main`:** PR obligatorio, check `gates (constitución §8)` en verde y rama al día, sin push directo (también para administradores), sin force push ni borrado. Aprobaciones requeridas: 0, porque tú no puedes aprobar tus propios PR; la revisión la garantiza `CODEOWNERS` y que solo se integra con tu visto bueno.
 
 ## Pendiente de ti
 - Invitar a **DiegoLopEs1250** como colaborador (hoy no lo es; por eso sus Issues no tienen asignado).
 - Dar acceso a Osmar y Diego al archivo de Figma.
-- **Proteger `main` (no quedó aplicada):** `gh api -X PUT .../branches/main/protection` respondió 404 con JaRe0528 (permiso de escritura; el único administrador es `WhereverApp2026`). Con esa cuenta, desde la raíz del repo:
+- **Proteger `main`:** reemplazado el 2026-11-22 por la regla `.github/rulesets/main.json` (1 aprobación de code owner, Osmar), que se aplica con la cuenta dueña:
 
   ```bash
-  gh api -X PUT repos/WhereverApp2026/wherever-mobile/branches/main/protection --input .github/branch-protection/main.json
+  gh api -X POST repos/WhereverApp2026/wherever-mobile/rulesets --input .github/rulesets/main.json
   ```
-
-  O en GitHub: Settings → Branches → Add rule `main`: Require a pull request (0 aprobaciones), Require status checks `gates (constitución §8)` y rama al día, Require conversation resolution, Do not allow bypassing, sin force push ni borrado. Otra opción: darle a JaRe0528 rol de administrador y lo aplico yo.
 
 ---
 
