@@ -1,41 +1,39 @@
 # plan.md — NV-30 — El día del plan
 
 > Deriva de `specs/nv-30/spec.md`. Respeta constitución §4 (cadena de red y capas). Plantilla: `.specify/templates/plan-template.md`.
+> Contrato conciliado el 2026-11-22 (backend nv-62 y nv-68).
 
 ## 1. Mapeo
-- Sin código todavía. Paquete `feature/<nombre>/{ui,domain,data}` según `specs/nv-04`; los archivos se fijan al tomar la spec.
-- Ruta en `docs/routes.md` al implementar.
+- Sin código todavía. Propuesta: `feature/dayof/{data,domain,ui}` (como sugiere `docs/figma-inventory.md`), con `CheckinsApi`, paquete sin conexión sobre `PlanStopEntity` (`nv-56`) y el lector QR que ya usa nv-20.
+- Rutas nuevas en `docs/routes.md` al implementar.
 
 ## 2. Guardarraíles
 - Constitución §2-§6: Room como fuente de verdad, cadena de red, textos en `strings.xml`, sin secretos.
 - Sin lógica de negocio en Composables.
-- Lo marcado "Pendiente de backend" no se implementa con datos simulados (constitución §2.7).
+- Ubicación solo en primer plano; nunca en disco ni en logs.
+- Lo que no tiene endpoint no se implementa con datos simulados (constitución §2.7).
 
 ## 3. Pruebas
-Previstas, sin implementar (de `spec.md §6`):
 
 ### Unitarias
-- Unit: pasos de la ruta.
+- Pasos de la ruta; check-in 201, 409 y 422.
 
 ### Integración (MockWebServer con el contrato publicado; Room real instrumentada; sin staging)
-- Data: el estado del check-in queda en Room y se lee sin red.
+- El check-in queda en Room y se lee sin red; paquete sin conexión con `ETag`.
 
 ### Seguridad (`docs/masvs-checklist.md`)
-- Security: no queda histórico de ubicación en disco ni en logs.
+- Sin histórico de ubicación en disco ni en logs.
 
 ### Otras
 - UI: estados sin permiso.
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 4. Secuencia
-1. Spec aprobada.
-2. Entidad Room + DAO + migración.
-3. DTO + mapeos + `AppError`.
-4. Repositorio.
-5. ViewModel con `UiState`.
-6. Pantalla y ruta.
-7. Pruebas de los tres tipos.
-8. Gates.
+1. `nv-56` integrada y D25 decidida con Jorge.
+2. `26_CheckinOk` con `POST /checkins` (QR o ubicación).
+3. Paquete sin conexión.
+4. `13_Mapa`, `14_MapaFull`, `15_Llegar`, `18_Navegando` según D25.
+5. Pruebas, gates y PR.
 
 ## 5. Verificación
 - `./gradlew assembleDebug → BUILD SUCCESSFUL`
