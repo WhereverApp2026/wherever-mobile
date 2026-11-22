@@ -266,6 +266,18 @@
 - A evitar: correr `ScreenshotTest` con el JDK 17 descargado: falla con `Could not initialize class sun.awt.Win32FontManager`. detekt con JDK 17 y pruebas/capturas con el JBR de Android Studio.
 - A recordar: revisar las capturas grabadas en claro y oscuro; así salieron los chips sin contraste en oscuro (`StatusPill` con tintes fijos necesita `contentColor = Ink`).
 
+- Estado (2026-11-21, tarde): PR #40 (nv-25) integrado en `main` (`2c62246`). Rediseño Boceto 2 en `feat/boceto2-rediseno` (guía: `docs/diseno_boceto2.md`). Hecho: 1) tokens: 7 hex de §2.2, botones 52 dp, campo 14 y tarjeta 18 (`Radius.Field`/`Radius.Card`), Sora solo Bold, escala de §3 con espaciado 0; 2) logo nuevo (`docs/logo/logo-nuevo.jpg`) en el ícono adaptativo (fondo blanco, `drawable-nodpi/ic_launcher_logo.webp`) y en `LogoMark` (Login y Bienvenida, `logo_wherever.webp`). Falta: barra de 5 con "+" y hoja 15_Crear; "Continuar con Google"; campo de 52 dp de alto.
+- Decisión: `labelLarge` queda en DM Sans Bold 14 (etiquetas de campo, enlaces, chips: su uso mayoritario) y los botones usan `ButtonText` (DM Sans Bold 17), en vez de subir `labelLarge` a 17 como sugiere §3. Así se iguala Figma sin agrandar 15 etiquetas.
+- Decisión: el logo nuevo trae el nombre dentro; en Bienvenida sustituye a la fila "pin + Wherever" (el nombre queda como `contentDescription`). El ícono monocromo (Android 13+) y la pantalla de arranque siguen con el pin vectorial: el logo es una foto y no sirve como silueta.
+- A evitar: grabar capturas con `-Proborazzi.test.record=true`: la tarea solo lee `-Proborazzi.record=true`. Con la otra, verifica, y con el umbral de 1 % un cambio de tipografía pasa sin grabar.
+
+- Estado (2026-11-22): Boceto 2, pasos 3-5 en `feat/boceto2-rediseno`. Barra de 5 (`core/designsystem/BottomBar.kt`): Inicio, Explorar (brújula), "+" naranja, Planes y Perfil; el "+" abre la hoja 15_Crear (`CreateOption`). Navegan "Armar un plan con IA" (`CreatePlanRoute`) y "Planear con amigos" (`MyGroupsRoute`); las otras 3 dicen "Próximamente". "Continuar con Google" en Login y Registro (`GoogleSignInBlock`) avisa que llega pronto: la API no tiene Google. Campo de texto a 52 dp con `BasicTextField` + `DecorationBox`.
+- A evitar: `fillMaxHeight()` dentro de `NavigationBar`: solo tiene alto mínimo y la barra se estira a toda la pantalla (salió así en el teléfono). Centrar con `align(Alignment.CenterVertically)`; lo cuida `BottomBarCreateTest`.
+- A recordar: `OutlinedTextField` fija 56 dp de alto mínimo; para 52 hay que usar `BasicTextField` con `OutlinedTextFieldDefaults.DecorationBox` y relleno vertical de 14.
+- A evitar: correr la suite de UI en el Xiaomi en horizontal: 4 pruebas fallan porque la pantalla queda baja. Fijar vertical (`settings put system accelerometer_rotation 0` y `user_rotation 0`) y devolver `accelerometer_rotation 1` al terminar.
+- A evitar: instalar el APK de debug mientras otro Gradle reempaqueta (`assembleDebugAndroidTest` en paralelo): quedó sin `Hilt_WhereverApp` y la app se cerraba al abrir. Volver a generar con `assembleDebug` solo.
+- Pendiente para Jorge: Home de Figma (portada con foto, buscador con botón IA, carrusel con fotos) y los enlaces de términos y aviso en Registro siguen sin hacer.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

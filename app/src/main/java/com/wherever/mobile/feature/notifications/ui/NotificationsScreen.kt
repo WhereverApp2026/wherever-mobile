@@ -181,7 +181,7 @@ private fun NotificationRow(
                         if (accept.accepted) R.string.notification_now_friends else textFor(notification.type)
                     ),
                     style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = if (notification.read) FontWeight.Normal else FontWeight.SemiBold,
+                    fontWeight = if (notification.read) FontWeight.Normal else FontWeight.Bold,
                     modifier = Modifier.testTag(if (accept.accepted) "notification_accepted" else "notification_text")
                 )
                 Text(

@@ -16,6 +16,24 @@
     <string name="tab_home">Inicio</string>
     <string name="tab_profile">Perfil</string>
     <string name="tab_explore">Explorar</string>
+    <string name="tab_create">Crear</string>
+    <!-- Hoja 15_Crear (Boceto 2) -->
+    <string name="create_sheet_title">¿Qué quieres hacer?</string>
+    <string name="create_ai_plan">Armar un plan con IA</string>
+    <string name="create_ai_plan_hint">Dime una palabra y lo armo</string>
+    <string name="create_manual_plan">Crear un plan a mano</string>
+    <string name="create_manual_plan_hint">Ponle nombre, fecha y paradas</string>
+    <string name="create_with_friends">Planear con amigos</string>
+    <string name="create_with_friends_hint">Crea un grupo, chateen y voten</string>
+    <string name="create_moment">Compartir un momento</string>
+    <string name="create_moment_hint">Foto o postal de hoy</string>
+    <string name="create_review">Escribir una reseña</string>
+    <string name="create_review_hint">De un lugar que ya visitaste</string>
+    <string name="create_coming_soon">Próximamente</string>
+    <!-- "Continuar con Google" en Login y Registro (Boceto 2) -->
+    <string name="auth_or">o</string>
+    <string name="auth_google">Continuar con Google</string>
+    <string name="auth_google_soon">Entrar con Google llega pronto. Por ahora usa tu correo.</string>
 
     <!-- Notificaciones push (specs/nv-46) -->
     <string name="notifications_channel_general">Avisos</string>
