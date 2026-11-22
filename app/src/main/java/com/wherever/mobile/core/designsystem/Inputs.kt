@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Checkbox
@@ -39,7 +38,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
-import com.wherever.mobile.core.designsystem.Radius
 import com.wherever.mobile.core.designsystem.Sizes
 import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.Strokes
@@ -76,7 +74,7 @@ fun LabeledTextField(
             readOnly = readOnly,
             singleLine = singleLine,
             isError = error != null,
-            shape = RoundedCornerShape(Radius.L),
+            shape = WhereverShapes.Field,
             placeholder = { Text(placeholder, color = MaterialTheme.colorScheme.onSurfaceVariant) },
             leadingIcon = leadingIcon?.let {
                 { Icon(it, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant) }

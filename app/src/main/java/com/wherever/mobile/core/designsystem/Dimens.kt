@@ -25,12 +25,18 @@ object Spacing {
     val Giant: Dp = 64.dp
 }
 
-/** Radios de esquina: la maqueta usa 16–24 dp en tarjetas y píldora en botones. */
+/** Radios de esquina. Boceto 2: campos 14, tarjetas 18, píldora en botones (docs/diseno_boceto2.md §4.1). */
 object Radius {
     val XS: Dp = 4.dp
     val S: Dp = 8.dp
     val M: Dp = 12.dp
+
+    /** Campo de texto. */
+    val Field: Dp = 14.dp
     val L: Dp = 16.dp
+
+    /** Tarjeta. */
+    val Card: Dp = 18.dp
     val XL: Dp = 20.dp
     val XXL: Dp = 24.dp
     val XXXL: Dp = 32.dp
@@ -40,8 +46,8 @@ object Radius {
 object WhereverShapes {
     val Small = RoundedCornerShape(Radius.S)
     val Medium = RoundedCornerShape(Radius.M)
-    val Field = RoundedCornerShape(Radius.L)
-    val Card = RoundedCornerShape(Radius.XL)
+    val Field = RoundedCornerShape(Radius.Field)
+    val Card = RoundedCornerShape(Radius.Card)
     val Sheet = RoundedCornerShape(topStart = Radius.XXL, topEnd = Radius.XXL)
     val Pill = CircleShape
 }
@@ -65,7 +71,7 @@ object Elevations {
 object Sizes {
     /** Área táctil mínima (constitución, accesibilidad). */
     val TouchTarget: Dp = 48.dp
-    val ButtonHeight: Dp = 56.dp
+    val ButtonHeight: Dp = 52.dp
     val RowMinHeight: Dp = 52.dp
 
     val IconXS: Dp = 12.dp

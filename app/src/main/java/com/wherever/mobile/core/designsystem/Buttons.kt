@@ -142,7 +142,7 @@ fun WhereverTextLink(
         contentPadding = PaddingValues(horizontal = Spacing.None, vertical = Spacing.S),
         modifier = modifier.height(Sizes.TouchTarget)
     ) {
-        Text(text = text, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+        Text(text = text, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -186,6 +186,6 @@ private fun ButtonContent(text: String, icon: ImageVector?) {
             Icon(icon, contentDescription = null, modifier = Modifier.size(Sizes.IconM))
             Spacer(Modifier.width(Spacing.S))
         }
-        Text(text = text, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Text(text = text, style = ButtonText)
     }
 }

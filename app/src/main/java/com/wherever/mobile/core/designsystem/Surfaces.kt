@@ -58,7 +58,7 @@ import com.wherever.mobile.core.designsystem.Strokes
 @Composable
 fun SurfaceCard(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
     Surface(
-        shape = RoundedCornerShape(Radius.XL),
+        shape = WhereverShapes.Card,
         color = MaterialTheme.colorScheme.surface,
         border = BorderStroke(Strokes.Hairline, MaterialTheme.colorScheme.outline),
         modifier = modifier.fillMaxWidth()
@@ -221,7 +221,7 @@ fun StatusPill(
         Text(
             text = text,
             style = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.SemiBold,
+            fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = Spacing.M, vertical = Spacing.XS)
         )
     }

@@ -10,15 +10,15 @@ val Mint = Color(0xFF12A37F)
 val Gold = Color(0xFFF2B531)
 val Mist = Color(0xFFF4F7FC)
 
-// Tonos derivados que usa la maqueta.
-val InkMuted = Color(0xFF5A6B80)
-val OutlineSoft = Color(0xFFE0E6F0)
-val RouteBlueTint = Color(0xFFE8EEFD)
-val MintTint = Color(0xFFD9F2EA)
-val GoldTint = Color(0xFFFCF1D2)
-val SunsetTint = Color(0xFFFFE6D8)
+// Tonos derivados: hex exactos de las variables del Boceto 2 (docs/diseno_boceto2.md §2.2).
+val InkMuted = Color(0xFF55627A)
+val OutlineSoft = Color(0xFFDCE3EF)
+val RouteBlueTint = Color(0xFFE8EEFF)
+val MintTint = Color(0xFFD9F4EA)
+val GoldTint = Color(0xFFFDF0CF)
+val SunsetTint = Color(0xFFFFE9DA)
 val Danger = Color(0xFFD64545)
-val DangerTint = Color(0xFFFBE6E6)
+val DangerTint = Color(0xFFFBE4E4)
 val SegmentTrack = Color(0xFFE2E7F0)
 val InkDeep = Color(0xFF16305C)
 
