@@ -24,7 +24,8 @@
 - Rama `feat/boceto2-rediseno`, guía `docs/diseno_boceto2.md`. Hecho: tokens exactos de Figma, logo nuevo, barra de 5 con "+" y hoja 15_Crear, "Continuar con Google" (avisa "llega pronto": la API no lo tiene) y campos de 52 dp.
 - **No cambia el %:** 15_Crear funciona a medias (navegan "Armar un plan con IA" y "Planear con amigos"; las otras 3 dicen "Próximamente" hasta que existan sus pantallas).
 - **Probado en el Xiaomi (sin servidor, de noche):** barra, hoja con scroll en horizontal, IA → Armar un plan, amigos → Mis grupos. Suite de UI en el teléfono: 38/43 en horizontal; en vertical solo falla `GroupsContentTest.chatEnviaReintentaYAvisaSinRed` (ver Bugs).
-- **Falta del Boceto 2:** Inicio de Figma (portada con foto, buscador con botón IA, carrusel con fotos), enlaces de términos y aviso en Registro, íconos SVG de Figma en el resto de la app, fotos en todas las tarjetas.
+- **10_Inicio de Figma (rama `feat/boceto2-inicio`):** portada con la foto del primer lugar recomendado (sin foto, degradado azul) y degradado de Figma; chip de ciudad y campana en círculo translúcido; "¿Qué hacemos hoy, Osmar?"; buscador "Tacos, relax, aventura…" con chispa naranja → Armar un plan con IA; "Cerca de ti" en carrusel de tarjetas-foto de 160 × 184 ("Para ti"/"Cerca", nombre, "8 min a pie · 4.8") con "Ver todo" → Explorar; "Planes de tus amigos" (momentos con plan, "Ver más" → pestaña Amigos). Mantener presionada una tarjeta = "No me interesa" (con Deshacer). Compañía y "Para este momento" bajan al final; el chip de clima sale de la portada (`docs/revision-jorge.md`).
+- **Falta del Boceto 2:** enlaces de términos y aviso en Registro (llevan a 87_Ayuda, que aún no existe: nv-33), corazón de favoritos y paradas en las tarjetas de Inicio (la API del feed no trae esos datos), íconos SVG de Figma en el resto de la app, fotos en el resto de las tarjetas.
 
 ## nv-17 feed de amigos (2026-11-20, noche)
 
@@ -33,22 +34,18 @@
 - **Arreglos de esta vuelta:** botones de 29_PlanAmigo apilados ("Hacer mi versión" se cortaba); tinte de fondo mientras carga la foto del momento (se veía un hueco gris/blanco); plurales `many`; rutas `MomentRoute` y `FriendPlanRoute` en `docs/routes.md`.
 - **Falta:** 29_PlanAmigo y 14_MeApunto en el teléfono: hace falta un momento de staging con `plan_id` (B publica un momento desde un plan público). Sin API: historias, reacciones, comentarios.
 - **Siguiente:** nv-25 Grupos y chats (27_AmigoOpc y 25_MiCodigo ya en `main`).
-- **Protección de `main`:** sigue sin aplicar (JaRe0528 tiene WRITE). Comando en `docs/revision-jorge.md`.
+- **Protección de `main`:** regla en `.github/rulesets/main.json`; solo Osmar aprueba (ver `CONTRIBUTING.md`, "Aprobación").
 
-## Reparto del equipo (desde 2026-11-20)
+## Reparto del equipo (desde 2026-11-22)
 
-Reglas: `CONTRIBUTING.md`. Cada spec es una rama y un PR a `main` con Jorge como revisor.
+Reglas: `CONTRIBUTING.md`. Cada spec es una rama y un PR a `main`, aprobado por Osmar. Frames que faltan por construir al 2026-11-22, sin contar los PR abiertos.
 
-| Responsable | Área | Specs | Frames | Funcionan | Lista de trabajo |
-|---|---|---|---|---|---|
-| Jorge | Cuenta y acceso | nv-06 a nv-16 | 17 | 16 (+1 local) | `docs/pendientes.md` |
-| Jorge | Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 18 | `docs/pendientes.md` |
-| Jorge | Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 16 | `docs/pendientes.md` |
-| Jorge | Planes: IA, detalle, Vaca, Mis planes, día del plan | nv-23, nv-24, nv-26, nv-28, nv-30 | 22 | 9 | `docs/pendientes.md` |
-| Jorge | Reserva, pago y cupones | nv-27, nv-29 | 15 | 4 | `docs/pendientes.md` |
-| Jorge | Compartido: theme y `core/designsystem`, navegación, cliente de API, CI | — | — | — | Issues de Osmar y Diego |
-| Diego | Recuerdos, Reseñas y Ayuda | nv-31 a nv-33 | 22 | 0 | `docs/equipo/diego.md` |
-| Osmar | Modo negocio | nv-34 a nv-38 | 26 | 0 | `docs/equipo/osmar.md` |
+| Responsable | Área | Specs | Faltan | Lista de trabajo |
+|---|---|---|---|---|
+| Jorge | Social y Explorar; compartido (theme y `core/designsystem`, navegación, cliente de API, CI) | nv-20, nv-21, nv-25 | 14 (+4 por probar) | `docs/equipo/jorge.md` |
+| Diego | Planes y cupones del negocio; cerrar #42, #45 y #48 | nv-23, nv-24, nv-26, nv-30, nv-37 | 16 | `docs/equipo/diego.md` |
+| Borre | Modo negocio | nv-35, nv-36, nv-38 | 17 | `docs/equipo/borre.md` |
+| Osmar | Reserva, pago y cupones; feed social; backend que bloquea; revisor único | nv-17, nv-27, nv-29 | 19 | `docs/equipo/osmar.md` |
 
 ## Estado (2026-11-20)
 
@@ -157,7 +154,9 @@ Bugs conocidos del área: Bienvenida en horizontal (✅ nv-55); enlaces corridos
 | Fila de solicitud ya respondida en Avisos sin mensaje | ✅ arreglado (nv-18) |
 | Barra inferior estirada a toda la pantalla tras agregar el "+" (Boceto 2) | ✅ arreglado antes de integrar (`BottomBarCreateTest`) |
 | Hoja inferior sin scroll: en horizontal las últimas opciones quedaban fuera | ✅ arreglado (`WhereverBottomSheet` con scroll) |
-| Login: "¿No tienes cuenta?Crea una" sin espacio entre texto y enlace | abierto |
+| Login: "¿No tienes cuenta?Crea una" sin espacio entre texto y enlace | arreglado (espacio de 4 dp) |
+| Inicio en horizontal: la barra de navegación del sistema tapaba la campana y la chispa de IA (visto en el Xiaomi) | arreglado (márgenes laterales del Scaffold) |
+| Inicio sin servidor: "Cerca de ti" con "Ver todo" quedaba sin nada debajo del aviso de error | arreglado (se oculta con error y sin lugares) |
 | `GroupsContentTest.chatEnviaReintentaYAvisaSinRed` falla en el Xiaomi: el teclado tapa "No se envió" en la actividad de prueba | abierto (pasa en el emulador de la CI) |
 | Pruebas de UI en el teléfono en horizontal: 4 fallan porque la pantalla queda baja (Fecha, Mi código, Grupos, Insignias) | correr con el teléfono en vertical |
 

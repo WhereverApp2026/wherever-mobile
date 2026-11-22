@@ -33,8 +33,20 @@ import com.wherever.mobile.feature.friends.ui.MyCodePreview
 import com.wherever.mobile.feature.friends.ui.MyCodeScanPreview
 import com.wherever.mobile.feature.groups.ui.GroupChatPreview
 import com.wherever.mobile.feature.groups.ui.MyGroupsPreview
+import com.wherever.mobile.feature.help.ui.HelpNoResultsPreview
+import com.wherever.mobile.feature.help.ui.HelpPreview
+import com.wherever.mobile.feature.help.ui.HelpReportPreview
+import com.wherever.mobile.feature.home.ui.HomePreview
 import com.wherever.mobile.feature.profile.ui.EditProfilePreview
 import com.wherever.mobile.feature.profile.ui.ProfilePreview
+import com.wherever.mobile.feature.reviews.ui.MyReviewsConfirmPreview
+import com.wherever.mobile.feature.reviews.ui.MyReviewsPreview
+import com.wherever.mobile.feature.reviews.ui.PendingReviewsEmptyPreview
+import com.wherever.mobile.feature.reviews.ui.PendingReviewsPreview
+import com.wherever.mobile.feature.reviews.ui.PlaceReviewsPreview
+import com.wherever.mobile.feature.reviews.ui.ReviewDetailPreview
+import com.wherever.mobile.feature.reviews.ui.ReviewFormPreview
+import com.wherever.mobile.feature.reviews.ui.ReviewPublishedPreview
 import com.wherever.mobile.feature.settings.ui.DeleteAccountPreview
 import com.wherever.mobile.feature.settings.ui.PrivacyPreview
 import com.wherever.mobile.feature.settings.ui.SettingsPreview
@@ -80,6 +92,7 @@ class ScreenshotTest {
         "85_ajustes" to { SettingsPreview() },
         "28_priv_social" to { PrivacyPreview() },
         "eliminar_cuenta" to { DeleteAccountPreview() },
+        "10_inicio" to { HomePreview() },
         "11_inicio_amigos" to { FriendsFeedPreview() },
         "11_inicio_amigos_vacio" to { FriendsFeedEmptyPreview() },
         "17_post_detalle" to { MomentDetailPreview() },
@@ -97,7 +110,18 @@ class ScreenshotTest {
         "45_neg_oper" to { BusinessOperationPreview() },
         "46_neg_verif" to { BusinessVerifyPreview() },
         "46_neg_verif_faltantes" to { BusinessMissingPreview() },
-        "47_neg_listo" to { BusinessDonePreview() }
+        "47_neg_listo" to { BusinessDonePreview() },
+        "68_post_visita" to { ReviewFormPreview() },
+        "78_res_com" to { ReviewDetailPreview() },
+        "69_publicado" to { ReviewPublishedPreview() },
+        "77_res_pend" to { PendingReviewsPreview() },
+        "77_res_pend_vacio" to { PendingReviewsEmptyPreview() },
+        "79_mis_res" to { MyReviewsPreview() },
+        "mis_res_confirmar_eliminar" to { MyReviewsConfirmPreview() },
+        "80_res_lugar" to { PlaceReviewsPreview() },
+        "86_ayuda" to { HelpPreview() },
+        "86_ayuda_sin_resultados" to { HelpNoResultsPreview() },
+        "86_ayuda_reportar" to { HelpReportPreview() }
     )
 
     @Test

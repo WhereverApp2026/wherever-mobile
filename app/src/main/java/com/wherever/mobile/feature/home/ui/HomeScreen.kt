@@ -2,43 +2,32 @@ package com.wherever.mobile.feature.home.ui
 
 import android.Manifest
 import android.content.Intent
+import android.content.res.Configuration
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material3.Badge
-import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
@@ -51,16 +40,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
@@ -69,35 +54,31 @@ import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.CreateOption
 import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.InfoBanner
-import com.wherever.mobile.core.designsystem.Ink
 import com.wherever.mobile.core.designsystem.MainTab
-import com.wherever.mobile.core.designsystem.Radius
-import com.wherever.mobile.core.designsystem.RouteBlue
 import com.wherever.mobile.core.designsystem.ScreenPadding
 import com.wherever.mobile.core.designsystem.SelectChip
 import com.wherever.mobile.core.designsystem.Sizes
 import com.wherever.mobile.core.designsystem.Spacing
-import com.wherever.mobile.core.designsystem.Sunset
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.UnderlineTabs
 import com.wherever.mobile.core.designsystem.WhereverBottomBar
-import com.wherever.mobile.core.designsystem.WhereverIconButton
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
+import com.wherever.mobile.core.designsystem.WhereverShapes
 import com.wherever.mobile.core.designsystem.WhereverSnackbarHost
 import com.wherever.mobile.core.designsystem.WhereverTextButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
+import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.core.notifications.RequestNotificationPermission
 import com.wherever.mobile.core.ui.formatDateTime
 import com.wherever.mobile.feature.feed.ui.FriendsFeedActions
 import com.wherever.mobile.feature.feed.ui.FriendsFeedUiState
 import com.wherever.mobile.feature.feed.ui.FriendsFeedViewModel
+import com.wherever.mobile.feature.feed.ui.PREVIEW_FEED_ITEM
 import com.wherever.mobile.feature.feed.ui.friendsFeedItems
 import com.wherever.mobile.feature.home.domain.Company
 import com.wherever.mobile.feature.home.domain.Event
 import com.wherever.mobile.feature.notifications.ui.UnreadBadgeViewModel
 import com.wherever.mobile.feature.places.domain.PlaceCard
-import com.wherever.mobile.feature.places.ui.PlaceCardItem
-import com.wherever.mobile.feature.places.ui.PlaceCardSkeleton
 import com.wherever.mobile.feature.plans.domain.PopularPlan
 import java.time.ZoneId
 
@@ -129,9 +110,11 @@ fun HomeRouteScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val feedState by feed.state.collectAsStateWithLifecycle()
     var tab by rememberSaveable { mutableIntStateOf(HomeTab.NEARBY.ordinal) }
-    LaunchedEffect(tab) { if (tab == HomeTab.FRIENDS.ordinal) feed.onShown() }
+    // "Planes de tus amigos" sale del mismo feed, así que se carga desde que se abre Inicio.
+    LaunchedEffect(feed) { feed.onShown() }
     val unread by badge.count.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
+    val layoutDirection = LocalLayoutDirection.current
     val undoMessage = stringResource(R.string.home_not_interested_done)
     val undoLabel = stringResource(R.string.home_undo)
     LaunchedEffect(viewModel) { viewModel.openPlan.collect(navigation.onPlan) }
@@ -181,7 +164,13 @@ fun HomeRouteScreen(
                 onLocationNotNow = viewModel::onLocationNotNow,
                 onCopyPlan = viewModel::copyPopular
             ),
-            modifier = Modifier.padding(bottom = padding.calculateBottomPadding())
+            // Sin el margen de arriba (la portada va bajo la barra de estado), pero sí los laterales: en
+            // horizontal la barra de navegación del sistema tapaba la campana y la chispa de IA.
+            modifier = Modifier.padding(
+                start = padding.calculateStartPadding(layoutDirection),
+                end = padding.calculateEndPadding(layoutDirection),
+                bottom = padding.calculateBottomPadding()
+            )
         )
     }
 }
@@ -226,7 +215,15 @@ private fun HomeContent(
             verticalArrangement = Arrangement.spacedBy(Spacing.L),
             modifier = Modifier.fillMaxSize().testTag("home_list")
         ) {
-            item { Header(state, unread, navigation) }
+            item {
+                HomeCover(
+                    state = state,
+                    unread = unread,
+                    onSearch = navigation.onSearch,
+                    onAiPlan = { navigation.onCreate(CreateOption.AI_PLAN) },
+                    onNotifications = navigation.onNotifications
+                )
+            }
             item {
                 UnderlineTabs(
                     options = listOf(
@@ -242,57 +239,74 @@ private fun HomeContent(
             if (friends.selected) {
                 friendsFeedItems(friends.state, friends.actions)
             } else {
-                nearbyItems(state, navigation, actions)
+                nearbyItems(state, navigation, actions, friends)
             }
         }
     }
 }
 
-/** Contenido de "Cerca de ti" (10_Inicio). */
-private fun LazyListScope.nearbyItems(state: HomeUiState, navigation: HomeNavigation, actions: HomeActions) {
-    item { CompanyChips(state.company, actions.onCompany) }
-    if (state.chips.isNotEmpty()) item { MoodChips(state, navigation.onCategory) }
+/** Contenido de "Cerca de ti" (10_Inicio): carrusel de lugares, planes de amigos y lo demás de la spec debajo. */
+private fun LazyListScope.nearbyItems(
+    state: HomeUiState,
+    navigation: HomeNavigation,
+    actions: HomeActions,
+    friends: HomeFriendsTab
+) {
     if (state.locationPrompt != LocationPrompt.NONE) item { LocationCard(state.locationPrompt, actions) }
     state.error?.let { error ->
         item { ErrorBanner(error.asString(), Modifier.padding(horizontal = ScreenPadding)) }
     }
-    item {
-        Text(
-            stringResource(R.string.home_for_you),
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = ScreenPadding)
-        )
+    // Con error y sin lugares solo queda el aviso: el título con "Ver todo" no tendría nada debajo.
+    if (state.error == null || state.recommendations.isNotEmpty()) {
+        item {
+            SectionHeader(
+                title = stringResource(R.string.home_tab_nearby),
+                action = stringResource(R.string.home_see_all),
+                onAction = { navigation.onTab(MainTab.EXPLORE) },
+                tag = "home_see_all"
+            )
+        }
+        when {
+            state.loading -> item { NearbySkeleton() }
+            state.recommendations.isEmpty() -> item { EmptyRecommendations(navigation.onSearch) }
+            else -> item { NearbyCarousel(state.recommendations, navigation.onPlace, actions.onNotInterested) }
+        }
     }
-    when {
-        state.loading -> items(SKELETON_CARDS) {
-            PlaceCardSkeleton(Modifier.padding(horizontal = ScreenPadding))
+    val friendPlans = friends.state.items.filter { it.moment.planId != null }
+    if (friendPlans.isNotEmpty()) {
+        item {
+            SectionHeader(
+                title = stringResource(R.string.home_friend_plans),
+                action = stringResource(R.string.feed_see_more),
+                onAction = { friends.onSelectTab(HomeTab.FRIENDS.ordinal) },
+                tag = "home_friend_plans_more"
+            )
         }
-        state.recommendations.isEmpty() && state.error == null -> item {
-            EmptyRecommendations(navigation.onSearch)
-        }
-        else -> items(state.recommendations, key = { it.id }) { place ->
-            PlaceCardItem(
-                place = place,
-                onClick = { navigation.onPlace(place.id) },
-                modifier = Modifier.padding(horizontal = ScreenPadding).animateItem()
-            ) {
-                place.why?.let { why ->
-                    Text(
-                        stringResource(R.string.home_why, why),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.testTag("home_why_${place.id}")
-                    )
-                }
-                WhereverTextLink(
-                    stringResource(R.string.home_not_interested),
-                    onClick = { actions.onNotInterested(place) }
-                )
-            }
-        }
+        item { FriendPlansCarousel(friendPlans, navigation.onFriendPlan) }
     }
     popularAndEvents(state, actions)
+    // Fuera del Boceto 2 pero en la spec (US-062, US-025): al final, no en la portada (docs/revision-jorge.md).
+    item { CompanyChips(state.company, actions.onCompany) }
+    if (state.chips.isNotEmpty()) item { MoodChips(state, navigation.onCategory) }
+}
+
+@Composable
+private fun NearbySkeleton() {
+    LazyRow(
+        contentPadding = PaddingValues(horizontal = ScreenPadding),
+        horizontalArrangement = Arrangement.spacedBy(Spacing.M),
+        userScrollEnabled = false,
+        modifier = Modifier.testTag("home_nearby_loading")
+    ) {
+        items(SKELETON_CARDS) {
+            Box(
+                Modifier
+                    .size(width = Sizes.NearbyCardWidth, height = Sizes.NearbyCardHeight)
+                    .clip(WhereverShapes.Card)
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+            )
+        }
+    }
 }
 
 /** Planes populares y eventos al final de "Cerca de ti". */
@@ -326,85 +340,6 @@ private fun LazyListScope.popularAndEvents(state: HomeUiState, actions: HomeActi
             ) {
                 items(state.events, key = { it.id }) { EventCard(it) }
             }
-        }
-    }
-}
-
-@Composable
-private fun Header(state: HomeUiState, unread: Int, navigation: HomeNavigation) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(bottomStart = Radius.XXXL, bottomEnd = Radius.XXXL))
-            .background(Brush.verticalGradient(listOf(Ink, RouteBlue)))
-            .statusBarsPadding()
-            .padding(ScreenPadding)
-    ) {
-        Column(verticalArrangement = Arrangement.spacedBy(Spacing.M)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                if (state.city != null) {
-                    Icon(Icons.Outlined.LocationOn, contentDescription = null, tint = Color.White)
-                    Text(text = state.city, color = Color.White, style = MaterialTheme.typography.bodyMedium)
-                }
-                Spacer(Modifier.weight(1f))
-                state.weather?.let { weather ->
-                    Surface(shape = CircleShape, color = Color.White.copy(alpha = 0.18f), contentColor = Color.White) {
-                        Text(
-                            stringResource(R.string.home_weather, weather.temperatureC, weather.condition),
-                            style = MaterialTheme.typography.labelLarge,
-                            modifier = Modifier.padding(
-                                horizontal = Spacing.M,
-                                vertical = Spacing.S
-                            ).testTag("home_weather")
-                        )
-                    }
-                }
-                NotificationBell(unread, navigation.onNotifications)
-            }
-            Text(
-                text = state.firstName?.let { stringResource(R.string.home_greeting_name, it) }
-                    ?: stringResource(R.string.home_greeting),
-                style = MaterialTheme.typography.headlineLarge,
-                color = Color.White,
-                modifier = Modifier.testTag("home_greeting")
-            )
-            if (state.greeting.isNotBlank()) {
-                Text(
-                    state.greeting,
-                    color = Color.White.copy(alpha = 0.85f),
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            }
-            if (state.weather?.adverse == true) {
-                Text(
-                    stringResource(R.string.home_weather_adverse),
-                    color = Color.White,
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-            SearchBox(navigation.onSearch)
-        }
-    }
-}
-
-/** La caja "¿Qué se te antoja?" abre Explorar con el teclado listo. */
-@Composable
-private fun SearchBox(onClick: () -> Unit) {
-    Surface(
-        shape = RoundedCornerShape(Radius.L),
-        color = MaterialTheme.colorScheme.surface,
-        modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(min = Sizes.RowMinHeight)
-            .clip(RoundedCornerShape(Radius.L))
-            .clickable(onClick = onClick)
-            .semantics { role = Role.Button }
-            .testTag("home_search")
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(Spacing.L)) {
-            Icon(Icons.Outlined.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
-            Spacer(Modifier.width(Spacing.M))
-            Text(stringResource(R.string.home_search_hint), color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }
@@ -551,27 +486,70 @@ private fun EventCard(event: Event) {
     }
 }
 
-/** Campana de avisos con el número de no leídos (specs/nv-52). */
+private const val PREVIEW_UNREAD = 3
+
+private val PREVIEW_PLACES = listOf(
+    PlaceCard(
+        id = "p1",
+        name = "Café Raíz",
+        category = "cafeteria",
+        priceLevel = 2,
+        averagePrice = 120,
+        rating = 4.8,
+        reviews = 120,
+        coverUrl = null,
+        distanceMeters = 640.0,
+        openNow = true,
+        why = "Te gustan los cafés"
+    ),
+    PlaceCard(
+        id = "p2",
+        name = "Jardín del Cerro",
+        category = "entretenimiento",
+        priceLevel = 1,
+        averagePrice = 80,
+        rating = 4.6,
+        reviews = 54,
+        coverUrl = null,
+        distanceMeters = 1120.0,
+        openNow = true
+    ),
+    PlaceCard(
+        id = "p3",
+        name = "Fonda Doña Lupe",
+        category = "restaurante",
+        priceLevel = 2,
+        averagePrice = 150,
+        rating = 4.7,
+        reviews = 88,
+        coverUrl = null,
+        distanceMeters = null,
+        openNow = false
+    )
+)
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun NotificationBell(unread: Int, onClick: () -> Unit) {
-    val description = if (unread > 0) {
-        pluralStringResource(R.plurals.home_notifications_unread, unread, unread)
-    } else {
-        stringResource(R.string.notifications_title)
-    }
-    WhereverIconButton(onClick = onClick, modifier = Modifier.testTag("home_notifications")) {
-        BadgedBox(
-            badge = {
-                if (unread > 0) {
-                    Badge(containerColor = Sunset, contentColor = Color.White) {
-                        Text(if (unread > MAX_BADGE) "$MAX_BADGE+" else unread.toString())
-                    }
-                }
-            }
-        ) {
-            Icon(Icons.Outlined.Notifications, contentDescription = description, tint = Color.White)
-        }
+internal fun HomePreview() {
+    WhereverTheme {
+        HomeContent(
+            state = HomeUiState(
+                loading = false,
+                firstName = "Osmar",
+                city = "Tula de Allende",
+                recommendations = PREVIEW_PLACES
+            ),
+            unread = PREVIEW_UNREAD,
+            navigation = HomeNavigation({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}),
+            friends = HomeFriendsTab(
+                selected = false,
+                state = FriendsFeedUiState(loading = false, items = listOf(PREVIEW_FEED_ITEM)),
+                onSelectTab = {},
+                actions = FriendsFeedActions({}, {}, {}, {}, {}, {}, {}, {})
+            ),
+            actions = HomeActions({}, {}, {}, {}, {}, {}),
+            modifier = Modifier
+        )
     }
 }
-
-private const val MAX_BADGE = 99

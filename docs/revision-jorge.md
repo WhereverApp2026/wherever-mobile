@@ -21,6 +21,62 @@
 
 ---
 
+# Revisión para Jorge — 2026-11-21: nv-32 Reseñas (Diego)
+
+> Rama `feat/nv-32-reviews`, Issue #27. Frames de Figma: `68_PostVisita` (`298:7592`), `69_Publicado`, `77_ResPend` (`298:8229`), `78_ResCom` (`298:8342`), `79_MisRes` (`298:8446`), `MisRes · confirmar eliminar`, `MisRes · reseña eliminada` (`340:681`) y `80_ResLugar` (`298:8578`).
+
+## Decisiones tomadas sin preguntarte
+- **D-32b Aspectos obligatorios y sin chips:** `POST /resenas` pide los cinco `aspectos` (no llevan `?` en el contrato), aunque la maqueta dice «Calificar a detalle · Opcional». Publicar abre 78_ResCom si faltan y «Listo» publica. Los chips de «¿Qué fue lo mejor?» no se dibujan: la API pide chips «del catálogo» y no hay ruta que lo publique.
+- **D-32c Sin distribución por estrellas en 80_ResLugar:** `GET /lugares/{id}` trae promedio y total, pero no la distribución 5…1. Se muestra el promedio, las estrellas y el total.
+- **D-32d «Ya reseñadas»:** salen de `GET /checkins` (válidos con `resena_id`); nombre y foto del lugar, de `GET /lugares/{id}` (una vez por lugar, en memoria).
+- **D-32e Editar:** abre el formulario con la reseña que cargó Mis reseñas (no hay `GET /resenas/{id}`). Un 409 recarga `GET /resenas/mias` y pide guardar de nuevo con la versión nueva.
+- **D-32f Deshacer:** el `DELETE` espera 5 s en el alcance de la app (`@ApplicationScope`), así que se manda aunque se salga de la pantalla; un segundo borrado manda el anterior al instante. Si falla, la reseña vuelve a la lista.
+- **D-32g Sin barra inferior:** 77 y 79 se abren desde Perfil como Favoritos y Mis reservas, con Regresar; no llevan la barra inferior de la maqueta.
+- **D-32h «¿Repetimos?»:** abre Crear plan con el nombre del lugar como frase. La maqueta dice «con Mariana y Jorge», pero la reseña no guarda con quién fuiste.
+- **Push `resena_pendiente`:** no se tocó `core/notifications` ni `PushNavigation`; sigue abriendo Avisos hasta que el backend lo mande.
+- **Prueba de UI:** `PlaceReviewsContentTest` en `androidTest` (Útil y Reportar).
+
+## Pendiente del backend
+- Catálogo de chips de reseña (`GET`), para «¿Qué fue lo mejor?».
+- Distribución de calificaciones por estrellas del lugar, para las barras de 80_ResLugar.
+
+## Pendiente de ti
+- Cuenta de staging con check-ins válidos para probar el flujo completo en el teléfono.
+
+---
+
+# Revisión para Jorge — 2026-11-22: 10_Inicio del Boceto 2
+
+> Pedido: seguir el rediseño del Boceto 2 sin parar. Lo ambiguo se decide y se anota aquí.
+
+## Decisiones tomadas sin preguntarte
+- **Foto de portada:** Figma usa una foto fija de Tula; no se pudo exportar (límite de llamadas del MCP de Figma en el plan Starter) y una foto fija mentiría fuera de Tula. La portada usa la foto del primer lugar recomendado; sin foto queda el degradado azul de la marca.
+- **Clima, compañía y "Para este momento":** no están en el Boceto 2. El chip de clima sale de la portada (se queda el aviso de "clima no ayuda" cuando aplica); los chips de compañía (US-062) y de antojo (US-025) bajan al final de "Cerca de ti". **Decide:** ¿se quedan ahí, pasan a Ajustes o se eliminan?
+- **"No me interesa" (US-053):** el carrusel no tiene espacio para el enlace; ahora es mantener presionada la tarjeta (también como acción de accesibilidad), con el mismo Deshacer.
+- **"Planes de tus amigos":** sale de `GET /momentos/feed` (momentos con `plan_id`), por eso el feed se carga al abrir Inicio y no solo en la pestaña Amigos. El corazón con conteo y las fotos de paradas de Figma no se dibujan: el feed no trae esos datos.
+- **Enlaces de términos y aviso en Registro:** en Figma llevan a 87_Ayuda, que aún no existe (nv-33, Diego). Se dejan para esa spec.
+
+---
+
+# Revisión para Jorge — 2026-11-21: nv-33 Ayuda (Diego)
+
+> Rama `feat/nv-33-help`, Issue #28. Una pantalla: `86_Ayuda` (nodo Figma `298:7902`), con entrada desde Ajustes.
+
+## Decisiones tomadas sin preguntarte
+- **D-33b Buscador con etiqueta:** la maqueta dibuja el campo sin etiqueta; `LabeledTextField` siempre la pinta, así que dice «Buscar en la ayuda», como Explorar y Amigos. No se tocó `core/designsystem`.
+- **D-33c Preguntas:** nueve. Las cuatro de la maqueta (cancelar, anticipo, Sello, Vaca virtual) y las de `plan.md` §6 (IA, amigos, ubicación, cupón, eliminar cuenta); «Cómo reservo y cuánto cuesta el anticipo» quedó dentro de «¿Por qué pago un anticipo?». Las respuestas solo dicen lo que confirma la API o la app (p. ej., el reembolso «sigue la política del lugar», sin porcentajes). **Revísalas.**
+- **D-33d `traza_id`:** la app no guarda el último `traza_id` en ningún lado, así que el reporte no lo manda (el campo es opcional). Si quieres que lo lleve, hace falta guardarlo en `core/network`.
+- **D-33e Prueba de UI en `androidTest`:** `HelpContentTest` va junto a las demás de Compose y corre en el paso `ui` de la CI. Con Robolectric en `src/test` corría antes que `ConnectionIntegrationTest` en la misma JVM y Conscrypt lo rompía (`JarVerifier`, en el JDK 21 de Oracle); solo, ese test pasa.
+- **Correo y WhatsApp:** `HelpRepositoryImpl.contacts()` devuelve nulos hasta que existan `SUPPORT_EMAIL` y `SUPPORT_WHATSAPP` en `BuildConfig`; mientras, solo se ve «Reportar un problema». Las capturas usan datos de vista previa para mostrar las tres filas de la maqueta.
+- **Íconos:** `ic_chat` (WhatsApp, genérico, sin logo de marca) e `ic_flag` (reportar) en `res/drawable`, de Material Icons (Apache 2.0).
+
+## Pendiente de ti
+- Agregar `SUPPORT_EMAIL` y `SUPPORT_WHATSAPP` a `app/build.gradle.kts` (Issue que abre Diego) y cambiar `contacts()` para leerlos.
+- Revisar las respuestas de las preguntas frecuentes (D-33c).
+- Prueba en teléfono contra staging: Ajustes → Ayuda, buscar, abrir preguntas y mandar un reporte.
+
+---
+
 # Revisión para Jorge — 2026-11-21: pantallas y evaluación alternadas
 
 > Pedido: alternar una pantalla y una mejora de la evaluación, un PR por cosa, compuertas una por una, integrar con CI verde. Lo ambiguo se decide y se anota aquí.
@@ -54,19 +110,17 @@
 - **D-35a Check-in:** por código escrito; el QR espera acordar librería (constitución §3). "Reprogramar" no existe para el negocio: se cambia por Contactar. Estadísticas: Semana, Mes y Trimestre (90 días máx.).
 - **D-36a / D-38a Diferidos del backend:** insignia del Sello, Instagram, estado de cuenta, facturación y depósito de prueba no se dibujan.
 - **D-37a Cupo:** la API tiene un solo `capacidad_por_horario`; `55_NegHoras` muestra ocupación por hora y edita ese valor.
-- **Revisor automático:** `.github/CODEOWNERS` con `@JaRe0528` para que cada PR pida tu revisión.
+- **Revisor automático:** `.github/CODEOWNERS` con `@JaRe0528` para que cada PR pida tu revisión. *(Cambió el 2026-11-22: el revisor único es Osmar; ver `CONTRIBUTING.md`, "Aprobación".)*
 - **Protección de `main`:** PR obligatorio, check `gates (constitución §8)` en verde y rama al día, sin push directo (también para administradores), sin force push ni borrado. Aprobaciones requeridas: 0, porque tú no puedes aprobar tus propios PR; la revisión la garantiza `CODEOWNERS` y que solo se integra con tu visto bueno.
 
 ## Pendiente de ti
 - Invitar a **DiegoLopEs1250** como colaborador (hoy no lo es; por eso sus Issues no tienen asignado).
 - Dar acceso a Osmar y Diego al archivo de Figma.
-- **Proteger `main` (no quedó aplicada):** `gh api -X PUT .../branches/main/protection` respondió 404 con JaRe0528 (permiso de escritura; el único administrador es `WhereverApp2026`). Con esa cuenta, desde la raíz del repo:
+- **Proteger `main`:** reemplazado el 2026-11-22 por la regla `.github/rulesets/main.json` (1 aprobación de code owner, Osmar), que se aplica con la cuenta dueña:
 
   ```bash
-  gh api -X PUT repos/WhereverApp2026/wherever-mobile/branches/main/protection --input .github/branch-protection/main.json
+  gh api -X POST repos/WhereverApp2026/wherever-mobile/rulesets --input .github/rulesets/main.json
   ```
-
-  O en GitHub: Settings → Branches → Add rule `main`: Require a pull request (0 aprobaciones), Require status checks `gates (constitución §8)` y rama al día, Require conversation resolution, Do not allow bypassing, sin force push ni borrado. Otra opción: darle a JaRe0528 rol de administrador y lo aplico yo.
 
 ---
 

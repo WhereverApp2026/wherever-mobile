@@ -1,10 +1,15 @@
-# Osmar — Modo negocio
+# Osmar — Reserva, pago, cupones, feed social y revisión
 
-> GitHub: `OsmarYahir`. Reglas: `CONTRIBUTING.md`. Revisor: Jorge. Actualizado: 2026-11-20.
+> GitHub: `OsmarYahir` (y `WhereverApp2026` solo para aprobar tus propios PR). Reglas: `CONTRIBUTING.md`. Actualizado: 2026-11-22.
 
-Orden recomendado: de arriba hacia abajo. Cada spec es una rama y un PR.
+Eres el **único revisor**: apruebas todo PR a `main` (ver "Aprobación" en `CONTRIBUTING.md`). nv-34 (alta del negocio), que antes era tuya, la hizo Diego en el PR #48; el resto del modo negocio pasó a Borre (nv-35, nv-36, nv-38) y a Diego (nv-37).
 
-## nv-34 — Negocio: registro
+## Revisión
+
+- [ ] PR abiertos de Diego: #42 (Ayuda), #45 (Recuerdos) y #48 (alta del negocio)
+- [ ] Cada PR: CI en verde, `CHECKLIST_PR.md`, spec al día y prueba en teléfono o emulador
+
+Avance de nv-34 en el PR #48 (antes en esta lista):
 
 - [x] Spec leída: `specs/nv-34/spec.md`, `plan.md`, `task.md`
 - [x] Rama `feat/nv-34-business` desde `main` actualizado
@@ -18,58 +23,33 @@ Orden recomendado: de arriba hacia abajo. Cada spec es una rama y un PR.
 - [ ] Probada en teléfono o emulador contra staging
 - [ ] PR a `main` integrado (CI en verde)
 
-## nv-35 — Negocio: panel, reservas y check-in
+## Backend que bloquea a la app
 
-- [ ] Spec leída: `specs/nv-35/spec.md`, `plan.md`, `task.md`
-- [ ] Rama `feat/nv-35-business` desde `main` actualizado
-- [ ] Pantalla `48_NegPanel`
-- [ ] Pantalla `49_NegReservas`
-- [ ] Pantalla `50_NegCheckin`
-- [ ] Pantalla `NegCheckin · *`
-- [ ] Pantalla `56_NegStats`
-- [ ] Compuertas una por una en verde
-- [ ] Probada en teléfono o emulador contra staging
-- [ ] PR a `main` integrado (CI en verde)
+- [ ] `GET /usuarios/yo/insignias` para `83_Insignias` (hoy con datos locales)
+- [ ] `GET /lugares` con filtro de Sello y `sello_excelencia` en la tarjeta (`34_Sello`, Jorge)
+- [ ] Historias, reacciones y comentarios para el feed (`nv-17`; hoy dan 404 en staging)
+- [ ] Semilla de negocios en staging para probar Explorar, ficha y reservas
 
-## nv-36 — Negocio: reseñas y momentos
+## nv-27 — Reserva y pago (lo que falta)
 
-- [ ] Spec leída: `specs/nv-36/spec.md`, `plan.md`, `task.md`
-- [ ] Rama `feat/nv-36-business` desde `main` actualizado
-- [ ] Pantalla `51_NegResenas`
-- [ ] Pantalla `52_NegResp`
-- [ ] Pantalla `NegMomentos`
-- [ ] Compuertas una por una en verde
-- [ ] Probada en teléfono o emulador contra staging
-- [ ] PR a `main` integrado (CI en verde)
+- [ ] Pantalla `35_Pasarela`
+- [ ] Pantalla `36_PagoError`
+- [ ] Hoja `27_Cancelar`
+- [ ] Hoja `38_CambiarHora`
+- [ ] Variantes `DetReserva · *`
+- [ ] Compuertas, teléfono y PR (lo aprueba `WhereverApp2026`)
 
-## nv-37 — Negocio: cupones y cupo
+## nv-29 — Cupones
 
-- [ ] Spec leída: `specs/nv-37/spec.md`, `plan.md`, `task.md`
-- [ ] Rama `feat/nv-37-business` desde `main` actualizado
-- [ ] Pantalla `53_NegCupones`
-- [ ] Pantalla `54_NegCrear`
-- [ ] Pantalla `55_NegHoras`
-- [ ] Compuertas una por una en verde
-- [ ] Probada en teléfono o emulador contra staging
-- [ ] PR a `main` integrado (CI en verde)
+- [ ] Spec leída: `specs/nv-29/spec.md`, `plan.md`, `task.md`
+- [ ] Pantalla `29_Cupones`
+- [ ] Pantalla `47_DetCupon` y `DetCupon · *`
+- [ ] Compuertas, teléfono y PR
 
-## nv-38 — Negocio: perfil, fotos y cobros
+## nv-17 — Inicio y feed (lo que falta)
 
-- [ ] Spec leída: `specs/nv-38/spec.md`, `plan.md`, `task.md`
-- [ ] Rama `feat/nv-38-business` desde `main` actualizado
-- [ ] Pantalla `58_NegPerfil`
-- [ ] Pantalla `87_NegGaleria`
-- [ ] Pantalla `88_NegAgregarFoto`
-- [ ] Pantalla `57_NegCobros`
-- [ ] Pantalla `89_NegBanco`
-- [ ] Pantalla `90_NegFiscal`
-- [ ] Compuertas una por una en verde
-- [ ] Probada en teléfono o emulador contra staging
-- [ ] PR a `main` integrado (CI en verde)
-
-## Notas
-
-- Empieza por nv-34 (registro): sin un negocio dado de alta no hay panel que probar.
-- nv-35 crea `BusinessHomeRoute` con la barra de negocio; nv-36, nv-37 y nv-38 agregan sus pestañas ahí.
-- Para probar con datos reales necesitas que un administrador apruebe tu negocio de prueba en staging (pídelo a Jorge).
-- QR del check-in, mapa y Custom Tabs dependen de librerías por acordar: Issue y seguir con lo demás.
+- [ ] Pantalla `13_Reacciones` y `Reacciones · solicitud enviada`
+- [ ] Pantalla `16_Historia` y `Historia · *`
+- [ ] Probar en teléfono `14_MeApunto` y `29_PlanAmigo` (hace falta un momento de staging con `plan_id`)
+- [ ] Terminar la hoja `15_Crear` (3 de sus 5 opciones aún no navegan)
+- [ ] Compuertas, teléfono y PR

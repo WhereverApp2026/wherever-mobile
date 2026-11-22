@@ -17,6 +17,10 @@
 | `PlaceRoute(id, origin)` | Ficha del lugar | ninguno | release | nv-47 |
 | `MomentRoute(id)` | Publicación de un amigo (17_PostDetalle) | ninguno | release | nv-17 |
 | `FriendPlanRoute(id)` | Plan de un amigo con Me apunto y Hacer mi versión (29_PlanAmigo) | ninguno | release | nv-17 |
+| `PendingReviewsRoute` | Por reseñar (77_ResPend) | ninguno | release | nv-32 |
+| `MyReviewsRoute` | Mis reseñas, eliminar con Deshacer (79_MisRes) | ninguno | release | nv-32 |
+| `ReviewFormRoute(checkinId, placeId, placeName, day, reviewId)` | Reseñar o editar: 68_PostVisita, 78_ResCom y 69_Publicado | ninguno (fotos con el selector del sistema) | release | nv-32 |
+| `PlaceReviewsRoute(placeId, placeName)` | Reseñas del lugar con filtros, Útil y Reportar (80_ResLugar) | ninguno | release | nv-32 |
 | `NewPasswordRoute(token)` | Nueva contraseña desde el enlace del correo | ninguno | release | nv-08 |
 | `VerifyEmailRoute(token)` | Verificar correo desde el enlace | ninguno | release | nv-08 |
 | `SearchRoute(query)` | Buscar: lugares, personas y planes; recientes, ideas y sin resultados | ninguno | release | nv-19 |
@@ -43,6 +47,7 @@
 | `PrivacyRoute` | Privacidad | ninguno | release | nv-15 |
 | `ChangePasswordRoute` | Cambiar contraseña | ninguno | release | nv-51 |
 | `ChangeEmailRoute` | Cambiar correo | ninguno | release | nv-51 |
+| `HelpRoute` | Ayuda: preguntas frecuentes, contacto y reportar un problema | ninguno | release | nv-33 |
 | `MyDataRoute` | Mis datos: descargar copia y borrar historial | ninguno | release | nv-51 |
 | `DeleteAccountRoute` | Eliminar cuenta | ninguno | release | nv-15 |
 | `DeletionPendingRoute` | Eliminación pendiente | ninguno | release | nv-15 |

@@ -4,11 +4,14 @@ Corto y obligatorio. Manda la constitución (`.specify/memory/constitution.md`);
 
 ## Equipo y reparto
 
-| Persona | Área | Specs |
-|---|---|---|
-| Jorge | Social, Planes, Reserva y lo compartido (theme, navegación, cliente de API) | nv-17 a nv-30 y la base |
-| Osmar | Modo negocio | nv-34 a nv-38 (`docs/equipo/osmar.md`) |
-| Diego | Recuerdos, Reseñas y Ayuda | nv-31 a nv-33 (`docs/equipo/diego.md`) |
+Reparto desde el 2026-11-22. Lo ya hecho (nv-06 a nv-16, nv-18, nv-19, nv-22, nv-28, nv-31 a nv-34) se queda con quien lo hizo para corregir lo que salga.
+
+| Persona | GitHub | Área | Specs | Lista de trabajo |
+|---|---|---|---|---|
+| Jorge | `JaRe0528` | Social y Explorar; lo compartido (theme, navegación, cliente de API, CI) | nv-20, nv-21, nv-25 | `docs/equipo/jorge.md` |
+| Diego | `DiegoLopEs1250` | Planes y cupones del negocio; cerrar sus PR abiertos | nv-23, nv-24, nv-26, nv-30, nv-37 | `docs/equipo/diego.md` |
+| Borre | `Borre4023` | Modo negocio | nv-35, nv-36, nv-38 | `docs/equipo/borre.md` |
+| Osmar | `OsmarYahir` | Reserva, pago y cupones; feed social de Inicio; endpoints del backend que faltan; **revisor único** | nv-17, nv-27, nv-29 | `docs/equipo/osmar.md` |
 
 ## Antes de empezar
 
@@ -34,14 +37,21 @@ Corto y obligatorio. Manda la constitución (`.specify/memory/constitution.md`);
    ./gradlew --no-daemon --max-workers=1 assembleDebug
    ```
    Si una falla, se arregla antes de seguir con la siguiente.
-4. **PR a `main`** con Jorge como revisor (`CODEOWNERS` lo pide solo) y `CHECKLIST_PR.md` completo. Se integra solo con el CI en verde.
-5. **Nadie hace push directo a `main`.** La rama está protegida.
+4. **PR a `main`** desde tu propia cuenta de GitHub, con `CHECKLIST_PR.md` completo. `CODEOWNERS` pide la revisión de Osmar sola.
+5. **Nadie hace push directo a `main`.** La rama está protegida (ver "Aprobación").
+
+## Aprobación
+
+- **Solo Osmar aprueba.** La regla de `main` (`.github/rulesets/main.json`) exige 1 aprobación de un code owner (`@OsmarYahir` o `@WhereverApp2026`), el CI `gates (constitución §8)` en verde, la rama al día con `main` y las conversaciones resueltas. No hay excepciones, tampoco para la cuenta dueña.
+- Si subes commits después de la aprobación, se anula y hay que volver a pedirla.
+- Los PR que abre `OsmarYahir` los aprueba la cuenta dueña `WhereverApp2026`, que solo usa Osmar. **Nadie más usa esa cuenta**: cada quien trabaja con la suya.
+- Sin aprobación no se puede fusionar. Con aprobación, el autor puede fusionar su PR.
 
 ## Lo que no se toca
 
 - **Theme y `core/designsystem`**, **navegación compartida** (`navigation/`, barra inferior, `NavMotion`) y **cliente de API** (`core/network`, `core/di`, `app/build.gradle.kts`).
 - Si necesitas algo de ahí, **abre un Issue** y sigue con otra tarea.
-- Excepción permitida, que Jorge revisa en el PR: registrar tus rutas (una línea en `WhereverNavHost` y tus objetos en `Routes.kt`) y agregar la fila o el botón de entrada que pide tu spec en la pantalla indicada.
+- Excepción permitida, que se revisa en el PR: registrar tus rutas (una línea en `WhereverNavHost` y tus objetos en `Routes.kt`) y agregar la fila o el botón de entrada que pide tu spec en la pantalla indicada.
 
 ## Reglas de calidad
 

@@ -42,6 +42,7 @@ import com.wherever.mobile.feature.friends.ui.MyCodeRoute as MyCodeScreen
 import com.wherever.mobile.feature.friends.ui.PersonRoute as PersonScreen
 import com.wherever.mobile.feature.groups.ui.GroupChatRoute as GroupChatScreen
 import com.wherever.mobile.feature.groups.ui.MyGroupsRoute as MyGroupsScreen
+import com.wherever.mobile.feature.help.ui.HelpRoute as HelpScreen
 import com.wherever.mobile.feature.home.ui.HomeNavigation
 import com.wherever.mobile.feature.home.ui.HomeRouteScreen
 import com.wherever.mobile.feature.notifications.ui.NotificationsRoute as NotificationsScreen
@@ -57,6 +58,12 @@ import com.wherever.mobile.feature.profile.ui.ProfileRoute as ProfileScreen
 import com.wherever.mobile.feature.reservations.ui.MyReservationsRoute as MyReservationsScreen
 import com.wherever.mobile.feature.reservations.ui.ReservationRoute as ReservationScreen
 import com.wherever.mobile.feature.reservations.ui.ReserveRoute as ReserveScreen
+import com.wherever.mobile.feature.reviews.domain.PendingReview
+import com.wherever.mobile.feature.reviews.ui.MyReviewsRoute as MyReviewsScreen
+import com.wherever.mobile.feature.reviews.ui.PendingReviewsRoute as PendingReviewsScreen
+import com.wherever.mobile.feature.reviews.ui.PlaceReviewsRoute as PlaceReviewsScreen
+import com.wherever.mobile.feature.reviews.ui.ReviewFormNavigation
+import com.wherever.mobile.feature.reviews.ui.ReviewFormRoute as ReviewFormScreen
 import com.wherever.mobile.feature.search.ui.SearchActions
 import com.wherever.mobile.feature.search.ui.SearchRoute as SearchScreen
 import com.wherever.mobile.feature.settings.ui.DeleteAccountRoute as DeleteAccountScreen
@@ -248,7 +255,41 @@ fun WhereverNavHost(
         composable<PlaceRoute> { e ->
             PlaceDetailScreen(
                 onBack = { navController.popFrom(e) },
-                onReserve = { id, name -> navController.navigateFrom(e, ReserveRoute(id, name)) }
+                onReserve = { id, name -> navController.navigateFrom(e, ReserveRoute(id, name)) },
+                onReviews = { id, name -> navController.navigateFrom(e, PlaceReviewsRoute(id, name)) }
+            )
+        }
+        composable<PlaceReviewsRoute> { e -> PlaceReviewsScreen(onBack = { navController.popFrom(e) }) }
+        composable<PendingReviewsRoute> { e ->
+            PendingReviewsScreen(
+                onBack = { navController.popFrom(e) },
+                onReview = { navController.navigateFrom(e, it.formRoute()) }
+            )
+        }
+        composable<MyReviewsRoute> { e ->
+            MyReviewsScreen(
+                onBack = { navController.popFrom(e) },
+                onEdit = { navController.navigateFrom(e, ReviewFormRoute(placeId = it.placeId, reviewId = it.id)) },
+                onReview = { navController.navigateFrom(e, it.formRoute()) }
+            )
+        }
+        composable<ReviewFormRoute> { e ->
+            ReviewFormScreen(
+                ReviewFormNavigation(
+                    onClose = { navController.popFrom(e) },
+                    onMyReviews = {
+                        navController.navigateOnResult(e, MyReviewsRoute) {
+                            popUpTo<ReviewFormRoute> { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
+                    onHome = { navController.openTab(e, MainTab.HOME) },
+                    onRepeat = { place ->
+                        navController.navigateOnResult(e, CreatePlanRoute(place)) {
+                            popUpTo<ReviewFormRoute> { inclusive = true }
+                        }
+                    }
+                )
             )
         }
         composable<ReserveRoute> { e ->
@@ -355,6 +396,8 @@ fun WhereverNavHost(
                 onFriends = { navController.navigateFrom(e, FriendsRoute) },
                 onReservations = { navController.navigateFrom(e, MyReservationsRoute) },
                 onBadges = { navController.navigateFrom(e, BadgesRoute) },
+                onMyReviews = { navController.navigateFrom(e, MyReviewsRoute) },
+                onPendingReviews = { navController.navigateFrom(e, PendingReviewsRoute) },
                 onSettings = { navController.navigateFrom(e, SettingsRoute) },
                 onVerifyEmail = { email ->
                     navController.navigateFrom(e, CheckEmailRoute(CheckEmailMode.VERIFICATION.name, email))
@@ -383,6 +426,7 @@ fun WhereverNavHost(
                     onChangePassword = { navController.navigateFrom(e, ChangePasswordRoute) },
                     onPrivacy = { navController.navigateFrom(e, PrivacyRoute) },
                     onRegisterBusiness = { navController.navigateFrom(e, BusinessOnboardingRoute) },
+                    onHelp = { navController.navigateFrom(e, HelpRoute) },
                     onLoggedOut = { navController.navigateOnResult(e, LoginRoute) { clearStack(navController) } }
                 )
             )
@@ -410,6 +454,7 @@ fun WhereverNavHost(
         }
         composable<ChangePasswordRoute> { e -> ChangePasswordScreen(onBack = { navController.popFrom(e) }) }
         composable<ChangeEmailRoute> { e -> ChangeEmailScreen(onBack = { navController.popFrom(e) }) }
+        composable<HelpRoute> { e -> HelpScreen(onBack = { navController.popFrom(e) }) }
         composable<MyDataRoute> { e -> MyDataScreen(onBack = { navController.popFrom(e) }) }
         composable<DeleteAccountRoute> { e ->
             DeleteAccountScreen(
@@ -473,3 +518,11 @@ private fun EmailLink.route(): Any = when (this) {
     is EmailLink.ResetPassword -> NewPasswordRoute
     is EmailLink.VerifyEmail -> VerifyEmailRoute
 }
+
+/** Reseñar una visita pendiente (77_ResPend y la pestaña Por reseñar de 79_MisRes). */
+private fun PendingReview.formRoute() = ReviewFormRoute(
+    checkinId = checkinId,
+    placeId = placeId,
+    placeName = placeName,
+    day = day
+)
