@@ -1,6 +1,5 @@
 package com.wherever.mobile.feature.reviews.ui
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -46,7 +45,10 @@ class PlaceReviewsContentTest {
     private fun show() {
         compose.setContent {
             WhereverTheme {
-                Column {
+                // La hoja de motivos tapa la pantalla, como la WhereverBottomSheet real: debajo de una pantalla que
+                // ocupa todo el alto quedaba fuera de la vista y la prueba fallaba en el emulador de la CI.
+                val form = state.report
+                if (form == null) {
                     PlaceReviewsContent(
                         state,
                         PlaceReviewsActions(
@@ -64,13 +66,12 @@ class PlaceReviewsContentTest {
                             onRetry = {}
                         )
                     )
-                    state.report?.let { form ->
-                        ReportReasons(
-                            form,
-                            onReason = { state = state.copy(report = form.copy(reason = it)) },
-                            onSend = { form.reason?.let(sent::add) }
-                        )
-                    }
+                } else {
+                    ReportReasons(
+                        form,
+                        onReason = { state = state.copy(report = form.copy(reason = it)) },
+                        onSend = { form.reason?.let(sent::add) }
+                    )
                 }
             }
         }
