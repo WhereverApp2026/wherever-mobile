@@ -283,6 +283,11 @@
 - A evitar: pruebas de Compose con Robolectric en un paquete que corre antes que `integration/`: dejan Conscrypt instalado en la JVM y `ConnectionIntegrationTest` (certificado no confiable) falla con `JarVerifier`/`SecurityException` en el JDK 21 de Oracle. Las pruebas de UI van en `androidTest`.
 - A recordar: el JDK 21 de Oracle (`C:\Program Files\Java\jdk-21`) corre todas las compuertas, capturas incluidas; no hay JDK 17 en el equipo de Diego. Semgrep no está instalado: lo corre la CI.
 - A recordar: el frame de Figma se abre sin sesión en el navegador con `?node-id=`; 86_Ayuda es `298:7902`. Así no se gastan llamadas del MCP de Figma (plan Starter).
+- Estado (2026-11-21, noche): nv-32 Reseñas (Diego) en `feat/nv-32-reviews`: 68_PostVisita → 78_ResCom → 69_Publicado (un solo ViewModel por pasos), 77_ResPend, 79_MisRes con eliminar + Deshacer de 5 s y 80_ResLugar con filtros, Útil y Reportar. Entradas: filas en Perfil y «Ver reseñas» en la ficha. Sin probar contra staging (fin de semana) ni en teléfono; falta una cuenta con check-ins. Decisiones D-32b a D-32h en `docs/revision-jorge.md`; pendientes del backend: catálogo de chips y distribución por estrellas.
+- A evitar: `x in mapa` sobre un `ConcurrentHashMap` en Kotlin llama a `contains(value)` y no compila (KT-18053); usar `containsKey`.
+- A evitar: en `ProfileContent` y demás Composables, los parámetros con valor por omisión van después de `modifier` (lint `ModifierParameter`); si no, se dejan obligatorios.
+- A recordar: los números de las vistas previas van como argumento con nombre o constante; detekt (`MagicNumber`) no excluye los `@Preview`.
+- A recordar: una espera que debe sobrevivir a la pantalla (Deshacer) corre en `@ApplicationScope`; en las pruebas se pasa un `TestScope` con el despachador de `MainDispatcherRule` para mover el reloj.
 
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).

@@ -1,3 +1,27 @@
+# Revisión para Jorge — 2026-11-21: nv-32 Reseñas (Diego)
+
+> Rama `feat/nv-32-reviews`, Issue #27. Frames de Figma: `68_PostVisita` (`298:7592`), `69_Publicado`, `77_ResPend` (`298:8229`), `78_ResCom` (`298:8342`), `79_MisRes` (`298:8446`), `MisRes · confirmar eliminar`, `MisRes · reseña eliminada` (`340:681`) y `80_ResLugar` (`298:8578`).
+
+## Decisiones tomadas sin preguntarte
+- **D-32b Aspectos obligatorios y sin chips:** `POST /resenas` pide los cinco `aspectos` (no llevan `?` en el contrato), aunque la maqueta dice «Calificar a detalle · Opcional». Publicar abre 78_ResCom si faltan y «Listo» publica. Los chips de «¿Qué fue lo mejor?» no se dibujan: la API pide chips «del catálogo» y no hay ruta que lo publique.
+- **D-32c Sin distribución por estrellas en 80_ResLugar:** `GET /lugares/{id}` trae promedio y total, pero no la distribución 5…1. Se muestra el promedio, las estrellas y el total.
+- **D-32d «Ya reseñadas»:** salen de `GET /checkins` (válidos con `resena_id`); nombre y foto del lugar, de `GET /lugares/{id}` (una vez por lugar, en memoria).
+- **D-32e Editar:** abre el formulario con la reseña que cargó Mis reseñas (no hay `GET /resenas/{id}`). Un 409 recarga `GET /resenas/mias` y pide guardar de nuevo con la versión nueva.
+- **D-32f Deshacer:** el `DELETE` espera 5 s en el alcance de la app (`@ApplicationScope`), así que se manda aunque se salga de la pantalla; un segundo borrado manda el anterior al instante. Si falla, la reseña vuelve a la lista.
+- **D-32g Sin barra inferior:** 77 y 79 se abren desde Perfil como Favoritos y Mis reservas, con Regresar; no llevan la barra inferior de la maqueta.
+- **D-32h «¿Repetimos?»:** abre Crear plan con el nombre del lugar como frase. La maqueta dice «con Mariana y Jorge», pero la reseña no guarda con quién fuiste.
+- **Push `resena_pendiente`:** no se tocó `core/notifications` ni `PushNavigation`; sigue abriendo Avisos hasta que el backend lo mande.
+- **Prueba de UI:** `PlaceReviewsContentTest` en `androidTest` (Útil y Reportar).
+
+## Pendiente del backend
+- Catálogo de chips de reseña (`GET`), para «¿Qué fue lo mejor?».
+- Distribución de calificaciones por estrellas del lugar, para las barras de 80_ResLugar.
+
+## Pendiente de ti
+- Cuenta de staging con check-ins válidos para probar el flujo completo en el teléfono.
+
+---
+
 # Revisión para Jorge — 2026-11-22: 10_Inicio del Boceto 2
 
 > Pedido: seguir el rediseño del Boceto 2 sin parar. Lo ambiguo se decide y se anota aquí.
