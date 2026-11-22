@@ -15,6 +15,9 @@
 | 8 | APK de release (nv-41) | Instalar y abrir el APK firmado | — | abierto |
 | 9 | 44_MisGrupos (nv-25) | Lista real, unirse y rechazar una invitación con la cuenta QA B | 2026-11-21 12:43: staging en 503 (sábado) | abierto |
 | 10 | 45_GrupoChat (nv-25) | Enviar mensaje, recibirlo en el otro teléfono (sondeo de 5 s) y Reintentar sin red | idem | abierto |
+| 11 | 86_Ayuda (nv-33) | Ajustes → Ayuda, buscar, abrir preguntas y mandar un reporte (`POST /errores`) | 2026-11-22 (domingo): staging apagado; pruebas de UI ya verdes en el Xiaomi | abierto (lunes 08:00) |
+| 12 | Reseñas (nv-32) | Cuenta con check-in: Por reseñar → 68_PostVisita → 78_ResCom → 69_Publicado; editar, eliminar con Deshacer; 80_ResLugar con Útil y Reportar | 2026-11-22 (domingo): staging apagado; pruebas de UI ya verdes en el Xiaomi | abierto (lunes 08:00) |
+| 13 | Recuerdos (nv-31) | Cámara real → 72_Postal → álbum; 75_PostalVer compartir/descargar/eliminar; 70_CrearPub publica un momento | 2026-11-22 (domingo): staging apagado; pruebas de UI ya verdes en el Xiaomi | abierto (lunes 08:00) |
 
 ## Hecho
 - 2026-11-21, nv-25: instalado sobre la build anterior (migración Room 4→5 sin cierre y con la sesión intacta); Planes → Mis grupos abre la pantalla, sin servidor muestra error con Reintentar y Volver regresa a Mis planes.
