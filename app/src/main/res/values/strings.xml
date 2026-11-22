@@ -92,6 +92,8 @@
     <string name="register_birth_date_placeholder">Elige la fecha</string>
     <string name="register_password_placeholder">Mínimo 8 caracteres</string>
     <string name="register_terms">Acepto los términos y el aviso de privacidad.</string>
+    <string name="register_terms_link">términos</string>
+    <string name="register_privacy_link">aviso de privacidad</string>
     <string name="register_submit">Crear cuenta</string>
     <string name="register_email_checking">Revisando el correo…</string>
     <string name="register_email_available">Correo disponible</string>

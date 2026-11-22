@@ -27,6 +27,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -54,7 +59,12 @@ private val PREVIEW_TODAY: LocalDate = LocalDate.parse("2026-11-12")
 
 /** 05_Registro */
 @Composable
-fun RegisterRoute(onBack: () -> Unit, onRegistered: () -> Unit, viewModel: RegisterViewModel = hiltViewModel()) {
+fun RegisterRoute(
+    onBack: () -> Unit,
+    onRegistered: () -> Unit,
+    onHelp: () -> Unit,
+    viewModel: RegisterViewModel = hiltViewModel()
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(viewModel) { viewModel.registered.collect { onRegistered() } }
     RegisterContent(
@@ -66,7 +76,8 @@ fun RegisterRoute(onBack: () -> Unit, onRegistered: () -> Unit, viewModel: Regis
         onPasswordChange = viewModel::onPasswordChange,
         onTermsChange = viewModel::onTermsChange,
         onSubmit = viewModel::submit,
-        onBack = onBack
+        onBack = onBack,
+        onHelp = onHelp
     )
 }
 
@@ -80,7 +91,8 @@ private fun RegisterContent(
     onPasswordChange: (String) -> Unit,
     onTermsChange: (Boolean) -> Unit,
     onSubmit: () -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onHelp: () -> Unit
 ) {
     var showDatePicker by remember { mutableStateOf(false) }
     val submit = rememberFormSubmit(onSubmit)
@@ -154,12 +166,7 @@ private fun RegisterContent(
             tag = "register_password"
         )
         LabeledCheckbox(state.acceptsTerms, onTermsChange, tag = "register_terms") {
-            Text(
-                text = stringResource(R.string.register_terms),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(start = Spacing.XS)
-            )
+            TermsText(onHelp, Modifier.padding(start = Spacing.XS))
         }
         state.error?.let { ErrorBanner(it.asString()) }
     }
@@ -218,6 +225,35 @@ internal fun BirthDatePicker(
 @Composable
 internal fun RegisterPreview() {
     WhereverTheme {
-        RegisterContent(RegisterUiState(today = PREVIEW_TODAY), {}, {}, {}, {}, {}, {}, {}, {})
+        RegisterContent(RegisterUiState(today = PREVIEW_TODAY), {}, {}, {}, {}, {}, {}, {}, {}, {})
     }
+}
+
+/** "Acepto los términos y el aviso de privacidad.": los dos enlaces abren 86_Ayuda (Figma 05_Registro). */
+@Composable
+private fun TermsText(onHelp: () -> Unit, modifier: Modifier = Modifier) {
+    val full = stringResource(R.string.register_terms)
+    val links = listOf(stringResource(R.string.register_terms_link), stringResource(R.string.register_privacy_link))
+    val linkStyle = TextLinkStyles(
+        SpanStyle(color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+    )
+    val text = buildAnnotatedString {
+        append(full)
+        links.forEachIndexed { index, link ->
+            val start = full.indexOf(link)
+            if (start >= 0) {
+                addLink(
+                    LinkAnnotation.Clickable("register_terms_link_$index", linkStyle) { onHelp() },
+                    start,
+                    start + link.length
+                )
+            }
+        }
+    }
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = modifier.testTag("register_terms_text")
+    )
 }

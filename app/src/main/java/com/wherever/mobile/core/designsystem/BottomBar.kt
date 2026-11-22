@@ -75,8 +75,8 @@ enum class CreateOption(
         RouteBlueTint,
         true
     ),
-    MOMENT(R.string.create_moment, R.string.create_moment_hint, R.drawable.ic_wh_camera, Mint, MintTint, false),
-    REVIEW(R.string.create_review, R.string.create_review_hint, R.drawable.ic_wh_shield_check, Ink, GoldTint, false)
+    MOMENT(R.string.create_moment, R.string.create_moment_hint, R.drawable.ic_wh_camera, Mint, MintTint, true),
+    REVIEW(R.string.create_review, R.string.create_review_hint, R.drawable.ic_wh_shield_check, Ink, GoldTint, true)
 }
 
 /**

@@ -153,7 +153,8 @@ fun WhereverNavHost(
         composable<RegisterRoute> { e ->
             RegisterScreen(
                 onBack = { navController.popFrom(e) },
-                onRegistered = { navController.navigateOnResult(e, TastesRoute()) { clearStack(navController) } }
+                onRegistered = { navController.navigateOnResult(e, TastesRoute()) { clearStack(navController) } },
+                onHelp = { navController.navigateFrom(e, HelpRoute) }
             )
         }
         composable<RecoverRoute> { e ->
@@ -483,7 +484,9 @@ private fun NavHostController.openCreate(from: NavBackStackEntry, option: Create
         CreateOption.AI_PLAN -> CreatePlanRoute()
         // Un grupo nace de un plan (POST /grupos con plan_id): Mis grupos explica cómo crearlo.
         CreateOption.WITH_FRIENDS -> MyGroupsRoute
-        CreateOption.MANUAL_PLAN, CreateOption.MOMENT, CreateOption.REVIEW -> return
+        CreateOption.MOMENT -> CreateMomentRoute()
+        CreateOption.REVIEW -> PendingReviewsRoute
+        CreateOption.MANUAL_PLAN -> return
     }
     navigateFrom(from, route)
 }
