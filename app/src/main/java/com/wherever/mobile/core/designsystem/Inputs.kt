@@ -1,6 +1,7 @@
 package com.wherever.mobile.core.designsystem
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -11,13 +12,13 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -31,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
@@ -68,37 +70,68 @@ fun LabeledTextField(
     var wasFocused by remember { mutableStateOf(false) }
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
         Text(text = label, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onBackground)
-        OutlinedTextField(
+        val interaction = remember { MutableInteractionSource() }
+        val colors = OutlinedTextFieldDefaults.colors(
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            errorContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outline
+        )
+        val isError = error != null
+        // BasicTextField + DecorationBox en vez de OutlinedTextField: este fija 56 dp de alto mínimo y Figma pide 52.
+        BasicTextField(
             value = value,
             onValueChange = onValueChange,
             readOnly = readOnly,
             singleLine = singleLine,
-            isError = error != null,
-            shape = WhereverShapes.Field,
-            placeholder = { Text(placeholder, color = MaterialTheme.colorScheme.onSurfaceVariant) },
-            leadingIcon = leadingIcon?.let {
-                { Icon(it, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant) }
-            },
-            trailingIcon = trailingContent,
-            prefix = prefix?.let { { Text(it) } },
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
             visualTransformation = visualTransformation,
-            textStyle = MaterialTheme.typography.bodyLarge,
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.surface,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                errorContainerColor = MaterialTheme.colorScheme.surface,
-                unfocusedBorderColor = MaterialTheme.colorScheme.outline
+            interactionSource = interaction,
+            textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface),
+            cursorBrush = SolidColor(
+                if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
             ),
             modifier = Modifier
                 .fillMaxWidth()
+                .heightIn(min = Sizes.FieldHeight)
                 .testTag(tag)
                 .then(accessibilityLabel?.let { Modifier.semantics { contentDescription = it } } ?: Modifier)
                 .onFocusChanged { focus ->
                     if (wasFocused && !focus.isFocused) onBlur()
                     wasFocused = focus.isFocused
-                }
+                },
+            decorationBox = { innerTextField ->
+                OutlinedTextFieldDefaults.DecorationBox(
+                    value = value,
+                    innerTextField = innerTextField,
+                    enabled = true,
+                    singleLine = singleLine,
+                    visualTransformation = visualTransformation,
+                    interactionSource = interaction,
+                    isError = isError,
+                    placeholder = { Text(placeholder, color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                    leadingIcon = leadingIcon?.let {
+                        { Icon(it, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant) }
+                    },
+                    trailingIcon = trailingContent,
+                    prefix = prefix?.let { { Text(it) } },
+                    colors = colors,
+                    contentPadding = OutlinedTextFieldDefaults.contentPadding(
+                        top = Sizes.FieldVerticalPadding,
+                        bottom = Sizes.FieldVerticalPadding
+                    ),
+                    container = {
+                        OutlinedTextFieldDefaults.Container(
+                            enabled = true,
+                            isError = isError,
+                            interactionSource = interaction,
+                            colors = colors,
+                            shape = WhereverShapes.Field
+                        )
+                    }
+                )
+            }
         )
         if (supporting != null && error == null) {
             Text(
