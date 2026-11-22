@@ -295,6 +295,11 @@
 - A recordar: Robolectric no soporta `ImageDecoder` (`DecodeException: Only supported on Android`); `BitmapFactory` sí. `ContentResolver` de Robolectric tampoco abre `file://`.
 - A recordar: `android.media.ExifInterface` no tiene `latLong` como propiedad: `getLatLong(FloatArray(2))` y GPS con `setAttribute` en formato racional.
 
+- Estado (2026-11-22, tarde): #42 (nv-33) y #43 (nv-32) integrados; #45 (nv-31) con base `main`, CI verde y **bloqueado por la regla de `main` (aprobación de Osmar)**. Staging encendido: las 22 pantallas de Diego y 44/45 de nv-25 probadas en el Xiaomi con cuentas QA → 87/162 = 53,7 %. Arreglos de esa prueba y del Boceto 2 (términos → Ayuda, Momento y Reseña en el "+") en `feat/boceto2-iconos-fotos`.
+- A evitar: integrar a `main` sin la aprobación de Osmar: la regla «main: solo con aprobación de Osmar» está activa (code owner, se descarta con cada push). No se salta con `--admin` ni desactivándola.
+- A recordar: en el Xiaomi `svc wifi disable` no apaga el Wi-Fi (MIUI); usar `cmd wifi set-wifi-enabled disabled|enabled`. Sin red la app pone la pantalla global 89_SinConexion encima de todo.
+- A recordar: la moderación de staging rechaza a veces textos repetidos («el texto no cumple las normas»), 422 con `campos[texto]`.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

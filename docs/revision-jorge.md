@@ -1,3 +1,14 @@
+# Revisión para Jorge — 2026-11-22 (tarde): PR de Diego, staging y arreglos
+
+## Decisiones tomadas sin preguntarte
+- **Conflictos de #42, #43 y #45:** se conservó lo de `main` y lo de Diego; en `docs/equipo/diego.md` manda el reparto nuevo de `main` (#49) con nv-31/32/33 marcadas como integradas.
+- **#45 no se integró:** la regla «main: solo con aprobación de Osmar» está activa. Pediste hacerlo sin su aprobación; no se forzó (ni `--admin` ni desactivar la regla). Falta que Osmar apruebe #45 y el PR de arreglos.
+- **Ayuda sin sesión:** desde los términos de Registro se llega sin sesión y `POST /errores` pide JWT; en vez del error crudo dice «Para reportar un problema, inicia sesión primero».
+- **"+" del Inicio:** «Compartir un momento» abre 70_CrearPub y «Escribir una reseña» abre 77_ResPend; solo «Crear un plan a mano» sigue en «Próximamente».
+- **Deshacer de reseñas** no se pudo tocar a tiempo con adb (aviso de 5 s); lo cubre la prueba unitaria.
+
+---
+
 # Revisión para Jorge — 2026-11-22: nv-31 Recuerdos y postales (Diego)
 
 > Rama `feat/nv-31-memories`, apilada sobre `feat/nv-32-reviews` (la pestaña Reseña de 70_CrearPub abre 77_ResPend). Issue #26. Frames: `70_CrearPub` (`298:7516`), `71_Camara` (`298:7061`), `72_Postal` (`298:6874`), `73_Album` (`298:6943`), `74_RecPlan` (`298:7119`), `75_PostalVer` (`298:7269`), `PostalVer · *` (p. ej. `349:375`) y `76_RecVacio` (`298:7358`).
