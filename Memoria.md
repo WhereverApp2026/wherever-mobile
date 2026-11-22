@@ -271,6 +271,13 @@
 - Decisión: el logo nuevo trae el nombre dentro; en Bienvenida sustituye a la fila "pin + Wherever" (el nombre queda como `contentDescription`). El ícono monocromo (Android 13+) y la pantalla de arranque siguen con el pin vectorial: el logo es una foto y no sirve como silueta.
 - A evitar: grabar capturas con `-Proborazzi.test.record=true`: la tarea solo lee `-Proborazzi.record=true`. Con la otra, verifica, y con el umbral de 1 % un cambio de tipografía pasa sin grabar.
 
+- Estado (2026-11-22): Boceto 2, pasos 3-5 en `feat/boceto2-rediseno`. Barra de 5 (`core/designsystem/BottomBar.kt`): Inicio, Explorar (brújula), "+" naranja, Planes y Perfil; el "+" abre la hoja 15_Crear (`CreateOption`). Navegan "Armar un plan con IA" (`CreatePlanRoute`) y "Planear con amigos" (`MyGroupsRoute`); las otras 3 dicen "Próximamente". "Continuar con Google" en Login y Registro (`GoogleSignInBlock`) avisa que llega pronto: la API no tiene Google. Campo de texto a 52 dp con `BasicTextField` + `DecorationBox`.
+- A evitar: `fillMaxHeight()` dentro de `NavigationBar`: solo tiene alto mínimo y la barra se estira a toda la pantalla (salió así en el teléfono). Centrar con `align(Alignment.CenterVertically)`; lo cuida `BottomBarCreateTest`.
+- A recordar: `OutlinedTextField` fija 56 dp de alto mínimo; para 52 hay que usar `BasicTextField` con `OutlinedTextFieldDefaults.DecorationBox` y relleno vertical de 14.
+- A evitar: correr la suite de UI en el Xiaomi en horizontal: 4 pruebas fallan porque la pantalla queda baja. Fijar vertical (`settings put system accelerometer_rotation 0` y `user_rotation 0`) y devolver `accelerometer_rotation 1` al terminar.
+- A evitar: instalar el APK de debug mientras otro Gradle reempaqueta (`assembleDebugAndroidTest` en paralelo): quedó sin `Hilt_WhereverApp` y la app se cerraba al abrir. Volver a generar con `assembleDebug` solo.
+- Pendiente para Jorge: Home de Figma (portada con foto, buscador con botón IA, carrusel con fotos) y los enlaces de términos y aviso en Registro siguen sin hacer.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).
