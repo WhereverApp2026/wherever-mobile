@@ -34,22 +34,18 @@
 - **Arreglos de esta vuelta:** botones de 29_PlanAmigo apilados ("Hacer mi versión" se cortaba); tinte de fondo mientras carga la foto del momento (se veía un hueco gris/blanco); plurales `many`; rutas `MomentRoute` y `FriendPlanRoute` en `docs/routes.md`.
 - **Falta:** 29_PlanAmigo y 14_MeApunto en el teléfono: hace falta un momento de staging con `plan_id` (B publica un momento desde un plan público). Sin API: historias, reacciones, comentarios.
 - **Siguiente:** nv-25 Grupos y chats (27_AmigoOpc y 25_MiCodigo ya en `main`).
-- **Protección de `main`:** sigue sin aplicar (JaRe0528 tiene WRITE). Comando en `docs/revision-jorge.md`.
+- **Protección de `main`:** regla en `.github/rulesets/main.json`; solo Osmar aprueba (ver `CONTRIBUTING.md`, "Aprobación").
 
-## Reparto del equipo (desde 2026-11-20)
+## Reparto del equipo (desde 2026-11-22)
 
-Reglas: `CONTRIBUTING.md`. Cada spec es una rama y un PR a `main` con Jorge como revisor.
+Reglas: `CONTRIBUTING.md`. Cada spec es una rama y un PR a `main`, aprobado por Osmar. Frames que faltan por construir al 2026-11-22, sin contar los PR abiertos.
 
-| Responsable | Área | Specs | Frames | Funcionan | Lista de trabajo |
-|---|---|---|---|---|---|
-| Jorge | Cuenta y acceso | nv-06 a nv-16 | 17 | 16 (+1 local) | `docs/pendientes.md` |
-| Jorge | Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 18 | `docs/pendientes.md` |
-| Jorge | Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 16 | `docs/pendientes.md` |
-| Jorge | Planes: IA, detalle, Vaca, Mis planes, día del plan | nv-23, nv-24, nv-26, nv-28, nv-30 | 22 | 9 | `docs/pendientes.md` |
-| Jorge | Reserva, pago y cupones | nv-27, nv-29 | 15 | 4 | `docs/pendientes.md` |
-| Jorge | Compartido: theme y `core/designsystem`, navegación, cliente de API, CI | — | — | — | Issues de Osmar y Diego |
-| Diego | Recuerdos, Reseñas y Ayuda | nv-31 a nv-33 | 22 | 0 | `docs/equipo/diego.md` |
-| Osmar | Modo negocio | nv-34 a nv-38 | 26 | 0 | `docs/equipo/osmar.md` |
+| Responsable | Área | Specs | Faltan | Lista de trabajo |
+|---|---|---|---|---|
+| Jorge | Social y Explorar; compartido (theme y `core/designsystem`, navegación, cliente de API, CI) | nv-20, nv-21, nv-25 | 14 (+4 por probar) | `docs/equipo/jorge.md` |
+| Diego | Planes y cupones del negocio; cerrar #42, #45 y #48 | nv-23, nv-24, nv-26, nv-30, nv-37 | 16 | `docs/equipo/diego.md` |
+| Borre | Modo negocio | nv-35, nv-36, nv-38 | 17 | `docs/equipo/borre.md` |
+| Osmar | Reserva, pago y cupones; feed social; backend que bloquea; revisor único | nv-17, nv-27, nv-29 | 19 | `docs/equipo/osmar.md` |
 
 ## Estado (2026-11-20)
 
