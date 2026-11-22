@@ -556,6 +556,21 @@
     <string name="notification_vote_opened">Hay una votación abierta en tu grupo</string>
     <string name="notification_vote_closed">Terminó una votación de tu grupo</string>
     <string name="notification_other">Tienes un aviso nuevo</string>
+    <plurals name="reviews_place_count">
+        <item quantity="one">%1$d reseña</item>
+        <item quantity="many">%1$d reseñas</item>
+        <item quantity="other">%1$d reseñas</item>
+    </plurals>
+    <plurals name="memories_postcards">
+        <item quantity="one">%1$d postal</item>
+        <item quantity="many">%1$d postales</item>
+        <item quantity="other">%1$d postales</item>
+    </plurals>
+    <plurals name="memories_plans">
+        <item quantity="one">%1$d plan</item>
+        <item quantity="many">%1$d planes</item>
+        <item quantity="other">%1$d planes</item>
+    </plurals>
     <plurals name="home_walk_minutes">
         <item quantity="one">%1$d min a pie</item>
         <item quantity="many">%1$d min a pie</item>
@@ -941,7 +956,6 @@
     <string name="reviews_undo">Deshacer</string>
     <string name="reviews_load_more">Ver más</string>
     <string name="reviews_place_subtitle">Reseñas verificadas</string>
-    <string name="reviews_place_count">%1$d reseñas</string>
     <string name="reviews_filter_recent">Recientes</string>
     <string name="reviews_filter_photos">Con fotos</string>
     <string name="reviews_filter_five">5 estrellas</string>
@@ -965,7 +979,8 @@
     <string name="profile_memories">Recuerdos</string>
     <string name="profile_new_moment">Nuevo momento</string>
     <string name="memories_title">Recuerdos</string>
-    <string name="memories_subtitle">%1$d postales de %2$d planes</string>
+    <string name="memories_subtitle">%1$s de %2$s</string>
+    <string name="memories_by_plan_empty">Todavía no hay recuerdos por plan. Cuando hagas check-in en un plan, sus fotos se juntan aquí.</string>
     <string name="memories_tab_all">Todas</string>
     <string name="memories_tab_plans">Por plan</string>
     <string name="memories_plan_meta">%1$s · %2$d paradas</string>
@@ -1042,6 +1057,7 @@
     <string name="help_report_privacy">No escribas datos personales como correos o teléfonos: los quitamos antes de guardar el reporte.</string>
     <string name="help_report_send">Enviar reporte</string>
     <string name="help_report_sent">Gracias, recibimos tu reporte.</string>
+    <string name="help_report_sign_in">Para reportar un problema, inicia sesión primero.</string>
     <string name="help_no_app">No encontramos una app para abrir esto.</string>
     <string name="help_expand">Mostrar respuesta</string>
     <string name="help_collapse">Ocultar respuesta</string>

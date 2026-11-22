@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.wherever.mobile.R
 import com.wherever.mobile.core.common.AppError
+import com.wherever.mobile.core.common.FieldError
 import com.wherever.mobile.core.common.PageResult
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.ui.UiText
@@ -91,6 +92,22 @@ class MemoriesViewModelsTest {
         assertEquals(1, viewModel.state.value.postcards.size)
     }
 
+    @Test
+    fun `al volver al album recarga lo nuevo sin esqueleto`() = runTest {
+        val viewModel = MemoriesViewModel(repository)
+        advanceUntilIdle()
+        viewModel.onResume()
+        advanceUntilIdle()
+        assertEquals(1, repository.calls.count { it == "postcards:null" })
+
+        // Probado en el Xiaomi: tras guardar una postal el álbum seguía vacío hasta salir y entrar.
+        repository.pages[null] = Result.Success(PageResult(listOf(samplePostcard("nueva")), null))
+        viewModel.onResume()
+        assertFalse(viewModel.state.value.loading)
+        advanceUntilIdle()
+        assertEquals(listOf("nueva"), viewModel.state.value.postcards.map { it.id })
+    }
+
     // --- PostcardEditorViewModel (72) ---
 
     private val photos = FakePhotoRepository(Result.Success(UploadedImage("i1", ImageState.PUBLISHED, "u", "t")))
@@ -156,6 +173,25 @@ class MemoriesViewModelsTest {
         assertTrue("deleteImage:i1" in repository.calls)
         assertEquals(UiText.Plain("Texto rechazado"), viewModel.state.value.error)
         assertFalse(viewModel.state.value.saving)
+    }
+
+    @Test
+    fun `texto rechazado por moderacion se muestra bajo el campo`() = runTest {
+        repository.createResult = Result.Failure(
+            AppError.Validation(
+                apiMessage = "datos inválidos",
+                fields = listOf(FieldError("texto", "el texto no cumple las normas de la comunidad"))
+            )
+        )
+        val viewModel = editor()
+        viewModel.onText("Polaroid QA")
+        viewModel.save()
+        advanceUntilIdle()
+        assertEquals(UiText.Plain("El texto no cumple las normas de la comunidad"), viewModel.state.value.textError)
+        assertNull(viewModel.state.value.error)
+
+        viewModel.onText("Otro texto")
+        assertNull(viewModel.state.value.textError)
     }
 
     @Test

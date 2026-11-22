@@ -29,12 +29,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.wherever.mobile.R
@@ -42,6 +44,7 @@ import com.wherever.mobile.core.designsystem.BackCircleButton
 import com.wherever.mobile.core.designsystem.CircleIconButton
 import com.wherever.mobile.core.designsystem.ErrorState
 import com.wherever.mobile.core.designsystem.FormScreen
+import com.wherever.mobile.core.designsystem.InfoBanner
 import com.wherever.mobile.core.designsystem.ListSkeleton
 import com.wherever.mobile.core.designsystem.Radius
 import com.wherever.mobile.core.designsystem.ScreenPadding
@@ -77,6 +80,11 @@ fun AlbumRoute(navigation: AlbumNavigation, viewModel: MemoriesViewModel = hiltV
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     val message = state.message?.asString()
+    // Al volver de la postal (guardada o eliminada) el álbum se recarga sin esqueleto.
+    LifecycleResumeEffect(viewModel) {
+        viewModel.onResume()
+        onPauseOrDispose { }
+    }
     LaunchedEffect(message) {
         if (message != null) {
             snackbar.showSnackbar(message)
@@ -110,7 +118,7 @@ internal fun AlbumContent(
                 )
                 if (!state.loading && error == null) {
                     Text(
-                        stringResource(R.string.memories_subtitle, state.postcards.size, state.memories.size),
+                        albumSubtitle(state.postcards.size, state.memories.size),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -134,6 +142,11 @@ internal fun AlbumContent(
             error != null -> ErrorState(error.asString(), onRetry)
             state.empty -> EmptyMemories(navigation)
             state.tab == AlbumTab.ALL -> PostcardGrid(state.postcards, navigation.onPostcard)
+            // Con postales pero sin recuerdos de plan, «Por plan» quedaba en blanco.
+            state.memories.isEmpty() -> InfoBanner(
+                stringResource(R.string.memories_by_plan_empty),
+                tag = "album_by_plan_empty"
+            )
             else -> state.memories.forEach { MemoryCard(it) }
         }
         val cursor = if (state.tab == AlbumTab.ALL) state.postcardsCursor else state.memoriesCursor
@@ -146,6 +159,14 @@ internal fun AlbumContent(
         }
     }
 }
+
+/** "1 postal de 0 planes", con plural en cada número. */
+@Composable
+private fun albumSubtitle(postcards: Int, plans: Int): String = stringResource(
+    R.string.memories_subtitle,
+    pluralStringResource(R.plurals.memories_postcards, postcards, postcards),
+    pluralStringResource(R.plurals.memories_plans, plans, plans)
+)
 
 /** 73_Album: cuadrícula de dos columnas. */
 @Composable

@@ -120,6 +120,7 @@ internal fun PostcardEditorContent(state: PostcardEditorUiState, actions: Postca
             onValueChange = actions.onText,
             placeholder = stringResource(R.string.memories_text_placeholder),
             supporting = stringResource(R.string.common_char_count, state.text.length, POSTCARD_TEXT_MAX),
+            error = state.textError?.asString(),
             tag = "postcard_text"
         )
         state.error?.let { ErrorBanner(it.asString()) }

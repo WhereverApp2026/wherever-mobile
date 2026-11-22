@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LocationOn
@@ -174,12 +175,19 @@ private fun Stamp(color: Color, modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = modifier
-            .size(Sizes.BadgeL)
+            .sizeIn(minWidth = Sizes.BadgeL, minHeight = Sizes.BadgeL)
             .border(Strokes.Thin, color, RoundedCornerShape(Radius.S))
             .padding(Spacing.XS)
     ) {
         Icon(Icons.Outlined.LocationOn, contentDescription = null, tint = color, modifier = Modifier.size(Sizes.IconM))
-        Text(stringResource(R.string.memories_stamp), style = MaterialTheme.typography.labelSmall, color = color)
+        // Sin cortar: en el teléfono «Wherever» se partía en «Whereve / r» dentro del sello de 64 dp.
+        Text(
+            stringResource(R.string.memories_stamp),
+            style = MaterialTheme.typography.labelSmall,
+            color = color,
+            maxLines = 1,
+            softWrap = false
+        )
     }
 }
 

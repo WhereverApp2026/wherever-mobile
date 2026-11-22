@@ -2,6 +2,7 @@ package com.wherever.mobile.feature.help.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wherever.mobile.R
 import com.wherever.mobile.core.common.AppError
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.ui.UiText
@@ -101,7 +102,12 @@ class HelpViewModel @Inject constructor(private val repository: HelpRepository) 
                 report = it.report?.copy(
                     sending = false,
                     fieldError = fieldError,
-                    error = if (fieldError == null) error.toUiText() else null
+                    error = when {
+                        fieldError != null -> null
+                        // Ayuda también se abre sin sesión (términos de 05_Registro) y `POST /errores` pide JWT.
+                        error is AppError.Unauthorized -> UiText.Res(R.string.help_report_sign_in)
+                        else -> error.toUiText()
+                    }
                 )
             )
         }

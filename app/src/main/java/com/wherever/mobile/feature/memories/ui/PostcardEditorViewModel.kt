@@ -7,6 +7,7 @@ import com.wherever.mobile.R
 import com.wherever.mobile.core.common.AppError
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.ui.UiText
+import com.wherever.mobile.core.ui.fieldErrors
 import com.wherever.mobile.core.ui.toUiText
 import com.wherever.mobile.feature.memories.domain.MemoriesRepository
 import com.wherever.mobile.feature.memories.domain.NewPostcard
@@ -37,6 +38,8 @@ sealed interface PostcardSaved {
     data class Share(val fileUri: String) : PostcardSaved
 }
 
+private const val FIELD_TEXT = "texto"
+
 data class PostcardEditorUiState(
     val source: String = "",
     val placeName: String = "",
@@ -44,7 +47,9 @@ data class PostcardEditorUiState(
     val style: PostcardStyle = PostcardStyle.CLASSIC,
     val text: String = "",
     val saving: Boolean = false,
-    val error: UiText? = null
+    val error: UiText? = null,
+    /** Motivo de la API para el texto (p. ej. moderación), bajo el campo. */
+    val textError: UiText? = null
 ) {
     val canSave: Boolean get() = source.isNotBlank() && text.length <= POSTCARD_TEXT_MAX && !saving
 }
@@ -86,7 +91,9 @@ class PostcardEditorViewModel @Inject constructor(
 
     fun onStyle(style: PostcardStyle) = mutableState.update { it.copy(style = style, error = null) }
 
-    fun onText(value: String) = mutableState.update { it.copy(text = value.take(POSTCARD_TEXT_MAX), error = null) }
+    fun onText(value: String) = mutableState.update {
+        it.copy(text = value.take(POSTCARD_TEXT_MAX), error = null, textError = null)
+    }
 
     fun save() = submit(share = false)
 
@@ -95,7 +102,7 @@ class PostcardEditorViewModel @Inject constructor(
     private fun submit(share: Boolean) {
         val current = state.value
         if (!current.canSave) return
-        mutableState.update { it.copy(saving = true, error = null) }
+        mutableState.update { it.copy(saving = true, error = null, textError = null) }
         viewModelScope.launch {
             when (val result = createOnce(current)) {
                 is Result.Success -> {
@@ -103,12 +110,15 @@ class PostcardEditorViewModel @Inject constructor(
                     savedChannel.send(if (share) PostcardSaved.Share(result.data) else PostcardSaved.ToAlbum)
                 }
                 is Result.Failure -> mutableState.update {
-                    val message = if (result.error === PHOTO_REJECTED) {
-                        UiText.Res(R.string.memories_photo_rejected)
-                    } else {
-                        result.error.toUiText()
+                    // Probado en el Xiaomi: la moderación rechaza el texto con un 422 en `texto` y solo se veía
+                    // «Datos inválidos» escondido bajo los botones. El motivo va bajo el campo.
+                    val textError = result.error.fieldErrors()[FIELD_TEXT]
+                    val message = when {
+                        textError != null -> null
+                        result.error === PHOTO_REJECTED -> UiText.Res(R.string.memories_photo_rejected)
+                        else -> result.error.toUiText()
                     }
-                    it.copy(saving = false, error = message)
+                    it.copy(saving = false, error = message, textError = textError)
                 }
             }
         }

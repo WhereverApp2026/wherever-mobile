@@ -40,12 +40,23 @@ class MemoriesViewModel @Inject constructor(private val repository: MemoriesRepo
     private val mutableState = MutableStateFlow(MemoriesUiState())
     val state: StateFlow<MemoriesUiState> = mutableState.asStateFlow()
 
+    private var resumedOnce = false
+
     init {
         load()
     }
 
-    fun load() {
-        mutableState.update { it.copy(loading = true, error = null) }
+    /** El primer resume coincide con el `init`; los siguientes (al volver) recargan sin esqueleto. */
+    fun onResume() {
+        if (!resumedOnce) {
+            resumedOnce = true
+            return
+        }
+        load(silent = true)
+    }
+
+    fun load(silent: Boolean = false) {
+        if (!silent) mutableState.update { it.copy(loading = true, error = null) }
         viewModelScope.launch {
             val memories = async { repository.memories() }
             when (val postcards = repository.postcards()) {
@@ -64,7 +75,8 @@ class MemoriesViewModel @Inject constructor(private val repository: MemoriesRepo
                 }
                 is Result.Failure -> {
                     memories.cancel()
-                    mutableState.update { it.copy(loading = false, error = postcards.error.toUiText()) }
+                    // Una recarga silenciosa que falla no tapa lo que ya se ve.
+                    if (!silent) mutableState.update { it.copy(loading = false, error = postcards.error.toUiText()) }
                 }
             }
         }
