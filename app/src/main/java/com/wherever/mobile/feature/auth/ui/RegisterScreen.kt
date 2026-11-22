@@ -98,6 +98,7 @@ private fun RegisterContent(
                 loading = state.submitting,
                 tag = "register_submit"
             )
+            GoogleSignInBlock(tag = "register_google")
         }
     ) {
         StepHeader(stringResource(R.string.register_step), step = 1, total = ONBOARDING_STEPS, onBack = onBack)

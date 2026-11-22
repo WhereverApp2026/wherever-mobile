@@ -1,6 +1,7 @@
 package com.wherever.mobile.core.designsystem
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.wherever.mobile.R
@@ -93,6 +95,25 @@ fun WhereverOutlinedButton(
         modifier = modifier.height(ButtonHeight).testTag(tag)
     ) {
         ButtonContent(text, icon)
+    }
+}
+
+/** Botón secundario "Continuar con Google" (03_Login y 05_Registro): blanco, borde suave y la "G" a color. */
+@Composable
+fun WhereverGoogleButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier, tag: String = "") {
+    OutlinedButton(
+        onClick = onClick,
+        shape = CircleShape,
+        border = BorderStroke(Strokes.Hairline, MaterialTheme.colorScheme.outline),
+        colors = ButtonDefaults.outlinedButtonColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        ),
+        modifier = modifier.fillMaxWidth().height(ButtonHeight).testTag(tag)
+    ) {
+        Image(painterResource(R.drawable.ic_google), contentDescription = null, modifier = Modifier.size(Sizes.IconM))
+        Spacer(Modifier.width(Spacing.M))
+        Text(text = text, style = ButtonText)
     }
 }
 

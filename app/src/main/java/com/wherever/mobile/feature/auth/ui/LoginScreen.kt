@@ -86,6 +86,7 @@ private fun LoginContent(
                 loading = state.submitting,
                 tag = "login_submit"
             )
+            GoogleSignInBlock(tag = "login_google")
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = stringResource(R.string.login_no_account),
