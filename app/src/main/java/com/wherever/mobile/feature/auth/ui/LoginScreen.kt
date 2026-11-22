@@ -1,6 +1,7 @@
 package com.wherever.mobile.feature.auth.ui
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,6 +30,7 @@ import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.LabeledTextField
 import com.wherever.mobile.core.designsystem.LogoMark
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.TitleBlock
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
@@ -87,7 +89,10 @@ private fun LoginContent(
                 tag = "login_submit"
             )
             GoogleSignInBlock(tag = "login_google")
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(Spacing.XS)
+            ) {
                 Text(
                     text = stringResource(R.string.login_no_account),
                     style = MaterialTheme.typography.bodyMedium,
