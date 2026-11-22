@@ -9,7 +9,6 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.wherever.mobile.R
@@ -73,7 +72,10 @@ class HelpContentTest {
     @Test
     fun sinResultadosMuestraElAvisoYLosContactos() {
         show()
-        compose.onNodeWithTag("help_search").performTextInput("mascotas")
+        // Se cambia el estado sin escribir en el campo: el teclado del emulador tapaba la tarjeta de contacto
+        // y la prueba fallaba a ratos en la CI. El filtro mientras se escribe lo cubre HelpViewModelTest.
+        state = state.copy(query = "mascotas", faqs = FAQS.matching("mascotas"))
+        compose.waitForIdle()
 
         compose.onNodeWithTag("help_no_results").assertIsDisplayed()
         compose.onNodeWithText(context.getString(R.string.help_no_results)).assertIsDisplayed()
