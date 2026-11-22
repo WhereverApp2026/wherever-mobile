@@ -9,5 +9,6 @@
 | `POST_NOTIFICATIONS` | en `08_Permisos` (paso 3 del alta) con "Permitir y continuar"; si no se decidió ahí, al llegar a Inicio (Android 13+) | la app funciona; no hay push | nv-11, nv-46 |
 | `ACCESS_COARSE_LOCATION` | en `08_Permisos` (paso 3 del alta) y en Inicio, tras la tarjeta que explica para qué (US-004); solo aproximada y mientras se usa la app | recomendaciones generales; tras 2 rechazos solo un aviso que abre Ajustes (US-009) | nv-47 |
 | `CAMERA` | solo al tocar Escanear en 25_MiCodigo: lo declara y lo pide en contexto el lector de ZXing (`zxing-android-embedded`). También al tocar el disparador de 71_Camara (nv-31): como el manifiesto ya lo declara, `TakePicture` lo necesita concedido. La foto de perfil usa la cámara del sistema (`TakePicture`) y el Photo Picker | Escanear queda deshabilitado; el código se escribe a mano en Agregar amigos. En 71_Camara se elige la foto de la galería | nv-20, nv-50, nv-31 |
+| `READ_CONTACTS` | solo al tocar «Buscar en mis contactos» en 07_EncuentraAmigos (Agregar amigo → Mis contactos). Se leen solo los números, se mandan por HTTPS a `POST /personas/contactos` (el servidor los busca por HMAC y no los guarda) y la app no los guarda ni los registra | aviso propio; se agrega por usuario, código o QR | nv-20 |
 
 Medir antes de agregar un permiso nuevo; cada uno exige fila aquí (principio empírico §2.5).

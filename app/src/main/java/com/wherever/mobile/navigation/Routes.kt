@@ -127,6 +127,10 @@ data class GroupChatRoute(val id: String)
 @Serializable
 data object AddFriendRoute
 
+/** 07_EncuentraAmigos: amigos entre mis contactos (`POST /personas/contactos`, specs/nv-20). */
+@Serializable
+data object FindFriendsRoute
+
 /** 25_MiCodigo; `scan` lo lee MyCodeViewModel para abrir en la pestaña Escanear (specs/nv-20). */
 @Serializable
 data class MyCodeRoute(val scan: Boolean = false)

@@ -43,6 +43,7 @@ fun AddFriendRoute(
     onBack: () -> Unit,
     onPerson: (String) -> Unit,
     onMyCode: (scan: Boolean) -> Unit,
+    onContacts: () -> Unit,
     viewModel: AddFriendViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -50,7 +51,7 @@ fun AddFriendRoute(
         TopTitleRow(stringResource(R.string.friends_add_title), onBack)
         state.message?.let { InfoBanner(it.asString(), icon = Icons.Outlined.Check, tag = "add_friend_message") }
         state.error?.let { ErrorBanner(it.asString()) }
-        MyIdentity(state, viewModel, onMyCode)
+        MyIdentity(state, viewModel, onMyCode, onContacts)
         LabeledTextField(
             label = stringResource(R.string.friends_search_label),
             value = state.query,
@@ -103,7 +104,12 @@ fun AddFriendRoute(
 }
 
 @Composable
-private fun MyIdentity(state: AddFriendUiState, viewModel: AddFriendViewModel, onMyCode: (scan: Boolean) -> Unit) {
+private fun MyIdentity(
+    state: AddFriendUiState,
+    viewModel: AddFriendViewModel,
+    onMyCode: (scan: Boolean) -> Unit,
+    onContacts: () -> Unit
+) {
     SurfaceCard {
         NavRow(
             stringResource(R.string.friends_my_username),
@@ -119,6 +125,7 @@ private fun MyIdentity(state: AddFriendUiState, viewModel: AddFriendViewModel, o
             tag = "add_friend_my_code"
         )
         NavRow(stringResource(R.string.my_code_scan_row), { onMyCode(true) }, tag = "add_friend_scan")
+        NavRow(stringResource(R.string.find_friends_row), onContacts, tag = "add_friend_contacts")
     }
     if (state.myCode != null) {
         InfoBanner(stringResource(R.string.friends_my_code_hint), icon = Icons.Outlined.Share)
