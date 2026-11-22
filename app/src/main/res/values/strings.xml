@@ -844,4 +844,45 @@
     <string name="feed_joined">Listo, ya estás en el plan.</string>
     <string name="feed_plan_full">El plan ya está lleno.</string>
     <string name="feed_plan_private">Este plan es privado.</string>
+
+    <!-- 86_Ayuda (specs/nv-33) -->
+    <string name="settings_help">Ayuda</string>
+    <string name="help_title">Ayuda</string>
+    <string name="help_search_label">Buscar en la ayuda</string>
+    <string name="help_search_placeholder">¿Con qué te ayudamos?</string>
+    <string name="help_search_clear">Borrar búsqueda</string>
+    <string name="help_faq_section">Preguntas frecuentes</string>
+    <string name="help_no_results">No encontramos esa pregunta. Escríbenos o repórtalo y te ayudamos.</string>
+    <string name="help_contact_section">¿Sigues con dudas?</string>
+    <string name="help_whatsapp_title">Escríbenos por WhatsApp</string>
+    <string name="help_whatsapp_subtitle">Respondemos en menos de 1 hora</string>
+    <string name="help_email_title">Mándanos un correo</string>
+    <string name="help_report_title">Reportar un problema</string>
+    <string name="help_report_subtitle">Con un lugar o una reseña</string>
+    <string name="help_report_label">¿Qué pasó?</string>
+    <string name="help_report_placeholder">Cuéntanos qué pasó y en qué pantalla</string>
+    <string name="help_report_privacy">No escribas datos personales como correos o teléfonos: los quitamos antes de guardar el reporte.</string>
+    <string name="help_report_send">Enviar reporte</string>
+    <string name="help_report_sent">Gracias, recibimos tu reporte.</string>
+    <string name="help_no_app">No encontramos una app para abrir esto.</string>
+    <string name="help_expand">Mostrar respuesta</string>
+    <string name="help_collapse">Ocultar respuesta</string>
+    <string name="help_faq_plan_ai_q">¿Cómo armo un plan con la IA?</string>
+    <string name="help_faq_plan_ai_a">Toca + y escribe una frase, como «tacos con amigos el sábado». La IA arma de 2 a 4 paradas; puedes cambiarlas, quitarlas o pedir otra idea.</string>
+    <string name="help_faq_cancel_q">¿Cómo cancelo una reservación?</string>
+    <string name="help_faq_cancel_a">Entra a Perfil, abre Mis reservas, elige la reserva y toca Cancelar. Antes de confirmar te mostramos cuánto del anticipo te regresamos.</string>
+    <string name="help_faq_deposit_q">¿Por qué pago un anticipo?</string>
+    <string name="help_faq_deposit_a">Algunos lugares piden un anticipo para apartar tu lugar. Se paga en la pasarela segura al reservar; Wherever no guarda los datos de tu tarjeta. Si cancelas, el reembolso sigue la política del lugar.</string>
+    <string name="help_faq_seal_q">¿Qué es el Sello de Excelencia?</string>
+    <string name="help_faq_seal_a">Es la insignia que Wherever da a los lugares que revisa y destacan por su calidad y su atención. La ves en la ficha del lugar.</string>
+    <string name="help_faq_kitty_q">¿Wherever mueve mi dinero en la Vaca virtual?</string>
+    <string name="help_faq_kitty_a">No. La Vaca solo calcula cuánto puso cada quien y quién le debe a quién. Los pagos los hacen entre ustedes y los marcan como pagados.</string>
+    <string name="help_faq_friends_q">¿Cómo agrego amigos?</string>
+    <string name="help_faq_friends_a">En Amigos, toca Agregar amigo y búscalos por su nombre de usuario o escanea su código. Cuando acepten tu solicitud, verán sus planes.</string>
+    <string name="help_faq_location_q">¿Quién ve mi ubicación?</string>
+    <string name="help_faq_location_a">Tu ubicación solo se usa para recomendarte lugares cercanos y armar planes. Puedes apagarla en Ajustes, en «Usar mi ubicación para armar planes».</string>
+    <string name="help_faq_coupon_q">¿Cómo uso un cupón?</string>
+    <string name="help_faq_coupon_a">Guárdalo en tus cupones y, ya en el lugar, toca Canjear: te damos un código y un QR que duran 5 minutos para que el negocio lo valide.</string>
+    <string name="help_faq_delete_q">¿Cómo elimino mi cuenta?</string>
+    <string name="help_faq_delete_a">En Perfil, entra a Editar perfil y toca Eliminar cuenta. Tienes 30 días para arrepentirte antes de que se borre.</string>
 </resources>

@@ -266,6 +266,11 @@
 - A evitar: correr `ScreenshotTest` con el JDK 17 descargado: falla con `Could not initialize class sun.awt.Win32FontManager`. detekt con JDK 17 y pruebas/capturas con el JBR de Android Studio.
 - A recordar: revisar las capturas grabadas en claro y oscuro; así salieron los chips sin contraste en oscuro (`StatusPill` con tintes fijos necesita `contentColor = Ink`).
 
+- Estado (2026-11-21, noche): nv-33 86_Ayuda (Diego) en `feat/nv-33-help`: buscador sin acentos, 9 preguntas en acordeón, contacto y «Reportar un problema» con `POST /errores`; fila Ayuda en Ajustes. Compuertas locales en verde (ktlint, detekt, lint, 527 unitarias + capturas, kover 81,24 %, assembleDebug) y scripts. Sin probar contra staging (503 en fin de semana) ni en teléfono. Correo y WhatsApp ocultos hasta que existan `SUPPORT_EMAIL`/`SUPPORT_WHATSAPP` en `BuildConfig` (Jorge). Decisiones D-33b a D-33e en `docs/revision-jorge.md`.
+- A evitar: pruebas de Compose con Robolectric en un paquete que corre antes que `integration/`: dejan Conscrypt instalado en la JVM y `ConnectionIntegrationTest` (certificado no confiable) falla con `JarVerifier`/`SecurityException` en el JDK 21 de Oracle. Las pruebas de UI van en `androidTest`.
+- A recordar: el JDK 21 de Oracle (`C:\Program Files\Java\jdk-21`) corre todas las compuertas, capturas incluidas; no hay JDK 17 en el equipo de Diego. Semgrep no está instalado: lo corre la CI.
+- A recordar: el frame de Figma se abre sin sesión en el navegador con `?node-id=`; 86_Ayuda es `298:7902`. Así no se gastan llamadas del MCP de Figma (plan Starter).
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).
