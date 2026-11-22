@@ -1,5 +1,6 @@
 package com.wherever.mobile.core.designsystem
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,11 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,11 +27,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.Spacing
 
 val ScreenPadding: Dp = Spacing.XL
@@ -168,18 +166,12 @@ fun StepHeader(stepLabel: String, step: Int, total: Int, onBack: (() -> Unit)?, 
     }
 }
 
-/** Logo cuadrado azul con el pin. */
+/** Logo de Wherever (docs/logo/logo-nuevo.jpg): cuadro blanco redondeado con el pin, la ruta y el nombre. */
 @Composable
-fun LogoMark(
-    modifier: Modifier = Modifier,
-    size: Dp = Sizes.AvatarM,
-    background: Color = RouteBlue,
-    tint: Color = Color.White
-) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier.size(size).clip(RoundedCornerShape(size / 4)).background(background)
-    ) {
-        Icon(Icons.Outlined.LocationOn, contentDescription = null, tint = tint, modifier = Modifier.size(size * 0.6f))
-    }
+fun LogoMark(modifier: Modifier = Modifier, size: Dp = Sizes.AvatarL, contentDescription: String? = null) {
+    Image(
+        painter = painterResource(R.drawable.logo_wherever),
+        contentDescription = contentDescription,
+        modifier = modifier.size(size)
+    )
 }
