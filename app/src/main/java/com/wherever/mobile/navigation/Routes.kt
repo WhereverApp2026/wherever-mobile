@@ -124,6 +124,14 @@ data object MyGroupsRoute
 @Serializable
 data class GroupChatRoute(val id: String)
 
+/** 28_Vaca del grupo; VacaViewModel lee `id` (specs/nv-26). */
+@Serializable
+data class VacaRoute(val id: String)
+
+/** 45_AgregarGasto; AddExpenseViewModel lee `id` y `mode` (`igual` o `personalizada`) (specs/nv-26). */
+@Serializable
+data class AddExpenseRoute(val id: String, val mode: String = "igual")
+
 @Serializable
 data object AddFriendRoute
 

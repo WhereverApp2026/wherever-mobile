@@ -307,6 +307,9 @@
 - Límite: en un repo de cuenta personal no se puede restringir quién presiona "Merge"; la regla lo cubre exigiendo la aprobación.
 - A evitar: activar la regla antes de integrar este `CODEOWNERS`, porque el code owner sería Jorge.
 
+- Estado (2026-11-22): nv-26 Vaca virtual (Diego) en `feat/nv-26-vaca`: 28_Vaca, variantes y 45_AgregarGasto en `feature/vaca` contra `/grupos/{id}/vaca`, gastos y deudas. Decisiones D-26a a D-26e en la spec.
+- A recordar: `deudor`, `acreedor` y `pagado_por` se leen como id o como objeto (`JsonElement`) porque la doc no dice la forma.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

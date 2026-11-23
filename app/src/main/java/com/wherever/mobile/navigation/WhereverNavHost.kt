@@ -80,6 +80,8 @@ import com.wherever.mobile.feature.settings.ui.SessionsRoute as SessionsScreen
 import com.wherever.mobile.feature.settings.ui.SettingsNavigation
 import com.wherever.mobile.feature.settings.ui.SettingsRoute as SettingsScreen
 import com.wherever.mobile.feature.tastes.ui.TastesRoute as TastesScreen
+import com.wherever.mobile.feature.vaca.ui.AddExpenseRoute as AddExpenseScreen
+import com.wherever.mobile.feature.vaca.ui.VacaRoute as VacaScreen
 import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
@@ -355,8 +357,18 @@ fun WhereverNavHost(
             GroupChatScreen(
                 onBack = { navController.popFrom(e) },
                 onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
-                onGone = { navController.popOnResult(e) }
+                onGone = { navController.popOnResult(e) },
+                onVaca = { navController.navigateFrom(e, VacaRoute(it)) }
             )
+        }
+        composable<VacaRoute> { e ->
+            VacaScreen(
+                onBack = { navController.popFrom(e) },
+                onAddExpense = { id, mode -> navController.navigateFrom(e, AddExpenseRoute(id, mode)) }
+            )
+        }
+        composable<AddExpenseRoute> { e ->
+            AddExpenseScreen(onBack = { navController.popFrom(e) }, onSaved = { navController.popOnResult(e) })
         }
         composable<FavoritesRoute> { e ->
             FavoritesScreen(

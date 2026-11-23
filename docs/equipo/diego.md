@@ -25,10 +25,10 @@ Orden recomendado: de arriba hacia abajo. Cada spec es una rama y un PR. Desde a
 
 ## nv-26 — Vaca virtual y gastos
 
-- [ ] Spec leída: `specs/nv-26/spec.md`, `plan.md`, `task.md`
-- [ ] Pantalla `28_Vaca` y `Vaca · *`
-- [ ] Pantalla `45_AgregarGasto`
-- [ ] Compuertas, teléfono y PR
+- [x] Spec leída: `specs/nv-26/spec.md`, `plan.md`, `task.md`
+- [x] Pantalla `28_Vaca` y `Vaca · *`
+- [x] Pantalla `45_AgregarGasto`
+- [ ] Compuertas (en verde), teléfono y PR
 
 ## nv-30 — El día del plan
 

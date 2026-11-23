@@ -57,11 +57,20 @@ Nombres de ruta propuestos. Se registran en `docs/routes.md` al implementar la s
 
 ### Endpoints
 
-### Pendiente de backend
+| Método | Ruta | Uso |
+|---|---|---|
+| GET | `/grupos/{id}/vaca` | Total, `por_persona` y `deudas` (28_Vaca). |
+| GET | `/grupos/{id}/gastos` | «Quién pagó». |
+| POST | `/grupos/{id}/gastos` | 45_AgregarGasto: `monto_centavos`, `concepto`, `descripcion`, `pagado_por`, `dividir_entre`, `division` (`igual` o `personalizada`), `montos_personalizados`, `plan_id` e `id_cliente`. |
+| PATCH | `/vaca/deudas/{id}` | «Marcar pagado» (`estado: pagada`); ya pagada = 409. |
 
-Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
+### Decisiones al implementar (2026-11-22)
 
-- Gastos por grupo y estado de pago.
+- **D-26a Entrada:** botón «La vaca» junto a «Ver plan» en el plan fijado de 45_GrupoChat (nv-25).
+- **D-26b Sin Room ni cola sin red:** la API calcula el corte y es la fuente de verdad. Sin red se muestra el error con Reintentar; reintentar un gasto manda el mismo `id_cliente` y la API no lo duplica.
+- **D-26c Partes iguales / Personalizado** en 28_Vaca elige cómo se divide el siguiente gasto (la API divide por gasto, no por vaca).
+- **D-26d Concepto:** la API pide `concepto`; 45_AgregarGasto agrega chips (Comida, Bebidas, Transporte, Entrada, Otro).
+- **D-26e Dividir entre 2 a 12 personas** (la API no acepta 1).
 
 ## 4. Modelo de datos
 
@@ -89,4 +98,4 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** ✅ Aprobada (Jorge, 2026-11-06).
+**Estado:** ✅ Aprobada (Jorge, 2026-11-06). Implementada el 2026-11-22 (Diego) en `feat/nv-26-vaca`; sin probar contra staging.

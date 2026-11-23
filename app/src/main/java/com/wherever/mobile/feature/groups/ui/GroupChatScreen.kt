@@ -74,6 +74,7 @@ fun GroupChatRoute(
     onBack: () -> Unit,
     onPlan: (String) -> Unit,
     onGone: () -> Unit,
+    onVaca: (String) -> Unit = {},
     viewModel: GroupChatViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -87,6 +88,7 @@ fun GroupChatRoute(
         GroupChatActions(
             onBack = onBack,
             onPlan = onPlan,
+            onVaca = { state.group?.id?.let(onVaca) },
             onRetry = viewModel::load,
             onOlder = viewModel::loadOlder,
             onDraft = viewModel::onDraft,
@@ -99,6 +101,8 @@ fun GroupChatRoute(
 data class GroupChatActions(
     val onBack: () -> Unit = {},
     val onPlan: (String) -> Unit = {},
+    /** La vaca virtual del grupo (specs/nv-26). */
+    val onVaca: () -> Unit = {},
     val onRetry: () -> Unit = {},
     val onOlder: () -> Unit = {},
     val onDraft: (String) -> Unit = {},
@@ -120,7 +124,7 @@ fun GroupChatContent(state: GroupChatUiState, actions: GroupChatActions, zone: Z
             modifier = Modifier.padding(horizontal = ScreenPadding),
             verticalArrangement = Arrangement.spacedBy(Spacing.S)
         ) {
-            state.plan?.let { PinnedPlan(it, actions.onPlan) }
+            state.plan?.let { PinnedPlan(it, actions.onPlan, actions.onVaca) }
             if (state.offline) InfoBanner(stringResource(R.string.groups_chat_offline), tag = "chat_offline")
             state.error?.takeIf { !state.offline }?.let { ErrorBanner(it.asString()) }
         }
@@ -181,7 +185,7 @@ private fun ChatHeader(state: GroupChatUiState, onBack: () -> Unit) {
 }
 
 @Composable
-private fun PinnedPlan(plan: Plan, onPlan: (String) -> Unit) {
+private fun PinnedPlan(plan: Plan, onPlan: (String) -> Unit, onVaca: () -> Unit) {
     SurfaceCard(modifier = Modifier.testTag("chat_plan")) {
         Column(modifier = Modifier.padding(Spacing.L), verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
             Text(plan.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
@@ -195,12 +199,21 @@ private fun PinnedPlan(plan: Plan, onPlan: (String) -> Unit) {
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            WhereverOutlinedButton(
-                text = stringResource(R.string.groups_chat_see_plan),
-                onClick = { onPlan(plan.id) },
-                modifier = Modifier.fillMaxWidth(),
-                tag = "chat_see_plan"
-            )
+            Row(horizontalArrangement = Arrangement.spacedBy(Spacing.S)) {
+                WhereverOutlinedButton(
+                    text = stringResource(R.string.groups_chat_see_plan),
+                    onClick = { onPlan(plan.id) },
+                    modifier = Modifier.weight(1f),
+                    tag = "chat_see_plan"
+                )
+                // Punto de entrada de 28_Vaca (specs/nv-26).
+                WhereverOutlinedButton(
+                    text = stringResource(R.string.vaca_open),
+                    onClick = onVaca,
+                    modifier = Modifier.weight(1f),
+                    tag = "chat_vaca"
+                )
+            }
         }
     }
 }

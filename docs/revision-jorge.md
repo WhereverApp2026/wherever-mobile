@@ -1,3 +1,17 @@
+# Revisión — 2026-11-22: nv-26 Vaca virtual y gastos (Diego)
+
+> Rama `feat/nv-26-vaca` desde `main`. Frames: `28_Vaca` (`120:5060`), `Vaca · Mariana pagó` (`340:491`), `Vaca · todos pagaron` (`340:583`), `45_AgregarGasto` (`193:1416`). Revisor: Osmar.
+
+## Decisiones tomadas
+- **D-26a** entrada desde el plan fijado de 45_GrupoChat: botón «La vaca» junto a «Ver plan» (cambia la captura de 45_GrupoChat).
+- **D-26b** sin Room: la API calcula el corte; reintentar un gasto no lo duplica (`id_cliente`).
+- **D-26c** «Partes iguales / Personalizado» de 28 elige cómo se divide el siguiente gasto.
+- **D-26d** chips de concepto (la API pide `concepto`). **D-26e** dividir entre 2 y 12.
+- Dinero siempre en centavos enteros; «Repartir en partes iguales» no pierde centavos (100 entre 3 = 34, 33, 33).
+- «Para quedar a mano» se lee desde quien mira: «Te debe», «Le debes» o «Le debe X a Y»; solo deudor o acreedor ven «Marcar pagado».
+
+---
+
 # Revisión para Jorge — 2026-11-22 (tarde): PR de Diego, staging y arreglos
 
 ## Decisiones tomadas sin preguntarte

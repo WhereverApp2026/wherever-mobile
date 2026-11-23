@@ -59,6 +59,12 @@ import com.wherever.mobile.feature.status.ui.OfflineNoticePreview
 import com.wherever.mobile.feature.status.ui.OfflinePreview
 import com.wherever.mobile.feature.status.ui.UpdateRequiredPreview
 import com.wherever.mobile.feature.tastes.ui.TastesPreview
+import com.wherever.mobile.feature.vaca.ui.AddExpenseCustomPreview
+import com.wherever.mobile.feature.vaca.ui.AddExpensePreview
+import com.wherever.mobile.feature.vaca.ui.VacaAllPaidPreview
+import com.wherever.mobile.feature.vaca.ui.VacaEmptyPreview
+import com.wherever.mobile.feature.vaca.ui.VacaOnePaidPreview
+import com.wherever.mobile.feature.vaca.ui.VacaPreview
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -129,7 +135,13 @@ class ScreenshotTest {
         "76_rec_vacio" to { AlbumEmptyPreview() },
         "86_ayuda" to { HelpPreview() },
         "86_ayuda_sin_resultados" to { HelpNoResultsPreview() },
-        "86_ayuda_reportar" to { HelpReportPreview() }
+        "86_ayuda_reportar" to { HelpReportPreview() },
+        "28_vaca" to { VacaPreview() },
+        "vaca_mariana_pago" to { VacaOnePaidPreview() },
+        "vaca_todos_pagaron" to { VacaAllPaidPreview() },
+        "vaca_vacia" to { VacaEmptyPreview() },
+        "45_agregar_gasto" to { AddExpensePreview() },
+        "45_agregar_gasto_personalizado" to { AddExpenseCustomPreview() }
     )
 
     @Test
