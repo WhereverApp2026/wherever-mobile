@@ -4,7 +4,6 @@ import com.wherever.mobile.R
 import com.wherever.mobile.core.common.AppError
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.ui.UiText
-import com.wherever.mobile.feature.profile.data.LocalBadgesRepository
 import com.wherever.mobile.feature.profile.domain.Badge
 import com.wherever.mobile.feature.profile.domain.BadgesRepository
 import com.wherever.mobile.feature.profile.domain.LevelProgress
@@ -28,15 +27,26 @@ class BadgesViewModelTest {
 
     private val profiles = FakeProfileRepository(sampleProfile())
 
+    private val apiBadges = object : BadgesRepository {
+        override suspend fun badges(): Result<List<Badge>> = Result.Success(
+            listOf(
+                Badge("resenista", "Reseñista", "Publica tu primera reseña", earned = true, current = 1, goal = 1),
+                Badge("catador_cafe", "Catador de café", "5 cafeterías", earned = false, current = 2, goal = 5),
+                Badge("anfitrion_grupo", "Anfitrión de grupo", "Organiza un grupo", earned = false, goal = 1)
+            )
+        )
+    }
+
     @Test
     fun `separa ganadas y por desbloquear y muestra el nivel del perfil`() = runTest {
-        val viewModel = BadgesViewModel(profiles, LocalBadgesRepository())
+        val viewModel = BadgesViewModel(profiles, apiBadges)
         advanceUntilIdle()
 
         val state = viewModel.state.value
         assertFalse(state.loading)
-        assertEquals(listOf(LocalBadgesRepository.WELCOME), state.earned.map { it.id })
-        assertEquals(LocalBadgesRepository.CATALOG.size - 1, state.locked.size)
+        assertEquals(listOf("resenista"), state.earned.map { it.id })
+        assertEquals(listOf("catador_cafe", "anfitrion_grupo"), state.locked.map { it.id })
+        assertEquals(0.4f, state.locked.first().fraction)
         assertTrue(state.locked.none { it.earned })
         assertEquals(sampleProfile().points, state.progress?.points)
         assertNull(state.error)
@@ -45,7 +55,7 @@ class BadgesViewModelTest {
     @Test
     fun `sin red conserva el nivel guardado y avisa`() = runTest {
         profiles.refreshResult = Result.Failure(AppError.Network)
-        val viewModel = BadgesViewModel(profiles, LocalBadgesRepository())
+        val viewModel = BadgesViewModel(profiles, apiBadges)
         advanceUntilIdle()
 
         assertEquals(UiText.Res(R.string.error_network), viewModel.state.value.error)

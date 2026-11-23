@@ -300,6 +300,9 @@
 - A recordar: en el Xiaomi `svc wifi disable` no apaga el Wi-Fi (MIUI); usar `cmd wifi set-wifi-enabled disabled|enabled`. Sin red la app pone la pantalla global 89_SinConexion encima de todo.
 - A recordar: la moderación de staging rechaza a veces textos repetidos («el texto no cumple las normas»), 422 con `campos[texto]`.
 
+- Pausa (2026-11-22, noche): rama `feat/cuenta-social-descubrir` (sale de #51). Hecho y compilando (ktlint, detekt, lint): 83_Insignias con `GET /usuarios/yo/insignias` real (Cuenta 17/17 al probar en teléfono) y 07_EncuentraAmigos (`POST /personas/contactos`, `READ_CONTACTS` en contexto, entrada «Mis contactos» en Agregar amigo). Falta: pruebas unitarias + capturas (grabar), UI en el Xiaomi y staging, PR. Después: nv-25 (42_Compartir, 43_CrearGrupo, 46_Grupo, 48_Votar, InvitarPlan), nv-17 (14_MeApunto/29_PlanAmigo con un momento con plan, 15_Crear a mano), variantes de Detalle; iconos y fotos del paso 2. Sin API: historias, reacciones, chat 1 a 1; mapa (D25) y Sello sin filtro.
+- A recordar: #45 y #51 esperan la aprobación de Osmar (regla de `main`); no se integran sin ella.
+
 ## Reparto entre cuatro y revisor único (2026-11-22)
 - Estado: reparto de lo que falta entre Jorge (nv-20, nv-21, nv-25 y lo compartido), Diego (nv-23, nv-24, nv-26, nv-30, nv-37), Borre (nv-35, nv-36, nv-38) y Osmar (nv-17, nv-27, nv-29 y backend). Listas en `docs/equipo/`. Avance al corte: 63/162 en `main`.
 - Decisión (Osmar): solo Osmar aprueba los PR a `main`. `CODEOWNERS` = `@OsmarYahir @WhereverApp2026` y regla `.github/rulesets/main.json` (1 aprobación de code owner, se anula con commits nuevos, CI `gates` en verde y al día, conversaciones resueltas, sin push directo ni force push), sin excepciones. Porqué: 15 commits entraron a `main` sin PR el 2026-11-19.
