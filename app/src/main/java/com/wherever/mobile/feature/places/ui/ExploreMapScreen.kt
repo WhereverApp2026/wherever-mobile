@@ -2,6 +2,7 @@ package com.wherever.mobile.feature.places.ui
 
 import android.content.Context
 import android.content.res.Configuration as UiConfiguration
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,12 +22,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -179,6 +182,8 @@ private fun OsmMap(
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val map = remember { newMapView(context, center) }
+    val pinColor = MaterialTheme.colorScheme.primary.toArgb()
+    val cellColor = MaterialTheme.colorScheme.secondary.toArgb()
     DisposableEffect(lifecycle, map) {
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
@@ -214,6 +219,7 @@ private fun OsmMap(
                     Marker(view).apply {
                         position = OsmPoint(pin.lat, pin.lng)
                         title = pin.name
+                        icon = pinIcon(view.context, pinColor)
                         setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
                         setOnMarkerClickListener { _, _ ->
                             onPin(pin)
@@ -227,6 +233,7 @@ private fun OsmMap(
                     Marker(view).apply {
                         position = OsmPoint(cell.lat, cell.lng)
                         title = cell.count.toString()
+                        icon = pinIcon(view.context, cellColor)
                         setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
                         // Una celda agrupa lugares: tocarla acerca el mapa a ella.
                         setOnMarkerClickListener { marker, mapView ->
@@ -241,6 +248,10 @@ private fun OsmMap(
         modifier = Modifier.fillMaxSize().testTag("map_view")
     )
 }
+
+/** Pin propio en lugar del de osmdroid, con el color del tema. */
+private fun pinIcon(context: Context, color: Int): Drawable? =
+    ContextCompat.getDrawable(context, R.drawable.ic_map_pin)?.mutate()?.apply { setTint(color) }
 
 private fun report(map: MapView, onArea: (MapArea) -> Unit): Boolean {
     val box = map.boundingBox

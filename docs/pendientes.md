@@ -6,20 +6,20 @@
 
 ## % real
 
-**95 de 162 = 58,6 %** con la API real (2026-11-23, 09:50: #67 en `main`; probadas hoy contra staging en el Xiaomi 83_Insignias, 43_CrearGrupo, 46_Grupo, 48_Votar, IAPalabra, 17_AjustaPlan, 41_AgregarParada, CrearPlan y 28_Vaca).
+**96 de 162 = 59,3 %** con la API real (2026-11-23, 16:10: 32_ExpMapa con osmdroid probado contra staging en el Xiaomi, en #68; antes, 09:50: 83_Insignias, 43_CrearGrupo, 46_Grupo, 48_Votar, IAPalabra, 17_AjustaPlan, 41_AgregarParada, CrearPlan y 28_Vaca).
 
 **Por sumar (2026-11-23, PR #67 `integracion/todo`, con código, pruebas y capturas; falta probar contra staging en el teléfono):** Jorge: 83_Insignias (ya con API real), 07_EncuentraAmigos, 43_CrearGrupo, 46_Grupo, 48_Votar, InvitarPlan. Diego: IAPalabra, 17_AjustaPlan, Generando 1/4–4/4, 39_Plan, 40_Cambiar, 41_AgregarParada, CrearPlan, 26_CheckinOk, 28_Vaca y variantes, 45_AgregarGasto. Negocio (nv-34/35/37): alta, panel, reservas, estadísticas, check-in, cupones y horas. Se cuentan al probarlos con staging (L-V 08:00–22:00).
 
 | Área | Specs | Frames | Funcionan | % |
 |---|---|---|---|---|
 | Cuenta y acceso | nv-06 a nv-16 | 17 | 17 | 100 % |
-| Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 18 | 62 % |
+| Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 19 | 66 % |
 | Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 21 | 68 % |
 | Planes: IA, detalle, Vaca, Mis planes, día del plan | nv-23, nv-24, nv-26, nv-28, nv-30 | 22 | 13 | 59 % |
 | Reserva, pago y cupones | nv-27, nv-29 | 15 | 4 | 27 % |
 | Después del plan: Recuerdos, Reseñas, Ayuda | nv-31 a nv-33 | 22 | 22 | 100 % |
 | Modo negocio | nv-34 a nv-38 | 26 | 0 | 0 % |
-| **Total** | | **162** | **95** | **58,6 %** |
+| **Total** | | **162** | **96** | **59,3 %** |
 
 ## Pruebas con staging en el Xiaomi (2026-11-22, domingo con staging encendido)
 
@@ -64,7 +64,7 @@ Reparto anterior (tres personas, 2026-11-20), con lo que funciona por área:
 | Responsable | Área | Specs | Frames | Funcionan | Lista de trabajo |
 |---|---|---|---|---|---|
 | Jorge | Cuenta y acceso | nv-06 a nv-16 | 17 | 16 (+1 local) | `docs/pendientes.md` |
-| Jorge | Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 18 | `docs/pendientes.md` |
+| Jorge | Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 19 | `docs/pendientes.md` |
 | Jorge | Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 18 | `docs/pendientes.md` |
 | Jorge | Planes: IA, detalle, Vaca, Mis planes, día del plan | nv-23, nv-24, nv-26, nv-28, nv-30 | 22 | 9 | `docs/pendientes.md` |
 | Jorge | Reserva, pago y cupones | nv-27, nv-29 | 15 | 4 | `docs/pendientes.md` |
@@ -77,7 +77,7 @@ Reparto anterior (tres personas, 2026-11-20), con lo que funciona por área:
 - **Área 1 (Cuenta y acceso): 16/17.** Solo falta `83_Insignias`, bloqueada por backend (`GET /usuarios/yo/insignias` no existe). Todo lo demás tiene captura y se probó en el teléfono (Xiaomi 2207117BPG, Android 12) contra staging.
 - **Área 2 (Descubrir): 14/29.** nv-19 Búsqueda y nv-22 Favoritos completas. Lo que falta está bloqueado:
   - nv-17 Inicio (12 frames: feed de amigos, historias, publicaciones, reacciones, Me apunto, hoja Crear, plan de amigo): `/feed`, `/publicaciones` e `/historias` dan 404 en staging (2026-11-20).
-  - nv-21 `32_ExpMapa`: falta decidir el proveedor de mapa (D25). `34_Sello`: `GET /lugares` no filtra por Sello y la tarjeta no trae `sello_excelencia`. Staging sin negocios (no se ve una ficha real).
+  - nv-21 `32_ExpMapa`: hecho con osmdroid (D25) y probado con staging el 2026-11-23. `34_Sello`: `GET /lugares` no filtra por Sello y la tarjeta no trae `sello_excelencia`. Staging ya tiene lugares reales (fichas probadas el 2026-11-23).
 - **Pruebas en teléfono que quedan** (juntas, para cuando haya con qué):
   1. Diálogo de avisos de `08_Permisos` en Android 13+ (este teléfono es Android 12).
   2. `NuevaContrasena` con un enlace real (staging no manda correos).

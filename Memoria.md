@@ -320,6 +320,10 @@
 - A evitar: probar en el teléfono de Jorge flujos que mandan su ubicación real o su agenda (alta del negocio paso 3, EncuentraAmigos) sin su visto bueno.
 - A recordar: el MCP de Figma (Starter) se acaba; los frames se ven con Playwright en `figma.com/design/...?node-id=` y Ctrl+rueda para acercar.
 - A recordar: en staging el 422 de `POST /planes/generar` es «sin lugares cerca»; los niveles 1 a 3 del backend se llaman igual («Explorador»).
+- Estado (2026-11-23, 16:10): 32_ExpMapa probado con staging en el Xiaomi (pines reales en Tula, tarjeta, Ver detalle, A mi plan, Buscar en esta zona, filtro): % real 96/162. Arreglado: «Buscar en esta zona» salía sin mover el mapa (osmdroid avisa al acomodarse; ahora `MapArea.differsFrom` exige cambio de zoom o 15 % de desplazamiento) y pines propios `ic_map_pin` con el color del tema. Explorar y fichas con lugares reales, bien.
+- Pausa (2026-11-23, 16:15): sin commit `core/designsystem/Buttons.kt` (botón con borde: relleno lateral `Spacing.L` y una línea con puntos; «Cómo llegar» se partía junto a «Llamar»). Falta regrabar las capturas (`-Proborazzi.record=true`; cambia `32_exp_mapa_tarjeta_chica_letra_grande`), revisar el diff de imágenes y hacer commit. Siguiente: punto 22 de `docs/pruebas-telefono.md` (la cuenta con sesión tiene 0 amigos: entrar con QA A), Inicio «Cerca de ti» vacío con lugares a 1 km, avisar a Osmar del 422 de `/planes/generar` con lugares cerca.
+- A recordar: en Git Bash, `adb shell uiautomator dump /sdcard/...` necesita `MSYS_NO_PATHCONV=1`; `adb` está en `%LOCALAPPDATA%/Android/Sdk/platform-tools`, no en el PATH.
+- A evitar: explicar el 422 de `/planes/generar` por falta de lugares: el 2026-11-23 falló con 15+ lugares abiertos a menos de 2 km.
 
 ## Reparto entre cuatro y revisor único (2026-11-22)
 - Estado: reparto de lo que falta entre Jorge (nv-20, nv-21, nv-25 y lo compartido), Diego (nv-23, nv-24, nv-26, nv-30, nv-37), Borre (nv-35, nv-36, nv-38) y Osmar (nv-17, nv-27, nv-29 y backend). Listas en `docs/equipo/`. Avance al corte: 63/162 en `main`.

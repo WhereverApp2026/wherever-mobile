@@ -52,6 +52,9 @@ class ExploreMapViewModel @Inject constructor(
     val state: StateFlow<ExploreMapUiState> = mutableState.asStateFlow()
     private var search: Job? = null
 
+    /** Zona de la última búsqueda: «Buscar en esta zona» sale solo si el mapa se alejó de ella. */
+    private var searchedArea: MapArea? = null
+
     init {
         viewModelScope.launch {
             // La ubicación solo se usa para centrar el mapa; no se guarda ni se manda sola a la API.
@@ -62,9 +65,9 @@ class ExploreMapViewModel @Inject constructor(
 
     /** El mapa terminó de moverse: la primera vez busca sola; después espera «Buscar en esta zona». */
     fun onArea(area: MapArea) {
-        val first = state.value.lastArea == null
-        mutableState.update { it.copy(lastArea = area, moved = !first) }
-        if (first) load(area)
+        val searched = searchedArea
+        mutableState.update { it.copy(lastArea = area, moved = searched != null && area.differsFrom(searched)) }
+        if (searched == null) load(area)
     }
 
     fun searchHere() {
@@ -86,6 +89,7 @@ class ExploreMapViewModel @Inject constructor(
 
     private fun load(area: MapArea) {
         search?.cancel()
+        searchedArea = area
         mutableState.update { it.copy(loading = true, error = null) }
         search = viewModelScope.launch {
             val result = repository.area(area, state.value.category)

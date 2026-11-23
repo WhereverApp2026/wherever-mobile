@@ -4,7 +4,19 @@ import com.wherever.mobile.core.common.Result
 
 /** Zona visible del mapa. La API acepta `zoom` de 3 a 20 y un ancho menor a 180°. */
 data class MapArea(val minLat: Double, val minLng: Double, val maxLat: Double, val maxLng: Double, val zoom: Int) {
+    /**
+     * Cambió el acercamiento o el centro se movió más de [MOVE_FRACTION] del alto o del ancho.
+     * El mapa avisa de un desplazamiento al terminar de acomodarse aunque nadie lo toque.
+     */
+    fun differsFrom(other: MapArea): Boolean {
+        if (zoom != other.zoom) return true
+        val latShift = kotlin.math.abs((minLat + maxLat) - (other.minLat + other.maxLat)) / 2
+        val lngShift = kotlin.math.abs((minLng + maxLng) - (other.minLng + other.maxLng)) / 2
+        return latShift > (maxLat - minLat) * MOVE_FRACTION || lngShift > (maxLng - minLng) * MOVE_FRACTION
+    }
+
     companion object {
+        private const val MOVE_FRACTION = 0.15
         const val MIN_ZOOM = 3
         const val MAX_ZOOM = 20
         private const val MAX_LAT = 90.0

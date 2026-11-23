@@ -56,6 +56,20 @@ class ExploreMapViewModelTest {
     }
 
     @Test
+    fun `el reacomodo inicial del mapa no muestra Buscar en esta zona`() = runTest {
+        val map = FakeMap(Result.Success(PlaceMap(false, listOf(pin), emptyList())))
+        val vm = ExploreMapViewModel(map, FakeLocationProvider(granted = true), fallback)
+        vm.onArea(area)
+        advanceUntilIdle()
+
+        vm.onArea(MapArea.of(19.401, -99.159, 19.461, -99.099, 15.0))
+        assertFalse(vm.state.value.moved)
+        vm.onArea(MapArea.of(19.43, -99.13, 19.49, -99.07, 15.0))
+        assertTrue(vm.state.value.moved)
+        assertEquals(1, map.calls.size)
+    }
+
+    @Test
     fun `mover el mapa pide confirmar y el filtro vuelve a buscar`() = runTest {
         val map = FakeMap(Result.Success(PlaceMap(false, listOf(pin), emptyList())))
         val vm = ExploreMapViewModel(map, FakeLocationProvider(granted = true), fallback)
