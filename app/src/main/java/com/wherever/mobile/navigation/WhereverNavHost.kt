@@ -41,6 +41,7 @@ import com.wherever.mobile.feature.feed.ui.FriendPlanNavigation
 import com.wherever.mobile.feature.feed.ui.FriendPlanRoute as FriendPlanScreen
 import com.wherever.mobile.feature.feed.ui.MomentDetailRoute
 import com.wherever.mobile.feature.feed.ui.MomentNavigation
+import com.wherever.mobile.feature.feed.ui.StoryViewerRoute as StoryViewerScreen
 import com.wherever.mobile.feature.friends.ui.AddFriendRoute as AddFriendScreen
 import com.wherever.mobile.feature.friends.ui.FindFriendsRoute as FindFriendsScreen
 import com.wherever.mobile.feature.friends.ui.FriendsRoute as FriendsScreen
@@ -237,8 +238,15 @@ fun WhereverNavHost(
                     onMoment = { navController.navigateFrom(e, MomentRoute(it)) },
                     onFriendPlan = { navController.navigateFrom(e, FriendPlanRoute(it)) },
                     onPerson = { navController.navigateFrom(e, PersonRoute(it)) },
-                    onAddFriends = { navController.navigateFrom(e, AddFriendRoute) }
+                    onAddFriends = { navController.navigateFrom(e, AddFriendRoute) },
+                    onStory = { navController.navigateFrom(e, StoryRoute(it)) }
                 )
+            )
+        }
+        composable<StoryRoute> { e ->
+            StoryViewerScreen(
+                onClose = { navController.popOnResult(e) },
+                onMoment = { navController.navigateFrom(e, MomentRoute(it)) }
             )
         }
         composable<MomentRoute> { e ->
@@ -246,7 +254,8 @@ fun WhereverNavHost(
                 MomentNavigation(
                     onBack = { navController.popFrom(e) },
                     onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "inicio")) },
-                    onPlan = { navController.navigateFrom(e, FriendPlanRoute(it)) }
+                    onPlan = { navController.navigateFrom(e, FriendPlanRoute(it)) },
+                    onPerson = { navController.navigateFrom(e, PersonRoute(it)) }
                 )
             )
         }

@@ -142,6 +142,10 @@ data object MyGroupsRoute
 @Serializable
 data class GroupChatRoute(val id: String)
 
+/** Visor de historias; StoryViewerViewModel lee `authorId` (backend nv-84, specs/nv-17). */
+@Serializable
+data class StoryRoute(val authorId: String)
+
 /** 46_Grupo; GroupDetailViewModel lee `id` (specs/nv-25). */
 @Serializable
 data class GroupRoute(val id: String)

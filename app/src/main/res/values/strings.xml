@@ -1616,4 +1616,41 @@
     <string name="plan_stop_duration">La duración en %1$s no es válida.</string>
     <string name="plan_stop_price">El precio de %1$s no es válido.</string>
     <string name="plan_stop_unavailable">%1$s ya no está disponible. Elige otro lugar.</string>
+    <!-- Me gusta, comentarios y 13_Reacciones (backend nv-83) -->
+    <string name="moment_like">Me gusta</string>
+    <string name="moment_unlike">Quitar me gusta</string>
+    <plurals name="moment_likes">
+        <item quantity="one">%1$d me gusta</item>
+        <item quantity="many">%1$d me gusta</item>
+        <item quantity="other">%1$d me gusta</item>
+    </plurals>
+    <plurals name="moment_comments">
+        <item quantity="one">%1$d comentario</item>
+        <item quantity="many">%1$d comentarios</item>
+        <item quantity="other">%1$d comentarios</item>
+    </plurals>
+    <string name="comments_title">Comentarios</string>
+    <string name="comments_empty">Aún no hay comentarios. Escribe el primero.</string>
+    <string name="comments_more">Ver más comentarios</string>
+    <string name="comment_removed">Comentario eliminado</string>
+    <string name="comment_moderation_label">En revisión</string>
+    <string name="comment_reply">Responder</string>
+    <string name="comment_delete">Borrar</string>
+    <string name="comment_in_review">Tu comentario está en revisión. Solo tú lo ves hasta que se apruebe.</string>
+    <string name="comment_deleted">Listo, borramos el comentario.</string>
+    <string name="comment_hint">Escribe un comentario…</string>
+    <string name="comment_send">Enviar comentario</string>
+    <string name="comment_replying_to">Respondiendo a %1$s</string>
+    <string name="reactions_title">Reacciones</string>
+    <string name="reactions_all">Todos · %1$d</string>
+    <string name="reactions_likes">Me gusta · %1$d</string>
+    <string name="reactions_empty">Nadie ha reaccionado todavía.</string>
+    <string name="reactions_you">Tú</string>
+    <string name="reactions_see_profile">Ver perfil</string>
+    <string name="feed_counts">%1$s · %2$s</string>
+    <!-- Historias (backend nv-84) -->
+    <string name="stories_open">Ver las historias de %1$s</string>
+    <string name="stories_close">Cerrar historias</string>
+    <string name="stories_verified">Visita verificada</string>
+    <string name="stories_see_post">Ver publicación</string>
 </resources>

@@ -32,5 +32,7 @@ internal fun MomentDto.toDomain() = Moment(
     placeId = placeId.orNullIfBlank(),
     planId = planId.orNullIfBlank(),
     createdAt = createdAt,
-    own = own
+    own = own,
+    likes = likes,
+    comments = comments
 )

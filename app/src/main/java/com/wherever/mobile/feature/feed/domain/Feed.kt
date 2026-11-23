@@ -14,7 +14,9 @@ data class Moment(
     val placeId: String?,
     val planId: String?,
     val createdAt: String,
-    val own: Boolean
+    val own: Boolean,
+    val likes: Int = 0,
+    val comments: Int = 0
 )
 
 data class MomentPage(val items: List<Moment>, val nextCursor: String?)

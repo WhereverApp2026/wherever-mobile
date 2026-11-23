@@ -78,4 +78,10 @@ class MomentDetailViewModel @Inject constructor(
     }
 }
 
-data class MomentNavigation(val onBack: () -> Unit, val onPlace: (String) -> Unit, val onPlan: (String) -> Unit)
+data class MomentNavigation(
+    val onBack: () -> Unit,
+    val onPlace: (String) -> Unit,
+    val onPlan: (String) -> Unit,
+    /** Perfil de quien reaccionó (13_Reacciones). */
+    val onPerson: (String) -> Unit = {}
+)

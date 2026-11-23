@@ -41,6 +41,9 @@ import com.wherever.mobile.feature.feed.ui.FriendPlanPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedEmptyPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedPreview
 import com.wherever.mobile.feature.feed.ui.MomentDetailPreview
+import com.wherever.mobile.feature.feed.ui.MomentSocialPreview
+import com.wherever.mobile.feature.feed.ui.StoriesRowPreview
+import com.wherever.mobile.feature.feed.ui.StoryViewerPreview
 import com.wherever.mobile.feature.friends.ui.FindFriendsPreview
 import com.wherever.mobile.feature.friends.ui.MyCodePreview
 import com.wherever.mobile.feature.friends.ui.MyCodeScanPreview
@@ -150,6 +153,9 @@ class ScreenshotTest {
         "44_mis_grupos" to { MyGroupsPreview() },
         "45_grupo_chat" to { GroupChatPreview() },
         "46_grupo" to { GroupDetailPreview() },
+        "17_post_detalle_social" to { MomentSocialPreview() },
+        "historias_fila" to { StoriesRowPreview() },
+        "historias_visor" to { StoryViewerPreview() },
         "48_votar" to { VotePreview() },
         "43_crear_grupo" to { CreateGroupPreview() },
         "invitar_al_grupo" to { InviteToGroupPreview() },
