@@ -30,3 +30,6 @@ val GrapeTint = Color(0xFFEFE8FF)
 val RouteBlueLight = Color(0xFF9BB4FF)
 val InkRaised = Color(0xFF274A8C)
 val InkTrack = Color(0xFF0A1828)
+
+/** Píldoras de estado en oscuro: verde profundo distinto de `InkDeep` (las tarjetas); Mist encima pasa 4,5:1. */
+val MintDeep = Color(0xFF0E5A4A)

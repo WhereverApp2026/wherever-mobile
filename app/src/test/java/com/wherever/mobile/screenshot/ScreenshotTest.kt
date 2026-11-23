@@ -44,8 +44,13 @@ import com.wherever.mobile.feature.feed.ui.MomentDetailPreview
 import com.wherever.mobile.feature.friends.ui.FindFriendsPreview
 import com.wherever.mobile.feature.friends.ui.MyCodePreview
 import com.wherever.mobile.feature.friends.ui.MyCodeScanPreview
+import com.wherever.mobile.feature.groups.ui.CreateGroupPreview
 import com.wherever.mobile.feature.groups.ui.GroupChatPreview
+import com.wherever.mobile.feature.groups.ui.GroupDetailPreview
+import com.wherever.mobile.feature.groups.ui.InvitePlanPreview
+import com.wherever.mobile.feature.groups.ui.InviteToGroupPreview
 import com.wherever.mobile.feature.groups.ui.MyGroupsPreview
+import com.wherever.mobile.feature.groups.ui.VotePreview
 import com.wherever.mobile.feature.help.ui.HelpNoResultsPreview
 import com.wherever.mobile.feature.help.ui.HelpPreview
 import com.wherever.mobile.feature.help.ui.HelpReportPreview
@@ -142,6 +147,11 @@ class ScreenshotTest {
         "83_insignias" to { BadgesPreview() },
         "44_mis_grupos" to { MyGroupsPreview() },
         "45_grupo_chat" to { GroupChatPreview() },
+        "46_grupo" to { GroupDetailPreview() },
+        "48_votar" to { VotePreview() },
+        "43_crear_grupo" to { CreateGroupPreview() },
+        "invitar_al_grupo" to { InviteToGroupPreview() },
+        "invitar_plan" to { InvitePlanPreview() },
         "25_mi_codigo_escanear" to { MyCodeScanPreview() },
         "89_sin_conexion" to { OfflinePreview() },
         "89_sin_conexion_aviso" to { OfflineNoticePreview() },

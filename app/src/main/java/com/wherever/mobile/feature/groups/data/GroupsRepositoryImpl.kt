@@ -19,7 +19,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-private const val GROUPS_PAGE = 20
+internal const val GROUPS_PAGE = 20
 private const val LOCAL_PREFIX = "local:"
 
 class GroupsRepositoryImpl @Inject constructor(
@@ -115,6 +115,7 @@ internal fun GroupDto.toGroup() = Group(
     id = id,
     planId = planId,
     name = name?.takeIf { it.isNotBlank() },
+    version = version,
     myStatus = MemberStatus.from(myStatus),
     iAmOrganizer = myRole == "organizador",
     confirmed = summary.confirmed,

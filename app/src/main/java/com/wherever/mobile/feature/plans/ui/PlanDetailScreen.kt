@@ -107,6 +107,7 @@ fun PlanDetailRoute(
     onBack: () -> Unit,
     onOpenPlan: (String) -> Unit,
     onArrived: (ArrivalTarget) -> Unit = {},
+    onInviteFriends: (String) -> Unit = {},
     viewModel: PlanDetailViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -136,6 +137,7 @@ fun PlanDetailRoute(
         onBack = onBack,
         onRetry = viewModel::load,
         onShare = viewModel::share,
+        onInviteFriends = { state.plan?.id?.let(onInviteFriends) },
         onRepeat = viewModel::repeatTomorrow,
         onRename = viewModel::startRename,
         onDelete = viewModel::askDelete,
@@ -277,6 +279,11 @@ private fun PlanBody(
                 modifier = Modifier.fillMaxWidth()
             )
         }
+        WhereverOutlinedButton(
+            text = stringResource(R.string.plan_invite_friends),
+            onClick = actions.onInviteFriends,
+            tag = "plan_invite_friends"
+        )
         Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
             WhereverTextLink(stringResource(R.string.plan_rename), actions.onRename)
             WhereverTextLink(stringResource(R.string.plan_repeat), actions.onRepeat)

@@ -9,6 +9,8 @@ internal data class PlanDetailActions(
     val onBack: () -> Unit = {},
     val onRetry: () -> Unit = {},
     val onShare: () -> Unit = {},
+    /** 43_CrearGrupo con este plan (specs/nv-25). */
+    val onInviteFriends: () -> Unit = {},
     val onRepeat: () -> Unit = {},
     val onRename: () -> Unit = {},
     val onDelete: () -> Unit = {},

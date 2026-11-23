@@ -1476,4 +1476,95 @@
     <string name="capacity_saved">Guardamos el cupo.</string>
     <string name="capacity_changed">La configuración cambió en otro lado. Ya la recargamos.</string>
     <string name="capacity_not_configured">Tu negocio aún no tiene reservaciones configuradas.</string>
+    <!-- 46_Grupo, 48_Votar, 43_CrearGrupo e InvitarPlan (specs/nv-25) -->
+    <string name="group_detail_title">El grupo</string>
+    <string name="group_detail_open">Ver el grupo</string>
+    <string name="group_detail_name">Nombre del grupo</string>
+    <string name="group_detail_name_hint">Los del domingo</string>
+    <string name="group_detail_name_count">%1$d de %2$d</string>
+    <string name="group_detail_rename">Cambiar el nombre del grupo</string>
+    <string name="group_detail_conflict">Alguien cambió el grupo hace un momento. Ya lo recargamos: inténtalo otra vez.</string>
+    <string name="group_detail_votes">Votaciones</string>
+    <plurals name="group_detail_open_votes">
+        <item quantity="one">%1$d abierta</item>
+        <item quantity="many">%1$d abiertas</item>
+        <item quantity="other">%1$d abiertas</item>
+    </plurals>
+    <string name="group_detail_invite">Invitar amigos</string>
+    <string name="group_detail_organizer">Organiza</string>
+    <string name="group_detail_invited">Invitado</string>
+    <string name="group_detail_unknown_member">Cuenta eliminada</string>
+    <string name="group_detail_leave">Salir del grupo</string>
+    <string name="group_detail_leave_title">¿Salir del grupo?</string>
+    <string name="group_detail_leave_body">Dejarás de ver el chat y el plan. Para volver, alguien tiene que invitarte otra vez.</string>
+    <string name="group_detail_remove">Sacar del grupo</string>
+    <string name="group_detail_remove_title">¿Sacar a %1$s del grupo?</string>
+    <string name="group_detail_remove_body">Dejará de ver el chat y el plan. Puedes invitarle de nuevo cuando quieras.</string>
+    <string name="group_detail_remove_a11y">Sacar a %1$s del grupo</string>
+    <string name="group_detail_removed">Listo, ya no está en el grupo.</string>
+    <string name="vote_title">Votar</string>
+    <string name="vote_empty">Todavía no hay votaciones en este grupo. Quien organiza puede proponer lugares para una parada.</string>
+    <string name="vote_stop">Votación %1$d</string>
+    <plurals name="vote_total">
+        <item quantity="one">%1$d voto en total</item>
+        <item quantity="many">%1$d votos en total</item>
+        <item quantity="other">%1$d votos en total</item>
+    </plurals>
+    <plurals name="vote_votes">
+        <item quantity="one">%1$d voto</item>
+        <item quantity="many">%1$d votos</item>
+        <item quantity="other">%1$d votos</item>
+    </plurals>
+    <plurals name="vote_closes_minutes">
+        <item quantity="one">Cierra en %1$d min</item>
+        <item quantity="many">Cierra en %1$d min</item>
+        <item quantity="other">Cierra en %1$d min</item>
+    </plurals>
+    <plurals name="vote_closes_hours">
+        <item quantity="one">Cierra en %1$d h</item>
+        <item quantity="many">Cierra en %1$d h</item>
+        <item quantity="other">Cierra en %1$d h</item>
+    </plurals>
+    <plurals name="vote_closes_days">
+        <item quantity="one">Cierra en %1$d día</item>
+        <item quantity="many">Cierra en %1$d días</item>
+        <item quantity="other">Cierra en %1$d días</item>
+    </plurals>
+    <string name="vote_open_label">Abierta</string>
+    <string name="vote_closed_label">Cerrada</string>
+    <string name="vote_winner">Ganó</string>
+    <string name="vote_place_gone">Lugar no disponible</string>
+    <string name="vote_send">Enviar mi voto</string>
+    <string name="vote_change">Cambiar mi voto</string>
+    <string name="vote_close">Cerrar la votación ahora</string>
+    <string name="vote_sent">Listo, tu voto quedó registrado.</string>
+    <string name="vote_closed">Votación cerrada. El plan ya tiene el lugar ganador.</string>
+    <string name="vote_closed_not_applied">Votación cerrada. El lugar ganador no cupo en el horario del plan, así que la parada quedó igual.</string>
+    <string name="vote_not_applied">El lugar ganador no cupo en el horario; la parada quedó igual.</string>
+    <string name="vote_closed_now">Esta votación ya cerró. Te mostramos el resultado.</string>
+    <string name="create_group_title">Nuevo grupo</string>
+    <string name="create_group_invite_title">Invitar amigos</string>
+    <string name="create_group_body">Elige hasta %1$d amigos. Les llega la invitación y deciden si van.</string>
+    <string name="create_group_name">Nombre del grupo</string>
+    <string name="create_group_name_optional">Opcional. Si no le pones nombre, usamos el del plan.</string>
+    <string name="create_group_who">¿Quién va?</string>
+    <string name="create_group_search">Buscar entre tus amigos</string>
+    <string name="create_group_seats">%1$d de %2$d lugares</string>
+    <string name="create_group_already_in">Ya está en el grupo</string>
+    <string name="create_group_no_friends">Aún no tienes amigos en Wherever. Agrégalos para armar el grupo.</string>
+    <string name="create_group_submit">Crear grupo</string>
+    <plurals name="create_group_send_invites">
+        <item quantity="one">Invitar a %1$d amigo</item>
+        <item quantity="many">Invitar a %1$d amigos</item>
+        <item quantity="other">Invitar a %1$d amigos</item>
+    </plurals>
+    <string name="invite_plan_title">Invitar a un plan</string>
+    <string name="invite_plan_headline">¿A qué plan invitas a %1$s?</string>
+    <string name="invite_plan_empty">No tienes planes próximos. Crea uno y luego invita a tus amigos.</string>
+    <string name="invite_plan_create">Crear un plan nuevo</string>
+    <string name="invite_plan_send">Enviar invitación</string>
+    <string name="invite_plan_sent">Listo, %1$s ya tiene tu invitación.</string>
+    <string name="invite_plan_open_group">Ir al grupo</string>
+    <string name="person_invite_plan">Invitar a un plan</string>
+    <string name="plan_invite_friends">Invitar amigos</string>
 </resources>

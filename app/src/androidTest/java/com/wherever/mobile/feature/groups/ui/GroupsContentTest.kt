@@ -3,6 +3,8 @@ package com.wherever.mobile.feature.groups.ui
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -92,7 +94,9 @@ class GroupsContentTest {
         var state by mutableStateOf(
             GroupChatUiState(group = PREVIEW_GROUPS.first(), loading = false, myId = "yo", messages = listOf(failed))
         )
+        var keyboard: SoftwareKeyboardController? = null
         compose.setContent {
+            keyboard = LocalSoftwareKeyboardController.current
             WhereverTheme {
                 GroupChatContent(
                     state,
@@ -113,6 +117,8 @@ class GroupsContentTest {
         compose.onNodeWithTag("message_retry").performClick()
         assertEquals(listOf("send:Hola", "retry:c1"), events)
 
+        // Con el teclado abierto, en un teléfono de pantalla baja el aviso queda fuera de la vista.
+        compose.runOnIdle { keyboard?.hide() }
         state = state.copy(offline = true)
         compose.onNodeWithTag("chat_offline").assertIsDisplayed()
         state = state.copy(messages = emptyList(), offline = false)

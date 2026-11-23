@@ -138,6 +138,22 @@ data object MyGroupsRoute
 @Serializable
 data class GroupChatRoute(val id: String)
 
+/** 46_Grupo; GroupDetailViewModel lee `id` (specs/nv-25). */
+@Serializable
+data class GroupRoute(val id: String)
+
+/** 48_Votar del grupo; VoteViewModel lee `id` (specs/nv-25). */
+@Serializable
+data class VoteRoute(val id: String)
+
+/** 43_CrearGrupo: con `groupId` invita a más amigos a ese grupo (specs/nv-25). */
+@Serializable
+data class CreateGroupRoute(val planId: String, val groupId: String = "")
+
+/** InvitarPlan: invitar a un amigo a uno de mis planes (specs/nv-25). */
+@Serializable
+data class InvitePlanRoute(val personId: String, val personName: String = "")
+
 /** 28_Vaca del grupo; VacaViewModel lee `id` (specs/nv-26). */
 @Serializable
 data class VacaRoute(val id: String)

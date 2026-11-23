@@ -37,7 +37,12 @@ import com.wherever.mobile.feature.profile.ui.ProfileAvatar
 
 /** 26_PerfilAmigo con la hoja 27_AmigoOpc (US-233, US-238). */
 @Composable
-fun PersonRoute(onBack: () -> Unit, onBlocked: () -> Unit, viewModel: PersonViewModel = hiltViewModel()) {
+fun PersonRoute(
+    onBack: () -> Unit,
+    onBlocked: () -> Unit,
+    onInvitePlan: (id: String, name: String) -> Unit = { _, _ -> },
+    viewModel: PersonViewModel = hiltViewModel()
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(state.blocked) { if (state.blocked) onBlocked() }
     val detail = state.detail
@@ -48,7 +53,9 @@ fun PersonRoute(onBack: () -> Unit, onBlocked: () -> Unit, viewModel: PersonView
             BackCircleButton(onClick = onBack)
             ErrorState(loadError.asString(), viewModel::load)
         }
-        detail != null -> PersonContent(detail, state, viewModel, onBack)
+        detail != null -> PersonContent(detail, state, viewModel, onBack) {
+            onInvitePlan(detail.person.id, detail.person.name.substringBefore(' '))
+        }
     }
     if (state.options && detail != null) {
         FriendOptionsSheet(
@@ -83,8 +90,14 @@ fun PersonRoute(onBack: () -> Unit, onBlocked: () -> Unit, viewModel: PersonView
 }
 
 @Composable
-private fun PersonContent(detail: PersonDetail, state: PersonUiState, viewModel: PersonViewModel, onBack: () -> Unit) {
-    FormScreen(footer = { Actions(detail.relation, state, viewModel) }) {
+private fun PersonContent(
+    detail: PersonDetail,
+    state: PersonUiState,
+    viewModel: PersonViewModel,
+    onBack: () -> Unit,
+    onInvitePlan: () -> Unit
+) {
+    FormScreen(footer = { Actions(detail.relation, state, viewModel, onInvitePlan) }) {
         BackCircleButton(onClick = onBack)
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -133,7 +146,7 @@ private fun FriendFacts(detail: PersonDetail) {
 }
 
 @Composable
-private fun Actions(relation: Relation, state: PersonUiState, viewModel: PersonViewModel) {
+private fun Actions(relation: Relation, state: PersonUiState, viewModel: PersonViewModel, onInvitePlan: () -> Unit) {
     val working = state.working
     val hasFriendship = state.friendshipId != null
     when (relation) {
@@ -164,17 +177,26 @@ private fun Actions(relation: Relation, state: PersonUiState, viewModel: PersonV
                 tag = "person_reject"
             )
         }
-        Relation.FRIEND -> WhereverOutlinedButton(
-            stringResource(R.string.friends_options_button),
-            viewModel::openOptions,
-            enabled = !working && hasFriendship,
-            icon = Icons.Outlined.Check,
-            tag = "person_options"
-        )
+        Relation.FRIEND -> {
+            // InvitarPlan (specs/nv-25).
+            WhereverPrimaryButton(
+                stringResource(R.string.person_invite_plan),
+                onInvitePlan,
+                enabled = !working,
+                tag = "person_invite_plan"
+            )
+            WhereverOutlinedButton(
+                stringResource(R.string.friends_options_button),
+                viewModel::openOptions,
+                enabled = !working && hasFriendship,
+                icon = Icons.Outlined.Check,
+                tag = "person_options"
+            )
+        }
     }
 }
 
-/** 27_AmigoOpc: Silenciar, Eliminar de mis amigos y Bloquear. "Invitar a un grupo" llega con nv-25. */
+/** 27_AmigoOpc: Silenciar, Eliminar de mis amigos y Bloquear. Invitar a un plan va en el perfil (InvitarPlan). */
 @Composable
 internal fun FriendOptionsSheet(detail: PersonDetail, working: Boolean, error: String?, actions: FriendOptionsActions) {
     WhereverBottomSheet(onDismissRequest = actions.onDismiss, tag = "person_options_sheet") {

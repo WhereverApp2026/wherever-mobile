@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -28,10 +30,12 @@ class CouponsContentTest {
         compose.setContent { WhereverTheme { CouponFormContent(state, SAMPLE_TODAY, CouponFormActions()) } }
 
         compose.onNodeWithTag("coupon_preview").performScrollTo()
-        compose.onNode(hasText("15%")).assertExists()
+        compose.onNode(hasText("15%") and hasAnyAncestor(hasTestTag("coupon_preview")), useUnmergedTree = true)
+            .assertExists()
 
         state = state.copy(type = CouponType.TWO_FOR_ONE, value = "")
-        compose.onNode(hasText("2x1", substring = false)).assertExists()
+        compose.onNode(hasText("2x1") and hasAnyAncestor(hasTestTag("coupon_preview")), useUnmergedTree = true)
+            .assertExists()
     }
 
     @Test

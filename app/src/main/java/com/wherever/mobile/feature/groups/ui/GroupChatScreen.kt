@@ -2,6 +2,7 @@ package com.wherever.mobile.feature.groups.ui
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -75,6 +76,7 @@ fun GroupChatRoute(
     onPlan: (String) -> Unit,
     onGone: () -> Unit,
     onVaca: (String) -> Unit = {},
+    onDetails: (String) -> Unit = {},
     viewModel: GroupChatViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -89,6 +91,7 @@ fun GroupChatRoute(
             onBack = onBack,
             onPlan = onPlan,
             onVaca = { state.group?.id?.let(onVaca) },
+            onDetails = { state.group?.id?.let(onDetails) },
             onRetry = viewModel::load,
             onOlder = viewModel::loadOlder,
             onDraft = viewModel::onDraft,
@@ -103,6 +106,8 @@ data class GroupChatActions(
     val onPlan: (String) -> Unit = {},
     /** La vaca virtual del grupo (specs/nv-26). */
     val onVaca: () -> Unit = {},
+    /** 46_Grupo (specs/nv-25): al tocar el encabezado. */
+    val onDetails: () -> Unit = {},
     val onRetry: () -> Unit = {},
     val onOlder: () -> Unit = {},
     val onDraft: (String) -> Unit = {},
@@ -119,7 +124,7 @@ fun GroupChatContent(state: GroupChatUiState, actions: GroupChatActions, zone: Z
             .safeDrawingPadding()
             .imePadding()
     ) {
-        ChatHeader(state, actions.onBack)
+        ChatHeader(state, actions.onBack, actions.onDetails)
         Column(
             modifier = Modifier.padding(horizontal = ScreenPadding),
             verticalArrangement = Arrangement.spacedBy(Spacing.S)
@@ -154,7 +159,7 @@ fun GroupChatContent(state: GroupChatUiState, actions: GroupChatActions, zone: Z
 }
 
 @Composable
-private fun ChatHeader(state: GroupChatUiState, onBack: () -> Unit) {
+private fun ChatHeader(state: GroupChatUiState, onBack: () -> Unit, onDetails: () -> Unit) {
     val group = state.group
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -165,7 +170,13 @@ private fun ChatHeader(state: GroupChatUiState, onBack: () -> Unit) {
         if (group != null) {
             AvatarStack(group.members.map(GroupMember::name), size = Sizes.AvatarS, max = 2)
             Spacer(Modifier.width(Spacing.M))
-            Column(modifier = Modifier.weight(1f)) {
+            val openDetails = stringResource(R.string.group_detail_open)
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable(onClickLabel = openDetails, onClick = onDetails)
+                    .testTag("chat_header")
+            ) {
                 Text(
                     state.title ?: groupTitle(group),
                     style = MaterialTheme.typography.titleLarge,

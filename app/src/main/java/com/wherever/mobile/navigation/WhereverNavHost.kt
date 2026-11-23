@@ -46,8 +46,13 @@ import com.wherever.mobile.feature.friends.ui.FindFriendsRoute as FindFriendsScr
 import com.wherever.mobile.feature.friends.ui.FriendsRoute as FriendsScreen
 import com.wherever.mobile.feature.friends.ui.MyCodeRoute as MyCodeScreen
 import com.wherever.mobile.feature.friends.ui.PersonRoute as PersonScreen
+import com.wherever.mobile.feature.groups.ui.CreateGroupRoute as CreateGroupScreen
 import com.wherever.mobile.feature.groups.ui.GroupChatRoute as GroupChatScreen
+import com.wherever.mobile.feature.groups.ui.GroupDetailNavigation
+import com.wherever.mobile.feature.groups.ui.GroupDetailRoute as GroupDetailScreen
+import com.wherever.mobile.feature.groups.ui.InvitePlanRoute as InvitePlanScreen
 import com.wherever.mobile.feature.groups.ui.MyGroupsRoute as MyGroupsScreen
+import com.wherever.mobile.feature.groups.ui.VoteRoute as VoteScreen
 import com.wherever.mobile.feature.help.ui.HelpRoute as HelpScreen
 import com.wherever.mobile.feature.home.ui.HomeNavigation
 import com.wherever.mobile.feature.home.ui.HomeRouteScreen
@@ -350,6 +355,7 @@ fun WhereverNavHost(
             PlanDetailScreen(
                 onBack = { navController.popOnResult(e) },
                 onOpenPlan = { id -> navController.navigateOnResult(e, PlanRoute(id)) },
+                onInviteFriends = { navController.navigateFrom(e, CreateGroupRoute(it)) },
                 onArrived = { target ->
                     navController.navigateFrom(
                         e,
@@ -398,7 +404,41 @@ fun WhereverNavHost(
                 onBack = { navController.popFrom(e) },
                 onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
                 onGone = { navController.popOnResult(e) },
-                onVaca = { navController.navigateFrom(e, VacaRoute(it)) }
+                onVaca = { navController.navigateFrom(e, VacaRoute(it)) },
+                onDetails = { navController.navigateFrom(e, GroupRoute(it)) }
+            )
+        }
+        composable<GroupRoute> { e ->
+            GroupDetailScreen(
+                GroupDetailNavigation(
+                    onBack = { navController.popFrom(e) },
+                    onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
+                    onVotes = { navController.navigateFrom(e, VoteRoute(it)) },
+                    onVaca = { navController.navigateFrom(e, VacaRoute(it)) },
+                    onInvite = { plan, group -> navController.navigateFrom(e, CreateGroupRoute(plan, group)) },
+                    onGone = { navController.leaveGroup(e) }
+                )
+            )
+        }
+        composable<VoteRoute> { e ->
+            VoteScreen(onBack = { navController.popFrom(e) })
+        }
+        composable<CreateGroupRoute> { e ->
+            CreateGroupScreen(
+                onBack = { navController.popFrom(e) },
+                onDone = { groupId -> navController.groupReady(e, groupId) },
+                onAddFriends = { navController.navigateFrom(e, AddFriendRoute) }
+            )
+        }
+        composable<InvitePlanRoute> { e ->
+            InvitePlanScreen(
+                onBack = { navController.popFrom(e) },
+                onCreatePlan = { navController.navigateFrom(e, CreatePlanRoute()) },
+                onGroup = { groupId ->
+                    navController.navigateFrom(e, GroupChatRoute(groupId)) {
+                        popUpTo<InvitePlanRoute> { inclusive = true }
+                    }
+                }
             )
         }
         composable<VacaRoute> { e ->
@@ -454,7 +494,11 @@ fun WhereverNavHost(
             )
         }
         composable<PersonRoute> { e ->
-            PersonScreen(onBack = { navController.popFrom(e) }, onBlocked = { navController.popOnResult(e) })
+            PersonScreen(
+                onBack = { navController.popFrom(e) },
+                onBlocked = { navController.popOnResult(e) },
+                onInvitePlan = { id, name -> navController.navigateFrom(e, InvitePlanRoute(id, name)) }
+            )
         }
         composable<ProfileRoute> { e ->
             ProfileScreen(
@@ -575,6 +619,20 @@ private fun NavHostController.openCreate(from: NavBackStackEntry, option: Create
 }
 
 /** Las pestañas comparten la raíz Inicio y guardan su estado (scroll, filtros) al cambiar. */
+/** Salí del grupo (o ya no es mío): se cierra también su chat y se vuelve a Mis grupos. */
+private fun NavHostController.leaveGroup(from: NavBackStackEntry) {
+    if (currentBackStackEntry?.id == from.id && !popBackStack<MyGroupsRoute>(inclusive = false)) popBackStack()
+}
+
+/** 43_CrearGrupo terminó: al invitar se regresa al grupo; al crear se abre su chat en su lugar. */
+private fun NavHostController.groupReady(from: NavBackStackEntry, groupId: String) {
+    if (from.toRoute<CreateGroupRoute>().groupId.isNotEmpty()) {
+        popOnResult(from)
+    } else {
+        navigateOnResult(from, GroupChatRoute(groupId)) { popUpTo<CreateGroupRoute> { inclusive = true } }
+    }
+}
+
 private fun NavHostController.openTab(from: NavBackStackEntry, tab: MainTab) {
     val route: Any = when (tab) {
         MainTab.HOME -> HomeRoute
