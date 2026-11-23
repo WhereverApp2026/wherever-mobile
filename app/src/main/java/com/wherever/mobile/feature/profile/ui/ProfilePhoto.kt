@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,9 +40,9 @@ import coil3.compose.AsyncImage
 import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.InitialAvatar
 import com.wherever.mobile.core.designsystem.InlineProgress
-import com.wherever.mobile.core.designsystem.RouteBlue
 import com.wherever.mobile.core.designsystem.Sizes
 import com.wherever.mobile.core.designsystem.Spacing
+import com.wherever.mobile.core.designsystem.Sunset
 import com.wherever.mobile.core.designsystem.WhereverDialog
 import com.wherever.mobile.core.designsystem.WhereverTextButton
 import java.io.File
@@ -111,10 +111,11 @@ fun EditableProfileAvatar(
                     .align(Alignment.BottomEnd)
                     .size(Sizes.EditBadge)
                     .clip(CircleShape)
-                    .background(RouteBlue)
+                    .background(Sunset)
             ) {
+                // 81_Perfil: «+» naranja para cambiar la foto.
                 Icon(
-                    Icons.Outlined.Edit,
+                    Icons.Outlined.Add,
                     contentDescription = null,
                     tint = Color.White,
                     modifier = Modifier.size(Sizes.IconS)

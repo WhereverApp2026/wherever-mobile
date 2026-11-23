@@ -46,6 +46,10 @@ data object BadgesRoute
 @Serializable
 data object EditProfileRoute
 
+/** 82_EditarPerfil: nombre, usuario, bio, gustos y privacidad social (specs/nv-14). */
+@Serializable
+data object ProfileEditorRoute
+
 @Serializable
 data object SettingsRoute
 

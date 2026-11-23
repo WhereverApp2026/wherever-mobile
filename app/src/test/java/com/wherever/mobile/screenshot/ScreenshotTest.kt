@@ -77,6 +77,7 @@ import com.wherever.mobile.feature.plans.ui.PlanReadyPreview
 import com.wherever.mobile.feature.plans.ui.PlanWordPreview
 import com.wherever.mobile.feature.profile.ui.BadgesPreview
 import com.wherever.mobile.feature.profile.ui.EditProfilePreview
+import com.wherever.mobile.feature.profile.ui.ProfileEditorPreview
 import com.wherever.mobile.feature.profile.ui.ProfilePreview
 import com.wherever.mobile.feature.reviews.ui.MyReviewsConfirmPreview
 import com.wherever.mobile.feature.reviews.ui.MyReviewsPreview
@@ -133,7 +134,8 @@ class ScreenshotTest {
         "06_gustos" to { TastesPreview() },
         "08_permisos" to { PermissionsPreview() },
         "perfil" to { ProfilePreview() },
-        "editar_perfil" to { EditProfilePreview() },
+        "84_datos_personales" to { EditProfilePreview() },
+        "82_editar_perfil" to { ProfileEditorPreview() },
         "85_ajustes" to { SettingsPreview() },
         "28_priv_social" to { PrivacyPreview() },
         "eliminar_cuenta" to { DeleteAccountPreview() },

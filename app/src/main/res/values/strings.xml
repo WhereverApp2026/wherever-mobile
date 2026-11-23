@@ -801,7 +801,7 @@
     <string name="notification_accept">Aceptar</string>
     <string name="notification_now_friends">Ya es tu amigo. Ahora pueden hacer planes juntos.</string>
     <string name="notification_request_gone">Esa solicitud ya no está: la cancelaron o ya la respondiste.</string>
-    <string name="badges_title">Insignias</string>
+    <string name="badges_title">Mis insignias</string>
     <string name="badges_level_label">Tu nivel</string>
     <plurals name="badges_points">
         <item quantity="one">%1$d punto</item>
@@ -1586,4 +1586,42 @@
     <string name="settings_app_lock">Desbloquear con huella o rostro</string>
     <string name="settings_app_lock_hint">Al abrir la app y al volver después de un minuto.</string>
     <string name="settings_app_lock_unavailable">Configura una huella, rostro o bloqueo de pantalla en tu teléfono para usarlo.</string>
+    <!-- 81_Perfil (Figma 298:8711) -->
+    <string name="profile_notifications">Notificaciones</string>
+    <string name="profile_share_code">Compartir mi código</string>
+    <string name="profile_count_plans">planes</string>
+    <string name="profile_count_friends">amigos</string>
+    <string name="profile_count_reviews">reseñas</string>
+    <string name="profile_count_unknown">—</string>
+    <string name="profile_level_number">Nv. %1$d</string>
+    <string name="profile_badges_more">+%1$d</string>
+    <string name="profile_shortcut_reservations">Reservas</string>
+    <string name="profile_shortcut_favorites">Favoritos</string>
+    <string name="profile_shortcut_coupons">Cupones</string>
+    <string name="profile_coupons_soon">Tus cupones llegan muy pronto.</string>
+    <string name="profile_my_reviews_hint">Publicadas y pendientes</string>
+    <plurals name="profile_pending_new">
+        <item quantity="one">%1$d nueva</item>
+        <item quantity="many">%1$d nuevas</item>
+        <item quantity="other">%1$d nuevas</item>
+    </plurals>
+    <string name="profile_tab_posts">Publicaciones</string>
+    <string name="profile_tab_plans">Planes</string>
+    <string name="profile_tab_saved">Guardados</string>
+    <string name="profile_empty_posts">Aún no publicas postales. Toma una en tu próxima visita.</string>
+    <string name="profile_empty_plans">No tienes planes próximos.</string>
+    <string name="profile_empty_saved">Todavía no guardas lugares.</string>
+    <!-- 82_EditarPerfil y 84_DatosPers -->
+    <string name="personal_data_title">Datos personales</string>
+    <string name="personal_data_save">Guardar cambios</string>
+    <string name="profile_editor_done">Listo</string>
+    <string name="profile_editor_username">Usuario</string>
+    <string name="profile_editor_bio">Bio</string>
+    <string name="profile_editor_bio_hint">Cuéntales a tus amigos qué te gusta hacer</string>
+    <string name="profile_editor_add_tastes">Elegir mis gustos</string>
+    <string name="profile_editor_privacy">Privacidad social</string>
+    <string name="profile_editor_privacy_hint">Quién ve tu actividad, tus planes y tus reseñas</string>
+    <!-- 83_Insignias (Figma 298:8945) -->
+    <string name="badges_earned_count">Ganadas · %1$d</string>
+    <string name="badges_points_of_next">%1$d de %2$d puntos para ser %3$s</string>
 </resources>

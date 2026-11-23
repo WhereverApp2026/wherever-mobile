@@ -72,7 +72,19 @@ data class UserProfileDto(
     @SerialName("nivel") val level: String = "",
     @SerialName("racha_semanas") val weekStreak: Int = 0,
     @SerialName("eliminar_en") val deleteAt: String? = null,
-    @SerialName("version") val version: Long
+    @SerialName("version") val version: Long,
+    /** nv-77: una línea de hasta 160 caracteres. */
+    @SerialName("descripcion") val description: String? = null,
+    @SerialName("nivel_numero") val levelNumber: Int? = null,
+    /** nv-81: solo en `GET /usuarios/yo`. */
+    @SerialName("contadores") val counters: CountersDto? = null
+)
+
+@Serializable
+data class CountersDto(
+    @SerialName("planes") val plans: Int? = null,
+    @SerialName("amigos") val friends: Int? = null,
+    @SerialName("resenas") val reviews: Int? = null
 )
 
 @Serializable
@@ -80,7 +92,9 @@ data class ProfilePatchDto(
     @SerialName("nombre") val name: String? = null,
     @SerialName("ciudad_id") val cityId: String? = null,
     @SerialName("foto_url") val photoUrl: String? = null,
-    @SerialName("nombre_usuario") val username: String? = null
+    @SerialName("nombre_usuario") val username: String? = null,
+    /** nv-77: `""` borra la bio. */
+    @SerialName("descripcion") val description: String? = null
 )
 
 @Serializable

@@ -2,14 +2,12 @@ package com.wherever.mobile.feature.profile.ui
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -24,29 +22,29 @@ import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.LabeledTextField
 import com.wherever.mobile.core.designsystem.LoadingState
-import com.wherever.mobile.core.designsystem.NavRow
 import com.wherever.mobile.core.designsystem.PhaseCrossfade
 import com.wherever.mobile.core.designsystem.ScreenPhase
 import com.wherever.mobile.core.designsystem.Sizes
+import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.StatusPill
-import com.wherever.mobile.core.designsystem.SurfaceCard
+import com.wherever.mobile.core.designsystem.TopTitleRow
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.core.ui.SecureScreen
-import com.wherever.mobile.feature.profile.domain.CitySuggestion
 
-/** 82_EditarPerfil y 84_DatosPers en una sola pantalla (duda D09). */
+/** 84_DatosPers (Figma `298:7692`): nombre, correo, ciudad, foto y eliminar la cuenta. */
 @Composable
 fun EditProfileRoute(
     onBack: () -> Unit,
-    onTastes: () -> Unit,
-    onPrivacy: () -> Unit,
     onDeleteAccount: () -> Unit,
-    viewModel: EditProfileViewModel = hiltViewModel()
+    viewModel: EditProfileViewModel = hiltViewModel(),
+    photoViewModel: ProfilePhotoViewModel = hiltViewModel()
 ) {
     SecureScreen()
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val photoState by photoViewModel.state.collectAsStateWithLifecycle()
+    val photoActions = rememberPhotoActions(photoViewModel)
     LaunchedEffect(viewModel) { viewModel.saved.collect { onBack() } }
     PhaseCrossfade(if (state.loading) ScreenPhase.LOADING else ScreenPhase.CONTENT) { phase ->
         if (phase == ScreenPhase.LOADING) {
@@ -54,59 +52,61 @@ fun EditProfileRoute(
         } else {
             EditProfileContent(
                 state = state,
-                onNameChange = viewModel::onNameChange,
-                onCityQuery = viewModel::onCityQueryChange,
-                onCitySelect = viewModel::onCitySelect,
-                onSave = viewModel::save,
-                onCancel = onBack,
-                onTastes = onTastes,
-                onPrivacy = onPrivacy,
-                onDeleteAccount = onDeleteAccount
+                actions = PersonalDataActions(
+                    onNameChange = viewModel::onNameChange,
+                    onCityQuery = viewModel::onCityQueryChange,
+                    onCitySelect = viewModel::onCitySelect,
+                    onSave = viewModel::save,
+                    onBack = onBack,
+                    onDeleteAccount = onDeleteAccount
+                ),
+                avatar = {
+                    EditableProfileAvatar(
+                        state.name.ifBlank { state.originalName },
+                        state.photoUrl,
+                        photoState,
+                        photoActions
+                    )
+                },
+                onChangePhoto = photoActions.onOpen
             )
         }
     }
 }
 
 @Composable
-private fun EditProfileContent(
+internal fun EditProfileContent(
     state: EditProfileUiState,
-    onNameChange: (String) -> Unit,
-    onCityQuery: (String) -> Unit,
-    onCitySelect: (CitySuggestion) -> Unit,
-    onSave: () -> Unit,
-    onCancel: () -> Unit,
-    onTastes: () -> Unit,
-    onPrivacy: () -> Unit,
-    onDeleteAccount: () -> Unit
+    actions: PersonalDataActions,
+    avatar: @Composable () -> Unit = {
+        ProfileAvatar(state.name.ifBlank { state.originalName }, state.photoUrl, size = Sizes.AvatarL)
+    },
+    onChangePhoto: () -> Unit = {}
 ) {
     FormScreen(
         footer = {
             WhereverPrimaryButton(
-                text = stringResource(R.string.common_save),
-                onClick = onSave,
+                text = stringResource(R.string.personal_data_save),
+                onClick = actions.onSave,
                 enabled = state.canSave,
                 loading = state.saving,
                 tag = "edit_profile_save"
             )
         }
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+        TopTitleRow(stringResource(R.string.personal_data_title), actions.onBack)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(Spacing.S),
+            modifier = Modifier.fillMaxWidth()
         ) {
-            WhereverTextLink(stringResource(R.string.common_cancel), onCancel)
-            Text(text = stringResource(R.string.edit_profile_title), style = MaterialTheme.typography.titleLarge)
-            // Mantiene el título centrado, como en la maqueta.
-            Box(Modifier)
-        }
-        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            ProfileAvatar(state.name.ifBlank { state.originalName }, state.photoUrl, size = Sizes.AvatarL)
+            avatar()
+            WhereverTextLink(stringResource(R.string.photo_change), onChangePhoto)
         }
         LabeledTextField(
             label = stringResource(R.string.field_name),
             value = state.name,
-            onValueChange = onNameChange,
+            onValueChange = actions.onNameChange,
             leadingIcon = Icons.Outlined.Person,
             error = state.nameError?.asString(),
             tag = "edit_profile_name"
@@ -124,18 +124,14 @@ private fun EditProfileContent(
             },
             tag = "edit_profile_email"
         )
-        CityField(state.city, onCityQuery, onCitySelect, tag = "edit_profile_city")
+        CityField(state.city, actions.onCityQuery, actions.onCitySelect, tag = "edit_profile_city")
         state.error?.let { ErrorBanner(it.asString()) }
-        SurfaceCard {
-            NavRow(stringResource(R.string.edit_profile_tastes), onTastes)
-            NavRow(stringResource(R.string.privacy_title), onPrivacy)
-            NavRow(
-                title = stringResource(R.string.delete_account_action),
-                onClick = onDeleteAccount,
-                titleColor = MaterialTheme.colorScheme.error,
-                tag = "edit_profile_delete"
-            )
-        }
+        WhereverTextLink(
+            stringResource(R.string.delete_account_action),
+            actions.onDeleteAccount,
+            modifier = Modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.error
+        )
     }
 }
 
@@ -146,14 +142,7 @@ internal fun EditProfilePreview() {
     WhereverTheme {
         EditProfileContent(
             EditProfileUiState(loading = false, name = "Ana López", email = "ana@ejemplo.com", emailVerified = true),
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {}
+            PersonalDataActions()
         )
     }
 }

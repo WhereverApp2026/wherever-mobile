@@ -53,7 +53,8 @@
 | `PersonRoute(id)` | Perfil de otra persona con su acción | ninguno | release | nv-53 |
 | `MyPlansRoute` | Mis planes (próximos, guardados y pasados) | ninguno | release | nv-48 |
 | `ProfileRoute` | Perfil | ninguno | release | nv-14 |
-| `EditProfileRoute` | Editar perfil | ninguno | release | nv-14 |
+| `EditProfileRoute` | 84_DatosPers: nombre, correo, ciudad, foto y eliminar la cuenta | ninguno | release | nv-14 |
+| `ProfileEditorRoute` | 82_EditarPerfil: nombre, usuario, bio, gustos y privacidad social | ninguno | release | nv-14 |
 | `SettingsRoute` | Ajustes | ninguno | release | nv-13 |
 | `BusinessOnboardingRoute` | Alta del negocio: registro, ubicación, operación, verificación y solicitud enviada (43 a 47) | ubicación aproximada al tocar «Estoy en mi negocio» | release | nv-34 |
 | `BusinessHomeRoute` | Modo negocio: entra con `POST /usuarios/yo/modo` y abre el Panel del negocio activo (barra interna Panel y Reservas; Cupones, Reseñas y Perfil llegan con nv-36 a nv-38) | ninguno | release | nv-35 |

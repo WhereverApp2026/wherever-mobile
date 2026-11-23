@@ -5,14 +5,25 @@ import app.cash.turbine.test
 import com.wherever.mobile.R
 import com.wherever.mobile.core.common.AppError
 import com.wherever.mobile.core.common.FieldError
+import com.wherever.mobile.core.common.PageResult
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.ui.UiText
+import com.wherever.mobile.feature.memories.domain.PostcardState
+import com.wherever.mobile.feature.profile.domain.Badge
+import com.wherever.mobile.feature.profile.domain.BadgesRepository
 import com.wherever.mobile.feature.profile.domain.CitySuggestion
 import com.wherever.mobile.feature.profile.domain.PreferencesPatch
+import com.wherever.mobile.feature.profile.domain.ProfileExtras
+import com.wherever.mobile.feature.reviews.domain.PendingReview
 import com.wherever.mobile.feature.tastes.ui.TastesViewModel
 import com.wherever.mobile.testing.FakeAuthRepository
+import com.wherever.mobile.testing.FakeMemoriesRepository
+import com.wherever.mobile.testing.FakePlacesRepository
+import com.wherever.mobile.testing.FakePlansRepository
 import com.wherever.mobile.testing.FakeProfileRepository
+import com.wherever.mobile.testing.FakeReviewRepository
 import com.wherever.mobile.testing.MainDispatcherRule
+import com.wherever.mobile.testing.samplePostcard
 import com.wherever.mobile.testing.sampleProfile
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceTimeBy
@@ -33,12 +44,69 @@ class ProfileViewModelsTest {
 
     private val profiles = FakeProfileRepository()
     private val auth = FakeAuthRepository()
+    private val reviews = FakeReviewRepository()
+    private val memories = FakeMemoriesRepository()
+    private val plans = FakePlansRepository()
+    private val places = FakePlacesRepository()
+    private var badgeList: Result<List<Badge>> = Result.Success(emptyList())
+    private val badges = object : BadgesRepository {
+        override suspend fun badges(): Result<List<Badge>> = badgeList
+    }
+
+    private fun profileViewModel() = ProfileViewModel(profiles, badges, reviews, memories, plans, places)
+
+    @Test
+    fun `perfil muestra contadores, insignias, resenas por hacer y cambia de pestana`() = runTest {
+        profiles.extras.value = ProfileExtras("Cafés y tacos", 3, plans = 12, friends = 24, reviews = 5)
+        badgeList = Result.Success(
+            listOf(
+                Badge("a", "Catador", "", earned = true),
+                Badge("b", "Reseñista", "", earned = true),
+                Badge("c", "Cronista", "", earned = true),
+                Badge("d", "Viajero", "", earned = false)
+            )
+        )
+        reviews.pendingResult = Result.Success(
+            listOf(
+                PendingReview("k1", "p1", "Café", "2026-11-20", "2026-11-27"),
+                PendingReview("k2", "p2", "Bar", "2026-11-21", "2026-11-28")
+            )
+        )
+        memories.pages[null] = Result.Success(
+            PageResult(listOf(samplePostcard("c1"), samplePostcard("c2", state = PostcardState.IN_MODERATION)), null)
+        )
+        val viewModel = profileViewModel()
+        advanceUntilIdle()
+
+        val state = viewModel.state.value
+        assertEquals(24, state.extras?.friends)
+        assertEquals(listOf("Catador", "Reseñista"), state.badges?.shown?.map { it.name })
+        assertEquals(1, state.badges?.more)
+        assertEquals(2, state.pendingReviews)
+        assertEquals("Solo las postales listas", listOf("c1"), state.currentTiles?.map { it.id })
+
+        viewModel.selectTab(ProfileTab.SAVED)
+        advanceUntilIdle()
+        assertEquals(listOf("Café Andrade"), viewModel.state.value.currentTiles?.map { it.title })
+        viewModel.selectTab(ProfileTab.PLANS)
+        advanceUntilIdle()
+        assertEquals(listOf("plan1"), viewModel.state.value.currentTiles?.map { it.id })
+    }
+
+    @Test
+    fun `una pestana sin red muestra el error y no inventa celdas`() = runTest {
+        memories.pages[null] = Result.Failure(AppError.Network)
+        val viewModel = profileViewModel()
+        advanceUntilIdle()
+        assertEquals(UiText.Res(R.string.error_network), viewModel.state.value.tabError)
+        assertEquals(null, viewModel.state.value.currentTiles)
+    }
 
     // Perfil
 
     @Test
     fun `perfil muestra lo que llega y deja de cargar`() = runTest {
-        val viewModel = ProfileViewModel(profiles)
+        val viewModel = profileViewModel()
         assertTrue(viewModel.state.value.loading)
 
         advanceUntilIdle()
@@ -52,11 +120,42 @@ class ProfileViewModelsTest {
         profiles.profile.value = sampleProfile()
         profiles.refreshResult = Result.Failure(AppError.Network)
 
-        val viewModel = ProfileViewModel(profiles)
+        val viewModel = profileViewModel()
         advanceUntilIdle()
 
         assertEquals("Ana López", viewModel.state.value.profile?.name)
         assertEquals(UiText.Res(R.string.error_network), viewModel.state.value.error)
+    }
+
+    // 82_EditarPerfil
+
+    @Test
+    fun `editar perfil guarda solo lo que cambio y cierra`() = runTest {
+        profiles.profile.value = sampleProfile()
+        profiles.extras.value = ProfileExtras("Cafés", null, null, null, null)
+        val viewModel = ProfileEditorViewModel(profiles)
+        advanceUntilIdle()
+        assertEquals("Cafés", viewModel.state.value.bio)
+
+        viewModel.onUsername("@Ana_L")
+        viewModel.onBio("Cafés y tacos")
+        assertEquals("ana_l", viewModel.state.value.username)
+        viewModel.save()
+        advanceUntilIdle()
+
+        assertEquals(listOf("username:ana_l", "bio:Cafés y tacos"), profiles.editorCalls)
+    }
+
+    @Test
+    fun `editar perfil no deja guardar un usuario invalido`() = runTest {
+        profiles.profile.value = sampleProfile()
+        val viewModel = ProfileEditorViewModel(profiles)
+        advanceUntilIdle()
+        viewModel.onUsername("a!")
+        viewModel.save()
+        advanceUntilIdle()
+        assertEquals(UiText.Res(R.string.friends_username_rule), viewModel.state.value.usernameError)
+        assertTrue(profiles.editorCalls.isEmpty())
     }
 
     // Editar perfil

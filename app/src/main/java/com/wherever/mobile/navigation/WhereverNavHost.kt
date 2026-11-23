@@ -73,6 +73,8 @@ import com.wherever.mobile.feature.plans.ui.MyPlansRoute as MyPlansScreen
 import com.wherever.mobile.feature.plans.ui.PlanDetailRoute as PlanDetailScreen
 import com.wherever.mobile.feature.profile.ui.BadgesRoute as BadgesScreen
 import com.wherever.mobile.feature.profile.ui.EditProfileRoute as EditProfileScreen
+import com.wherever.mobile.feature.profile.ui.ProfileEditorRoute as ProfileEditorScreen
+import com.wherever.mobile.feature.profile.ui.ProfileNavigation
 import com.wherever.mobile.feature.profile.ui.ProfileRoute as ProfileScreen
 import com.wherever.mobile.feature.reservations.ui.MyReservationsRoute as MyReservationsScreen
 import com.wherever.mobile.feature.reservations.ui.ReservationRoute as ReservationScreen
@@ -502,21 +504,27 @@ fun WhereverNavHost(
         }
         composable<ProfileRoute> { e ->
             ProfileScreen(
-                onTab = { navController.openTab(e, it) },
-                onCreate = { navController.openCreate(e, it) },
-                onEdit = { navController.navigateFrom(e, EditProfileRoute) },
-                onFavorites = { navController.navigateFrom(e, FavoritesRoute) },
-                onFriends = { navController.navigateFrom(e, FriendsRoute) },
-                onReservations = { navController.navigateFrom(e, MyReservationsRoute) },
-                onBadges = { navController.navigateFrom(e, BadgesRoute) },
-                onMyReviews = { navController.navigateFrom(e, MyReviewsRoute) },
-                onPendingReviews = { navController.navigateFrom(e, PendingReviewsRoute) },
-                onMemories = { navController.navigateFrom(e, AlbumRoute) },
-                onNewMoment = { navController.navigateFrom(e, CreateMomentRoute()) },
-                onSettings = { navController.navigateFrom(e, SettingsRoute) },
-                onVerifyEmail = { email ->
-                    navController.navigateFrom(e, CheckEmailRoute(CheckEmailMode.VERIFICATION.name, email))
-                }
+                ProfileNavigation(
+                    onTab = { navController.openTab(e, it) },
+                    onCreate = { navController.openCreate(e, it) },
+                    onEdit = { navController.navigateFrom(e, ProfileEditorRoute) },
+                    onSettings = { navController.navigateFrom(e, SettingsRoute) },
+                    onNotifications = { navController.navigateFrom(e, NotificationsRoute) },
+                    onMyCode = { navController.navigateFrom(e, MyCodeRoute()) },
+                    onFriends = { navController.navigateFrom(e, FriendsRoute) },
+                    onBadges = { navController.navigateFrom(e, BadgesRoute) },
+                    onReservations = { navController.navigateFrom(e, MyReservationsRoute) },
+                    onFavorites = { navController.navigateFrom(e, FavoritesRoute) },
+                    onMemories = { navController.navigateFrom(e, AlbumRoute) },
+                    onMyReviews = { navController.navigateFrom(e, MyReviewsRoute) },
+                    onPendingReviews = { navController.navigateFrom(e, PendingReviewsRoute) },
+                    onVerifyEmail = { email ->
+                        navController.navigateFrom(e, CheckEmailRoute(CheckEmailMode.VERIFICATION.name, email))
+                    },
+                    onPostcard = { navController.navigateFrom(e, PostcardRoute(it)) },
+                    onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
+                    onPlace = { navController.navigateFrom(e, PlaceRoute(it)) }
+                )
             )
         }
         composable<BadgesRoute> { e ->
@@ -525,9 +533,14 @@ fun WhereverNavHost(
         composable<EditProfileRoute> { e ->
             EditProfileScreen(
                 onBack = { navController.popFrom(e) },
-                onTastes = { navController.navigateFrom(e, TastesRoute(fromSettings = true)) },
-                onPrivacy = { navController.navigateFrom(e, PrivacyRoute) },
                 onDeleteAccount = { navController.navigateFrom(e, DeleteAccountRoute) }
+            )
+        }
+        composable<ProfileEditorRoute> { e ->
+            ProfileEditorScreen(
+                onBack = { navController.popFrom(e) },
+                onTastes = { navController.navigateFrom(e, TastesRoute(fromSettings = true)) },
+                onPrivacy = { navController.navigateFrom(e, PrivacyRoute) }
             )
         }
         composable<SettingsRoute> { e ->
