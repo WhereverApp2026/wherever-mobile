@@ -79,6 +79,9 @@ sealed interface PlanEvent {
     data class Open(val planId: String) : PlanEvent
 
     data object Deleted : PlanEvent
+
+    /** Abrir la app de mapas hacia el lugar (specs/nv-30, D25). */
+    data class Directions(val lat: Double, val lng: Double, val name: String) : PlanEvent
 }
 
 /** 39_Plan, 40_Cambiar y 41_AgregarParada (specs/nv-24; US-055 a US-058, US-061, US-063 a US-066). */
@@ -320,6 +323,21 @@ class PlanDetailViewModel @Inject constructor(
     }
 
     fun messageShown() = mutableState.update { it.copy(message = null) }
+
+    /** «Cómo llegar»: la ubicación del lugar sale de su ficha; la ruta la da la app de mapas del teléfono. */
+    fun directions(stop: PlanStop) {
+        viewModelScope.launch {
+            when (val result = places.detail(stop.placeId)) {
+                is Result.Success -> eventChannel.send(
+                    PlanEvent.Directions(result.data.location.lat, result.data.location.lng, result.data.name)
+                )
+                is Result.Failure -> mutableState.update { it.copy(message = result.error.toUiText()) }
+            }
+        }
+    }
+
+    /** El teléfono no tiene app de mapas. */
+    fun noMapsApp() = mutableState.update { it.copy(message = UiText.Res(R.string.plan_no_maps)) }
 
     /**
      * Toda edición devuelve el plan recalculado. Con 409 (otro dispositivo cambió el plan) se recarga y se

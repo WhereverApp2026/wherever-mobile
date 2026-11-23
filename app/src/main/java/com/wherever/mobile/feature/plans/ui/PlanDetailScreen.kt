@@ -3,8 +3,10 @@
 
 package com.wherever.mobile.feature.plans.ui
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,6 +49,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -103,6 +106,7 @@ private fun planDate(date: String): String = try {
 fun PlanDetailRoute(
     onBack: () -> Unit,
     onOpenPlan: (String) -> Unit,
+    onArrived: (ArrivalTarget) -> Unit = {},
     viewModel: PlanDetailViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -117,6 +121,14 @@ fun PlanDetailRoute(
                 }
                 is PlanEvent.Open -> onOpenPlan(event.planId)
                 PlanEvent.Deleted -> onBack()
+                is PlanEvent.Directions -> {
+                    val geo = "geo:${event.lat},${event.lng}?q=${event.lat},${event.lng}(${Uri.encode(event.name)})"
+                    try {
+                        context.startActivity(Intent(Intent.ACTION_VIEW, geo.toUri()))
+                    } catch (_: ActivityNotFoundException) {
+                        viewModel.noMapsApp()
+                    }
+                }
             }
         }
     }
@@ -143,7 +155,15 @@ fun PlanDetailRoute(
         onAddTab = viewModel::onAddTab,
         onAddQuery = viewModel::onAddQuery,
         onAddSuggestion = viewModel::addSuggestion,
-        onAddPlace = viewModel::addPlace
+        onAddPlace = viewModel::addPlace,
+        onDirections = viewModel::directions,
+        onArrived = { stop ->
+            val plan = state.plan
+            val ordered = plan?.stops?.sortedBy { it.arrives }.orEmpty()
+            val next = ordered.getOrNull(ordered.indexOfFirst { it.id == stop.id } + 1)
+            val transfer = plan?.transfers?.firstOrNull { it.fromStopId == stop.id && it.toStopId == next?.id }
+            onArrived(ArrivalTarget(stop.placeId, stop.name, plan?.id.orEmpty(), next?.name, transfer?.minutes))
+        }
     )
     PlanDetailContent(
         state = state,
@@ -233,7 +253,9 @@ private fun PlanBody(
         if (plan.stops.isEmpty()) {
             InfoBanner(stringResource(R.string.plan_empty_stops), tag = "plan_empty")
         } else {
-            PlanItinerary(plan.stops, plan.transfers, plan.mobility, zone) { stop, _ ->
+            PlanItinerary(plan.stops, plan.transfers, plan.mobility, zone, links = { stop, _ ->
+                StopLinks(stop, actions)
+            }) { stop, _ ->
                 StopButtons(stop, state.busy, actions)
             }
         }
@@ -264,6 +286,23 @@ private fun PlanBody(
                 color = MaterialTheme.colorScheme.error
             )
         }
+    }
+}
+
+/** «Cómo llegar» (app de mapas) y «Ya llegué» (check-in) bajo cada parada (specs/nv-30). */
+@Composable
+private fun StopLinks(stop: PlanStop, actions: PlanDetailActions) {
+    Row(horizontalArrangement = Arrangement.spacedBy(Spacing.S)) {
+        WhereverTextLink(
+            stringResource(R.string.plan_directions),
+            { actions.onDirections(stop) },
+            Modifier.testTag("stop_directions_${stop.id}")
+        )
+        WhereverTextLink(
+            stringResource(R.string.plan_arrived),
+            { actions.onArrived(stop) },
+            Modifier.testTag("stop_arrived_${stop.id}")
+        )
     }
 }
 

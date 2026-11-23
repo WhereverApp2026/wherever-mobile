@@ -19,6 +19,8 @@ import com.wherever.mobile.feature.auth.ui.PermissionsPreview
 import com.wherever.mobile.feature.auth.ui.RecoverPreview
 import com.wherever.mobile.feature.auth.ui.RegisterPreview
 import com.wherever.mobile.feature.auth.ui.WelcomePreview
+import com.wherever.mobile.feature.checkin.ui.ArrivalOkPreview
+import com.wherever.mobile.feature.checkin.ui.ArrivalPermissionPreview
 import com.wherever.mobile.feature.feed.ui.FriendPlanPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedEmptyPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedPreview
@@ -149,7 +151,9 @@ class ScreenshotTest {
         "plan_paseo_familiar" to { PlanFamilyPreview() },
         "40_cambiar" to { PlanChangePreview() },
         "41_agregar_parada" to { PlanAddStopPreview() },
-        "crear_plan" to { ManualPlanPreview() }
+        "crear_plan" to { ManualPlanPreview() },
+        "26_checkin_ok" to { ArrivalOkPreview() },
+        "llegada_sin_permiso" to { ArrivalPermissionPreview() }
     )
 
     @Test

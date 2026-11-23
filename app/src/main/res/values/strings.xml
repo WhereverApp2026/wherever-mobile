@@ -1144,4 +1144,25 @@
     <string name="help_faq_coupon_a">Guárdalo en tus cupones y, ya en el lugar, toca Canjear: te damos un código y un QR que duran 5 minutos para que el negocio lo valide.</string>
     <string name="help_faq_delete_q">¿Cómo elimino mi cuenta?</string>
     <string name="help_faq_delete_a">En Perfil, entra a Editar perfil y toca Eliminar cuenta. Tienes 30 días para arrepentirte antes de que se borre.</string>
+    <!-- Llegada, check-in y 26_CheckinOk (specs/nv-30) -->
+    <string name="plan_directions">Cómo llegar</string>
+    <string name="plan_arrived">Ya llegué</string>
+    <string name="plan_no_maps">No encontramos una app de mapas en tu teléfono.</string>
+    <string name="arrival_title">¿Ya llegaste a %1$s?</string>
+    <string name="arrival_permission">Para confirmar tu llegada usamos tu ubicación aproximada, solo en este momento. No la guardamos.</string>
+    <string name="arrival_use_location">Usar mi ubicación</string>
+    <string name="arrival_scan">Escanear el código del negocio</string>
+    <string name="arrival_scan_prompt">Apunta al código Wherever del mostrador</string>
+    <string name="arrival_retry">Intentar de nuevo</string>
+    <string name="arrival_no_location">No pudimos obtener tu ubicación. Escanea el código del negocio para confirmar tu llegada.</string>
+    <string name="arrival_bad_code">Ese código no es de Wherever. Pide en el mostrador el código para registrar tu llegada.</string>
+    <string name="arrival_done_title">¡Ya estás en %1$s!</string>
+    <string name="arrival_done_at">Check-in confirmado a las %1$s.</string>
+    <string name="arrival_done_today">Tu llegada de hoy ya estaba registrada.</string>
+    <string name="arrival_review_verified">Tu reseña de este lugar será verificada.</string>
+    <string name="arrival_next_line_minutes">Siguiente: %1$s, %2$d min.</string>
+    <string name="arrival_next_line">Siguiente: %1$s.</string>
+    <string name="arrival_postcard">Tomar una postal</string>
+    <string name="arrival_next">Ir a la siguiente parada</string>
+    <string name="arrival_back_plan">Volver al plan</string>
 </resources>

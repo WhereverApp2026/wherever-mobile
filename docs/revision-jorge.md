@@ -1,3 +1,15 @@
+# Revisión — 2026-11-22: nv-30 El día del plan, parcial (Diego)
+
+> Rama `feat/nv-30-checkin` (sale de `feat/nv-24-plan-detail`, PR #57). Frames: `26_CheckinOk` (`190:1041`); `13_Mapa` (`120:3328`), `14_MapaFull` (`120:3502`), `15_Llegar` (`120:3808`) y `18_Navegando` (`188:216`) esperan D25. Revisor: Osmar.
+
+## Decisiones tomadas
+- Diego eligió hacer ya lo que no necesita mapa; 13, 14, 15 y 18 esperan el proveedor de mapa y rutas (D25, acordar con Jorge).
+- **D-30a** «Cómo llegar» en cada parada abre la app de mapas del teléfono. **D-30b** «Ya llegué» hace el check-in real (`POST /checkins`) por ubicación aproximada o con el código del mostrador (ZXing, nv-20), y abre 26_CheckinOk con «Tomar una postal» e «Ir a la siguiente parada».
+- **D-30c** `core/location` no da precisión y la API pide `precision_m`: pedir a Jorge que `GeoPoint` la incluya; mientras, el código del mostrador cubre el rechazo.
+- **D-30d** sin Room; la ubicación no se guarda ni se registra. **D-30e** sin «cupón aplicado» (la respuesta no lo trae).
+
+---
+
 # Revisión — 2026-11-22: nv-24 Plan, detalle y edición (Diego)
 
 > Rama `feat/nv-24-plan-detail` (sale de `feat/nv-23-ai-plan`, PR #56). Frames: `39_Plan` (`292:5544`), `Plan · Paseo familiar` (`347:486`), `40_Cambiar` (`292:5784`), `41_AgregarParada` (`292:5706`), `CrearPlan` (`320:218`). Revisor: Osmar.

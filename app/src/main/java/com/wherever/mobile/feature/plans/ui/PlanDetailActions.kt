@@ -28,5 +28,9 @@ internal data class PlanDetailActions(
     val onAddTab: (AddStopTab) -> Unit = {},
     val onAddQuery: (String) -> Unit = {},
     val onAddSuggestion: (Alternative) -> Unit = {},
-    val onAddPlace: (PlaceCard) -> Unit = {}
+    val onAddPlace: (PlaceCard) -> Unit = {},
+    /** «Cómo llegar»: abre la app de mapas del teléfono (D25, specs/nv-30). */
+    val onDirections: (PlanStop) -> Unit = {},
+    /** «Ya llegué»: check-in de la parada (specs/nv-30). */
+    val onArrived: (PlanStop) -> Unit = {}
 )

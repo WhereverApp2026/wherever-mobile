@@ -315,6 +315,9 @@
 - A recordar: las horas en capturas dependen de la zona del equipo (Windows local, Linux UTC en CI); las pantallas con horas reciben `zone` y las vistas previas pasan `PREVIEW_ZONE`.
 - A evitar: pedir la ficha del lugar después de guardar o crear un plan: `PlansIntegrationTest` espera una sola llamada. `toPlan(lookupMissing = false)` al guardar.
 
+- Estado (2026-11-22): nv-30 parcial (Diego) en `feat/nv-30-checkin` (sobre nv-24): check-in real y 26_CheckinOk en `feature/checkin`, «Cómo llegar» con la app de mapas. 13, 14, 15 y 18 esperan D25. `LocationProvider` sin precisión (D-30c).
+- A recordar: el conector de Figma (plan Starter) tiene límite de llamadas; si se acaba, abrir el frame en el panel del navegador con `?node-id=` y arrastrar el lienzo con la mano.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

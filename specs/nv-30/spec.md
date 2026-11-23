@@ -68,12 +68,22 @@ Nombres de ruta propuestos. Se registran en `docs/routes.md` al implementar la s
 
 ### Endpoints
 
-### Pendiente de backend
+| Método | Ruta | Uso |
+|---|---|---|
+| POST | `/checkins` | «Ya llegué»: `metodo: ubicacion` con `lat`/`lng`, o `qr_negocio` con `codigo` del mostrador; fuera de radio = 422 neutro; segundo del día = 409. |
+| GET | `/lugares/{id}` | Coordenadas del lugar para «Cómo llegar». |
 
-Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
+### Pendiente de backend o de decisión
 
-- Rutas y tiempos (o proveedor externo).
-- Aviso de check-in hacia el cliente.
+- **D25 (proveedor de mapa y rutas):** 13_Mapa, 14_MapaFull, 15_Llegar y 18_Navegando no se dibujan; la API no da rutas.
+
+### Decisiones al implementar (2026-11-22, Diego)
+
+- **D-30a «Cómo llegar»** en cada parada de 39_Plan abre la app de mapas del teléfono (`geo:` con las coordenadas de la ficha): la alternativa sin proveedor que propone D25.
+- **D-30b «Ya llegué»** en cada parada: pide la ubicación aproximada solo en ese momento (permiso en contexto) o escanea el código del mostrador con el lector ZXing ya en el stack (nv-20). 26_CheckinOk ofrece «Tomar una postal» (71_Camara con el lugar y el plan) e «Ir a la siguiente parada».
+- **D-30c Sin precisión:** `LocationProvider` (`core/location`) no da precisión y la API pide `precision_m` ≤ 100 m; si la API rechaza la ubicación, queda el código del mostrador. Pedirlo a Jorge (dueño de `core`).
+- **D-30d Sin Room:** el check-in vive en la API (`GET /checkins`); la ubicación no se guarda en el teléfono ni en logs.
+- **D-30e** «Cupón aplicado» de 26_CheckinOk no se dibuja: la respuesta del check-in no trae cupones.
 
 ## 4. Modelo de datos
 
@@ -101,4 +111,4 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** ✅ Aprobada (Jorge, 2026-11-06).
+**Estado:** ✅ Aprobada (Jorge, 2026-11-06). Parcial el 2026-11-22 (Diego) en `feat/nv-30-checkin`: 26_CheckinOk, check-in y «Cómo llegar»; 13, 14, 15 y 18 esperan D25.

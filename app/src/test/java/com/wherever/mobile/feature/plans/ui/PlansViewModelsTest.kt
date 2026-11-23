@@ -402,6 +402,17 @@ class PlansViewModelsTest {
     }
 
     @Test
+    fun `como llegar manda la ubicacion del lugar a la app de mapas`() = runTest(mainDispatcher.dispatcher) {
+        val vm = detail()
+
+        vm.directions(vm.stops()[0])
+        advanceUntilIdle()
+
+        val event = vm.events.first() as PlanEvent.Directions
+        assertEquals("Café Andrade", event.name)
+    }
+
+    @Test
     fun `con 4 paradas no se agrega otra`() = runTest(mainDispatcher.dispatcher) {
         plans.plan = samplePlan().let { it.copy(stops = it.stops + sampleStop("s4", "n4", "2026-11-19T01:45:00Z")) }
         val vm = detail()

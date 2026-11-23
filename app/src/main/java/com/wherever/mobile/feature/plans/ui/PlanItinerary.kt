@@ -146,6 +146,7 @@ internal fun PlanItinerary(
     transfers: List<Transfer>,
     mobility: Mobility,
     zone: ZoneId,
+    links: (@Composable (PlanStop, Int) -> Unit)? = null,
     actions: @Composable (PlanStop, Int) -> Unit
 ) {
     val ordered = stops.sortedBy { it.arrives }
@@ -162,7 +163,7 @@ internal fun PlanItinerary(
                     }
                 }
                 Spacer(Modifier.width(Spacing.M))
-                ItineraryCard(stop, index, zone, actions, Modifier.weight(1f))
+                ItineraryCard(stop, index, zone, links, actions, Modifier.weight(1f))
             }
             val next = ordered.getOrNull(index + 1)
             val transfer = next?.let { n -> transfers.firstOrNull { it.fromStopId == stop.id && it.toStopId == n.id } }
@@ -176,6 +177,7 @@ private fun ItineraryCard(
     stop: PlanStop,
     index: Int,
     zone: ZoneId,
+    links: (@Composable (PlanStop, Int) -> Unit)?,
     actions: @Composable (PlanStop, Int) -> Unit,
     modifier: Modifier
 ) {
@@ -209,6 +211,7 @@ private fun ItineraryCard(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+                links?.invoke(stop, index)
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) { actions(stop, index) }
         }

@@ -32,12 +32,12 @@ Orden recomendado: de arriba hacia abajo. Cada spec es una rama y un PR. Desde a
 
 ## nv-30 — El día del plan
 
-- [ ] Spec leída: `specs/nv-30/spec.md`, `plan.md`, `task.md`
-- [ ] Pantalla `13_Mapa`
-- [ ] Pantalla `14_MapaFull`
-- [ ] Pantalla `15_Llegar`
-- [ ] Pantalla `18_Navegando`
-- [ ] Pantalla `26_CheckinOk`
+- [x] Spec leída: `specs/nv-30/spec.md`, `plan.md`, `task.md`
+- [ ] Pantalla `13_Mapa` (espera D25, proveedor de mapa)
+- [ ] Pantalla `14_MapaFull` (espera D25)
+- [ ] Pantalla `15_Llegar` (espera D25; mientras, «Cómo llegar» abre la app de mapas)
+- [ ] Pantalla `18_Navegando` (espera D25)
+- [x] Pantalla `26_CheckinOk` (con check-in real: ubicación o código del mostrador)
 - [ ] Compuertas, teléfono y PR
 
 ## nv-37 — Negocio: cupones y cupo
