@@ -42,6 +42,7 @@ import com.wherever.mobile.feature.memories.ui.PostcardDetailPolaroidPreview
 import com.wherever.mobile.feature.memories.ui.PostcardDetailPreview
 import com.wherever.mobile.feature.memories.ui.PostcardEditorPreview
 import com.wherever.mobile.feature.memories.ui.PostcardGonePreview
+import com.wherever.mobile.feature.profile.ui.BadgesPreview
 import com.wherever.mobile.feature.profile.ui.EditProfilePreview
 import com.wherever.mobile.feature.profile.ui.ProfilePreview
 import com.wherever.mobile.feature.reviews.ui.MyReviewsConfirmPreview
@@ -104,6 +105,7 @@ class ScreenshotTest {
         "29_plan_amigo" to { FriendPlanPreview() },
         "25_mi_codigo" to { MyCodePreview() },
         "07_encuentra_amigos" to { FindFriendsPreview() },
+        "83_insignias" to { BadgesPreview() },
         "44_mis_grupos" to { MyGroupsPreview() },
         "45_grupo_chat" to { GroupChatPreview() },
         "25_mi_codigo_escanear" to { MyCodeScanPreview() },

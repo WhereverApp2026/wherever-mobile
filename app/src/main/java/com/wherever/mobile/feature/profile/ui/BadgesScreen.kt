@@ -1,5 +1,6 @@
 package com.wherever.mobile.feature.profile.ui
 
+import android.content.res.Configuration
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -38,6 +39,7 @@ import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.TopTitleRow
 import com.wherever.mobile.core.designsystem.WhereverProgressBar
+import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.feature.profile.domain.Badge
 import com.wherever.mobile.feature.profile.domain.LevelProgress
 
@@ -156,7 +158,7 @@ private fun BadgeRow(badge: Badge) {
                 }
                 // Avance real de la API (p. ej. 2 de 5 check-ins) en las que faltan.
                 if (!badge.earned && badge.goal > 1) {
-                    LinearProgressIndicator(
+                    WhereverProgressBar(
                         progress = { badge.fraction },
                         modifier = Modifier.fillMaxWidth().testTag("badge_progress_${badge.id}")
                     )
@@ -168,5 +170,38 @@ private fun BadgeRow(badge: Badge) {
                 }
             }
         }
+    }
+}
+
+private const val PREVIEW_POINTS = 320
+private const val PREVIEW_CURRENT = 3
+private const val PREVIEW_GOAL = 5
+
+private val PREVIEW_BADGES = listOf(
+    Badge("primer_plan", "Primer plan", "Armaste tu primer plan con amigos.", earned = true),
+    Badge(
+        "explorador",
+        "Explorador local",
+        "Visitaste 5 lugares distintos.",
+        earned = false,
+        current = PREVIEW_CURRENT,
+        goal = PREVIEW_GOAL
+    )
+)
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+internal fun BadgesPreview() {
+    WhereverTheme {
+        BadgesContent(
+            BadgesUiState(
+                loading = false,
+                progress = LevelProgress.of(points = PREVIEW_POINTS, levelName = "Aventurero"),
+                earned = PREVIEW_BADGES.filter { it.earned },
+                locked = PREVIEW_BADGES.filterNot { it.earned }
+            ),
+            onBack = {}
+        )
     }
 }

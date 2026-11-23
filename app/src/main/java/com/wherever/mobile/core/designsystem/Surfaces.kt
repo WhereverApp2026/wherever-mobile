@@ -77,7 +77,12 @@ fun InfoBanner(
     ) {
         Row(modifier = Modifier.padding(Spacing.L), verticalAlignment = Alignment.CenterVertically) {
             if (icon != null) {
-                Icon(icon, contentDescription = null, tint = RouteBlue, modifier = Modifier.size(Sizes.IconL))
+                Icon(
+                    icon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(Sizes.IconL)
+                )
                 Spacer(Modifier.width(Spacing.M))
             }
             Text(text = text, style = MaterialTheme.typography.bodyMedium)
