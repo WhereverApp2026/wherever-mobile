@@ -71,6 +71,12 @@ import com.wherever.mobile.feature.status.ui.OfflineNoticePreview
 import com.wherever.mobile.feature.status.ui.OfflinePreview
 import com.wherever.mobile.feature.status.ui.UpdateRequiredPreview
 import com.wherever.mobile.feature.tastes.ui.TastesPreview
+import com.wherever.mobile.feature.vaca.ui.AddExpenseCustomPreview
+import com.wherever.mobile.feature.vaca.ui.AddExpensePreview
+import com.wherever.mobile.feature.vaca.ui.VacaAllPaidPreview
+import com.wherever.mobile.feature.vaca.ui.VacaEmptyPreview
+import com.wherever.mobile.feature.vaca.ui.VacaOnePaidPreview
+import com.wherever.mobile.feature.vaca.ui.VacaPreview
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -153,7 +159,13 @@ class ScreenshotTest {
         "41_agregar_parada" to { PlanAddStopPreview() },
         "crear_plan" to { ManualPlanPreview() },
         "26_checkin_ok" to { ArrivalOkPreview() },
-        "llegada_sin_permiso" to { ArrivalPermissionPreview() }
+        "llegada_sin_permiso" to { ArrivalPermissionPreview() },
+        "28_vaca" to { VacaPreview() },
+        "vaca_mariana_pago" to { VacaOnePaidPreview() },
+        "vaca_todos_pagaron" to { VacaAllPaidPreview() },
+        "vaca_vacia" to { VacaEmptyPreview() },
+        "45_agregar_gasto" to { AddExpensePreview() },
+        "45_agregar_gasto_personalizado" to { AddExpenseCustomPreview() }
     )
 
     @Test

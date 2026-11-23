@@ -1165,4 +1165,47 @@
     <string name="arrival_postcard">Tomar una postal</string>
     <string name="arrival_next">Ir a la siguiente parada</string>
     <string name="arrival_back_plan">Volver al plan</string>
+
+    <!-- 28_Vaca y 45_AgregarGasto (specs/nv-26) -->
+    <string name="vaca_open">La vaca</string>
+    <string name="vaca_title">La Vaca virtual</string>
+    <string name="vaca_notice">Solo calcula quién debe a quién. Wherever no mueve dinero.</string>
+    <string name="vaca_total">Gasto total</string>
+    <string name="vaca_per_person">Por persona</string>
+    <string name="vaca_equal">Partes iguales</string>
+    <string name="vaca_custom">Personalizado</string>
+    <string name="vaca_who_paid">Quién pagó</string>
+    <string name="vaca_empty">Aún no hay gastos. Agrega el primero y la vaca calcula quién debe a quién.</string>
+    <string name="vaca_you">Tú</string>
+    <string name="vaca_expense_line">%1$s · %2$s</string>
+    <string name="vaca_settle">Para quedar a mano</string>
+    <string name="vaca_all_even">Todos están a mano.</string>
+    <string name="vaca_owes_you">Te debe %1$s</string>
+    <string name="vaca_paid_you">Te pagó %1$s</string>
+    <string name="vaca_you_owe">Le debes %1$s</string>
+    <string name="vaca_you_paid">Le pagaste %1$s</string>
+    <string name="vaca_owes_other">Le debe %1$s a %2$s</string>
+    <string name="vaca_paid">Pagado</string>
+    <string name="vaca_mark_paid">Marcar pagado</string>
+    <string name="vaca_marked_paid">Listo: quedó marcado como pagado para todos.</string>
+    <string name="vaca_already_paid">Esa deuda ya estaba pagada. Ya actualizamos la vaca.</string>
+    <string name="vaca_add_expense">Agregar gasto</string>
+    <string name="vaca_add_expense_title">Agregar gasto</string>
+    <string name="vaca_what">¿En qué se gastó?</string>
+    <string name="vaca_what_hint">Tacos y bebidas</string>
+    <string name="vaca_concept_food">Comida</string>
+    <string name="vaca_concept_drinks">Bebidas</string>
+    <string name="vaca_concept_transport">Transporte</string>
+    <string name="vaca_concept_ticket">Entrada</string>
+    <string name="vaca_concept_other">Otro</string>
+    <string name="vaca_amount">Monto</string>
+    <string name="vaca_currency">$</string>
+    <string name="vaca_who_paid_q">¿Quién pagó?</string>
+    <string name="vaca_paid_by">Pagó %1$s</string>
+    <string name="vaca_split_between">Dividir entre</string>
+    <string name="vaca_each">%1$s c/u</string>
+    <string name="vaca_remaining">Faltan %1$s</string>
+    <string name="vaca_fill_equally">Repartir en partes iguales</string>
+    <string name="vaca_amount_of">Monto de %1$s</string>
+    <string name="vaca_save_expense">Guardar gasto</string>
 </resources>

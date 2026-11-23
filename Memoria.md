@@ -336,6 +336,9 @@
 - Estado (2026-11-22): nv-30 parcial (Diego) en `feat/nv-30-checkin` (sobre nv-24): check-in real y 26_CheckinOk en `feature/checkin`, «Cómo llegar» con la app de mapas. 13, 14, 15 y 18 esperan D25. `LocationProvider` sin precisión (D-30c).
 - A recordar: el conector de Figma (plan Starter) tiene límite de llamadas; si se acaba, abrir el frame en el panel del navegador con `?node-id=` y arrastrar el lienzo con la mano.
 
+- Estado (2026-11-22): nv-26 Vaca virtual (Diego) en `feat/nv-26-vaca`: 28_Vaca, variantes y 45_AgregarGasto en `feature/vaca` contra `/grupos/{id}/vaca`, gastos y deudas. Decisiones D-26a a D-26e en la spec.
+- A recordar: `deudor`, `acreedor` y `pagado_por` se leen como id o como objeto (`JsonElement`) porque la doc no dice la forma.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

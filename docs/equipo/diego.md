@@ -27,10 +27,10 @@ Desde el 2026-11-22, Planes (nv-23, nv-24, nv-26, nv-30) pasa a Borre: `docs/iti
 
 ## nv-26 — Vaca virtual y gastos
 
-- [ ] Spec leída: `specs/nv-26/spec.md`, `plan.md`, `task.md`
-- [ ] Pantalla `28_Vaca` y `Vaca · *`
-- [ ] Pantalla `45_AgregarGasto`
-- [ ] Compuertas, teléfono y PR
+- [x] Spec leída: `specs/nv-26/spec.md`, `plan.md`, `task.md`
+- [x] Pantalla `28_Vaca` y `Vaca · *`
+- [x] Pantalla `45_AgregarGasto`
+- [ ] Compuertas (en verde), teléfono y PR
 
 ## nv-30 — El día del plan
 
