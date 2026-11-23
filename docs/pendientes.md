@@ -1,25 +1,25 @@
 # Pendientes — Wherever Móvil
 
-> Actualizado: 2026-11-23. Una rama y un PR por spec. Pruebas que esperan el teléfono: `docs/pruebas-telefono.md`.
+> Actualizado: 2026-11-23 (09:30). Una rama y un PR por spec. Pruebas que esperan el teléfono: `docs/pruebas-telefono.md`.
 > Métrica: pantallas que funcionan de verdad / 162 frames de la maqueta (detalle y registro de cortes en `docs/avance.md`).
 > Una pantalla cuenta si tiene código, llama a la API real, maneja carga, error y vacío, tiene pruebas y se probó en el teléfono.
 
 ## % real
 
-**87 de 162 = 53,7 %** con la API real, más 1 con datos locales (Insignias, sin endpoint) que no suma.
+**91 de 162 = 56,2 %** con la API real (2026-11-23, 09:30: #67 ya en `main`; probadas hoy contra staging en el Xiaomi 83_Insignias, 43_CrearGrupo, 46_Grupo y 48_Votar).
 
 **Por sumar (2026-11-23, PR #67 `integracion/todo`, con código, pruebas y capturas; falta probar contra staging en el teléfono):** Jorge: 83_Insignias (ya con API real), 07_EncuentraAmigos, 43_CrearGrupo, 46_Grupo, 48_Votar, InvitarPlan. Diego: IAPalabra, 17_AjustaPlan, Generando 1/4–4/4, 39_Plan, 40_Cambiar, 41_AgregarParada, CrearPlan, 26_CheckinOk, 28_Vaca y variantes, 45_AgregarGasto. Negocio (nv-34/35/37): alta, panel, reservas, estadísticas, check-in, cupones y horas. Se cuentan al probarlos con staging (L-V 08:00–22:00).
 
 | Área | Specs | Frames | Funcionan | % |
 |---|---|---|---|---|
-| Cuenta y acceso | nv-06 a nv-16 | 17 | 16 (+1 local) | 94 % |
+| Cuenta y acceso | nv-06 a nv-16 | 17 | 17 | 100 % |
 | Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 18 | 62 % |
-| Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 18 | 58 % |
+| Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 21 | 68 % |
 | Planes: IA, detalle, Vaca, Mis planes, día del plan | nv-23, nv-24, nv-26, nv-28, nv-30 | 22 | 9 | 41 % |
 | Reserva, pago y cupones | nv-27, nv-29 | 15 | 4 | 27 % |
 | Después del plan: Recuerdos, Reseñas, Ayuda | nv-31 a nv-33 | 22 | 22 | 100 % |
 | Modo negocio | nv-34 a nv-38 | 26 | 0 | 0 % |
-| **Total** | | **162** | **87** | **53,7 %** |
+| **Total** | | **162** | **91** | **56,2 %** |
 
 ## Pruebas con staging en el Xiaomi (2026-11-22, domingo con staging encendido)
 
