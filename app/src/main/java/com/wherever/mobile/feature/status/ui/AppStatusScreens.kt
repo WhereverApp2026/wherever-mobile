@@ -28,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -48,6 +49,7 @@ import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.core.security.IntegrityRisk
+import com.wherever.mobile.core.ui.authenticate
 
 /** Capa sobre la app: Actualizar (bloquea), mantenimiento o 89_SinConexion. "Atrás" cierra Sin conexión. */
 @Composable
@@ -102,6 +104,30 @@ internal fun UpdateRequiredContent(onUpdate: () -> Unit) {
         onAction = onUpdate,
         loading = false,
         tag = "app_update"
+    )
+}
+
+/**
+ * Bloqueo con huella o PIN (constitución E-05): tapa la app y pide identificarse al aparecer; si la persona
+ * cancela, queda el botón para volver a intentarlo. «Atrás» cierra la app en lugar de saltarse el bloqueo.
+ */
+@Composable
+fun AppLockOverlay(locked: Boolean, onUnlocked: () -> Unit) {
+    if (!locked) return
+    val context = LocalContext.current
+    val title = stringResource(R.string.app_lock_prompt_title)
+    val subtitle = stringResource(R.string.app_lock_prompt_subtitle)
+    val ask = { authenticate(context, title, subtitle) { ok -> if (ok) onUnlocked() } }
+    LaunchedEffect(Unit) { ask() }
+    BackHandler { (context as? Activity)?.finishAffinity() }
+    StatusLayout(
+        icon = rememberVectorPainter(Icons.Outlined.Lock),
+        title = stringResource(R.string.app_lock_title),
+        body = stringResource(R.string.app_lock_body),
+        action = stringResource(R.string.app_lock_unlock),
+        onAction = ask,
+        loading = false,
+        tag = "app_lock"
     )
 }
 

@@ -1577,4 +1577,13 @@
     <string name="integrity_reason_test_keys">un sistema modificado</string>
     <string name="integrity_reason_debugger">un depurador conectado</string>
     <string name="integrity_reason_tampered">una copia alterada de la app</string>
+    <!-- Desbloqueo con huella o PIN (constitución E-05) -->
+    <string name="app_lock_title">Wherever está bloqueada</string>
+    <string name="app_lock_body">Desbloquéala con tu huella, tu rostro o el PIN de tu teléfono.</string>
+    <string name="app_lock_unlock">Desbloquear</string>
+    <string name="app_lock_prompt_title">Desbloquear Wherever</string>
+    <string name="app_lock_prompt_subtitle">Confirma que eres tú</string>
+    <string name="settings_app_lock">Desbloquear con huella o rostro</string>
+    <string name="settings_app_lock_hint">Al abrir la app y al volver después de un minuto.</string>
+    <string name="settings_app_lock_unavailable">Configura una huella, rostro o bloqueo de pantalla en tu teléfono para usarlo.</string>
 </resources>

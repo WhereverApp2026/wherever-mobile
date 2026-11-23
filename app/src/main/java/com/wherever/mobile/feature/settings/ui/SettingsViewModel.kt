@@ -3,6 +3,7 @@ package com.wherever.mobile.feature.settings.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wherever.mobile.core.common.Result
+import com.wherever.mobile.core.security.AppLockPreferences
 import com.wherever.mobile.core.ui.UiText
 import com.wherever.mobile.core.ui.toUiText
 import com.wherever.mobile.feature.auth.domain.AuthRepository
@@ -25,13 +26,16 @@ data class SettingsUiState(
     val profile: UserProfile? = null,
     val saving: Boolean = false,
     val loggingOut: Boolean = false,
-    val error: UiText? = null
+    val error: UiText? = null,
+    /** Desbloqueo con huella o PIN (constitución E-05). */
+    val appLock: Boolean = false
 )
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val appLockPreferences: AppLockPreferences
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(SettingsUiState())
     val state: StateFlow<SettingsUiState> = mutableState.asStateFlow()
@@ -45,7 +49,13 @@ class SettingsViewModel @Inject constructor(
                 mutableState.update { it.copy(profile = profile) }
             }
         }
+        viewModelScope.launch {
+            appLockPreferences.enabled.collect { enabled -> mutableState.update { it.copy(appLock = enabled) } }
+        }
     }
+
+    /** Al encender, la pantalla ya pidió la huella o el PIN: aquí solo se guarda. */
+    fun setAppLock(enabled: Boolean) = appLockPreferences.setEnabled(enabled)
 
     fun setTheme(theme: String) = patchPreferences(PreferencesPatch(theme = theme))
 

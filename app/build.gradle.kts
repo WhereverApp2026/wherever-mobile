@@ -212,6 +212,8 @@ dependencies {
     implementation(libs.coil.network.okhttp)
     implementation(libs.zxing.core)
     implementation(libs.zxing.android.embedded)
+    implementation(libs.androidx.biometric)
+    implementation(libs.sqlcipher.android)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging)

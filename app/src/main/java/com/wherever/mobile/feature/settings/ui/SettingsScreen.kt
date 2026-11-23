@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -42,6 +43,8 @@ import com.wherever.mobile.core.designsystem.WhereverDialog
 import com.wherever.mobile.core.designsystem.WhereverTextButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.core.designsystem.WhereverTheme
+import com.wherever.mobile.core.ui.authenticate
+import com.wherever.mobile.core.ui.canUseAppLock
 import com.wherever.mobile.feature.profile.domain.CityRef
 import com.wherever.mobile.feature.profile.domain.NotificationSettings
 import com.wherever.mobile.feature.profile.domain.Preferences
@@ -70,7 +73,25 @@ data class SettingsNavigation(
 @Composable
 fun SettingsRoute(navigation: SettingsNavigation, viewModel: SettingsViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val actions = remember(viewModel) { viewModel.actions() }
+    val context = LocalContext.current
+    val lockTitle = stringResource(R.string.app_lock_prompt_title)
+    val lockSubtitle = stringResource(R.string.app_lock_prompt_subtitle)
+    val actions = remember(viewModel) {
+        viewModel.actions().copy(
+            onAppLock = if (canUseAppLock(context)) {
+                { enable ->
+                    // Encender exige identificarse antes; apagar no.
+                    if (enable) {
+                        authenticate(context, lockTitle, lockSubtitle) { ok -> if (ok) viewModel.setAppLock(true) }
+                    } else {
+                        viewModel.setAppLock(false)
+                    }
+                }
+            } else {
+                null
+            }
+        )
+    }
     var confirmLogout by remember { mutableStateOf(false) }
     LaunchedEffect(viewModel) { viewModel.loggedOut.collect { navigation.onLoggedOut() } }
     val loading = state.profile == null || state.loggingOut
@@ -104,7 +125,9 @@ internal data class SettingsActions(
     val onReviews: (Boolean) -> Unit,
     val onPromotions: (Boolean) -> Unit,
     val onQuietHours: (QuietHours) -> Unit,
-    val onUseLocation: (Boolean) -> Unit
+    val onUseLocation: (Boolean) -> Unit,
+    /** `null` = el teléfono no tiene huella, rostro ni bloqueo de pantalla. */
+    val onAppLock: ((Boolean) -> Unit)? = null
 )
 
 private fun SettingsViewModel.actions() = SettingsActions(
@@ -139,6 +162,15 @@ private fun SettingsContent(
             )
             NavRow(stringResource(R.string.settings_password), navigation.onChangePassword, tag = "settings_password")
             NavRow(stringResource(R.string.settings_sessions), navigation.onSessions, tag = "settings_sessions")
+            actions.onAppLock?.let { onAppLock ->
+                ToggleRow(
+                    title = stringResource(R.string.settings_app_lock),
+                    subtitle = stringResource(R.string.settings_app_lock_hint),
+                    checked = state.appLock,
+                    onCheckedChange = onAppLock,
+                    tag = "settings_app_lock"
+                )
+            }
         }
         SectionLabel(stringResource(R.string.settings_section_preferences))
         SurfaceCard {
