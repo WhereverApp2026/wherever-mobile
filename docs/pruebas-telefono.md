@@ -23,7 +23,8 @@
 | 16 | 48_Votar con una votación real (nv-25) | Votar, cambiar el voto y cerrar | la app aún no crea votaciones (`POST /grupos/{id}/votaciones`) | abierto |
 | 17 | 07_EncuentraAmigos (nv-20) | Buscar en mis contactos | manda a staging los números reales de la agenda del teléfono: necesita el visto bueno de Jorge o un teléfono con agenda de prueba | abierto |
 | 18 | InvitarPlan (nv-25) | Perfil de QA B → Invitar a un plan → elegir plan → Enviar | — | abierto |
-| 19 | Planes de Diego (nv-23, 24, 26, 30) y Modo negocio (nv-34, 35, 37) | Probar cada pantalla contra staging | integradas en `main` el 2026-11-23 (#67) | abierto |
+| 19 | Planes de Diego (nv-23, 24, 26, 30) | Contra staging | integradas en `main` (#67) | 2026-11-23: hechas IAPalabra, 17_AjustaPlan, Generando 1–3, 39_Plan, 40_Cambiar, 41_AgregarParada, CrearPlan (con error de parada cerrada) y 28_Vaca vacía. Abiertas: Generando 4/4 (staging no tiene negocios cerca de la ubicación real del teléfono: 422), 45_AgregarGasto y variantes de Vaca (QA B debe aceptar el grupo), 26_CheckinOk (hay que estar en el lugar) |
+| 21 | Modo negocio (nv-34, 35, 37) | Alta completa y panel | integradas en `main` (#67) | 2026-11-23: paso 2 del alta guardado. Abierto: el paso 3 manda la ubicación real del teléfono (necesita el visto bueno de Jorge o ubicación simulada) y el panel necesita un negocio aprobado por un administrador en staging |
 | 20 | Biometría y Room cifrada (#68) | Encender en Ajustes, salir más de 1 min y volver; migración con datos reales | — | migración hecha 2026-11-23 (datos intactos, archivo cifrado); biometría abierta |
 
 ## Hecho
