@@ -19,9 +19,6 @@ import com.wherever.mobile.feature.auth.ui.PermissionsPreview
 import com.wherever.mobile.feature.auth.ui.RecoverPreview
 import com.wherever.mobile.feature.auth.ui.RegisterPreview
 import com.wherever.mobile.feature.auth.ui.WelcomePreview
-import com.wherever.mobile.feature.checkin.ui.ArrivalOkPreview
-import com.wherever.mobile.feature.checkin.ui.ArrivalPermissionPreview
-
 import com.wherever.mobile.feature.business.ui.BusinessDonePreview
 import com.wherever.mobile.feature.business.ui.BusinessLocationPreview
 import com.wherever.mobile.feature.business.ui.BusinessMissingPreview
@@ -38,6 +35,8 @@ import com.wherever.mobile.feature.business.ui.CheckinPreview
 import com.wherever.mobile.feature.business.ui.CouponFormPreview
 import com.wherever.mobile.feature.business.ui.CouponsEmptyPreview
 import com.wherever.mobile.feature.business.ui.CouponsPreview
+import com.wherever.mobile.feature.checkin.ui.ArrivalOkPreview
+import com.wherever.mobile.feature.checkin.ui.ArrivalPermissionPreview
 import com.wherever.mobile.feature.feed.ui.FriendPlanPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedEmptyPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedPreview
@@ -71,7 +70,6 @@ import com.wherever.mobile.feature.plans.ui.PlanGeneratingPreview
 import com.wherever.mobile.feature.plans.ui.PlanGeneratingStep3Preview
 import com.wherever.mobile.feature.plans.ui.PlanReadyPreview
 import com.wherever.mobile.feature.plans.ui.PlanWordPreview
-
 import com.wherever.mobile.feature.profile.ui.BadgesPreview
 import com.wherever.mobile.feature.profile.ui.EditProfilePreview
 import com.wherever.mobile.feature.profile.ui.ProfilePreview

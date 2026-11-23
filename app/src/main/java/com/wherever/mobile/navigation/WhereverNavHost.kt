@@ -32,12 +32,11 @@ import com.wherever.mobile.feature.auth.ui.RecoverRoute as RecoverScreen
 import com.wherever.mobile.feature.auth.ui.RegisterRoute as RegisterScreen
 import com.wherever.mobile.feature.auth.ui.VerifyEmailRoute as VerifyEmailScreen
 import com.wherever.mobile.feature.auth.ui.WelcomeScreen
-import com.wherever.mobile.feature.checkin.ui.ArrivalNavigation
-import com.wherever.mobile.feature.checkin.ui.ArrivalRoute as ArrivalScreen
-
 import com.wherever.mobile.feature.business.ui.BusinessHomeRoute as BusinessHomeScreen
 import com.wherever.mobile.feature.business.ui.BusinessOnboardingRoute as BusinessOnboardingScreen
 import com.wherever.mobile.feature.business.ui.OnboardingNavigation
+import com.wherever.mobile.feature.checkin.ui.ArrivalNavigation
+import com.wherever.mobile.feature.checkin.ui.ArrivalRoute as ArrivalScreen
 import com.wherever.mobile.feature.feed.ui.FriendPlanNavigation
 import com.wherever.mobile.feature.feed.ui.FriendPlanRoute as FriendPlanScreen
 import com.wherever.mobile.feature.feed.ui.MomentDetailRoute
