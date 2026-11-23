@@ -52,6 +52,9 @@ android {
         // Centro de CDMX, donde está la semilla del backend. No es un dato personal.
         buildConfigField("double", "FALLBACK_LAT", "19.4326")
         buildConfigField("double", "FALLBACK_LNG", "-99.1332")
+        // Huella SHA-256 del certificado de firma de release (sin dos puntos). Vacía = no se comprueba la firma
+        // (debug y builds sin firmar). Llega por variable de entorno, como la firma (specs/nv-41).
+        buildConfigField("String", "RELEASE_CERT_SHA256", "\"${System.getenv("WHEREVER_CERT_SHA256").orEmpty()}\"")
     }
 
     // Firma de release solo por variables de entorno; sin ellas el APK sale sin firmar (specs/nv-41).

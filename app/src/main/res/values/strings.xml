@@ -1567,4 +1567,14 @@
     <string name="invite_plan_open_group">Ir al grupo</string>
     <string name="person_invite_plan">Invitar a un plan</string>
     <string name="plan_invite_friends">Invitar amigos</string>
+    <!-- Integridad del dispositivo (constitución §6) -->
+    <string name="integrity_blocked_title">No podemos abrir Wherever en este teléfono</string>
+    <string name="integrity_blocked_body">Para proteger tu cuenta, Wherever no funciona si detecta: %1$s. Usa un teléfono sin modificar o instala la app desde la tienda oficial.</string>
+    <string name="integrity_close">Cerrar la app</string>
+    <string name="integrity_debug_warning">Modo de desarrollo: detectamos %1$s. En la versión publicada la app se bloquearía.</string>
+    <string name="integrity_dismiss">Entendido</string>
+    <string name="integrity_reason_root">acceso root</string>
+    <string name="integrity_reason_test_keys">un sistema modificado</string>
+    <string name="integrity_reason_debugger">un depurador conectado</string>
+    <string name="integrity_reason_tampered">una copia alterada de la app</string>
 </resources>

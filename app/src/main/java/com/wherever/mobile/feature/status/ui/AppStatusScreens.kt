@@ -1,5 +1,6 @@
 package com.wherever.mobile.feature.status.ui
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -20,7 +21,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -42,7 +45,9 @@ import com.wherever.mobile.core.designsystem.ScreenPadding
 import com.wherever.mobile.core.designsystem.Sizes
 import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
+import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.core.designsystem.WhereverTheme
+import com.wherever.mobile.core.security.IntegrityRisk
 
 /** Capa sobre la app: Actualizar (bloquea), mantenimiento o 89_SinConexion. "Atrás" cierra Sin conexión. */
 @Composable
@@ -99,6 +104,57 @@ internal fun UpdateRequiredContent(onUpdate: () -> Unit) {
         tag = "app_update"
     )
 }
+
+/**
+ * Root, depurador o app alterada (constitución §6). En release tapa toda la app y solo deja cerrarla;
+ * en debug muestra un aviso arriba que se puede descartar.
+ */
+@Composable
+fun IntegrityOverlay(state: IntegrityUiState, onDismissWarning: () -> Unit) {
+    val context = LocalContext.current
+    when {
+        state.blocked -> {
+            BackHandler { (context as? Activity)?.finishAffinity() }
+            IntegrityBlockedContent(state.verdict.risks) { (context as? Activity)?.finishAffinity() }
+        }
+        state.showWarning -> IntegrityWarning(state.verdict.risks, onDismissWarning)
+    }
+}
+
+@Composable
+internal fun IntegrityBlockedContent(risks: Set<IntegrityRisk>, onClose: () -> Unit) {
+    StatusLayout(
+        icon = rememberVectorPainter(Icons.Outlined.Lock),
+        title = stringResource(R.string.integrity_blocked_title),
+        body = stringResource(R.string.integrity_blocked_body, risks.map { reasonText(it) }.joinToString()),
+        action = stringResource(R.string.integrity_close),
+        onAction = onClose,
+        loading = false,
+        tag = "integrity_blocked"
+    )
+}
+
+@Composable
+private fun IntegrityWarning(risks: Set<IntegrityRisk>, onDismiss: () -> Unit) {
+    Column(modifier = Modifier.safeDrawingPadding().padding(ScreenPadding)) {
+        InfoBanner(
+            stringResource(R.string.integrity_debug_warning, risks.map { reasonText(it) }.joinToString()),
+            icon = Icons.Outlined.Warning,
+            tag = "integrity_warning"
+        )
+        WhereverTextLink(stringResource(R.string.integrity_dismiss), onDismiss)
+    }
+}
+
+@Composable
+private fun reasonText(risk: IntegrityRisk): String = stringResource(
+    when (risk) {
+        IntegrityRisk.ROOTED -> R.string.integrity_reason_root
+        IntegrityRisk.TEST_KEYS -> R.string.integrity_reason_test_keys
+        IntegrityRisk.DEBUGGER -> R.string.integrity_reason_debugger
+        IntegrityRisk.REPACKAGED_DEBUGGABLE, IntegrityRisk.WRONG_SIGNATURE -> R.string.integrity_reason_tampered
+    }
+)
 
 @Suppress("LongParameterList") // Las dos variantes cambian ícono, textos, acción y etiqueta.
 @Composable

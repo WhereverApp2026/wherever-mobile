@@ -19,10 +19,12 @@ import com.wherever.mobile.core.designsystem.InfoBanner
 import com.wherever.mobile.core.designsystem.TopTitleRow
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
+import com.wherever.mobile.core.ui.SecureScreen
 
 /** Privacidad → Mis datos (US-007, specs/nv-51). */
 @Composable
 fun MyDataRoute(onBack: () -> Unit, viewModel: MyDataViewModel = hiltViewModel()) {
+    SecureScreen()
     val state by viewModel.state.collectAsStateWithLifecycle()
     FormScreen {
         TopTitleRow(stringResource(R.string.my_data_title), onBack)

@@ -5,7 +5,9 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.dataStoreFile
 import com.wherever.mobile.core.common.DispatcherProvider
+import com.wherever.mobile.core.security.AndroidDeviceSignalsReader
 import com.wherever.mobile.core.security.DataStoreTokenStore
+import com.wherever.mobile.core.security.DeviceSignalsReader
 import com.wherever.mobile.core.security.EncryptedTokensSerializer
 import com.wherever.mobile.core.security.KeystoreTokenCipher
 import com.wherever.mobile.core.security.SessionTokens
@@ -34,4 +36,7 @@ object SecurityModule {
                 produceFile = { context.dataStoreFile("session_tokens.enc") }
             )
         )
+
+    @Provides
+    fun provideDeviceSignals(reader: AndroidDeviceSignalsReader): DeviceSignalsReader = reader
 }

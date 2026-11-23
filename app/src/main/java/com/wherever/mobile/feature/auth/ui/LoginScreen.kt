@@ -36,6 +36,7 @@ import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.core.designsystem.rememberFormSubmit
+import com.wherever.mobile.core.ui.SecureScreen
 import com.wherever.mobile.core.ui.formatCountdown
 import com.wherever.mobile.feature.auth.domain.PostAuthDestination
 
@@ -48,6 +49,7 @@ fun LoginRoute(
     onLoggedIn: (PostAuthDestination) -> Unit,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+    SecureScreen()
     val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(viewModel) { viewModel.destinations.collect(onLoggedIn) }
     LoginContent(

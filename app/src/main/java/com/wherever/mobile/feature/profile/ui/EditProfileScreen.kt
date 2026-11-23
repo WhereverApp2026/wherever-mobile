@@ -33,6 +33,7 @@ import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.core.designsystem.WhereverTheme
+import com.wherever.mobile.core.ui.SecureScreen
 import com.wherever.mobile.feature.profile.domain.CitySuggestion
 
 /** 82_EditarPerfil y 84_DatosPers en una sola pantalla (duda D09). */
@@ -44,6 +45,7 @@ fun EditProfileRoute(
     onDeleteAccount: () -> Unit,
     viewModel: EditProfileViewModel = hiltViewModel()
 ) {
+    SecureScreen()
     val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(viewModel) { viewModel.saved.collect { onBack() } }
     PhaseCrossfade(if (state.loading) ScreenPhase.LOADING else ScreenPhase.CONTENT) { phase ->

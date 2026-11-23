@@ -19,6 +19,7 @@ import com.wherever.mobile.core.designsystem.TitleBlock
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.core.designsystem.rememberFormSubmit
+import com.wherever.mobile.core.ui.SecureScreen
 import com.wherever.mobile.feature.account.ui.PasswordField
 import com.wherever.mobile.feature.auth.domain.PostAuthDestination
 
@@ -29,6 +30,7 @@ fun NewPasswordRoute(
     onRequestAnother: () -> Unit,
     viewModel: NewPasswordViewModel = hiltViewModel()
 ) {
+    SecureScreen()
     val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(viewModel) { viewModel.done.collect(onDone) }
     NewPasswordContent(

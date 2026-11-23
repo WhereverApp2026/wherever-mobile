@@ -17,6 +17,8 @@ import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.core.notifications.PushDestination
 import com.wherever.mobile.feature.status.ui.AppStatusOverlay
 import com.wherever.mobile.feature.status.ui.AppStatusViewModel
+import com.wherever.mobile.feature.status.ui.IntegrityOverlay
+import com.wherever.mobile.feature.status.ui.IntegrityViewModel
 import com.wherever.mobile.navigation.InAppPushBanner
 import com.wherever.mobile.navigation.MainViewModel
 import com.wherever.mobile.navigation.WhereverNavHost
@@ -26,6 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
     private val status: AppStatusViewModel by viewModels()
+    private val integrity: IntegrityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splash = installSplashScreen()
@@ -48,11 +51,14 @@ class MainActivity : ComponentActivity() {
             WhereverTheme(darkTheme = dark) {
                 val banner by viewModel.banner.collectAsStateWithLifecycle()
                 val appStatus by status.state.collectAsStateWithLifecycle()
+                val integrityState by integrity.state.collectAsStateWithLifecycle()
                 Box(Modifier.fillMaxSize()) {
                     start?.let { WhereverNavHost(it, viewModel.events, viewModel.pushes, viewModel.links) }
                     InAppPushBanner(banner, viewModel::onBannerOpen, viewModel::onBannerLater)
                     // 89_SinConexion, mantenimiento y versión mínima (specs/nv-16) quedan sobre todo lo demás.
                     AppStatusOverlay(appStatus, status::retry, status::dismiss)
+                    // Root, depurador o app alterada: sobre todo, incluso Sin conexión.
+                    IntegrityOverlay(integrityState, integrity::dismissWarning)
                 }
             }
         }
