@@ -1,12 +1,14 @@
 # Pendientes — Wherever Móvil
 
-> Actualizado: 2026-11-22. Una rama y un PR por spec. Pruebas que esperan el teléfono: `docs/pruebas-telefono.md`.
+> Actualizado: 2026-11-23. Una rama y un PR por spec. Pruebas que esperan el teléfono: `docs/pruebas-telefono.md`.
 > Métrica: pantallas que funcionan de verdad / 162 frames de la maqueta (detalle y registro de cortes en `docs/avance.md`).
 > Una pantalla cuenta si tiene código, llama a la API real, maneja carga, error y vacío, tiene pruebas y se probó en el teléfono.
 
 ## % real
 
 **87 de 162 = 53,7 %** con la API real, más 1 con datos locales (Insignias, sin endpoint) que no suma.
+
+**Por sumar (2026-11-23, PR #67 `integracion/todo`, con código, pruebas y capturas; falta probar contra staging en el teléfono):** Jorge: 83_Insignias (ya con API real), 07_EncuentraAmigos, 43_CrearGrupo, 46_Grupo, 48_Votar, InvitarPlan. Diego: IAPalabra, 17_AjustaPlan, Generando 1/4–4/4, 39_Plan, 40_Cambiar, 41_AgregarParada, CrearPlan, 26_CheckinOk, 28_Vaca y variantes, 45_AgregarGasto. Negocio (nv-34/35/37): alta, panel, reservas, estadísticas, check-in, cupones y horas. Se cuentan al probarlos con staging (L-V 08:00–22:00).
 
 | Área | Specs | Frames | Funcionan | % |
 |---|---|---|---|---|

@@ -113,12 +113,12 @@ class GroupsContentTest {
         compose.onNodeWithTag("chat_send").assertIsNotEnabled()
         compose.onNodeWithTag("chat_input").performTextInput("Hola")
         compose.onNodeWithTag("chat_send").assertIsEnabled().performClick()
+        // Con el teclado abierto, en un teléfono de pantalla baja la lista queda fuera de la vista.
+        compose.runOnIdle { keyboard?.hide() }
         compose.onNodeWithText(context.getString(R.string.groups_chat_failed)).assertIsDisplayed()
         compose.onNodeWithTag("message_retry").performClick()
         assertEquals(listOf("send:Hola", "retry:c1"), events)
 
-        // Con el teclado abierto, en un teléfono de pantalla baja el aviso queda fuera de la vista.
-        compose.runOnIdle { keyboard?.hide() }
         state = state.copy(offline = true)
         compose.onNodeWithTag("chat_offline").assertIsDisplayed()
         state = state.copy(messages = emptyList(), offline = false)
