@@ -7,7 +7,7 @@
 > Stack: ver `constitution.md §3`. Nada fuera sin excepción documentada.
 - Setup: `local.properties.example → local.properties` con `API_BASE_URL` (ej. `https://10.0.2.2:8443/api/v1/` para el emulador con certificado de desarrollo); `google-services.json` en `app/` (no se sube a Git); `./gradlew assembleDebug`.
 - Comandos: `./gradlew assembleDebug`, `./gradlew ktlintCheck detekt lintDebug`, `./gradlew testDebugUnitTest` (Unit, Data, Security, Arquitectura), `./gradlew connectedDebugAndroidTest` (UI y migraciones), `./gradlew koverVerify`.
-- CI `ci-pr.yml` (ubuntu-latest): deps → build → lint → unit → data → security → ui → critic → routes → sdd → coverage → delta-check → mutation → semgrep → deps-scan. Sin deploy. Corre en cada push y PR; sube el APK de debug. `security` = gitleaks; `deps-scan` = OSV informativo; `mutation` aún no configurado: ver `specs/nv-39` §2.6.
+- CI `ci-pr.yml` (ubuntu-latest): deps → build → lint → unit → data → security → ui → critic → routes → sdd → coverage → delta-check → mutation → semgrep → deps-scan → sbom. Sin deploy. Corre en cada push y PR; sube el APK de debug y el SBOM CycloneDX. `security` = gitleaks; `semgrep` = reglas propias + registro (paquetes explícitos), ambos bloqueantes; `deps-scan` = OSV bloqueante con hallazgos altos o críticos; `mutation` aún no configurado: ver `specs/nv-39` §2.6.
 - PR = 1 slice (funcionalidad); `CHECKLIST_PR.md` + 1 revisor + `Memoria.md` al día.
 - Naming: inglés en código y paquetes; textos en español en `strings.xml`.
 - Sin secretos, sin TODO sin issue, sin imports muertos, sin código muerto.
@@ -37,7 +37,7 @@
 ## 4. Verificación por funcionalidad
 - `assembleDebug` sin errores antes de test.
 - `Unit/Data/Security/UI/Arquitectura` 100% verdes.
-- `scripts/critic-guardrails.sh → PASS`, `scripts/check_sdd.sh → SDD-OK`, `scripts/check_specs.sh → SPECS-OK`, `scripts/check_routes.sh → OK`, `scripts/check_strings.sh → OK`, `scripts/check_coverage.sh --min 45`, `check_delta_coverage.py --min 80 --advisory` informa (no bloquea), `semgrep scan --config=.semgrep/semgrep.yaml --error` 0 hallazgos y `semgrep scan --config=auto` advisory.
+- `scripts/critic-guardrails.sh → PASS`, `scripts/check_sdd.sh → SDD-OK`, `scripts/check_specs.sh → SPECS-OK`, `scripts/check_routes.sh → OK`, `scripts/check_strings.sh → OK`, `scripts/check_coverage.sh --min 45`, `check_delta_coverage.py --min 80 --advisory` informa (no bloquea), `semgrep scan --config=.semgrep/semgrep.yaml --error` y el registro (`p/kotlin p/java p/secrets p/python p/github-actions p/owasp-top-ten`) con 0 hallazgos; `check_deps_osv.py --fail-on high` sin hallazgos.
 - Mutación PR advisory (Pitest sobre lo cambiado, `continue-on-error`) + nightly opcional; tras ella siempre `assembleDebug`. Pitest no está en el build: pendiente en `specs/nv-39` §2.6.
 - La app abre sin red y muestra el estado correspondiente.
 
@@ -55,7 +55,7 @@
 - Tokens cifrados con Keystore; refresh seguro; sesión limpia si falla.
 - `networkSecurityConfig` solo HTTPS; `allowBackup` controlado.
 - Permisos en contexto; la app funciona sin ellos.
-- SAST Semgrep bloqueante; Dependency-Check informativo; `Dependabot` activo. MobSF/Frida y firma automática diferidos, documentados, no exigidos.
+- SAST Semgrep bloqueante (propias y registro); OSV bloqueante (alto/crítico); SBOM CycloneDX; `Dependabot` activo. Pinning de la API, `FLAG_SECURE`, detección de root/depurador, Room con SQLCipher y desbloqueo biométrico opcional (constitución §6, E-05/E-06). MobSF/Frida y publicación automática diferidos, documentados, no exigidos.
 
 ## 7. Testing quirks
 - JUnit + MockK + Turbine; `MockWebServer` y Room en memoria para datos; Compose Testing para UI; Konsist para arquitectura.
