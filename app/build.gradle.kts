@@ -214,6 +214,7 @@ dependencies {
     implementation(libs.zxing.android.embedded)
     implementation(libs.androidx.biometric)
     implementation(libs.sqlcipher.android)
+    implementation(libs.osmdroid.android)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging)

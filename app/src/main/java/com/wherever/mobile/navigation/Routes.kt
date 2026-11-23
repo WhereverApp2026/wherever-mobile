@@ -142,6 +142,10 @@ data object MyGroupsRoute
 @Serializable
 data class GroupChatRoute(val id: String)
 
+/** 32_ExpMapa: lugares en el mapa (specs/nv-21, D25 osmdroid). */
+@Serializable
+data object ExploreMapRoute
+
 /** Visor de historias; StoryViewerViewModel lee `authorId` (backend nv-84, specs/nv-17). */
 @Serializable
 data class StoryRoute(val authorId: String)

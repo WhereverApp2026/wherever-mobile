@@ -1653,4 +1653,12 @@
     <string name="stories_close">Cerrar historias</string>
     <string name="stories_verified">Visita verificada</string>
     <string name="stories_see_post">Ver publicación</string>
+    <!-- 32_ExpMapa (D25: OpenStreetMap) -->
+    <string name="explore_map">Ver mapa</string>
+    <string name="map_search_here">Buscar en esta zona</string>
+    <string name="map_empty">No hay lugares en esta zona. Mueve el mapa o quita el filtro.</string>
+    <string name="map_attribution">© colaboradores de OpenStreetMap</string>
+    <string name="map_card_line">%1$s · ★ %2$.1f</string>
+    <string name="map_see_detail">Ver detalle</string>
+    <string name="map_to_plan">A mi plan</string>
 </resources>

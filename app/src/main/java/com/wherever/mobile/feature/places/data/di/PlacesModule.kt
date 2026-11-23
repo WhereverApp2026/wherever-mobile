@@ -2,10 +2,13 @@ package com.wherever.mobile.feature.places.data.di
 
 import com.wherever.mobile.feature.places.data.FavoritesApi
 import com.wherever.mobile.feature.places.data.FavoritesRepositoryImpl
+import com.wherever.mobile.feature.places.data.PlaceMapApi
+import com.wherever.mobile.feature.places.data.PlaceMapRepositoryImpl
 import com.wherever.mobile.feature.places.data.PlacesApi
 import com.wherever.mobile.feature.places.data.PlacesRepositoryImpl
 import com.wherever.mobile.feature.places.data.ReviewsRepositoryImpl
 import com.wherever.mobile.feature.places.domain.FavoritesRepository
+import com.wherever.mobile.feature.places.domain.PlaceMapRepository
 import com.wherever.mobile.feature.places.domain.PlacesRepository
 import com.wherever.mobile.feature.places.domain.ReviewsRepository
 import dagger.Binds
@@ -27,11 +30,17 @@ abstract class PlacesModule {
     @Binds
     abstract fun bindFavorites(impl: FavoritesRepositoryImpl): FavoritesRepository
 
+    @Binds
+    abstract fun bindMap(impl: PlaceMapRepositoryImpl): PlaceMapRepository
+
     companion object {
         @Provides
         fun provideApi(retrofit: Retrofit): PlacesApi = retrofit.create(PlacesApi::class.java)
 
         @Provides
         fun provideFavoritesApi(retrofit: Retrofit): FavoritesApi = retrofit.create(FavoritesApi::class.java)
+
+        @Provides
+        fun provideMapApi(retrofit: Retrofit): PlaceMapApi = retrofit.create(PlaceMapApi::class.java)
     }
 }

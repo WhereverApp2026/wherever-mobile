@@ -65,6 +65,8 @@ import com.wherever.mobile.feature.memories.ui.CreateMomentRoute as CreateMoment
 import com.wherever.mobile.feature.memories.ui.PostcardDetailRoute as PostcardDetailScreen
 import com.wherever.mobile.feature.memories.ui.PostcardEditorRoute as PostcardEditorScreen
 import com.wherever.mobile.feature.notifications.ui.NotificationsRoute as NotificationsScreen
+import com.wherever.mobile.feature.places.ui.ExploreMapNavigation
+import com.wherever.mobile.feature.places.ui.ExploreMapRoute as ExploreMapScreen
 import com.wherever.mobile.feature.places.ui.ExploreRoute as ExploreScreen
 import com.wherever.mobile.feature.places.ui.FavoritesRoute as FavoritesScreen
 import com.wherever.mobile.feature.places.ui.PlaceDetailRoute as PlaceDetailScreen
@@ -283,7 +285,17 @@ fun WhereverNavHost(
             ExploreScreen(
                 onTab = { navController.openTab(e, it) },
                 onCreate = { navController.openCreate(e, it) },
-                onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "busqueda")) }
+                onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "busqueda")) },
+                onMap = { navController.navigateFrom(e, ExploreMapRoute) }
+            )
+        }
+        composable<ExploreMapRoute> { e ->
+            ExploreMapScreen(
+                ExploreMapNavigation(
+                    onBack = { navController.popFrom(e) },
+                    onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "mapa")) },
+                    onPlan = { navController.navigateFrom(e, CreatePlanRoute(phrase = it)) }
+                )
             )
         }
         composable<PlaceRoute> { e ->

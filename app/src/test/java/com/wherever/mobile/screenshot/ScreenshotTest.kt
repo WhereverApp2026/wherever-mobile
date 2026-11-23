@@ -68,6 +68,7 @@ import com.wherever.mobile.feature.memories.ui.PostcardDetailPolaroidPreview
 import com.wherever.mobile.feature.memories.ui.PostcardDetailPreview
 import com.wherever.mobile.feature.memories.ui.PostcardEditorPreview
 import com.wherever.mobile.feature.memories.ui.PostcardGonePreview
+import com.wherever.mobile.feature.places.ui.PlaceMapCardPreview
 import com.wherever.mobile.feature.plans.ui.ManualPlanPreview
 import com.wherever.mobile.feature.plans.ui.PlanAddStopPreview
 import com.wherever.mobile.feature.plans.ui.PlanAdjustPreview
@@ -153,6 +154,7 @@ class ScreenshotTest {
         "44_mis_grupos" to { MyGroupsPreview() },
         "45_grupo_chat" to { GroupChatPreview() },
         "46_grupo" to { GroupDetailPreview() },
+        "32_exp_mapa_tarjeta" to { PlaceMapCardPreview() },
         "17_post_detalle_social" to { MomentSocialPreview() },
         "historias_fila" to { StoriesRowPreview() },
         "historias_visor" to { StoryViewerPreview() },

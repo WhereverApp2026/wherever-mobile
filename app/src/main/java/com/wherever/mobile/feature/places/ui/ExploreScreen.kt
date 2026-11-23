@@ -48,12 +48,13 @@ import com.wherever.mobile.feature.places.domain.SortOrder
 private const val MAX_PRICE_FILTER = 3
 private val PRICE_LEVELS = (1..MAX_PRICE_FILTER).toList()
 
-/** 18_Explorar (US-027, US-028, US-034, US-187). Sin mapa: falta decidir el proveedor (D25). */
+/** 18_Explorar (US-027, US-028, US-034, US-187). «Ver mapa» abre 32_ExpMapa (D25: osmdroid). */
 @Composable
 fun ExploreRoute(
     onTab: (MainTab) -> Unit,
     onCreate: (CreateOption) -> Unit,
     onPlace: (String) -> Unit,
+    onMap: () -> Unit = {},
     viewModel: ExploreViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -69,6 +70,14 @@ fun ExploreRoute(
         ) {
             item { SearchHeader(state.query, viewModel::onQueryChange) }
             item { FilterChips(state, viewModel) }
+            item {
+                WhereverOutlinedButton(
+                    text = stringResource(R.string.explore_map),
+                    onClick = onMap,
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = ScreenPadding),
+                    tag = "explore_map"
+                )
+            }
             if (!state.searching && state.filters.isEmpty) {
                 if (state.recentSearches.isNotEmpty()) item { RecentSearches(state, viewModel) }
                 if (state.recentlyViewed.isNotEmpty()) item { RecentlyViewed(state, onPlace) }

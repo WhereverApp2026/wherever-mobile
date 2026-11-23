@@ -311,6 +311,16 @@
 - A evitar: `onNode(hasText(...))` cuando el texto sale dos veces (chip y vista previa); acotar con `hasAnyAncestor(hasTestTag(...))` y `useUnmergedTree = true`.
 - A recordar: en el Xiaomi el teclado abierto tapa los avisos de arriba en pruebas de UI; cerrarlo con `LocalSoftwareKeyboardController` antes de comprobarlos.
 
+- Estado (2026-11-23, tarde): #67 integrado por Osmar. #68 (`feat/seguridad-95`, base `main`) trae: constitución E-04 a E-07; pinning, `FLAG_SECURE`, root/depurador; SQLCipher con migración probada con datos reales; biometría opcional; CI con Semgrep (paquetes explícitos) y OSV bloqueantes, SBOM, MobSF y release firmado si hay secretos; Perfil 81–84 como Figma; me gusta, comentarios, reacciones e historias (nv-17); mapa 32_ExpMapa con osmdroid. % real 95/162 tras probar con staging.
+- Decisión (Jorge, 2026-11-23): osmdroid para D25; root/depurador avisa en debug y bloquea en release; biometría opcional en Ajustes.
+- Decisión: contadores, bio y número de nivel de `/usuarios/yo` en memoria (`ProfileExtras`), no en Room: la versión 6 la reserva `nv-56` (Borre).
+- A evitar: SQLCipher 4.6.1 `rawExecSQL` solo compila (no ejecuta) y un `PRAGMA` sobre la base adjunta va a otra conexión; usar `execSQL` para ATTACH/DETACH, `rawQuery(...).moveToFirst()` para `sqlcipher_export`, abrir con `CREATE_IF_NECESSARY` y fijar `user_version` abriendo la base cifrada aparte.
+- A evitar: `semgrep --config=auto` exige métricas; usar paquetes explícitos (`p/kotlin p/java p/secrets p/python p/github-actions p/owasp-top-ten`).
+- A evitar: manejar formularios largos del teléfono con `adb input`: el teclado y el «atrás» sacan la app y el texto cae en el launcher. Preferir pruebas de UI.
+- A evitar: probar en el teléfono de Jorge flujos que mandan su ubicación real o su agenda (alta del negocio paso 3, EncuentraAmigos) sin su visto bueno.
+- A recordar: el MCP de Figma (Starter) se acaba; los frames se ven con Playwright en `figma.com/design/...?node-id=` y Ctrl+rueda para acercar.
+- A recordar: en staging el 422 de `POST /planes/generar` es «sin lugares cerca»; los niveles 1 a 3 del backend se llaman igual («Explorador»).
+
 ## Reparto entre cuatro y revisor único (2026-11-22)
 - Estado: reparto de lo que falta entre Jorge (nv-20, nv-21, nv-25 y lo compartido), Diego (nv-23, nv-24, nv-26, nv-30, nv-37), Borre (nv-35, nv-36, nv-38) y Osmar (nv-17, nv-27, nv-29 y backend). Listas en `docs/equipo/`. Avance al corte: 63/162 en `main`.
 - Decisión (Osmar): solo Osmar aprueba los PR a `main`. `CODEOWNERS` = `@OsmarYahir @WhereverApp2026` y regla `.github/rulesets/main.json` (1 aprobación de code owner, se anula con commits nuevos, CI `gates` en verde y al día, conversaciones resueltas, sin push directo ni force push), sin excepciones. Porqué: 15 commits entraron a `main` sin PR el 2026-11-19.
