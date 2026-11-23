@@ -26,6 +26,8 @@
 | 19 | Planes de Diego (nv-23, 24, 26, 30) | Contra staging | integradas en `main` (#67) | 2026-11-23: hechas IAPalabra, 17_AjustaPlan, Generando 1–3, 39_Plan, 40_Cambiar, 41_AgregarParada, CrearPlan (con error de parada cerrada) y 28_Vaca vacía. Abiertas: Generando 4/4 (staging no tiene negocios cerca de la ubicación real del teléfono: 422), 45_AgregarGasto y variantes de Vaca (QA B debe aceptar el grupo), 26_CheckinOk (hay que estar en el lugar) |
 | 21 | Modo negocio (nv-34, 35, 37) | Alta completa y panel | integradas en `main` (#67) | 2026-11-23: paso 2 del alta guardado. Abierto: el paso 3 manda la ubicación real del teléfono (necesita el visto bueno de Jorge o ubicación simulada) y el panel necesita un negocio aprobado por un administrador en staging |
 | 20 | Biometría y Room cifrada (#68) | Encender en Ajustes, salir más de 1 min y volver; migración con datos reales | — | migración hecha 2026-11-23 (datos intactos, archivo cifrado); biometría abierta |
+| 22 | Me gusta, comentarios, 13_Reacciones e historias (nv-17) | Dar y quitar me gusta, comentar, responder, borrar; abrir reacciones; fila de historias y visor | 2026-11-23 14:02: la sesión QA del teléfono se cerró sola (renovación rechazada) y no se reingresa la contraseña desde Claude | abierto: Jorge inicia sesión con la cuenta QA A |
+| 23 | 32_ExpMapa (nv-21) | Ver mapa desde Explorar, pines de staging, Buscar en esta zona, filtros, tarjeta, Ver detalle y A mi plan | idem | abierto |
 
 ## Hecho
 - 2026-11-21, nv-25: instalado sobre la build anterior (migración Room 4→5 sin cierre y con la sesión intacta); Planes → Mis grupos abre la pantalla, sin servidor muestra error con Reintentar y Volver regresa a Mis planes.
