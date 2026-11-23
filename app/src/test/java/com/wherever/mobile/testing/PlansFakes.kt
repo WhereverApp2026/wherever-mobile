@@ -3,6 +3,7 @@ package com.wherever.mobile.testing
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.location.GeoPoint
 import com.wherever.mobile.feature.plans.domain.Alternative
+import com.wherever.mobile.feature.plans.domain.ManualPlan
 import com.wherever.mobile.feature.plans.domain.Mobility
 import com.wherever.mobile.feature.plans.domain.Plan
 import com.wherever.mobile.feature.plans.domain.PlanAssistantRepository
@@ -137,8 +138,20 @@ class FakePlansRepository : PlansRepository {
 
     override suspend fun removeStop(plan: Plan, stopId: String): Result<Plan> = edited("remove:$stopId")
 
-    override suspend fun alternatives(plan: Plan, stopId: String): Result<List<Alternative>> =
-        Result.Success(listOf(Alternative("n7", "Café Nuevo", "cafeteria", 300.0, 4)))
+    val alternativeQueries = mutableListOf<Pair<String, String?>>()
+    var created: ManualPlan? = null
+    var createResult: Result<Plan>? = null
+
+    override suspend fun alternatives(plan: Plan, stopId: String, query: String?): Result<List<Alternative>> {
+        alternativeQueries += stopId to query
+        return Result.Success(listOf(Alternative("n7", "Café Nuevo", "cafeteria", 300.0, 4)))
+    }
+
+    override suspend fun create(plan: ManualPlan): Result<Plan> {
+        calls += "create"
+        created = plan
+        return createResult ?: Result.Success(samplePlan().copy(id = "manual1"))
+    }
 
     override suspend fun replaceStop(plan: Plan, stopId: String, placeId: String): Result<Plan> =
         edited("replace:$stopId:$placeId")

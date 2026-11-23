@@ -311,6 +311,10 @@
 - A evitar: `MIN_STOPS`/`MAX_STOPS` ya existen en `feature/plans/ui` (edición, 6 paradas); los de la IA son `AI_MIN_STOPS`/`AI_MAX_STOPS`.
 - A recordar: un Composable que regresa valor va en minúscula (lint `ComposableNaming`), p. ej. `sparkleIcon()`.
 
+- Estado (2026-11-22): nv-24 Plan, detalle y edición (Diego) en `feat/nv-24-plan-detail` (sobre nv-23): 39_Plan, 40_Cambiar, 41_AgregarParada y CrearPlan (`ManualPlanRoute`). Decisiones D-24a a D-24f en la spec.
+- A recordar: las horas en capturas dependen de la zona del equipo (Windows local, Linux UTC en CI); las pantallas con horas reciben `zone` y las vistas previas pasan `PREVIEW_ZONE`.
+- A evitar: pedir la ficha del lugar después de guardar o crear un plan: `PlansIntegrationTest` espera una sola llamada. `toPlan(lookupMissing = false)` al guardar.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

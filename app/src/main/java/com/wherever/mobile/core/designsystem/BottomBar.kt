@@ -65,7 +65,7 @@ enum class CreateOption(
         R.drawable.ic_wh_pencil,
         Grape,
         GrapeTint,
-        false
+        true
     ),
     WITH_FRIENDS(
         R.string.create_with_friends,

@@ -1,3 +1,17 @@
+# Revisión — 2026-11-22: nv-24 Plan, detalle y edición (Diego)
+
+> Rama `feat/nv-24-plan-detail` (sale de `feat/nv-23-ai-plan`, PR #56). Frames: `39_Plan` (`292:5544`), `Plan · Paseo familiar` (`347:486`), `40_Cambiar` (`292:5784`), `41_AgregarParada` (`292:5706`), `CrearPlan` (`320:218`). Revisor: Osmar.
+
+## Decisiones tomadas
+- **39_Plan** con resumen (paradas, horas, traslados, costo por persona), paradas con foto, hora, duración, giro y precio, y el traslado en una píldora. Renombrar, Repetir mañana y Borrar siguen al final (nv-48).
+- **D-24a** sin mapa ni «Cómo llegar» hasta tener proveedor (D25, nv-30). **D-24c** sin «Invitar amigos» (nv-25) ni «Reservar todo» (no hay reserva múltiple en la API).
+- **40_Cambiar** con alternativas elegibles, «Buscar otro lugar» (`?q=`), «Quitar esta parada» y, abajo, subir, bajar y ±15 min. Sin afluencia (D-24e).
+- **41_AgregarParada:** Sugeridas = alternativas de la última parada; Buscar = búsqueda de lugares. La parada va al final, 15 min después de la última.
+- **CrearPlan** (`ManualPlanRoute`): entra desde «¿Prefieres hacerlo tú? Crear plan a mano» de 17_AjustaPlan y desde «Crear un plan a mano» de la hoja 15_Crear (deja de decir Próximamente: cambio de una línea en `core/designsystem/BottomBar.kt` y una en `WhereverNavHost`). Personas según «¿Quién va?» (D-24d).
+- **D-24f** hasta 4 paradas.
+
+---
+
 # Revisión — 2026-11-22: nv-23 Crear plan con IA (Diego)
 
 > Rama `feat/nv-23-ai-plan` desde `main`. Frames: `IAPalabra` (`331:3`), `17_AjustaPlan` (`189:844`), `Generando 1/4` (`120:3270`), `2/4` (`358:5`), `3/4` (`358:64`), `4/4` (`358:123`). Revisor: Osmar.

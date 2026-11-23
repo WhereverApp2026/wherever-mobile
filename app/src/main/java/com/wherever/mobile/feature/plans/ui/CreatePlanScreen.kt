@@ -134,12 +134,17 @@ private val QUICK_WORDS = listOf(
 
 private val STEPS = listOf(R.string.generating_1, R.string.generating_2, R.string.generating_3, R.string.generating_4)
 
-private val DayFormat = DateTimeFormatter.ofPattern("EEE d MMM", Locale.forLanguageTag("es-MX"))
-private val TimeFormat = DateTimeFormatter.ofPattern("HH:mm")
+internal val DayFormat = DateTimeFormatter.ofPattern("EEE d MMM", Locale.forLanguageTag("es-MX"))
+internal val TimeFormat = DateTimeFormatter.ofPattern("HH:mm")
 
 /** IAPalabra → 17_AjustaPlan → Generando 1/4…4/4 → plan propuesto (specs/nv-23). */
 @Composable
-fun CreatePlanRoute(onBack: () -> Unit, onSaved: (String) -> Unit, viewModel: CreatePlanViewModel = hiltViewModel()) {
+fun CreatePlanRoute(
+    onBack: () -> Unit,
+    onSaved: (String) -> Unit,
+    onManual: () -> Unit = {},
+    viewModel: CreatePlanViewModel = hiltViewModel()
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(viewModel) { viewModel.saved.collect(onSaved) }
     BackHandler(enabled = state.phase != CreatePhase.WORD && state.phase != CreatePhase.RESULT) {
@@ -157,6 +162,7 @@ fun CreatePlanRoute(onBack: () -> Unit, onSaved: (String) -> Unit, viewModel: Cr
             onQuickWord = viewModel::onQuickWord,
             onAdjust = viewModel::adjust,
             onBackToWord = viewModel::backToWord,
+            onManual = onManual,
             onCompany = viewModel::onCompany,
             onDate = viewModel::onDate,
             onTime = viewModel::onTime,
@@ -381,6 +387,13 @@ private fun AdjustStep(state: CreatePlanUiState, today: LocalDate, actions: Crea
             }
         }
         Notices(state)
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            WhereverTextLink(
+                stringResource(R.string.plan_manual_link),
+                actions.onManual,
+                Modifier.testTag("plan_manual")
+            )
+        }
     }
     if (pickDate) {
         PlanDatePicker(today, state.date ?: today, { pickDate = false }) {
@@ -397,13 +410,13 @@ private fun AdjustStep(state: CreatePlanUiState, today: LocalDate, actions: Crea
 }
 
 @Composable
-private fun SectionLabel(@StringRes text: Int) {
+internal fun SectionLabel(@StringRes text: Int) {
     Text(text = stringResource(text), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
 }
 
 /** Campo que abre un selector (día u hora), con el mismo aspecto que los campos de texto. */
 @Composable
-private fun PickerField(
+internal fun PickerField(
     label: String,
     value: String,
     icon: ImageVector?,
@@ -483,7 +496,12 @@ private fun StepperRow(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PlanDatePicker(today: LocalDate, initial: LocalDate, onDismiss: () -> Unit, onPicked: (LocalDate) -> Unit) {
+internal fun PlanDatePicker(
+    today: LocalDate,
+    initial: LocalDate,
+    onDismiss: () -> Unit,
+    onPicked: (LocalDate) -> Unit
+) {
     val last = today.plusDays(MAX_DAYS_AHEAD)
     val pickerState = rememberDatePickerState(
         initialSelectedDateMillis = initial.toPickerMillis(),
@@ -512,7 +530,7 @@ private fun PlanDatePicker(today: LocalDate, initial: LocalDate, onDismiss: () -
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PlanTimePicker(initial: LocalTime?, onDismiss: () -> Unit, onPicked: (LocalTime) -> Unit) {
+internal fun PlanTimePicker(initial: LocalTime?, onDismiss: () -> Unit, onPicked: (LocalTime) -> Unit) {
     val start = initial ?: DEFAULT_START
     val pickerState = rememberTimePickerState(initialHour = start.hour, initialMinute = start.minute, is24Hour = true)
     WhereverDialog(

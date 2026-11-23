@@ -93,6 +93,10 @@ data class SearchRoute(val query: String = "")
 @Serializable
 data class CreatePlanRoute(val phrase: String = "")
 
+/** CrearPlan: plan a mano (specs/nv-24). */
+@Serializable
+data object ManualPlanRoute
+
 /** `id` lo lee PlanDetailViewModel. */
 @Serializable
 data class PlanRoute(val id: String)

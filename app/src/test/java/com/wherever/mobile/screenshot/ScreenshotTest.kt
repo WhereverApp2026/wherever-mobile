@@ -41,7 +41,12 @@ import com.wherever.mobile.feature.memories.ui.PostcardDetailPolaroidPreview
 import com.wherever.mobile.feature.memories.ui.PostcardDetailPreview
 import com.wherever.mobile.feature.memories.ui.PostcardEditorPreview
 import com.wherever.mobile.feature.memories.ui.PostcardGonePreview
+import com.wherever.mobile.feature.plans.ui.ManualPlanPreview
+import com.wherever.mobile.feature.plans.ui.PlanAddStopPreview
 import com.wherever.mobile.feature.plans.ui.PlanAdjustPreview
+import com.wherever.mobile.feature.plans.ui.PlanChangePreview
+import com.wherever.mobile.feature.plans.ui.PlanDetailPreview
+import com.wherever.mobile.feature.plans.ui.PlanFamilyPreview
 import com.wherever.mobile.feature.plans.ui.PlanGeneratingPreview
 import com.wherever.mobile.feature.plans.ui.PlanGeneratingStep3Preview
 import com.wherever.mobile.feature.plans.ui.PlanReadyPreview
@@ -139,7 +144,12 @@ class ScreenshotTest {
         "17_ajusta_plan" to { PlanAdjustPreview() },
         "generando_1" to { PlanGeneratingPreview() },
         "generando_3" to { PlanGeneratingStep3Preview() },
-        "generando_4" to { PlanReadyPreview() }
+        "generando_4" to { PlanReadyPreview() },
+        "39_plan" to { PlanDetailPreview() },
+        "plan_paseo_familiar" to { PlanFamilyPreview() },
+        "40_cambiar" to { PlanChangePreview() },
+        "41_agregar_parada" to { PlanAddStopPreview() },
+        "crear_plan" to { ManualPlanPreview() }
     )
 
     @Test

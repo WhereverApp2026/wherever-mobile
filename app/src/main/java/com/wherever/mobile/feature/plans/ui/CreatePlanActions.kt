@@ -11,6 +11,8 @@ internal data class CreatePlanActions(
     val onQuickWord: (String) -> Unit = {},
     val onAdjust: () -> Unit = {},
     val onBackToWord: () -> Unit = {},
+    /** «¿Prefieres hacerlo tú? Crear plan a mano» (CrearPlan, nv-24). */
+    val onManual: () -> Unit = {},
     val onCompany: (Company) -> Unit = {},
     val onDate: (LocalDate) -> Unit = {},
     val onTime: (LocalTime) -> Unit = {},

@@ -57,6 +57,7 @@ import com.wherever.mobile.feature.places.ui.ExploreRoute as ExploreScreen
 import com.wherever.mobile.feature.places.ui.FavoritesRoute as FavoritesScreen
 import com.wherever.mobile.feature.places.ui.PlaceDetailRoute as PlaceDetailScreen
 import com.wherever.mobile.feature.plans.ui.CreatePlanRoute as CreatePlanScreen
+import com.wherever.mobile.feature.plans.ui.ManualPlanRoute as ManualPlanScreen
 import com.wherever.mobile.feature.plans.ui.MyPlansRoute as MyPlansScreen
 import com.wherever.mobile.feature.plans.ui.PlanDetailRoute as PlanDetailScreen
 import com.wherever.mobile.feature.profile.ui.BadgesRoute as BadgesScreen
@@ -323,8 +324,17 @@ fun WhereverNavHost(
         composable<CreatePlanRoute> { e ->
             CreatePlanScreen(
                 onBack = { navController.popFrom(e) },
+                onManual = { navController.navigateFrom(e, ManualPlanRoute) },
                 onSaved = { id ->
                     navController.navigateOnResult(e, PlanRoute(id)) { popUpTo<CreatePlanRoute> { inclusive = true } }
+                }
+            )
+        }
+        composable<ManualPlanRoute> { e ->
+            ManualPlanScreen(
+                onBack = { navController.popFrom(e) },
+                onCreated = { id ->
+                    navController.navigateOnResult(e, PlanRoute(id)) { popUpTo<ManualPlanRoute> { inclusive = true } }
                 }
             )
         }
@@ -486,7 +496,7 @@ private fun NavHostController.openCreate(from: NavBackStackEntry, option: Create
         CreateOption.WITH_FRIENDS -> MyGroupsRoute
         CreateOption.MOMENT -> CreateMomentRoute()
         CreateOption.REVIEW -> PendingReviewsRoute
-        CreateOption.MANUAL_PLAN -> return
+        CreateOption.MANUAL_PLAN -> ManualPlanRoute
     }
     navigateFrom(from, route)
 }

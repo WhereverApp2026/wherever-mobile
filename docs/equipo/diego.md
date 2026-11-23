@@ -20,8 +20,8 @@ Orden recomendado: de arriba hacia abajo. Cada spec es una rama y un PR. Desde a
 
 ## nv-24 — Plan: detalle y edición (lo que falta)
 
-- [ ] Revisar contra la spec qué falta de `39_Plan`, `Plan · *`, `40_Cambiar`, `41_AgregarParada` y `CrearPlan` (3 de 5 frames funcionan)
-- [ ] Compuertas, teléfono y PR
+- [x] Revisar contra la spec qué falta de `39_Plan`, `Plan · *`, `40_Cambiar`, `41_AgregarParada` y `CrearPlan` (3 de 5 frames funcionan)
+- [ ] Compuertas (en verde), teléfono y PR
 
 ## nv-26 — Vaca virtual y gastos
 

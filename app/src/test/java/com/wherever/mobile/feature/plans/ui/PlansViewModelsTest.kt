@@ -16,7 +16,9 @@ import com.wherever.mobile.testing.FakeProfileRepository
 import com.wherever.mobile.testing.MainDispatcherRule
 import com.wherever.mobile.testing.TEST_POINT
 import com.wherever.mobile.testing.sampleDraft
+import com.wherever.mobile.testing.samplePlan
 import com.wherever.mobile.testing.sampleProfile
+import com.wherever.mobile.testing.sampleStop
 import java.time.Clock
 import java.time.Instant
 import java.time.LocalDate
@@ -338,16 +340,89 @@ class PlansViewModelsTest {
     }
 
     @Test
-    fun `cambiar por una alternativa`() = runTest(mainDispatcher.dispatcher) {
+    fun `cambiar por una alternativa elegida`() = runTest(mainDispatcher.dispatcher) {
         val vm = detail()
 
         vm.openAlternatives(vm.stops()[0])
         advanceUntilIdle()
-        vm.replaceWith(checkNotNull(vm.state.value.alternatives).items.single())
+        vm.replaceSelected()
+        assertTrue(plans.calls.none { it.startsWith("replace") })
+
+        vm.selectAlternative(checkNotNull(vm.state.value.alternatives).items.single())
+        vm.replaceSelected()
         advanceUntilIdle()
 
         assertTrue("replace:s1:n7" in plans.calls)
         assertNull(vm.state.value.alternatives)
+    }
+
+    @Test
+    fun `buscar otro lugar pide alternativas por nombre desde 2 letras`() = runTest(mainDispatcher.dispatcher) {
+        val vm = detail()
+        vm.openAlternatives(vm.stops()[1])
+        advanceUntilIdle()
+
+        vm.openAlternativeSearch()
+        vm.onAlternativeQuery("m")
+        advanceUntilIdle()
+        vm.onAlternativeQuery("mirador")
+        advanceUntilIdle()
+
+        assertEquals(listOf("s2" to null, "s2" to "mirador"), plans.alternativeQueries)
+        assertTrue(checkNotNull(vm.state.value.alternatives).searchOpen)
+    }
+
+    @Test
+    fun `quitar esta parada desde la hoja`() = runTest(mainDispatcher.dispatcher) {
+        val vm = detail()
+        vm.openAlternatives(vm.stops()[2])
+        advanceUntilIdle()
+
+        vm.removeFromSheet()
+        advanceUntilIdle()
+
+        assertTrue("remove:s3" in plans.calls)
+        assertNull(vm.state.value.alternatives)
+    }
+
+    @Test
+    fun `sugeridas son las alternativas de la ultima parada`() = runTest(mainDispatcher.dispatcher) {
+        val vm = detail()
+
+        vm.openAddStop()
+        advanceUntilIdle()
+        val sheet = checkNotNull(vm.state.value.addStop)
+        assertFalse(sheet.loadingSuggestions)
+        assertEquals("s3" to null, plans.alternativeQueries.single())
+
+        vm.addSuggestion(sheet.suggestions.single())
+        advanceUntilIdle()
+        assertTrue("add:n7" in plans.calls)
+        assertEquals("2026-11-19T01:45:00Z", plans.lastArrives)
+    }
+
+    @Test
+    fun `con 4 paradas no se agrega otra`() = runTest(mainDispatcher.dispatcher) {
+        plans.plan = samplePlan().let { it.copy(stops = it.stops + sampleStop("s4", "n4", "2026-11-19T01:45:00Z")) }
+        val vm = detail()
+
+        vm.openAddStop()
+
+        assertNull(vm.state.value.addStop)
+    }
+
+    @Test
+    fun `un 403 al editar un plan ajeno no cambia el plan en pantalla`() = runTest(mainDispatcher.dispatcher) {
+        val vm = detail()
+        val before = vm.state.value.plan
+        plans.editResult = Result.Failure(AppError.Forbidden("no eres el dueño"))
+
+        vm.moveDown(vm.stops()[0])
+        advanceUntilIdle()
+
+        assertEquals(before, vm.state.value.plan)
+        assertNotNull(vm.state.value.message)
+        assertFalse(vm.state.value.busy)
     }
 
     @Test
