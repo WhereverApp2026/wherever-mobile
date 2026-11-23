@@ -14,18 +14,19 @@ private val STOP_ERROR = Regex("""[Pp]arada\s+([0-9a-f]{24}|\d+)\s*:\s*([a-z_]+)
  * la app mostraba «Parada 6b045db57d777f3ea0301d45: cerrado».
  */
 internal fun AppError.stopErrorText(stopNames: List<Pair<String, String>>): UiText {
-    val match = apiMessage?.let(STOP_ERROR::find) ?: return toUiText()
-    val (ref, reason) = match.destructured
-    val name = stopNames.firstOrNull { it.first == ref }?.second
-        ?: ref.toIntOrNull()?.let { stopNames.getOrNull(it)?.second ?: stopNames.getOrNull(it - 1)?.second }
-        ?: return toUiText()
-    val res = when (reason) {
+    val match = apiMessage?.let(STOP_ERROR::find)
+    val ref = match?.groupValues?.get(1)
+    val name = ref?.let { r ->
+        stopNames.firstOrNull { it.first == r }?.second
+            ?: r.toIntOrNull()?.let { stopNames.getOrNull(it)?.second ?: stopNames.getOrNull(it - 1)?.second }
+    }
+    val res = when (match?.groupValues?.get(2)) {
         "cerrado" -> R.string.plan_stop_closed
         "no_cabe" -> R.string.plan_stop_overlap
         "duracion" -> R.string.plan_stop_duration
         "precio" -> R.string.plan_stop_price
         "negocio_no_disponible" -> R.string.plan_stop_unavailable
-        else -> return toUiText()
+        else -> null
     }
-    return UiText.Res(res, listOf(name))
+    return if (name != null && res != null) UiText.Res(res, listOf(name)) else toUiText()
 }

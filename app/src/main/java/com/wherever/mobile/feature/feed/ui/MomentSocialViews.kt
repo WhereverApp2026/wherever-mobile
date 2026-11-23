@@ -42,19 +42,6 @@ import com.wherever.mobile.feature.feed.domain.ReactionPerson
 import com.wherever.mobile.feature.feed.domain.ReactionTab
 import com.wherever.mobile.feature.profile.ui.ProfileAvatar
 
-/** Lo que hace la parte social de 17_PostDetalle. */
-data class MomentSocialActions(
-    val onLike: () -> Unit = {},
-    val onReactions: (ReactionTab) -> Unit = {},
-    val onCloseReactions: () -> Unit = {},
-    val onReply: (Comment) -> Unit = {},
-    val onCancelReply: () -> Unit = {},
-    val onDelete: (Comment) -> Unit = {},
-    val onMoreComments: () -> Unit = {},
-    val onRetryComments: () -> Unit = {},
-    val onPerson: (String) -> Unit = {}
-)
-
 /** Corazón con su conteo (abre 13_Reacciones) y conteo de comentarios. */
 @Composable
 internal fun LikeBar(state: MomentSocialUiState, comments: Int, actions: MomentSocialActions) {

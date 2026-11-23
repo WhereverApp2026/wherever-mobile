@@ -76,7 +76,8 @@ class MomentSocialIntegrationTest {
             """{"items":[{"id":"c1","autor":{"id":"u2","nombre":"Ana","nombre_usuario":"ana"},"padre_id":null,""" +
                 """"texto":"¡Qué rico!","estado":"publicado","propio":false,"puede_borrar":false,""" +
                 """"creado_en":"2026-11-23T10:00:00Z","respuestas":[{"id":"c2","autor":null,"padre_id":"c1",""" +
-                """"texto":"","estado":"eliminado","propio":false,"puede_borrar":false,"creado_en":"2026-11-23T10:05:00Z"}]}],""" +
+                """"texto":"","estado":"eliminado","propio":false,"puede_borrar":false,""" +
+                """"creado_en":"2026-11-23T10:05:00Z"}]}],""" +
                 """"siguiente_cursor":"cur2"}"""
         )
         server.reply(
@@ -120,7 +121,8 @@ class MomentSocialIntegrationTest {
             """{"personas":[{"autor":{"id":"u2","nombre_usuario":"ana","foto_url":null},"momentos":[""" +
                 """{"id":"m1","imagen_url":"https://cdn/m1.jpg","negocio":{"id":"n1","nombre":"Café Tacuba"},""" +
                 """"verificado":true,"creado_en":"2026-11-23T09:00:00Z"},""" +
-                """{"id":"m2","imagen_url":"","negocio":null,"verificado":false,"creado_en":"2026-11-23T09:30:00Z"}]},""" +
+                """{"id":"m2","imagen_url":"","negocio":null,"verificado":false,""" +
+                """"creado_en":"2026-11-23T09:30:00Z"}]},""" +
                 """{"autor":{"id":"u3","nombre_usuario":"luis"},"momentos":[]}]}"""
         )
 

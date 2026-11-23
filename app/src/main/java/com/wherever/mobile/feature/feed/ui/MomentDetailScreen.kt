@@ -130,45 +130,55 @@ internal fun MomentDetailContent(
         else -> FormScreen(footer = if (social != null) ({ composer() }) else null) {
             TopTitleRow(stringResource(R.string.feed_post_title), navigation.onBack)
             AuthorLine(item, onPhoto = false)
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(PHOTO_RATIO)
-                    .clip(WhereverShapes.Card)
-                    .testTag("moment_photo")
-            ) {
-                if (item.moment.imageUrl != null) {
-                    AsyncImage(
-                        model = item.moment.imageUrl,
-                        contentDescription = item.moment.text,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxWidth().aspectRatio(PHOTO_RATIO).background(RouteBlueTint)
-                    )
-                } else {
-                    Box(Modifier.fillMaxWidth().aspectRatio(PHOTO_RATIO).background(RouteBlueTint))
-                }
-            }
+            MomentPhoto(item)
             social?.let { LikeBar(it, item.moment.comments, socialActions) }
             item.moment.text?.let { Text(it, style = MaterialTheme.typography.bodyLarge) }
-            if (item.moment.placeId != null || item.moment.planId != null) {
-                SurfaceCard {
-                    Column(verticalArrangement = Arrangement.spacedBy(Spacing.None)) {
-                        item.moment.placeId?.let { placeId ->
-                            NavRow(
-                                item.placeName ?: stringResource(R.string.feed_see_place),
-                                { navigation.onPlace(placeId) },
-                                tag = "moment_detail_place"
-                            )
-                        }
-                        item.moment.planId?.let { planId ->
-                            NavRow(stringResource(R.string.feed_see_plan), {
-                                navigation.onPlan(planId)
-                            }, tag = "moment_detail_plan")
-                        }
-                    }
+            MomentLinks(item, navigation)
+            social?.let { CommentsSection(it, socialActions) }
+        }
+    }
+}
+
+@Composable
+private fun MomentPhoto(item: FeedItem) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(PHOTO_RATIO)
+            .clip(WhereverShapes.Card)
+            .testTag("moment_photo")
+    ) {
+        if (item.moment.imageUrl != null) {
+            AsyncImage(
+                model = item.moment.imageUrl,
+                contentDescription = item.moment.text,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxWidth().aspectRatio(PHOTO_RATIO).background(RouteBlueTint)
+            )
+        } else {
+            Box(Modifier.fillMaxWidth().aspectRatio(PHOTO_RATIO).background(RouteBlueTint))
+        }
+    }
+}
+
+@Composable
+private fun MomentLinks(item: FeedItem, navigation: MomentNavigation) {
+    if (item.moment.placeId != null || item.moment.planId != null) {
+        SurfaceCard {
+            Column(verticalArrangement = Arrangement.spacedBy(Spacing.None)) {
+                item.moment.placeId?.let { placeId ->
+                    NavRow(
+                        item.placeName ?: stringResource(R.string.feed_see_place),
+                        { navigation.onPlace(placeId) },
+                        tag = "moment_detail_place"
+                    )
+                }
+                item.moment.planId?.let { planId ->
+                    NavRow(stringResource(R.string.feed_see_plan), {
+                        navigation.onPlan(planId)
+                    }, tag = "moment_detail_plan")
                 }
             }
-            social?.let { CommentsSection(it, socialActions) }
         }
     }
 }

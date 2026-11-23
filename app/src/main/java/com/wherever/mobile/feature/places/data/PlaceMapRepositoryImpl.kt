@@ -34,6 +34,8 @@ data class PlaceMapDto(
 
 /** wherever-backend `docs/endpoints.md`: `GET /lugares/mapa` (nv-21). */
 interface PlaceMapApi {
+    // Los seis son los parámetros de la API (zona, zoom y giro); agruparlos solo movería el problema.
+    @Suppress("LongParameterList")
     @GET("lugares/mapa")
     suspend fun map(
         @Query("min_lat") minLat: Double,

@@ -203,3 +203,16 @@ internal fun List<Comment>.withComment(comment: Comment): List<Comment> {
 /** Quita un comentario o una respuesta. */
 internal fun List<Comment>.without(id: String): List<Comment> =
     filterNot { it.id == id }.map { c -> c.copy(replies = c.replies.filterNot { it.id == id }) }
+
+/** Lo que hace la parte social de 17_PostDetalle. */
+data class MomentSocialActions(
+    val onLike: () -> Unit = {},
+    val onReactions: (ReactionTab) -> Unit = {},
+    val onCloseReactions: () -> Unit = {},
+    val onReply: (Comment) -> Unit = {},
+    val onCancelReply: () -> Unit = {},
+    val onDelete: (Comment) -> Unit = {},
+    val onMoreComments: () -> Unit = {},
+    val onRetryComments: () -> Unit = {},
+    val onPerson: (String) -> Unit = {}
+)

@@ -7,13 +7,15 @@ data class MapArea(val minLat: Double, val minLng: Double, val maxLat: Double, v
     companion object {
         const val MIN_ZOOM = 3
         const val MAX_ZOOM = 20
+        private const val MAX_LAT = 90.0
+        private const val MAX_LNG = 180.0
 
         /** Recorta lo que pide la API para no recibir un 422 por una zona fuera de rango. */
         fun of(south: Double, west: Double, north: Double, east: Double, zoom: Double): MapArea = MapArea(
-            minLat = south.coerceIn(-90.0, 90.0),
-            minLng = west.coerceIn(-180.0, 180.0),
-            maxLat = north.coerceIn(-90.0, 90.0),
-            maxLng = east.coerceIn(-180.0, 180.0),
+            minLat = south.coerceIn(-MAX_LAT, MAX_LAT),
+            minLng = west.coerceIn(-MAX_LNG, MAX_LNG),
+            maxLat = north.coerceIn(-MAX_LAT, MAX_LAT),
+            maxLng = east.coerceIn(-MAX_LNG, MAX_LNG),
             zoom = zoom.toInt().coerceIn(MIN_ZOOM, MAX_ZOOM)
         )
     }
