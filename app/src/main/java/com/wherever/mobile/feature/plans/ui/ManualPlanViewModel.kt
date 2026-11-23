@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.ui.UiText
-import com.wherever.mobile.core.ui.toUiText
 import com.wherever.mobile.feature.places.domain.PlaceCard
 import com.wherever.mobile.feature.places.domain.PlacesRepository
 import com.wherever.mobile.feature.plans.domain.ManualPlan
@@ -220,7 +219,16 @@ class ManualPlanViewModel @Inject constructor(
                     mutableState.update { it.copy(saving = false) }
                     createdChannel.send(result.data.id)
                 }
-                is Result.Failure -> mutableState.update { it.copy(saving = false, error = result.error.toUiText()) }
+                is Result.Failure -> mutableState.update {
+                    it.copy(
+                        saving = false,
+                        error = result.error.stopErrorText(
+                            current.stops.map { p ->
+                                p.id to p.name
+                            }
+                        )
+                    )
+                }
             }
         }
     }

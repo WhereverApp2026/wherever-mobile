@@ -1607,4 +1607,13 @@
     <string name="badges_points_of_next">%1$d de %2$d puntos para ser %3$s</string>
     <string name="badges_cell_a11y">%1$s, %2$s</string>
     <string name="badges_points_to_level">%1$d de %2$d puntos para llegar al nivel %3$d</string>
+    <string name="vaca_need_two">Para dividir un gasto hacen falta al menos 2 personas que ya aceptaron el grupo.</string>
+    <string name="plan_alternative_line_less">%1$s · %2$d min menos de traslado</string>
+    <string name="plan_minus_minutes">−%1$d min</string>
+    <!-- Motivos de una parada que no sirve (backend planes/recalculo.go) -->
+    <string name="plan_stop_closed">%1$s está cerrado a esa hora. Cambia la hora de inicio o el lugar.</string>
+    <string name="plan_stop_overlap">%1$s no cabe en el horario del plan. Ajusta las horas o quita una parada.</string>
+    <string name="plan_stop_duration">La duración en %1$s no es válida.</string>
+    <string name="plan_stop_price">El precio de %1$s no es válido.</string>
+    <string name="plan_stop_unavailable">%1$s ya no está disponible. Elige otro lugar.</string>
 </resources>
