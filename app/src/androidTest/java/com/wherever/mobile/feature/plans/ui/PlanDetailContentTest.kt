@@ -73,6 +73,6 @@ class PlanDetailContentTest {
             stops = listOf(ManualPlace("a", "Café", "cafes", null, 0), ManualPlace("b", "Parque", "parques", null, 0))
         )
         compose.onNodeWithTag("manual_create").assertIsEnabled()
-        compose.onNodeWithTag("manual_stop_1").assertIsDisplayed()
+        compose.onNodeWithTag("manual_stop_1").performScrollTo().assertIsDisplayed()
     }
 }

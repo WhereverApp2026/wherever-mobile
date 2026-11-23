@@ -6,7 +6,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -53,10 +52,17 @@ class BottomBarCreateTest {
         compose.onNodeWithTag("create_option_with_friends").performClick()
         compose.onNodeWithTag("create_option_moment").performClick()
         compose.onNodeWithTag("create_option_review").performClick()
-        compose.onNodeWithTag("create_option_manual_plan").assertIsNotEnabled()
+        // nv-24: «Crear un plan a mano» ya tiene pantalla (CrearPlan).
+        compose.onNodeWithTag("create_option_manual_plan").performClick()
 
         assertEquals(
-            listOf(CreateOption.AI_PLAN, CreateOption.WITH_FRIENDS, CreateOption.MOMENT, CreateOption.REVIEW),
+            listOf(
+                CreateOption.AI_PLAN,
+                CreateOption.WITH_FRIENDS,
+                CreateOption.MOMENT,
+                CreateOption.REVIEW,
+                CreateOption.MANUAL_PLAN
+            ),
             chosen
         )
     }
