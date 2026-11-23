@@ -31,16 +31,30 @@ internal const val MOVE_STEP_MINUTES = 15L
 internal const val NEW_STOP_MINUTES = 60
 private const val GAP_MINUTES = 15L
 private const val MIN_QUERY = 2
+private const val MAX_QUERY = 60
 
 data class RemovedStop(val stop: PlanStop)
 
+/** Máximo de paradas al editar (spec nv-24: 2 a 4, como 17_AjustaPlan y 41_AgregarParada). */
+internal const val PLAN_MAX_STOPS = 4
+
+/** 40_Cambiar: alternativas de una parada, la elegida y la búsqueda «Buscar otro lugar». */
 data class AlternativesSheet(
     val stopId: String,
     val loading: Boolean = true,
-    val items: List<Alternative> = emptyList()
+    val items: List<Alternative> = emptyList(),
+    val selected: String? = null,
+    val searchOpen: Boolean = false,
+    val query: String = ""
 )
 
+enum class AddStopTab { SUGGESTED, SEARCH }
+
+/** 41_AgregarParada: sugeridas cerca de la última parada y búsqueda por nombre. */
 data class AddStopSheet(
+    val tab: AddStopTab = AddStopTab.SUGGESTED,
+    val suggestions: List<Alternative> = emptyList(),
+    val loadingSuggestions: Boolean = true,
     val query: String = "",
     val results: List<PlaceCard> = emptyList(),
     val searching: Boolean = false
@@ -65,9 +79,12 @@ sealed interface PlanEvent {
     data class Open(val planId: String) : PlanEvent
 
     data object Deleted : PlanEvent
+
+    /** Abrir la app de mapas hacia el lugar (specs/nv-30, D25). */
+    data class Directions(val lat: Double, val lng: Double, val name: String) : PlanEvent
 }
 
-/** 16_Plan: línea de tiempo y edición (US-055 a US-058, US-061, US-063 a US-066). */
+/** 39_Plan, 40_Cambiar y 41_AgregarParada (specs/nv-24; US-055 a US-058, US-061, US-063 a US-066). */
 @HiltViewModel
 @Suppress("TooManyFunctions")
 class PlanDetailViewModel @Inject constructor(
@@ -138,17 +155,24 @@ class PlanDetailViewModel @Inject constructor(
         edit({ plans.moveStop(plan, stop.id, shiftIso(stop.arrives, minutes)) })
     }
 
-    /** US-056: alternativas para cambiar una parada. */
+    /** 40_Cambiar (US-056): alternativas para cambiar una parada. */
     fun openAlternatives(stop: PlanStop) {
-        val plan = state.value.plan ?: return
         mutableState.update { it.copy(alternatives = AlternativesSheet(stop.id)) }
+        loadAlternatives(stop.id, query = null)
+    }
+
+    private fun loadAlternatives(stopId: String, query: String?) {
+        val plan = state.value.plan ?: return
         viewModelScope.launch {
-            val result = plans.alternatives(plan, stop.id)
+            val result = plans.alternatives(plan, stopId, query)
             mutableState.update {
+                val sheet = it.alternatives?.takeIf { s -> s.stopId == stopId && (query == null || s.query == query) }
+                    ?: return@update it
                 it.copy(
-                    alternatives = it.alternatives?.copy(
+                    alternatives = sheet.copy(
                         loading = false,
-                        items = (result as? Result.Success)?.data.orEmpty()
+                        items = (result as? Result.Success)?.data.orEmpty(),
+                        selected = null
                     ),
                     message = (result as? Result.Failure)?.error?.toUiText()
                 )
@@ -158,17 +182,56 @@ class PlanDetailViewModel @Inject constructor(
 
     fun closeAlternatives() = mutableState.update { it.copy(alternatives = null) }
 
-    fun replaceWith(alternative: Alternative) {
-        val plan = state.value.plan ?: return
-        val stopId = state.value.alternatives?.stopId ?: return
-        mutableState.update { it.copy(alternatives = null) }
-        edit({ plans.replaceStop(plan, stopId, alternative.placeId) })
+    fun selectAlternative(alternative: Alternative) =
+        mutableState.update { it.copy(alternatives = it.alternatives?.copy(selected = alternative.placeId)) }
+
+    /** «Buscar otro lugar»: la API busca por nombre cerca de la parada (`?q=`, 2 a 60). */
+    fun openAlternativeSearch() =
+        mutableState.update { it.copy(alternatives = it.alternatives?.copy(searchOpen = true)) }
+
+    fun onAlternativeQuery(query: String) {
+        val sheet = state.value.alternatives ?: return
+        val text = query.take(MAX_QUERY)
+        mutableState.update { it.copy(alternatives = sheet.copy(query = text)) }
+        if (text.trim().length < MIN_QUERY) return
+        mutableState.update { it.copy(alternatives = it.alternatives?.copy(loading = true)) }
+        loadAlternatives(sheet.stopId, text)
     }
 
-    /** US-057: agregar una parada al final, 15 min después de la última. */
-    fun openAddStop() = mutableState.update { it.copy(addStop = AddStopSheet()) }
+    /** «Cambiar parada» con la alternativa elegida. */
+    fun replaceSelected() {
+        val plan = state.value.plan ?: return
+        val sheet = state.value.alternatives ?: return
+        val placeId = sheet.selected ?: return
+        mutableState.update { it.copy(alternatives = null) }
+        edit({ plans.replaceStop(plan, sheet.stopId, placeId) })
+    }
+
+    /** «Quitar esta parada» desde 40_Cambiar. */
+    fun removeFromSheet() {
+        val stop = state.value.plan?.stops?.firstOrNull { it.id == state.value.alternatives?.stopId } ?: return
+        mutableState.update { it.copy(alternatives = null) }
+        removeStop(stop)
+    }
+
+    /** 41_AgregarParada (US-057): sugeridas = alternativas de la última parada (cerca y abiertas a esa hora). */
+    fun openAddStop() {
+        val plan = state.value.plan ?: return
+        if (plan.stops.size >= PLAN_MAX_STOPS) return
+        mutableState.update { it.copy(addStop = AddStopSheet()) }
+        val last = plan.stops.maxByOrNull { it.arrives } ?: run {
+            mutableState.update { it.copy(addStop = it.addStop?.copy(loadingSuggestions = false)) }
+            return
+        }
+        viewModelScope.launch {
+            val found = (plans.alternatives(plan, last.id, null) as? Result.Success)?.data.orEmpty()
+            mutableState.update { it.copy(addStop = it.addStop?.copy(suggestions = found, loadingSuggestions = false)) }
+        }
+    }
 
     fun closeAddStop() = mutableState.update { it.copy(addStop = null) }
+
+    fun onAddTab(tab: AddStopTab) = mutableState.update { it.copy(addStop = it.addStop?.copy(tab = tab)) }
 
     fun onAddQuery(query: String) {
         mutableState.update { it.copy(addStop = it.addStop?.copy(query = query)) }
@@ -177,23 +240,28 @@ class PlanDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val found = (places.search(query) as? Result.Success)?.data.orEmpty()
             mutableState.update {
-                if (it.addStop?.query ==
-                    query
-                ) {
-                    it.copy(addStop = it.addStop.copy(results = found, searching = false))
-                } else {
-                    it
-                }
+                val sheet = it.addStop ?: return@update it
+                if (sheet.query == query) it.copy(addStop = sheet.copy(results = found, searching = false)) else it
             }
         }
     }
 
-    fun addPlace(place: PlaceCard) {
+    fun addPlace(place: PlaceCard) = addAt(place.id)
+
+    fun addSuggestion(alternative: Alternative) = addAt(alternative.placeId)
+
+    /** La parada nueva va al final, 15 min después de que termina la última. */
+    private fun addAt(placeId: String) {
         val plan = state.value.plan ?: return
-        val last = plan.stops.maxByOrNull { it.arrives } ?: return
-        val arrives = shiftIso(last.arrives, last.minutes + GAP_MINUTES)
+        val arrives = nextArrival(plan) ?: return
         mutableState.update { it.copy(addStop = null) }
-        edit({ plans.addStop(plan, place.id, arrives, NEW_STOP_MINUTES) })
+        edit({ plans.addStop(plan, placeId, arrives, NEW_STOP_MINUTES) })
+    }
+
+    /** Hora de llegada de la parada que se agregaría. */
+    fun nextArrival(plan: Plan): String? {
+        val last = plan.stops.maxByOrNull { it.arrives } ?: return null
+        return shiftIso(last.arrives, last.minutes + GAP_MINUTES)
     }
 
     /** US-061: enlace para compartir (vence en 7 días). */
@@ -255,6 +323,21 @@ class PlanDetailViewModel @Inject constructor(
     }
 
     fun messageShown() = mutableState.update { it.copy(message = null) }
+
+    /** «Cómo llegar»: la ubicación del lugar sale de su ficha; la ruta la da la app de mapas del teléfono. */
+    fun directions(stop: PlanStop) {
+        viewModelScope.launch {
+            when (val result = places.detail(stop.placeId)) {
+                is Result.Success -> eventChannel.send(
+                    PlanEvent.Directions(result.data.location.lat, result.data.location.lng, result.data.name)
+                )
+                is Result.Failure -> mutableState.update { it.copy(message = result.error.toUiText()) }
+            }
+        }
+    }
+
+    /** El teléfono no tiene app de mapas. */
+    fun noMapsApp() = mutableState.update { it.copy(message = UiText.Res(R.string.plan_no_maps)) }
 
     /**
      * Toda edición devuelve el plan recalculado. Con 409 (otro dispositivo cambió el plan) se recarga y se

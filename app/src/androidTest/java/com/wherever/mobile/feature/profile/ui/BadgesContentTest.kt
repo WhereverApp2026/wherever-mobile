@@ -27,8 +27,8 @@ class BadgesContentTest {
         val state = BadgesUiState(
             loading = false,
             progress = LevelProgress.of(50, "Explorador"),
-            earned = listOf(Badge("bienvenida", true)),
-            locked = listOf(Badge("primer_plan", false))
+            earned = listOf(Badge("resenista", "Reseñista", "Publica tu primera reseña", true, 1, 1)),
+            locked = listOf(Badge("catador_cafe", "Catador de café", "Haz check-in en 5 cafeterías", false, 2, 5))
         )
         compose.setContent { WhereverTheme { BadgesContent(state, onBack = {}) } }
 
@@ -37,7 +37,9 @@ class BadgesContentTest {
         compose.onNodeWithText(
             context.resources.getQuantityString(R.plurals.badges_to_next, 200, 200, "Aventurero")
         ).assertIsDisplayed()
-        compose.onNodeWithText(context.getString(R.string.badge_welcome)).assertIsDisplayed()
-        compose.onNodeWithTag("badge_primer_plan").assertIsDisplayed()
+        compose.onNodeWithText("Reseñista").assertIsDisplayed()
+        compose.onNodeWithTag("badge_catador_cafe").assertIsDisplayed()
+        compose.onNodeWithTag("badge_progress_catador_cafe").assertIsDisplayed()
+        compose.onNodeWithText(context.getString(R.string.badges_progress, 2, 5)).assertIsDisplayed()
     }
 }

@@ -1,12 +1,14 @@
 # Pendientes — Wherever Móvil
 
-> Actualizado: 2026-11-22. Una rama y un PR por spec. Pruebas que esperan el teléfono: `docs/pruebas-telefono.md`.
+> Actualizado: 2026-11-23. Una rama y un PR por spec. Pruebas que esperan el teléfono: `docs/pruebas-telefono.md`.
 > Métrica: pantallas que funcionan de verdad / 162 frames de la maqueta (detalle y registro de cortes en `docs/avance.md`).
 > Una pantalla cuenta si tiene código, llama a la API real, maneja carga, error y vacío, tiene pruebas y se probó en el teléfono.
 
 ## % real
 
 **87 de 162 = 53,7 %** con la API real, más 1 con datos locales (Insignias, sin endpoint) que no suma.
+
+**Por sumar (2026-11-23, PR #67 `integracion/todo`, con código, pruebas y capturas; falta probar contra staging en el teléfono):** Jorge: 83_Insignias (ya con API real), 07_EncuentraAmigos, 43_CrearGrupo, 46_Grupo, 48_Votar, InvitarPlan. Diego: IAPalabra, 17_AjustaPlan, Generando 1/4–4/4, 39_Plan, 40_Cambiar, 41_AgregarParada, CrearPlan, 26_CheckinOk, 28_Vaca y variantes, 45_AgregarGasto. Negocio (nv-34/35/37): alta, panel, reservas, estadísticas, check-in, cupones y horas. Se cuentan al probarlos con staging (L-V 08:00–22:00).
 
 | Área | Specs | Frames | Funcionan | % |
 |---|---|---|---|---|
@@ -53,8 +55,8 @@ Reglas: `CONTRIBUTING.md`. Cada spec es una rama y un PR a `main`, aprobado por 
 | Responsable | Área | Specs | Faltan | Lista de trabajo |
 |---|---|---|---|---|
 | Jorge | Social y Explorar; compartido (theme y `core/designsystem`, navegación, cliente de API, CI) | nv-20, nv-21, nv-25 | 14 (+4 por probar) | `docs/equipo/jorge.md` |
-| Diego | Planes y cupones del negocio; cerrar #42, #45 y #48 | nv-23, nv-24, nv-26, nv-30, nv-37 | 16 | `docs/equipo/diego.md` |
-| Borre | Modo negocio | nv-35, nv-36, nv-38 | 17 | `docs/equipo/borre.md` |
+| Diego | Cupones del negocio; cerrar #42, #45 y #48 | nv-37 | 3 | `docs/equipo/diego.md` |
+| Borre | Planes (desde el 2026-11-22) y Modo negocio | nv-23, nv-24, nv-26, nv-30, nv-56; nv-35, nv-36, nv-38 | 30 | `docs/equipo/borre.md`, `docs/itinerario-planes.md` |
 | Osmar | Reserva, pago y cupones; feed social; backend que bloquea; revisor único | nv-17, nv-27, nv-29 | 19 | `docs/equipo/osmar.md` |
 
 Reparto anterior (tres personas, 2026-11-20), con lo que funciona por área:

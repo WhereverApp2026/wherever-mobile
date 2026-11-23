@@ -24,7 +24,11 @@ data class PlanStop(
     val arrives: String,
     val minutes: Int,
     val price: Int,
-    val why: String? = null
+    val why: String? = null,
+    /** Foto de portada del lugar (`GET /lugares/{id}`); nula si no tiene. */
+    val photoUrl: String? = null,
+    /** Nivel de precio del lugar (0 = gratis, 1 a 3 = $ a $$$). */
+    val priceLevel: Int = 0
 )
 
 /** Traslado entre dos paradas, ya calculado por la API según la movilidad (US-055). */
@@ -91,7 +95,31 @@ data class Alternative(
     val name: String,
     val category: String,
     val distanceMeters: Double,
-    val extraMinutes: Int
+    val extraMinutes: Int,
+    val coverUrl: String? = null,
+    val priceLevel: Int = 0
+)
+
+/** Parada de un plan hecho a mano (CrearPlan, nv-24). `arrives` en ISO 8601 UTC. */
+data class ManualStop(
+    val placeId: String,
+    val name: String,
+    val category: String,
+    val photoUrl: String?,
+    val arrives: String,
+    val minutes: Int,
+    val price: Int
+)
+
+/** CrearPlan: `POST /planes` sin IA; `isPublic` = «Visible para mis amigos» (`visibilidad`). */
+data class ManualPlan(
+    val name: String,
+    val date: String,
+    val people: Int,
+    val budget: Int,
+    val mobility: Mobility,
+    val stops: List<ManualStop>,
+    val isPublic: Boolean
 )
 
 data class ShareLink(val link: String, val expiresAt: String)
@@ -138,7 +166,11 @@ interface PlansRepository {
 
     suspend fun removeStop(plan: Plan, stopId: String): Result<Plan>
 
-    suspend fun alternatives(plan: Plan, stopId: String): Result<List<Alternative>>
+    /** Hasta 3 lugares para cambiar la parada; con [query] (2 a 60) busca por nombre (40_Cambiar). */
+    suspend fun alternatives(plan: Plan, stopId: String, query: String?): Result<List<Alternative>>
+
+    /** CrearPlan (nv-24): plan a mano; si es visible para amigos se marca `publico` con `PATCH`. */
+    suspend fun create(plan: ManualPlan): Result<Plan>
 
     suspend fun replaceStop(plan: Plan, stopId: String, placeId: String): Result<Plan>
 

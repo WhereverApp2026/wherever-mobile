@@ -96,12 +96,15 @@ data class CreatePlanDto(
     @SerialName("personas") val people: Int,
     @SerialName("presupuesto") val budget: Int,
     @SerialName("movilidad") val mobility: String,
-    @SerialName("origen") val origin: String,
+    @SerialName("origen") val origin: String? = null,
     @SerialName("paradas") val stops: List<CreateStopDto>
 )
 
 @Serializable
-data class PlanPatchDto(@SerialName("nombre") val name: String? = null)
+data class PlanPatchDto(
+    @SerialName("nombre") val name: String? = null,
+    @SerialName("visibilidad") val visibility: String? = null
+)
 
 @Serializable
 data class StopPatchDto(@SerialName("llega") val arrives: String)
@@ -198,7 +201,11 @@ interface PlansApi {
     ): PlanDto
 
     @GET("planes/{id}/paradas/{stop}/alternativas")
-    suspend fun alternatives(@Path("id") id: String, @Path("stop") stopId: String): AlternativesDto
+    suspend fun alternatives(
+        @Path("id") id: String,
+        @Path("stop") stopId: String,
+        @Query("q") query: String? = null
+    ): AlternativesDto
 
     @POST("planes/{id}/paradas/{stop}/cambiar")
     suspend fun replaceStop(

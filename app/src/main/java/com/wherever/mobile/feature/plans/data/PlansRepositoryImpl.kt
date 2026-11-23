@@ -5,6 +5,7 @@ import com.wherever.mobile.core.location.GeoPoint
 import com.wherever.mobile.core.network.safeApiCall
 import com.wherever.mobile.feature.places.data.PlacesApi
 import com.wherever.mobile.feature.plans.domain.Alternative
+import com.wherever.mobile.feature.plans.domain.ManualPlan
 import com.wherever.mobile.feature.plans.domain.Mobility
 import com.wherever.mobile.feature.plans.domain.Plan
 import com.wherever.mobile.feature.plans.domain.PlanAssistantRepository
@@ -92,12 +93,13 @@ private fun ifMatch(plan: Plan) = "\"${plan.version}\""
  * Los planes guardados traen solo `negocio_id` en cada parada: el nombre y el giro salen de
  * `GET /lugares/{id}`, con un caché en memoria para no repetir la ficha al editar.
  */
+@Suppress("TooManyFunctions") // Una función por ruta de planes de la API (crear, leer, editar paradas, compartir).
 class PlansRepositoryImpl @Inject constructor(private val api: PlansApi, private val places: PlacesApi) :
     PlansRepository {
-    private val names = mutableMapOf<String, Pair<String, String>>()
+    private val names = mutableMapOf<String, PlaceInfo>()
 
     override suspend fun save(draft: PlanDraft): Result<Plan> = safeApiCall {
-        draft.stops.forEach { names[it.placeId] = it.name to it.category }
+        draft.stops.forEach { names.putIfAbsent(it.placeId, PlaceInfo(it.name, it.category)) }
         api.create(
             CreatePlanDto(
                 name = draft.name,
@@ -108,7 +110,7 @@ class PlansRepositoryImpl @Inject constructor(private val api: PlansApi, private
                 origin = draft.source.takeIf { it == "ia" || it == "reglas" } ?: "ia",
                 stops = draft.stops.map { CreateStopDto(it.placeId, it.arrives, it.minutes, it.price) }
             )
-        ).toPlan()
+        ).toPlan(lookupMissing = false)
     }
 
     override suspend fun list(tab: PlansTab): Result<List<PlanSummary>> = safeApiCall {
@@ -141,10 +143,42 @@ class PlansRepositoryImpl @Inject constructor(private val api: PlansApi, private
     override suspend fun removeStop(plan: Plan, stopId: String): Result<Plan> =
         safeApiCall { api.removeStop(plan.id, stopId, ifMatch(plan)).toPlan() }
 
-    override suspend fun alternatives(plan: Plan, stopId: String): Result<List<Alternative>> = safeApiCall {
-        api.alternatives(plan.id, stopId).items.map {
-            names[it.place.id] = it.place.name to it.place.category
-            Alternative(it.place.id, it.place.name, it.place.category, it.distanceMeters, it.extraMinutes)
+    override suspend fun alternatives(plan: Plan, stopId: String, query: String?): Result<List<Alternative>> =
+        safeApiCall {
+            api.alternatives(plan.id, stopId, query?.trim()?.takeIf { it.isNotEmpty() }).items.map {
+                names[it.place.id] = PlaceInfo(it.place.name, it.place.category, it.place.cover, it.place.priceLevel)
+                Alternative(
+                    placeId = it.place.id,
+                    name = it.place.name,
+                    category = it.place.category,
+                    distanceMeters = it.distanceMeters,
+                    extraMinutes = it.extraMinutes,
+                    coverUrl = it.place.cover,
+                    priceLevel = it.place.priceLevel
+                )
+            }
+        }
+
+    override suspend fun create(plan: ManualPlan): Result<Plan> = safeApiCall {
+        plan.stops.forEach { names[it.placeId] = PlaceInfo(it.name, it.category, it.photoUrl) }
+        val created = api.create(
+            CreatePlanDto(
+                name = plan.name.trim(),
+                date = plan.date,
+                people = plan.people,
+                budget = plan.budget,
+                mobility = plan.mobility.apiValue,
+                stops = plan.stops.map { CreateStopDto(it.placeId, it.arrives, it.minutes, it.price) }
+            )
+        )
+        if (plan.isPublic) {
+            api.patch(
+                created.id,
+                "\"${created.version}\"",
+                PlanPatchDto(visibility = "publico")
+            ).toPlan(lookupMissing = false)
+        } else {
+            created.toPlan(lookupMissing = false)
         }
     }
 
@@ -154,10 +188,15 @@ class PlansRepositoryImpl @Inject constructor(private val api: PlansApi, private
     override suspend fun share(plan: Plan): Result<ShareLink> =
         safeApiCall { api.share(plan.id).let { ShareLink(it.link, it.expiresAt) } }
 
-    private suspend fun PlanDto.toPlan(): Plan {
+    /**
+     * Al guardar ([lookupMissing] = false) basta con los nombres del borrador; al leer el plan se pide una vez
+     * la ficha de cada lugar que aún no se consultó, para su foto y su nivel de precio (39_Plan).
+     */
+    private suspend fun PlanDto.toPlan(lookupMissing: Boolean = true): Plan {
         val stopsWithNames = stops.map { stop ->
-            val (name, category) = names[stop.placeId] ?: lookup(stop.placeId)
-            stop.toDomain(name, category)
+            val known = names[stop.placeId]
+            val info = if (known != null && (known.looked || !lookupMissing)) known else lookup(stop.placeId)
+            stop.toDomain(info.name, info.category).copy(photoUrl = info.photoUrl, priceLevel = info.priceLevel)
         }
         return Plan(
             id = id,
@@ -176,10 +215,27 @@ class PlansRepositoryImpl @Inject constructor(private val api: PlansApi, private
     }
 
     /** Si la ficha falla (negocio pausado o dado de baja) la parada queda sin nombre, no rompe el plan. */
-    private suspend fun lookup(placeId: String): Pair<String, String> {
+    private suspend fun lookup(placeId: String): PlaceInfo {
+        val known = names[placeId]
         val found = (safeApiCall { places.detail(placeId) } as? Result.Success)?.data
-        val pair = (found?.name.orEmpty()) to (found?.category.orEmpty())
-        if (found != null) names[placeId] = pair
-        return pair
+            ?: return known ?: PlaceInfo("", "")
+        val info = PlaceInfo(
+            name = found.name,
+            category = found.category,
+            photoUrl = found.photos.orEmpty().minByOrNull { it.order }?.url?.takeIf { it.isNotBlank() },
+            priceLevel = found.priceLevel,
+            looked = true
+        )
+        names[placeId] = info
+        return info
     }
 }
+
+/** Lo que se sabe de un lugar para pintar su parada; `looked` = ya se pidió su ficha. */
+private data class PlaceInfo(
+    val name: String,
+    val category: String,
+    val photoUrl: String? = null,
+    val priceLevel: Int = 0,
+    val looked: Boolean = false
+)

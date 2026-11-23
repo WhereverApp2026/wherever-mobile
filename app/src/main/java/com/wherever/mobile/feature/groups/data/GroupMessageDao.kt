@@ -26,6 +26,9 @@ interface GroupMessageDao {
     @Query("DELETE FROM group_message WHERE id = :id")
     suspend fun delete(id: String)
 
+    @Query("DELETE FROM group_message WHERE groupId = :groupId")
+    suspend fun clearGroup(groupId: String)
+
     @Query("DELETE FROM group_message")
     suspend fun clear()
 }

@@ -2,15 +2,23 @@ package com.wherever.mobile.feature.profile.domain
 
 import com.wherever.mobile.core.common.Result
 
-/** Una insignia del catálogo (83_Insignias). `id` es la clave estable que la API devolverá. */
-data class Badge(val id: String, val earned: Boolean)
-
 /**
- * Insignias ganadas y por desbloquear.
- *
- * La API v1 no tiene endpoint de insignias (anotado en `docs/revision-jorge.md`); mientras tanto la
- * implementación es local (`LocalBadgesRepository`). Cuando exista, solo cambia el binding de Hilt.
+ * Una insignia de `GET /usuarios/yo/insignias` (83_Insignias). El nombre y la descripción vienen de la API;
+ * `current`/`goal` es el avance hacia ganarla.
  */
+data class Badge(
+    val id: String,
+    val name: String,
+    val description: String,
+    val earned: Boolean,
+    val current: Int = 0,
+    val goal: Int = 0
+) {
+    /** De 0 a 1; una insignia ganada siempre va completa. */
+    val fraction: Float get() = if (earned || goal <= 0) 1f else (current.toFloat() / goal).coerceIn(0f, 1f)
+}
+
+/** Insignias ganadas y por desbloquear, en el orden del catálogo de la API. */
 interface BadgesRepository {
     suspend fun badges(): Result<List<Badge>>
 }

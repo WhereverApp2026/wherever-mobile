@@ -10,6 +10,26 @@
 |---|---|---|---|---|---|
 | 2026-11-20 | Línea base (este documento) | 62/162 = 38,3 % | 16,5/25 = 66 % | 480 | — |
 | 2026-11-21 | #35 feed y opciones de amigo; #38 MCP de Figma; 25_MiCodigo con ZXing | 63/162 = 38,9 % | 16,5/25 = 66 % | 492 | Sin cambio en seguridad: el QR suma 4 pruebas de seguridad (contenido y entrada escaneada no confiable), pero ningún control de la tabla pasa de 0 a 1. `.mcp.json` es de flujo de trabajo, no de seguridad. |
+| 2026-11-23 | PR #67 (integración del equipo, pendiente de la aprobación de Osmar): nv-23/24/26/30 y nv-34/35/37 (Diego, Borre, Osmar), Insignias, EncuentraAmigos, 43/46/48 e InvitarPlan (Jorge) | 87/162 = 53,7 % en `main` (lo nuevo suma al probarlo con staging) | 17,5/25 = 70 % | 734 | Control 8 pasa de 0 a 1: `main` exige PR, CI `gates` en verde y aprobación del code owner (`.github/rulesets/main.json`, `CODEOWNERS`). Contactos: `READ_CONTACTS` en contexto, números por HTTPS y sin guardarse. |
+
+## Corte del 2026-11-23: trabajo de todo el equipo (rama `integracion/todo`, PR #67)
+
+Medido sobre la rama que une `main` con los PR abiertos de los cuatro integrantes. Lo de las secciones de abajo es la línea base del 2026-11-20; esta tabla manda donde difiere.
+
+| Pregunta del profesor | Respuesta al 2026-11-23 | Evidencia |
+|---|---|---|
+| Proceso del equipo | 4 integrantes, una spec por rama y un PR por spec; `main` solo recibe PR con CI verde y aprobación de Osmar (code owner). Diego: Recuerdos, Reseñas y Ayuda (en `main`), Planes con IA, detalle, Vaca y check-in, y cupones del negocio. Borre: itinerario y conciliación de las specs de Planes (nv-56 en borrador). Osmar: alta del negocio, revisor único y backend. Jorge: base compartida (tema, navegación, red, CI), Cuenta, Social y Descubrir, e integración. Conflictos entre ramas resueltos en `integracion/todo` (specs: manda lo implementado y se conserva la conciliación). | `docs/equipo/*.md`; `git log`; PR #42 a #60 y #67 |
+| % de seguridad DevSecOps | **70 %** (17,5/25): pipeline 7/10 (protección de rama aplicada), app 10,5/15 sin cambio | `.github/rulesets/main.json`, `CODEOWNERS` |
+| Pruebas unitarias, seguridad e integración (JVM) | **734 pruebas JVM, 0 fallos** (`testDebugUnitTest`, 96 clases): unitarias de ViewModels y repositorios, seguridad (`security/*`, ahora con `READ_CONTACTS` en permisos mínimos) e integración con MockWebServer (grupos suma crear, invitar, renombrar con `If-Match`, salir, sacar y votaciones) | `app/build/test-results/testDebugUnitTest/` |
+| Pruebas en dispositivo | **75 pruebas instrumentadas** en 30 clases, **75 verdes** en el Xiaomi (Android 12). Al unir las ramas fallaban 2 (cupones de nv-37 y el chat con el teclado abierto) y se corrigieron; se sumaron 4 de 46_Grupo, 48_Votar, 43_CrearGrupo e InvitarPlan | `adb shell am instrument`; `CouponsContentTest`, `GroupsContentTest` |
+| Capturas | 268 imágenes Roborazzi (claro, oscuro y pantalla chica con letra grande) | `app/src/test/screenshots/` |
+| Endpoints consumidos | **151** método + ruta (149 con anotación y 2 `@HTTP DELETE`), más la subida a S3, en 25 interfaces de API | `grep -rhoE '@(GET\|POST\|PUT\|PATCH\|DELETE)\("[^"]*"\)' app/src/main/java \| sort -u` |
+| Agentes y skills | 5 subagentes + Claude Code; 27 skills del proyecto | `.claude/agents`, `.claude/skills` |
+| MCP | **1 versionado:** Figma (`.mcp.json`, `https://mcp.figma.com/mcp`) para leer los frames de la maqueta | `.mcp.json`; `README.md` |
+| Memoria del aprendizaje | `Memoria.md` (363 líneas), `docs/pendientes.md`, `docs/revision-jorge.md`, `docs/equipo/` | |
+| Permisos | Declarados por la app: `INTERNET`, `ACCESS_NETWORK_STATE`, `POST_NOTIFICATIONS`, `ACCESS_COARSE_LOCATION` y `READ_CONTACTS` (solo al tocar «Buscar en mis contactos»); `CAMERA` lo agrega el lector QR de ZXing y se pide en contexto. Todos en tiempo de ejecución se piden en contexto y la app funciona sin ellos | `AndroidManifest.xml`; `docs/permissions-matrix.md` |
+| Texto e imágenes inapropiados | El backend modera reseñas, postales y reportes (422 «no cumple las normas»); la app muestra el mensaje de la API. Fotos de perfil, postales y momentos pasan por la moderación con Rekognition | `feature/reviews`, `feature/memories`; `Memoria.md` |
+| Errores encontrados y corregidos en este corte | Píldoras de estado invisibles en tema oscuro (`tertiaryContainer` = `surface`), ícono de `InfoBanner` sin contraste en oscuro, `Insignias` usaba una barra fuera del sistema de diseño (Konsist), prueba de cupones con texto repetido, aviso sin red tapado por el teclado, conflicto de `SettingsNavigation` (Ayuda y Modo negocio) al unir ramas | commits de `integracion/todo` |
 
 ## Resumen de números reales
 

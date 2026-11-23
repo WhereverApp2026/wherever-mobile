@@ -300,12 +300,66 @@
 - A recordar: en el Xiaomi `svc wifi disable` no apaga el Wi-Fi (MIUI); usar `cmd wifi set-wifi-enabled disabled|enabled`. Sin red la app pone la pantalla global 89_SinConexion encima de todo.
 - A recordar: la moderación de staging rechaza a veces textos repetidos («el texto no cumple las normas»), 422 con `campos[texto]`.
 
+- Pausa (2026-11-22, noche): rama `feat/cuenta-social-descubrir` (sale de #51). Hecho y compilando (ktlint, detekt, lint): 83_Insignias con `GET /usuarios/yo/insignias` real (Cuenta 17/17 al probar en teléfono) y 07_EncuentraAmigos (`POST /personas/contactos`, `READ_CONTACTS` en contexto, entrada «Mis contactos» en Agregar amigo). Falta: pruebas unitarias + capturas (grabar), UI en el Xiaomi y staging, PR. Después: nv-25 (42_Compartir, 43_CrearGrupo, 46_Grupo, 48_Votar, InvitarPlan), nv-17 (14_MeApunto/29_PlanAmigo con un momento con plan, 15_Crear a mano), variantes de Detalle; iconos y fotos del paso 2. Sin API: historias, reacciones, chat 1 a 1; mapa (D25) y Sello sin filtro.
+- A recordar: #45 y #51 esperan la aprobación de Osmar (regla de `main`); no se integran sin ella.
+
+- Estado (2026-11-23): rama `integracion/todo` (PR #67) une `main` con #52 (Jorge), #53 (Borre), #56/#57/#59/#58 (Diego: nv-23/24/30/26) y #48/#55/#60 (nv-34/35/37). Sobre ella, nv-25 de Jorge: 46_Grupo, 48_Votar, 43_CrearGrupo (y modo invitar) e InvitarPlan, con `GroupMembersRepository` y `VotesRepository`. 734 pruebas JVM, detekt, ktlint y los 5 scripts en verde; 75 instrumentadas en el Xiaomi, todas verdes. Falta probar lo nuevo contra staging para sumarlo al %. Sigue en 87/162 en `main`.
+- Decisión: integrar todo en una rama y un PR para que Osmar apruebe una sola vez; al entrar, los PR de cada quien se cierran solos. En specs con conflicto manda lo implementado y se conserva la conciliación de Borre (contrato vivo, endpoints aún sin consumir como pendientes).
+- Decisión: tema oscuro `tertiaryContainer = MintDeep`; era igual a `surface` y las 29 píldoras de estado sin colores propios no se veían. `InfoBanner` pinta el ícono con `colorScheme.primary`.
+- A evitar: un repositorio con más de 16 funciones (detekt `TooManyFunctions`); separar por tema (grupos, integrantes, votaciones) desde el inicio.
+- A evitar: recargar con `load()` después de poner un aviso de error: `load()` lo borra. Usar `reload(clearError = false)`.
+- A evitar: `onNode(hasText(...))` cuando el texto sale dos veces (chip y vista previa); acotar con `hasAnyAncestor(hasTestTag(...))` y `useUnmergedTree = true`.
+- A recordar: en el Xiaomi el teclado abierto tapa los avisos de arriba en pruebas de UI; cerrarlo con `LocalSoftwareKeyboardController` antes de comprobarlos.
+
 ## Reparto entre cuatro y revisor único (2026-11-22)
 - Estado: reparto de lo que falta entre Jorge (nv-20, nv-21, nv-25 y lo compartido), Diego (nv-23, nv-24, nv-26, nv-30, nv-37), Borre (nv-35, nv-36, nv-38) y Osmar (nv-17, nv-27, nv-29 y backend). Listas en `docs/equipo/`. Avance al corte: 63/162 en `main`.
 - Decisión (Osmar): solo Osmar aprueba los PR a `main`. `CODEOWNERS` = `@OsmarYahir @WhereverApp2026` y regla `.github/rulesets/main.json` (1 aprobación de code owner, se anula con commits nuevos, CI `gates` en verde y al día, conversaciones resueltas, sin push directo ni force push), sin excepciones. Porqué: 15 commits entraron a `main` sin PR el 2026-11-19.
 - Decisión: la cuenta dueña `WhereverApp2026` solo la usa Osmar, para aprobar sus propios PR. Porqué: GitHub no deja aprobar un PR propio, y con la cuenta dueña cualquiera podía saltarse la regla (Diego abría sus PR con ella).
 - Límite: en un repo de cuenta personal no se puede restringir quién presiona "Merge"; la regla lo cubre exigiendo la aprobación.
 - A evitar: activar la regla antes de integrar este `CODEOWNERS`, porque el code owner sería Jorge.
+
+## Planes pasa a Borre: itinerario (2026-11-22)
+- Estado: rama `spec/planes-itinerario` (solo `.md`). Planes (nv-23, nv-24, nv-26, nv-30) pasa de Diego a Borre, por acuerdo del equipo según Borre. `docs/itinerario-planes.md` fija 6 fases: 0 specs al día, 1 Room (`nv-56`), 2 nv-24, 3 nv-23, 4 nv-26, 5 nv-30. Reparto actualizado en `CONTRIBUTING.md`, `docs/pendientes.md` y `docs/equipo/`. Puertas: SPECS-OK, SDD-OK, routes OK, critic PASS.
+- Hallazgo: las specs de Planes no se conciliaron con nv-48. nv-23, nv-24 y nv-28 siguen "sin código" y "Pendiente de backend"; nv-26 y nv-30 tienen el contrato viejo; nv-48 eligió "Sin cambios en Room" sin excepción documentada; nv-48 sigue sin firma. Las puertas no lo detectan porque solo revisan la estructura.
+- Decisión: conciliar las specs (Fase 0) antes de escribir código. Porqué: metodología SDD; sin eso no se sabe qué falta en cada frame.
+- Estado (Fase 0): specs nv-23, nv-24 y nv-28 conciliadas con nv-48 (lo hecho marcado con rutas reales; lo que falta, abierto); nv-26 y nv-30 con el contrato real; `specs/README.md` (18 frames, D29 resuelta, D31 en curso) y `docs/avance.md` al día. Contrato leído de una copia de `wherever-backend/docs/endpoints.md` del 2026-11-22. Falta: decisiones 1-5 con Osmar en el PR y la spec `nv-56`.
+- Decisión: la conciliación deja la firma de Jorge del 2026-11-06 y agrega "Revisor de la conciliación: Osmar" sin marcar. Porqué: AGENTS §2, borrador con evidencia; solo se firma con revisor indicado.
+- Hallazgo: el check-in lo inicia la persona (`POST /checkins` con QR del mostrador o ubicación), no el negocio; existe `GET /planes/{id}/paquete-offline` para el modo sin red; `GET /planes` no trae el estado (Reservado, En grupo) que pide Mis planes.
+- A evitar: tomar una spec del reparto sin revisar `docs/equipo/` de `main` actualizado; el reparto cambió el mismo día.
+- Estado: `specs/nv-56` (Planes sin conexión, Room v6) escrita y revisada contra el código; SPECS-OK con 53 specs. Tablas `plan`, `plan_tab_entry`, `plan_stop`, `plan_transfer`, `plan_draft`; `PlansCleaner` como `SessionCleaner`; paquete sin conexión con `ETag` y máximo una vez cada 30 min por plan.
+- Decisión: sin red las ediciones se intentan y, si fallan, no cambian nada; no se encolan ni se apagan botones. Porqué: cada edición exige `If-Match` y un 409 obliga a recargar; y nv-16/nv-40 decidieron que el monitor de red solo informa (daba falsos "sin conexión" en datos móviles).
+- Hallazgo de la revisión: `89_SinConexion` es una capa sobre toda la app que solo se cierra con "Atrás"; `GET /planes` devuelve `PlanDto` sin garantía de paradas (no debe pisar el detalle); registrar una migración toca `core/di/AppModule.kt`, que según `CONTRIBUTING.md` requiere Issue a Jorge.
+- A evitar: escribir una spec que toque `core/di`, `navigation/`, `core/network` o `app/build.gradle.kts` sin prever el Issue a Jorge en su §7.
+- Decisión: Room guarda `paquete-offline` aunque la respuesta diga `Cache-Control: no-store`. Porqué: esa cabecera es para cachés HTTP; guardarlo en la app es el propósito del endpoint, y OkHttp no tiene caché.
+- A recordar: el índice de specs de `specs/README.md` termina en nv-39; nv-40 a nv-56 no están listadas.
+- A evitar: heredocs largos con `cat > archivo <<'EOF'` en la herramienta Bash: falló con "unexpected EOF" y no escribió nada. Usar Write.
+- A evitar: `|` dentro de una celda de tabla Markdown, aunque esté entre comillas invertidas: parte la columna.
+- A recordar: `python` no está en el PATH de Git Bash en este equipo (alias de la Microsoft Store).
+
+- Estado (2026-11-22): nv-23 Crear plan con IA (Diego) en `feat/nv-23-ai-plan`: IAPalabra, 17_AjustaPlan y Generando 1/4 a 4/4 sobre `POST /planes/generar` (base nv-48). Decisiones D-23a a D-23e en la spec. Sin probar contra staging.
+- A evitar: `MIN_STOPS`/`MAX_STOPS` ya existen en `feature/plans/ui` (edición, 6 paradas); los de la IA son `AI_MIN_STOPS`/`AI_MAX_STOPS`.
+- A recordar: un Composable que regresa valor va en minúscula (lint `ComposableNaming`), p. ej. `sparkleIcon()`.
+
+- Estado (2026-11-22): nv-24 Plan, detalle y edición (Diego) en `feat/nv-24-plan-detail` (sobre nv-23): 39_Plan, 40_Cambiar, 41_AgregarParada y CrearPlan (`ManualPlanRoute`). Decisiones D-24a a D-24f en la spec.
+- A recordar: las horas en capturas dependen de la zona del equipo (Windows local, Linux UTC en CI); las pantallas con horas reciben `zone` y las vistas previas pasan `PREVIEW_ZONE`.
+- A evitar: pedir la ficha del lugar después de guardar o crear un plan: `PlansIntegrationTest` espera una sola llamada. `toPlan(lookupMissing = false)` al guardar.
+
+- Estado (2026-11-22): nv-30 parcial (Diego) en `feat/nv-30-checkin` (sobre nv-24): check-in real y 26_CheckinOk en `feature/checkin`, «Cómo llegar» con la app de mapas. 13, 14, 15 y 18 esperan D25. `LocationProvider` sin precisión (D-30c).
+- A recordar: el conector de Figma (plan Starter) tiene límite de llamadas; si se acaba, abrir el frame en el panel del navegador con `?node-id=` y arrastrar el lienzo con la mano.
+
+- Estado (2026-11-22): nv-26 Vaca virtual (Diego) en `feat/nv-26-vaca`: 28_Vaca, variantes y 45_AgregarGasto en `feature/vaca` contra `/grupos/{id}/vaca`, gastos y deudas. Decisiones D-26a a D-26e en la spec.
+- A recordar: `deudor`, `acreedor` y `pagado_por` se leen como id o como objeto (`JsonElement`) porque la doc no dice la forma.
+
+- Estado (2026-11-22): nv-34 Negocio, registro (Osmar, hecho por Claude con su autorización) en `feat/nv-34-business`: 43 a 47 en un asistente que retoma en `paso_alta`; entrada «Registrar mi negocio» en Ajustes. Sin probar contra staging. Decisiones D-34a a D-34d y bloqueos en `docs/revision-jorge.md`.
+- A evitar: un campo de un DTO de petición con valor por omisión no viaja (`ApiJson` no codifica los valores por omisión). Lo que la API exige va sin valor por omisión (`BizPointDto.type`).
+- A evitar: helpers de prueba con nombres genéricos (`sampleDraft`, `FakeLocationProvider`) ya existen en `testing/`; buscar antes de crear uno.
+- Estado (2026-11-22): nv-35 Negocio, panel, reservas y check-in (Osmar, hecho por Claude) en `feat/nv-35-business` (sale de nv-34). Modo negocio con `NavHost` y barra propios (Panel, Reservas); 48, 49, 50 y 56 contra la API real. Sin probar contra staging. Decisiones D-35a a D-35j y bloqueos en `docs/revision-jorge.md`; QR en el Issue #54.
+- A recordar: los IDs de los frames de Figma salen de `get_metadata` del canvas `96:130` (respuesta enorme: filtrarla con Python por `name`); mapa de negocio en `docs/revision-jorge.md`.
+- A evitar: datos de ejemplo de las vistas previas dentro de cada pantalla: detekt marca cada número (MagicNumber). Juntarlos en un archivo `*Samples.kt` con la supresión justificada.
+- A evitar: en `strings.xml`, los `plurals` en español piden también `many` (lint `MissingQuantity`).
+
+- Estado (2026-11-22): nv-37 Cupones y cupo (Diego) en `feat/nv-37-business` (sobre nv-35): 53, 54 y 55 con la API real. Decisiones D-37b a D-37f en la spec.
+- A evitar: un `%` suelto en `strings.xml` rompe lint (`StringFormatInvalid`); usar `formatted="false"`.
 
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).

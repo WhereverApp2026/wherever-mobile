@@ -1,3 +1,57 @@
+# Revisión — 2026-11-22: nv-30 El día del plan, parcial (Diego)
+
+> Rama `feat/nv-30-checkin` (sale de `feat/nv-24-plan-detail`, PR #57). Frames: `26_CheckinOk` (`190:1041`); `13_Mapa` (`120:3328`), `14_MapaFull` (`120:3502`), `15_Llegar` (`120:3808`) y `18_Navegando` (`188:216`) esperan D25. Revisor: Osmar.
+
+## Decisiones tomadas
+- Diego eligió hacer ya lo que no necesita mapa; 13, 14, 15 y 18 esperan el proveedor de mapa y rutas (D25, acordar con Jorge).
+- **D-30a** «Cómo llegar» en cada parada abre la app de mapas del teléfono. **D-30b** «Ya llegué» hace el check-in real (`POST /checkins`) por ubicación aproximada o con el código del mostrador (ZXing, nv-20), y abre 26_CheckinOk con «Tomar una postal» e «Ir a la siguiente parada».
+- **D-30c** `core/location` no da precisión y la API pide `precision_m`: pedir a Jorge que `GeoPoint` la incluya; mientras, el código del mostrador cubre el rechazo.
+- **D-30d** sin Room; la ubicación no se guarda ni se registra. **D-30e** sin «cupón aplicado» (la respuesta no lo trae).
+
+---
+
+# Revisión — 2026-11-22: nv-24 Plan, detalle y edición (Diego)
+
+> Rama `feat/nv-24-plan-detail` (sale de `feat/nv-23-ai-plan`, PR #56). Frames: `39_Plan` (`292:5544`), `Plan · Paseo familiar` (`347:486`), `40_Cambiar` (`292:5784`), `41_AgregarParada` (`292:5706`), `CrearPlan` (`320:218`). Revisor: Osmar.
+
+## Decisiones tomadas
+- **39_Plan** con resumen (paradas, horas, traslados, costo por persona), paradas con foto, hora, duración, giro y precio, y el traslado en una píldora. Renombrar, Repetir mañana y Borrar siguen al final (nv-48).
+- **D-24a** sin mapa ni «Cómo llegar» hasta tener proveedor (D25, nv-30). **D-24c** sin «Invitar amigos» (nv-25) ni «Reservar todo» (no hay reserva múltiple en la API).
+- **40_Cambiar** con alternativas elegibles, «Buscar otro lugar» (`?q=`), «Quitar esta parada» y, abajo, subir, bajar y ±15 min. Sin afluencia (D-24e).
+- **41_AgregarParada:** Sugeridas = alternativas de la última parada; Buscar = búsqueda de lugares. La parada va al final, 15 min después de la última.
+- **CrearPlan** (`ManualPlanRoute`): entra desde «¿Prefieres hacerlo tú? Crear plan a mano» de 17_AjustaPlan y desde «Crear un plan a mano» de la hoja 15_Crear (deja de decir Próximamente: cambio de una línea en `core/designsystem/BottomBar.kt` y una en `WhereverNavHost`). Personas según «¿Quién va?» (D-24d).
+- **D-24f** hasta 4 paradas.
+
+---
+
+# Revisión — 2026-11-22: nv-23 Crear plan con IA (Diego)
+
+> Rama `feat/nv-23-ai-plan` desde `main`. Frames: `IAPalabra` (`331:3`), `17_AjustaPlan` (`189:844`), `Generando 1/4` (`120:3270`), `2/4` (`358:5`), `3/4` (`358:64`), `4/4` (`358:123`). Revisor: Osmar.
+
+## Decisiones tomadas
+- **Base nv-48:** la generación ya funcionaba con `POST /planes/generar`; se rehicieron las pantallas para que sigan los frames del Boceto 2 (antes eran 15_Asistente y la hoja rápida).
+- **D-23a** compañía, paradas (2 a 4) y presupuesto ($, $$, $$$ = hasta 200, 500 o 1000 por persona) viajan en la frase; día y hora en `fecha` (de ahora a 30 días), personas y movilidad en sus campos.
+- **D-23b** sin Room: el borrador no se guarda en el teléfono; Guardar lo manda a `POST /planes`.
+- **D-23c** «Crear plan a mano» no se dibuja hasta nv-24 (`CrearPlan`).
+- **D-23d** «Ver mi plan» abre el plan propuesto (Guardar, Otra idea, Ajustar).
+- **D-23e** caritas de ánimo solo con su consentimiento.
+- **Generando:** los pasos 1 a 3 avanzan cada 1,8 s mientras responde la API; el 4 («¡Plan listo!») llega con la respuesta. Cancelar regresa al formulario de donde se pidió, con lo escrito. Sin red: «No podemos armar planes sin internet». 422: «Prueba ajustarlos» en 17_AjustaPlan.
+- **Gustos:** el aviso de IAPalabra nombra hasta 3 gustos solo si hay gustos y `aprendizaje_personalizado`.
+
+# Revisión — 2026-11-22: nv-26 Vaca virtual y gastos (Diego)
+
+> Rama `feat/nv-26-vaca` desde `main`. Frames: `28_Vaca` (`120:5060`), `Vaca · Mariana pagó` (`340:491`), `Vaca · todos pagaron` (`340:583`), `45_AgregarGasto` (`193:1416`). Revisor: Osmar.
+
+## Decisiones tomadas
+- **D-26a** entrada desde el plan fijado de 45_GrupoChat: botón «La vaca» junto a «Ver plan» (cambia la captura de 45_GrupoChat).
+- **D-26b** sin Room: la API calcula el corte; reintentar un gasto no lo duplica (`id_cliente`).
+- **D-26c** «Partes iguales / Personalizado» de 28 elige cómo se divide el siguiente gasto.
+- **D-26d** chips de concepto (la API pide `concepto`). **D-26e** dividir entre 2 y 12.
+- Dinero siempre en centavos enteros; «Repartir en partes iguales» no pierde centavos (100 entre 3 = 34, 33, 33).
+- «Para quedar a mano» se lee desde quien mira: «Te debe», «Le debes» o «Le debe X a Y»; solo deudor o acreedor ven «Marcar pagado».
+
+---
+
 # Revisión para Jorge — 2026-11-22 (tarde): PR de Diego, staging y arreglos
 
 ## Decisiones tomadas sin preguntarte
@@ -25,6 +79,66 @@
 ## Pendiente de ti
 - Integrar #43 (nv-32) antes que este PR, o cambiar su base a `main` cuando se integre.
 - Probar en el teléfono contra staging: cámara, postal, álbum y momento.
+
+# Revisión — 2026-11-22: nv-37 Negocio, cupones y cupo (Diego)
+
+> Rama `feat/nv-37-business` (sale de `feat/nv-35-business`, PR #55). Frames: `53_NegCupones` (`120:1679`), `54_NegCrear` (`120:1777`), `55_NegHoras` (`120:1852`). Revisor: Osmar.
+
+## Decisiones tomadas
+- **D-37a** (de la spec) un solo cupo para todos los turnos: 55 muestra la ocupación por hora y edita ese cupo y la duración del turno.
+- **D-37b** pestaña Cupones en la barra del negocio; «Horas y cupo» en el Panel hasta que exista 58_NegPerfil.
+- **D-37c** pestañas agrupadas en la app por estado (la doc no lista los valores de `?estado=`).
+- **D-37d** campo «Título del cupón» con «Sugerir título con IA» (la API lo pide; el frame no lo tiene).
+- **D-37e** `reservas_config` se lee de `GET /negocios/mios` (no hay `GET` propio) y el `PUT` conserva anticipo y políticas.
+- **D-37f** validar cupón va en el check-in de nv-35, no aquí.
+
+---
+
+# Revisión para Jorge — 2026-11-22: nv-35 Negocio, panel, reservas y check-in (Osmar)
+
+> Rama `feat/nv-35-business` (sale de `feat/nv-34-business`, que aún no está en `main`), Issue #30. Hecho por Claude con la autorización de Osmar. Frames: `48_NegPanel` (`120:7089`), `49_NegReservas` (`120:7457`), `50_NegCheckin` (`120:7307`), `NegCheckin · *` (`349:788`, `349:862`, `349:936`, `349:1010`), `56_NegStats` (`120:1989`).
+
+## Decisiones tomadas sin preguntarte
+- **D-35a QR:** el check-in es por código escrito; el botón de QR no se dibuja. Issue #54 propone reusar el lector ZXing de nv-20.
+- **D-35b Cifras de la portada (48):** la API del panel no trae Anticipos ni Ocupación; se muestran Reservas hoy, Llegadas hoy y Cupones hoy (cada una se oculta si llega nula). Calificación de la semana, reseñas por responder, cupones activos y próxima reserva van en «Tu semana»; el avance del Sello en su tarjeta si aún no lo tiene.
+- **D-35c Gráfica semanal del Panel:** `GET estadisticas` de los 7 días hasta ayer, agrupado por día, con su `cambio.reservas`. Tocarla abre 56.
+- **D-35d Estadísticas (56):** Semana, Mes y Trimestre (90 días, el máximo de la API). «Anticipos» no existe en la API: va «Vistas de tu ficha». «De dónde llegan» solo con premium (`avanzadas`); sin premium, aviso. Reporte del mes en PDF a Descargas (MediaStore en 10+, carpeta de la app en 8 y 9; sin permisos).
+- **D-35e Próximas y Pasadas (49):** `GET reservas` es por día; Próximas empieza mañana y Pasadas ayer, con flechas para recorrer días.
+- **D-35f Acciones de la reserva:** hoja con Confirmar (pendiente), Llegó / No llegó (confirmada), registrar llegada con su código (hoy) y Contactar (confirmada o de las últimas 24 h). 409 al cambiar estado recarga el día.
+- **D-35g Reprogramar → Contactar** (no existe en la API), también en 50.
+- **D-35h Barra del negocio:** solo Panel y Reservas por ahora; Cupones, Reseñas y Perfil llegan con nv-37, nv-36 y nv-38 (nada sin pantalla). Rutas internas en un `NavHost` propio; en el grafo principal solo `BusinessHomeRoute`.
+- **D-35i Entrada:** fila «Modo negocio» en Ajustes. `POST /usuarios/yo/modo`; 403 o sin negocio enviado (borrador o rechazado) → alta (nv-34). «Ir al panel» de 47 ya abre el Panel. Si hay varios negocios, chips arriba del Panel.
+- **D-35j Dinero en centavos:** `anticipo` de reservas se toma en centavos como `cobro` (la doc lo dice solo de `cobro`).
+
+## Bloqueos
+- **Backend:** no hay `GET /negocios/{id}/bloqueos`; un horario cerrado solo se puede reabrir en la misma visita (la app guarda el id que regresó el `POST`).
+- **Backend:** `GET reservas` no trae cupón; la fila «Cupón» de 50 no se dibuja.
+
+## Pendiente de ti
+- Revisar la fila «Modo negocio» en Ajustes (punto de entrada) y la línea de `BusinessHomeRoute` en `WhereverNavHost`.
+
+---
+
+# Revisión para Jorge — 2026-11-22: nv-34 Negocio, registro (Osmar)
+
+> Rama `feat/nv-34-business`, Issue #29. Hecho por Claude con la autorización de Osmar. Frames: `42_NegCuenta` (`120:6489`), `43_NegRegistro` (`120:6903`), `44_NegUbic` (`120:6588`), `45_NegOper` (`120:7195`), `46_NegVerif` (`120:6790`), `47_NegListo` (`120:7089`).
+
+## Decisiones tomadas sin preguntarte
+- **D-34b 42_NegCuenta se salta:** la entrada es Ajustes, que exige sesión, así que el paso 1 nunca se ve (la spec dice «con sesión, se salta»). Sin sesión, la cuenta se crea en Registro. El alta empieza en 43 con «Paso 2 de 5», como la maqueta.
+- **D-34c Un ViewModel para los cinco pasos:** `BusinessOnboardingViewModel` retoma en el paso que sigue a `paso_alta` (`GET /negocios/mios`). Orden en la app: 43 crea, 44 = paso 2, 45 = pasos 3 y 5, 46 = pasos 4 y 6 y el envío.
+- **D-34d Lo que no existe en la API no se dibuja:** tipo de experiencia y año de apertura (43); WhatsApp e Instagram (44, el paso 2 solo lleva dirección y ubicación); mesas, máximo de personas y anticipo (45, son de reservas); logo y constancia fiscal (46).
+- **D-34a Sin mapa:** «Estoy en mi negocio» toma la ubicación aproximada del teléfono (permiso en contexto) y la manda como GeoJSON.
+- **Horario:** siete filas con interruptor y HH:MM (la maqueta resume «Lun a sáb 08:00 a 20:00 · Dom cerrado»).
+- **Documentos:** multipart directo a la API; el archivo se manda como `tipo.extensión` (nunca el nombre original) y se valida JPEG, PNG o PDF de hasta 5 MB antes de subir.
+- **Ir al panel:** regresa a Ajustes hasta que nv-35 cree `BusinessHomeRoute`.
+- **Encontrado al probar:** `ApiJson` no manda los campos que quedan en su valor por omisión; `"type": "Point"` no viajaba. `BizPointDto.type` ya no tiene valor por omisión.
+
+## Bloqueos
+- **Backend:** no hay ruta para dar el consentimiento `datos_negocio` que exige `POST /negocios/{id}/documentos` (422 `consentimiento_requerido`). Se muestra el mensaje de la API.
+- **`core/network`:** `requiere_refresh` necesita renovar el token a propósito y el único refresco es el `Authenticator` (ante un 401). No se tocó `core/network`; se pide en un Issue. En el alta no estorba: los pasos piden «dueño», no el rol comerciante.
+
+## Pendiente de ti
+- Aprobar el negocio de prueba en staging para que Osmar pruebe el panel (nv-35).
 
 ---
 
