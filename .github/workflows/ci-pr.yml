@@ -165,6 +165,33 @@ jobs:
           set -o pipefail
           python3 scripts/check_deps_osv.py build/deps.txt --fail-on high | tee -a "$GITHUB_STEP_SUMMARY"
 
+      # Release firmado (constitución §6): solo si el repositorio tiene los secretos del keystore.
+      # El keystore se decodifica en el runner y nunca entra al repositorio (specs/nv-41).
+      - name: release firmado (si hay secretos)
+        env:
+          KEYSTORE_B64: ${{ secrets.WHEREVER_KEYSTORE_B64 }}
+          WHEREVER_KEYSTORE_PASSWORD: ${{ secrets.WHEREVER_KEYSTORE_PASSWORD }}
+          WHEREVER_KEY_ALIAS: ${{ secrets.WHEREVER_KEY_ALIAS }}
+          WHEREVER_KEY_PASSWORD: ${{ secrets.WHEREVER_KEY_PASSWORD }}
+          WHEREVER_CERT_SHA256: ${{ secrets.WHEREVER_CERT_SHA256 }}
+        run: |
+          if [ -z "$KEYSTORE_B64" ]; then
+            echo "Sin secretos del keystore: se omite el release firmado." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          export WHEREVER_KEYSTORE_PATH="$RUNNER_TEMP/wherever.jks"
+          echo "$KEYSTORE_B64" | base64 -d > "$WHEREVER_KEYSTORE_PATH"
+          ./gradlew assembleRelease
+          rm -f "$WHEREVER_KEYSTORE_PATH"
+
+      # MAST estático con MobSF (constitución §6). Informativo mientras se revisa la línea base
+      # del reporte; el JSON queda en el artefacto `reports`.
+      - name: "mast (MobSF, advisory)"
+        continue-on-error: true
+        run: |
+          mkdir -p build/reports/mobsf
+          bash scripts/mobsf_scan.sh app/build/outputs/apk/debug/app-debug.apk build/reports/mobsf/report.json             | tee -a "$GITHUB_STEP_SUMMARY"
+
       # SBOM CycloneDX del APK y del código (excepción E-07): inventario de dependencias para auditar.
       - name: sbom (CycloneDX)
         uses: anchore/sbom-action@66cbf4bc1f1c0d2edc94016e65bc221b6bb0ad6c # v0.24.3
