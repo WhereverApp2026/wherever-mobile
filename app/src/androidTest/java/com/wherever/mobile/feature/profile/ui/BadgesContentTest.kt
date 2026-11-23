@@ -1,9 +1,11 @@
 package com.wherever.mobile.feature.profile.ui
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performScrollToNode
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.wherever.mobile.R
@@ -38,6 +40,8 @@ class BadgesContentTest {
             context.getString(R.string.badges_points_of_next, 50, 250, "Aventurero")
         ).assertIsDisplayed()
         compose.onNodeWithText("Reseñista").assertIsDisplayed()
+        // Rejilla de 83_Insignias: en un emulador de pantalla baja la insignia queda abajo; se desplaza hasta ella.
+        compose.onNodeWithTag("badges_list").performScrollToNode(hasTestTag("badge_progress_catador_cafe"))
         compose.onNodeWithTag("badge_catador_cafe").assertIsDisplayed()
         compose.onNodeWithTag("badge_progress_catador_cafe").assertIsDisplayed()
         compose.onNodeWithText(context.getString(R.string.badges_progress, 2, 5)).assertIsDisplayed()
