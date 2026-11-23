@@ -9,8 +9,8 @@ Reparto desde el 2026-11-22. Lo ya hecho (nv-06 a nv-16, nv-18, nv-19, nv-22, nv
 | Persona | GitHub | Área | Specs | Lista de trabajo |
 |---|---|---|---|---|
 | Jorge | `JaRe0528` | Social y Explorar; lo compartido (theme, navegación, cliente de API, CI) | nv-20, nv-21, nv-25 | `docs/equipo/jorge.md` |
-| Diego | `DiegoLopEs1250` | Planes y cupones del negocio; cerrar sus PR abiertos | nv-23, nv-24, nv-26, nv-30, nv-37 | `docs/equipo/diego.md` |
-| Borre | `Borre4023` | Modo negocio | nv-35, nv-36, nv-38 | `docs/equipo/borre.md` |
+| Diego | `DiegoLopEs1250` | Cupones del negocio; cerrar sus PR abiertos | nv-37 | `docs/equipo/diego.md` |
+| Borre | `Borre4023` | Planes (desde el 2026-11-22, ver `docs/itinerario-planes.md`) y Modo negocio | nv-23, nv-24, nv-26, nv-30, nv-56; nv-35, nv-36, nv-38 | `docs/equipo/borre.md` |
 | Osmar | `OsmarYahir` | Reserva, pago y cupones; feed social de Inicio; endpoints del backend que faltan; **revisor único** | nv-17, nv-27, nv-29 | `docs/equipo/osmar.md` |
 
 ## Antes de empezar

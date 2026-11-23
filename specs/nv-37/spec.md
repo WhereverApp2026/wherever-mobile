@@ -50,6 +50,14 @@ Colores, tipografía, espacios y componentes solo desde `core/designsystem`; tex
 - La API tiene un solo `capacidad_por_horario` para todos los turnos: `55_NegHoras` muestra la ocupación por hora (lectura) y edita ese valor único; un cupo distinto por hora no existe (D-37a).
 - Validar un cupón en mostrador (`POST .../cupones/validar`) va en la tarjeta de check-in de nv-35 como «Validar cupón» por código.
 
+### Decisiones al implementar (2026-11-22, Diego)
+
+- **D-37b Pestaña Cupones** en la barra del negocio (nv-35). 55_NegHoras entra desde «Horas y cupo» en el Panel mientras no exista 58_NegPerfil (nv-38).
+- **D-37c Pestañas por estado del cupón:** se pide la lista una vez y se agrupa en la app (activo y pausado = Activos; programado = Programados; lo demás = Terminados), porque la doc no lista los valores de `?estado=`.
+- **D-37d Título:** la API lo pide y el frame no tiene campo; 54 agrega «Título del cupón» con «Sugerir título con IA». La vigencia empieza hoy y termina el día elegido (30 días por omisión).
+- **D-37e Configuración de reservas:** no hay un `GET`; se lee `reservas_config` de `GET /negocios/mios` y el `PUT` devuelve los demás campos tal cual (anticipo, políticas). Sin configuración, 55 lo explica.
+- **D-37f Validar cupón** (`POST cupones/validar`) no se agrega aquí: según la spec va en la tarjeta de check-in de nv-35.
+
 ### No-alcance
 
 - Nada con datos simulados o locales (constitución §2.7): si falta un endpoint, el control no se dibuja y se anota.
@@ -121,4 +129,4 @@ Rama `feat/nv-37-business` desde `main` actualizado → `plan.md` → `task.md` 
 - [ ] CHECKLIST_PR.md OK
 - [x] Sin conflicto con constitución
 
-**Estado:** ✅ Aprobada y lista para ejecutar. Responsable: Osmar.
+**Estado:** ✅ Aprobada y lista para ejecutar. Implementada el 2026-11-22 por Diego (reparto nuevo) en `feat/nv-37-business`, sobre nv-35; sin probar contra staging.

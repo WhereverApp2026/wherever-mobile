@@ -30,6 +30,8 @@ data class Group(
     val planId: String,
     /** Nombre que le puso el organizador (nv-69); sin él se muestran los integrantes. */
     val name: String?,
+    /** Versión para `If-Match` al renombrar (nv-69). */
+    val version: Int = 0,
     val myStatus: MemberStatus,
     val iAmOrganizer: Boolean,
     val confirmed: Int,
@@ -39,6 +41,23 @@ data class Group(
 )
 
 enum class MessageStatus { SENT, PENDING, FAILED }
+
+/** Una opción de la votación con sus votos; `placeName` falta si el lugar dejó de estar disponible. */
+data class VoteOption(val placeId: String, val placeName: String?, val votes: Int)
+
+/** Votación de una parada (backend nv-39): conteos, nunca quién votó qué. */
+data class Vote(
+    val id: String,
+    val stopId: String,
+    val options: List<VoteOption>,
+    val total: Int,
+    val myVote: String?,
+    val closesAt: String,
+    val open: Boolean,
+    val winner: String?,
+    /** Al cerrar: si la parada del plan cambió a la ganadora (`false` si no cupo). */
+    val applied: Boolean?
+)
 
 data class ChatMessage(
     /** Id del servidor, o `local:<id_cliente>` mientras no llega. */
@@ -78,4 +97,35 @@ interface GroupsRepository {
     suspend fun send(groupId: String, text: String): Result<Unit>
 
     suspend fun retry(groupId: String, clientId: String): Result<Unit>
+}
+
+/** Integrantes del grupo: crear, invitar, renombrar, salir y sacar (backend nv-37, nv-69). */
+interface GroupMembersRepository {
+    /** 43_CrearGrupo: un grupo nace de un plan con hasta 11 amigos (`POST /grupos`). */
+    suspend fun create(planId: String, invitees: List<String>): Result<Group>
+
+    /** Invitar a más amigos (solo el organizador). */
+    suspend fun invite(groupId: String, userIds: List<String>): Result<Group>
+
+    /** InvitarPlan: invita al grupo del plan o lo crea si el plan aún no tiene grupo. */
+    suspend fun inviteToPlan(planId: String, userIds: List<String>): Result<Group>
+
+    suspend fun rename(group: Group, name: String): Result<Group>
+
+    /** Salir del grupo; el organizador no puede (422). */
+    suspend fun leave(groupId: String): Result<Unit>
+
+    /** Sacar a un integrante (solo el organizador). */
+    suspend fun removeMember(groupId: String, userId: String): Result<Unit>
+}
+
+/** Votaciones del grupo (backend nv-39). */
+interface VotesRepository {
+    suspend fun votes(groupId: String): Result<List<Vote>>
+
+    /** Un voto por persona; se cambia hasta el cierre. */
+    suspend fun vote(voteId: String, placeId: String): Result<Vote>
+
+    /** Cerrar antes de tiempo (solo el organizador). */
+    suspend fun closeVote(voteId: String): Result<Vote>
 }

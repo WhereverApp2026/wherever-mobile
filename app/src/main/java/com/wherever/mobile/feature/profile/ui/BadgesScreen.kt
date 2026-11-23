@@ -1,5 +1,6 @@
 package com.wherever.mobile.feature.profile.ui
 
+import android.content.res.Configuration
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
@@ -37,6 +39,7 @@ import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.TopTitleRow
 import com.wherever.mobile.core.designsystem.WhereverProgressBar
+import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.feature.profile.domain.Badge
 import com.wherever.mobile.feature.profile.domain.LevelProgress
 
@@ -132,7 +135,6 @@ private fun EmptyText(@StringRes text: Int) {
 
 @Composable
 private fun BadgeRow(badge: Badge) {
-    val text = badgeText(badge.id)
     SurfaceCard(modifier = Modifier.testTag("badge_${badge.id}")) {
         Row(modifier = Modifier.fillMaxWidth().padding(Spacing.M), verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -142,27 +144,64 @@ private fun BadgeRow(badge: Badge) {
                 ),
                 tint = if (badge.earned) Gold else MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Column(modifier = Modifier.weight(1f).padding(start = Spacing.M)) {
-                Text(stringResource(text.first), style = MaterialTheme.typography.titleSmall)
-                Text(
-                    stringResource(text.second),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+            Column(
+                modifier = Modifier.weight(1f).padding(start = Spacing.M),
+                verticalArrangement = Arrangement.spacedBy(Spacing.XS)
+            ) {
+                Text(badge.name, style = MaterialTheme.typography.titleSmall)
+                if (badge.description.isNotBlank()) {
+                    Text(
+                        badge.description,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                // Avance real de la API (p. ej. 2 de 5 check-ins) en las que faltan.
+                if (!badge.earned && badge.goal > 1) {
+                    WhereverProgressBar(
+                        progress = { badge.fraction },
+                        modifier = Modifier.fillMaxWidth().testTag("badge_progress_${badge.id}")
+                    )
+                    Text(
+                        stringResource(R.string.badges_progress, badge.current, badge.goal),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     }
 }
 
-/** Nombre y cómo se gana; una clave desconocida de la API cae en el texto genérico. */
-private fun badgeText(id: String): Pair<Int, Int> = when (id) {
-    "bienvenida" -> R.string.badge_welcome to R.string.badge_welcome_how
-    "primer_plan" -> R.string.badge_first_plan to R.string.badge_first_plan_how
-    "primera_reserva" -> R.string.badge_first_reservation to R.string.badge_first_reservation_how
-    "primera_resena" -> R.string.badge_first_review to R.string.badge_first_review_how
-    "cinco_amigos" -> R.string.badge_five_friends to R.string.badge_five_friends_how
-    "racha_cuatro" -> R.string.badge_streak to R.string.badge_streak_how
-    "seis_giros" -> R.string.badge_all_categories to R.string.badge_all_categories_how
-    "primer_recuerdo" -> R.string.badge_first_memory to R.string.badge_first_memory_how
-    else -> R.string.badge_unknown to R.string.badge_unknown_how
+private const val PREVIEW_POINTS = 320
+private const val PREVIEW_CURRENT = 3
+private const val PREVIEW_GOAL = 5
+
+private val PREVIEW_BADGES = listOf(
+    Badge("primer_plan", "Primer plan", "Armaste tu primer plan con amigos.", earned = true),
+    Badge(
+        "explorador",
+        "Explorador local",
+        "Visitaste 5 lugares distintos.",
+        earned = false,
+        current = PREVIEW_CURRENT,
+        goal = PREVIEW_GOAL
+    )
+)
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+internal fun BadgesPreview() {
+    WhereverTheme {
+        BadgesContent(
+            BadgesUiState(
+                loading = false,
+                progress = LevelProgress.of(points = PREVIEW_POINTS, levelName = "Aventurero"),
+                earned = PREVIEW_BADGES.filter { it.earned },
+                locked = PREVIEW_BADGES.filterNot { it.earned }
+            ),
+            onBack = {}
+        )
+    }
 }

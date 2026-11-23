@@ -1,4 +1,4 @@
-# Diego — Planes y cupones del negocio
+# Diego — Cupones del negocio
 
 > GitHub: `DiegoLopEs1250`. Reglas: `CONTRIBUTING.md`. Revisor: Osmar. Actualizado: 2026-11-22.
 
@@ -11,33 +11,35 @@ Orden recomendado: de arriba hacia abajo. Cada spec es una rama y un PR. Desde a
 - [ ] nv-31 Recuerdos y postales: PR #45, atender la revisión y probar
 - [ ] nv-34 Negocio, alta: PR #48, atender la revisión y probar (Borre arranca nv-35 sobre esto)
 
-## nv-23 — Crear plan con IA (lo que falta)
+## Planes
 
-- [ ] Revisar contra la spec qué falta de `IAPalabra`, `17_AjustaPlan` y `Generando *` (4 de 6 frames funcionan)
-- [ ] Compuertas una por una en verde
+Desde el 2026-11-22, Planes (nv-23, nv-24, nv-26, nv-30) pasa a Borre: `docs/itinerario-planes.md`.
+
+- [x] Revisar contra la spec qué falta de `IAPalabra`, `17_AjustaPlan` y `Generando *` (4 de 6 frames funcionan)
+- [x] Compuertas una por una en verde
 - [ ] Probada en teléfono o emulador contra staging
 - [ ] PR a `main` integrado (CI en verde y aprobado por Osmar)
 
 ## nv-24 — Plan: detalle y edición (lo que falta)
 
-- [ ] Revisar contra la spec qué falta de `39_Plan`, `Plan · *`, `40_Cambiar`, `41_AgregarParada` y `CrearPlan` (3 de 5 frames funcionan)
-- [ ] Compuertas, teléfono y PR
+- [x] Revisar contra la spec qué falta de `39_Plan`, `Plan · *`, `40_Cambiar`, `41_AgregarParada` y `CrearPlan` (3 de 5 frames funcionan)
+- [ ] Compuertas (en verde), teléfono y PR
 
 ## nv-26 — Vaca virtual y gastos
 
-- [ ] Spec leída: `specs/nv-26/spec.md`, `plan.md`, `task.md`
-- [ ] Pantalla `28_Vaca` y `Vaca · *`
-- [ ] Pantalla `45_AgregarGasto`
-- [ ] Compuertas, teléfono y PR
+- [x] Spec leída: `specs/nv-26/spec.md`, `plan.md`, `task.md`
+- [x] Pantalla `28_Vaca` y `Vaca · *`
+- [x] Pantalla `45_AgregarGasto`
+- [ ] Compuertas (en verde), teléfono y PR
 
 ## nv-30 — El día del plan
 
-- [ ] Spec leída: `specs/nv-30/spec.md`, `plan.md`, `task.md`
-- [ ] Pantalla `13_Mapa`
-- [ ] Pantalla `14_MapaFull`
-- [ ] Pantalla `15_Llegar`
-- [ ] Pantalla `18_Navegando`
-- [ ] Pantalla `26_CheckinOk`
+- [x] Spec leída: `specs/nv-30/spec.md`, `plan.md`, `task.md`
+- [ ] Pantalla `13_Mapa` (espera D25, proveedor de mapa)
+- [ ] Pantalla `14_MapaFull` (espera D25)
+- [ ] Pantalla `15_Llegar` (espera D25; mientras, «Cómo llegar» abre la app de mapas)
+- [ ] Pantalla `18_Navegando` (espera D25)
+- [x] Pantalla `26_CheckinOk` (con check-in real: ubicación o código del mostrador)
 - [ ] Compuertas, teléfono y PR
 
 ## nv-37 — Negocio: cupones y cupo
@@ -51,7 +53,6 @@ Orden recomendado: de arriba hacia abajo. Cada spec es una rama y un PR. Desde a
 
 ## Notas
 
-- nv-30 y `32_ExpMapa` (Jorge) dependen del proveedor de mapa (D25): pónganse de acuerdo en la misma librería.
 - nv-31 y nv-32 reutilizan `PhotoRepository`; no lo modifiques sin Issue.
 
 ## Historial: nv-32 y nv-31 (hecho)

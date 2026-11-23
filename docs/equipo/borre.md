@@ -1,8 +1,23 @@
-# Borre — Modo negocio
+# Borre — Planes y Modo negocio
 
 > GitHub: `Borre4023`. Reglas: `CONTRIBUTING.md`. Revisor: Osmar. Actualizado: 2026-11-22.
 
-Orden recomendado: de arriba hacia abajo. Cada spec es una rama y un PR. Las specs están listas desde el 2026-11-20; nv-34 (alta del negocio) la hizo Diego en el PR #48 y es tu punto de partida.
+Orden recomendado: de arriba hacia abajo. Cada spec es una rama y un PR.
+
+## Planes (desde el 2026-11-22, antes de Diego)
+
+Itinerario completo, con fases, decisiones y bloqueos: `docs/itinerario-planes.md`.
+
+- [ ] Fase 0 — Specs al día (`spec/planes-itinerario`): conciliar nv-23, nv-24, nv-28 con nv-48; contrato real en nv-26 y nv-30; decisión Room
+- [ ] Fase 1 — Planes sin conexión, Room (`feat/nv-56-planes-room`)
+- [ ] Fase 2 — nv-24: `CrearPlan` y `41_AgregarParada` completos
+- [ ] Fase 3 — nv-23: `17_AjustaPlan` y `Generando *` completos
+- [ ] Fase 4 — nv-26: Vaca virtual (espera `46_Grupo` de Jorge)
+- [ ] Fase 5 — nv-30: el día del plan (espera D25, acordada con Jorge)
+
+## Modo negocio
+
+Las specs están listas desde el 2026-11-20; nv-34 (alta del negocio) la hizo Diego en el PR #48 y es tu punto de partida.
 
 ## nv-35 — Negocio: panel, reservas y check-in
 

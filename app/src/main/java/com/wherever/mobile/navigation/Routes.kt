@@ -93,6 +93,20 @@ data class SearchRoute(val query: String = "")
 @Serializable
 data class CreatePlanRoute(val phrase: String = "")
 
+/** Llegada a una parada y 26_CheckinOk (specs/nv-30); ArrivalViewModel lee los campos por su nombre. */
+@Serializable
+data class ArrivalRoute(
+    val placeId: String,
+    val placeName: String = "",
+    val planId: String = "",
+    val nextName: String = "",
+    val nextMinutes: Int = 0
+)
+
+/** CrearPlan: plan a mano (specs/nv-24). */
+@Serializable
+data object ManualPlanRoute
+
 /** `id` lo lee PlanDetailViewModel. */
 @Serializable
 data class PlanRoute(val id: String)
@@ -124,8 +138,36 @@ data object MyGroupsRoute
 @Serializable
 data class GroupChatRoute(val id: String)
 
+/** 46_Grupo; GroupDetailViewModel lee `id` (specs/nv-25). */
+@Serializable
+data class GroupRoute(val id: String)
+
+/** 48_Votar del grupo; VoteViewModel lee `id` (specs/nv-25). */
+@Serializable
+data class VoteRoute(val id: String)
+
+/** 43_CrearGrupo: con `groupId` invita a más amigos a ese grupo (specs/nv-25). */
+@Serializable
+data class CreateGroupRoute(val planId: String, val groupId: String = "")
+
+/** InvitarPlan: invitar a un amigo a uno de mis planes (specs/nv-25). */
+@Serializable
+data class InvitePlanRoute(val personId: String, val personName: String = "")
+
+/** 28_Vaca del grupo; VacaViewModel lee `id` (specs/nv-26). */
+@Serializable
+data class VacaRoute(val id: String)
+
+/** 45_AgregarGasto; AddExpenseViewModel lee `id` y `mode` (`igual` o `personalizada`) (specs/nv-26). */
+@Serializable
+data class AddExpenseRoute(val id: String, val mode: String = "igual")
+
 @Serializable
 data object AddFriendRoute
+
+/** 07_EncuentraAmigos: amigos entre mis contactos (`POST /personas/contactos`, specs/nv-20). */
+@Serializable
+data object FindFriendsRoute
 
 /** 25_MiCodigo; `scan` lo lee MyCodeViewModel para abrir en la pestaña Escanear (specs/nv-20). */
 @Serializable
@@ -142,6 +184,10 @@ data class MomentRoute(val id: String)
 /** 29_PlanAmigo: plan público de un amigo, con Me apunto y Hacer mi versión (specs/nv-17). */
 @Serializable
 data class FriendPlanRoute(val id: String)
+
+/** Alta del negocio: 43_NegRegistro a 47_NegListo (specs/nv-34). 42_NegCuenta se salta con sesión. */
+@Serializable
+data object BusinessOnboardingRoute
 
 /** 77_ResPend (specs/nv-32). */
 @Serializable
@@ -193,3 +239,7 @@ data class PostcardRoute(val id: String)
 /** 70_CrearPub (specs/nv-31). CreateMomentViewModel lee `postcardId`. */
 @Serializable
 data class CreateMomentRoute(val postcardId: String = "")
+
+/** Modo negocio: Panel, Reservas, Estadísticas y Check-in con su barra interna (specs/nv-35). */
+@Serializable
+data object BusinessHomeRoute
