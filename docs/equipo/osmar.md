@@ -9,6 +9,20 @@ Eres el **único revisor**: apruebas todo PR a `main` (ver "Aprobación" en `CON
 - [ ] PR abiertos de Diego: #42 (Ayuda), #45 (Recuerdos) y #48 (alta del negocio)
 - [ ] Cada PR: CI en verde, `CHECKLIST_PR.md`, spec al día y prueba en teléfono o emulador
 
+Avance de nv-34 en el PR #48 (antes en esta lista):
+
+- [x] Spec leída: `specs/nv-34/spec.md`, `plan.md`, `task.md`
+- [x] Rama `feat/nv-34-business` desde `main` actualizado
+- [ ] Pantalla `42_NegCuenta` (se salta con sesión, D-34b en `docs/revision-jorge.md`)
+- [x] Pantalla `43_NegRegistro`
+- [x] Pantalla `44_NegUbic`
+- [x] Pantalla `45_NegOper`
+- [x] Pantalla `46_NegVerif`
+- [x] Pantalla `47_NegListo`
+- [x] Compuertas una por una en verde
+- [ ] Probada en teléfono o emulador contra staging
+- [ ] PR a `main` integrado (CI en verde)
+
 ## Backend que bloquea a la app
 
 - [ ] `GET /usuarios/yo/insignias` para `83_Insignias` (hoy con datos locales)

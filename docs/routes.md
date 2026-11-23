@@ -51,6 +51,7 @@
 | `ProfileRoute` | Perfil | ninguno | release | nv-14 |
 | `EditProfileRoute` | Editar perfil | ninguno | release | nv-14 |
 | `SettingsRoute` | Ajustes | ninguno | release | nv-13 |
+| `BusinessOnboardingRoute` | Alta del negocio: registro, ubicación, operación, verificación y solicitud enviada (43 a 47) | ubicación aproximada al tocar «Estoy en mi negocio» | release | nv-34 |
 | `SessionsRoute` | Sesiones abiertas | ninguno | release | nv-13 |
 | `PrivacyRoute` | Privacidad | ninguno | release | nv-15 |
 | `ChangePasswordRoute` | Cambiar contraseña | ninguno | release | nv-51 |

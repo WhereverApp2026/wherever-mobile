@@ -339,6 +339,10 @@
 - Estado (2026-11-22): nv-26 Vaca virtual (Diego) en `feat/nv-26-vaca`: 28_Vaca, variantes y 45_AgregarGasto en `feature/vaca` contra `/grupos/{id}/vaca`, gastos y deudas. Decisiones D-26a a D-26e en la spec.
 - A recordar: `deudor`, `acreedor` y `pagado_por` se leen como id o como objeto (`JsonElement`) porque la doc no dice la forma.
 
+- Estado (2026-11-22): nv-34 Negocio, registro (Osmar, hecho por Claude con su autorización) en `feat/nv-34-business`: 43 a 47 en un asistente que retoma en `paso_alta`; entrada «Registrar mi negocio» en Ajustes. Sin probar contra staging. Decisiones D-34a a D-34d y bloqueos en `docs/revision-jorge.md`.
+- A evitar: un campo de un DTO de petición con valor por omisión no viaja (`ApiJson` no codifica los valores por omisión). Lo que la API exige va sin valor por omisión (`BizPointDto.type`).
+- A evitar: helpers de prueba con nombres genéricos (`sampleDraft`, `FakeLocationProvider`) ya existen en `testing/`; buscar antes de crear uno.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

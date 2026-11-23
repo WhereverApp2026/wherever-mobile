@@ -34,6 +34,9 @@ import com.wherever.mobile.feature.auth.ui.VerifyEmailRoute as VerifyEmailScreen
 import com.wherever.mobile.feature.auth.ui.WelcomeScreen
 import com.wherever.mobile.feature.checkin.ui.ArrivalNavigation
 import com.wherever.mobile.feature.checkin.ui.ArrivalRoute as ArrivalScreen
+
+import com.wherever.mobile.feature.business.ui.BusinessOnboardingRoute as BusinessOnboardingScreen
+import com.wherever.mobile.feature.business.ui.OnboardingNavigation
 import com.wherever.mobile.feature.feed.ui.FriendPlanNavigation
 import com.wherever.mobile.feature.feed.ui.FriendPlanRoute as FriendPlanScreen
 import com.wherever.mobile.feature.feed.ui.MomentDetailRoute
@@ -485,8 +488,18 @@ fun WhereverNavHost(
                     onChangeEmail = { navController.navigateFrom(e, ChangeEmailRoute) },
                     onChangePassword = { navController.navigateFrom(e, ChangePasswordRoute) },
                     onPrivacy = { navController.navigateFrom(e, PrivacyRoute) },
+                    onRegisterBusiness = { navController.navigateFrom(e, BusinessOnboardingRoute) },
                     onHelp = { navController.navigateFrom(e, HelpRoute) },
                     onLoggedOut = { navController.navigateOnResult(e, LoginRoute) { clearStack(navController) } }
+                )
+            )
+        }
+        composable<BusinessOnboardingRoute> { e ->
+            BusinessOnboardingScreen(
+                OnboardingNavigation(
+                    onExit = { navController.popFrom(e) },
+                    // El Panel (BusinessHomeRoute) llega con nv-35; mientras, se regresa a Ajustes.
+                    onPanel = { navController.popFrom(e) }
                 )
             )
         }

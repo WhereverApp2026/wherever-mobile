@@ -165,6 +165,10 @@ data class MomentRoute(val id: String)
 @Serializable
 data class FriendPlanRoute(val id: String)
 
+/** Alta del negocio: 43_NegRegistro a 47_NegListo (specs/nv-34). 42_NegCuenta se salta con sesión. */
+@Serializable
+data object BusinessOnboardingRoute
+
 /** 77_ResPend (specs/nv-32). */
 @Serializable
 data object PendingReviewsRoute
