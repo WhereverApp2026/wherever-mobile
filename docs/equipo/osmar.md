@@ -30,6 +30,17 @@ Avance de nv-34 en el PR #48 (antes en esta lista):
 - [ ] Historias, reacciones y comentarios para el feed (`nv-17`; hoy dan 404 en staging)
 - [ ] Semilla de negocios en staging para probar Explorar, ficha y reservas
 
+- [x] Spec leída: `specs/nv-35/spec.md`, `plan.md`, `task.md`
+- [x] Rama `feat/nv-35-business` desde `main` actualizado
+- [x] Pantalla `48_NegPanel`
+- [x] Pantalla `49_NegReservas`
+- [x] Pantalla `50_NegCheckin`
+- [x] Pantalla `NegCheckin · *`
+- [x] Pantalla `56_NegStats`
+- [x] Compuertas una por una en verde
+- [ ] Probada en teléfono o emulador contra staging
+- [ ] PR a `main` integrado (CI en verde)
+
 ## nv-27 — Reserva y pago (lo que falta)
 
 - [ ] Pantalla `35_Pasarela`

@@ -219,3 +219,7 @@ data class PostcardRoute(val id: String)
 /** 70_CrearPub (specs/nv-31). CreateMomentViewModel lee `postcardId`. */
 @Serializable
 data class CreateMomentRoute(val postcardId: String = "")
+
+/** Modo negocio: Panel, Reservas, Estadísticas y Check-in con su barra interna (specs/nv-35). */
+@Serializable
+data object BusinessHomeRoute

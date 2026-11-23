@@ -26,8 +26,18 @@ import com.wherever.mobile.feature.business.ui.BusinessDonePreview
 import com.wherever.mobile.feature.business.ui.BusinessLocationPreview
 import com.wherever.mobile.feature.business.ui.BusinessMissingPreview
 import com.wherever.mobile.feature.business.ui.BusinessOperationPreview
+import com.wherever.mobile.feature.business.ui.BusinessPanelPreview
 import com.wherever.mobile.feature.business.ui.BusinessRegisterPreview
+import com.wherever.mobile.feature.business.ui.BusinessReservationsEmptyPreview
+import com.wherever.mobile.feature.business.ui.BusinessReservationsPreview
+import com.wherever.mobile.feature.business.ui.BusinessStatsPreview
 import com.wherever.mobile.feature.business.ui.BusinessVerifyPreview
+import com.wherever.mobile.feature.business.ui.CapacityPreview
+import com.wherever.mobile.feature.business.ui.CheckinEmptyPreview
+import com.wherever.mobile.feature.business.ui.CheckinPreview
+import com.wherever.mobile.feature.business.ui.CouponFormPreview
+import com.wherever.mobile.feature.business.ui.CouponsEmptyPreview
+import com.wherever.mobile.feature.business.ui.CouponsPreview
 import com.wherever.mobile.feature.feed.ui.FriendPlanPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedEmptyPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedPreview
@@ -178,7 +188,17 @@ class ScreenshotTest {
         "vaca_todos_pagaron" to { VacaAllPaidPreview() },
         "vaca_vacia" to { VacaEmptyPreview() },
         "45_agregar_gasto" to { AddExpensePreview() },
-        "45_agregar_gasto_personalizado" to { AddExpenseCustomPreview() }
+        "45_agregar_gasto_personalizado" to { AddExpenseCustomPreview() },
+        "48_neg_panel" to { BusinessPanelPreview() },
+        "49_neg_reservas" to { BusinessReservationsPreview() },
+        "49_neg_reservas_vacio" to { BusinessReservationsEmptyPreview() },
+        "50_neg_checkin" to { CheckinPreview() },
+        "50_neg_checkin_vacio" to { CheckinEmptyPreview() },
+        "56_neg_stats" to { BusinessStatsPreview() },
+        "53_neg_cupones" to { CouponsPreview() },
+        "53_neg_cupones_vacio" to { CouponsEmptyPreview() },
+        "54_neg_crear" to { CouponFormPreview() },
+        "55_neg_horas" to { CapacityPreview() }
     )
 
     @Test
