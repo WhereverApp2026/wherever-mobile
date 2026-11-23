@@ -71,6 +71,19 @@ class BadgesViewModelTest {
     }
 
     @Test
+    fun `si el siguiente nivel se llama igual guarda su numero`() = runTest {
+        val sameName = object : BadgesRepository {
+            override suspend fun badges(): Result<List<Badge>> = Result.Success(emptyList())
+
+            override fun lastLevel(): ApiLevel = ApiLevel(1, "Explorador", 85, "Explorador", 150, nextNumber = 2)
+        }
+        val viewModel = BadgesViewModel(profiles, sameName)
+        advanceUntilIdle()
+        assertEquals(2, viewModel.state.value.nextLevelNumber)
+        assertEquals("Explorador", viewModel.state.value.progress?.next?.name)
+    }
+
+    @Test
     fun `sin red conserva el nivel guardado y avisa`() = runTest {
         profiles.refreshResult = Result.Failure(AppError.Network)
         val viewModel = BadgesViewModel(profiles, apiBadges)

@@ -85,7 +85,7 @@ internal fun BadgesContent(state: BadgesUiState, onBack: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(Spacing.L),
             modifier = Modifier.testTag("badges_list")
         ) {
-            state.progress?.let { progress -> item { LevelCard(progress, state.levelNumber) } }
+            state.progress?.let { progress -> item { LevelCard(progress, state.levelNumber, state.nextLevelNumber) } }
             item {
                 Text(
                     stringResource(R.string.badges_earned_count, state.earned.size),
@@ -110,7 +110,7 @@ internal fun BadgesContent(state: BadgesUiState, onBack: () -> Unit) {
 private const val COLUMNS = 3
 
 @Composable
-private fun LevelCard(progress: LevelProgress, number: Int?) {
+private fun LevelCard(progress: LevelProgress, number: Int?, nextNumber: Int?) {
     // Tarjeta de tinta en ambos temas, como en Figma (degradado #1B3A63 → #10243B).
     Column(
         verticalArrangement = Arrangement.spacedBy(Spacing.S),
@@ -156,10 +156,11 @@ private fun LevelCard(progress: LevelProgress, number: Int?) {
         )
         val next = progress.next
         Text(
-            if (next == null) {
-                stringResource(R.string.badges_max_level)
-            } else {
-                stringResource(R.string.badges_points_of_next, progress.points, next.minPoints, next.name)
+            when {
+                next == null -> stringResource(R.string.badges_max_level)
+                next.name == progress.current.name && nextNumber != null ->
+                    stringResource(R.string.badges_points_to_level, progress.points, next.minPoints, nextNumber)
+                else -> stringResource(R.string.badges_points_of_next, progress.points, next.minPoints, next.name)
             },
             style = MaterialTheme.typography.bodyMedium,
             color = Color.White.copy(alpha = SOFT_WHITE)

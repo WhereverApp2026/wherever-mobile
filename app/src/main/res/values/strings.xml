@@ -1606,4 +1606,5 @@
     <string name="badges_earned_count">Ganadas · %1$d</string>
     <string name="badges_points_of_next">%1$d de %2$d puntos para ser %3$s</string>
     <string name="badges_cell_a11y">%1$s, %2$s</string>
+    <string name="badges_points_to_level">%1$d de %2$d puntos para llegar al nivel %3$d</string>
 </resources>

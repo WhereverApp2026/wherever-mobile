@@ -24,7 +24,9 @@ data class BadgesUiState(
     val locked: List<Badge> = emptyList(),
     val error: UiText? = null,
     /** Número del nivel de la API (círculo dorado de 83_Insignias). */
-    val levelNumber: Int? = null
+    val levelNumber: Int? = null,
+    /** Los niveles 1 a 3 se llaman igual («Explorador», backend nv-79): el siguiente se nombra por número. */
+    val nextLevelNumber: Int? = null
 )
 
 /** 83_Insignias: nivel y puntos del perfil (Room, refrescado de `/usuarios/yo`) e insignias. */
@@ -60,7 +62,8 @@ class BadgesViewModel @Inject constructor(
                         locked = result.data.filterNot { it.earned },
                         error = (refreshed as? Result.Failure)?.error?.toUiText(),
                         progress = badges.lastLevel()?.toProgress() ?: s.progress,
-                        levelNumber = badges.lastLevel()?.number ?: s.levelNumber
+                        levelNumber = badges.lastLevel()?.number ?: s.levelNumber,
+                        nextLevelNumber = badges.lastLevel()?.nextNumber ?: s.nextLevelNumber
                     )
                 }
                 is Result.Failure -> mutableState.update { it.copy(loading = false, error = result.error.toUiText()) }

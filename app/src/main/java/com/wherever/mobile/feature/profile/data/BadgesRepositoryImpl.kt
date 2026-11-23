@@ -65,7 +65,14 @@ class BadgesRepositoryImpl @Inject constructor(private val api: BadgesApi) : Bad
     override suspend fun badges(): Result<List<Badge>> = safeApiCall {
         val dto = api.badges()
         level = dto.level?.takeIf { it.name.isNotBlank() }?.let {
-            ApiLevel(it.number, it.name, it.points, it.next?.name?.takeIf(String::isNotBlank), it.next?.points)
+            ApiLevel(
+                it.number,
+                it.name,
+                it.points,
+                it.next?.name?.takeIf(String::isNotBlank),
+                it.next?.points,
+                it.next?.number
+            )
         }
         dto.badges.map { it.toDomain() }
     }
