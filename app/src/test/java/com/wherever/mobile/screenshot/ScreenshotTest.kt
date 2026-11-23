@@ -19,6 +19,8 @@ import com.wherever.mobile.feature.auth.ui.PermissionsPreview
 import com.wherever.mobile.feature.auth.ui.RecoverPreview
 import com.wherever.mobile.feature.auth.ui.RegisterPreview
 import com.wherever.mobile.feature.auth.ui.WelcomePreview
+import com.wherever.mobile.feature.checkin.ui.ArrivalOkPreview
+import com.wherever.mobile.feature.checkin.ui.ArrivalPermissionPreview
 import com.wherever.mobile.feature.feed.ui.FriendPlanPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedEmptyPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedPreview
@@ -41,6 +43,16 @@ import com.wherever.mobile.feature.memories.ui.PostcardDetailPolaroidPreview
 import com.wherever.mobile.feature.memories.ui.PostcardDetailPreview
 import com.wherever.mobile.feature.memories.ui.PostcardEditorPreview
 import com.wherever.mobile.feature.memories.ui.PostcardGonePreview
+import com.wherever.mobile.feature.plans.ui.ManualPlanPreview
+import com.wherever.mobile.feature.plans.ui.PlanAddStopPreview
+import com.wherever.mobile.feature.plans.ui.PlanAdjustPreview
+import com.wherever.mobile.feature.plans.ui.PlanChangePreview
+import com.wherever.mobile.feature.plans.ui.PlanDetailPreview
+import com.wherever.mobile.feature.plans.ui.PlanFamilyPreview
+import com.wherever.mobile.feature.plans.ui.PlanGeneratingPreview
+import com.wherever.mobile.feature.plans.ui.PlanGeneratingStep3Preview
+import com.wherever.mobile.feature.plans.ui.PlanReadyPreview
+import com.wherever.mobile.feature.plans.ui.PlanWordPreview
 import com.wherever.mobile.feature.profile.ui.EditProfilePreview
 import com.wherever.mobile.feature.profile.ui.ProfilePreview
 import com.wherever.mobile.feature.reviews.ui.MyReviewsConfirmPreview
@@ -129,7 +141,19 @@ class ScreenshotTest {
         "76_rec_vacio" to { AlbumEmptyPreview() },
         "86_ayuda" to { HelpPreview() },
         "86_ayuda_sin_resultados" to { HelpNoResultsPreview() },
-        "86_ayuda_reportar" to { HelpReportPreview() }
+        "86_ayuda_reportar" to { HelpReportPreview() },
+        "ia_palabra" to { PlanWordPreview() },
+        "17_ajusta_plan" to { PlanAdjustPreview() },
+        "generando_1" to { PlanGeneratingPreview() },
+        "generando_3" to { PlanGeneratingStep3Preview() },
+        "generando_4" to { PlanReadyPreview() },
+        "39_plan" to { PlanDetailPreview() },
+        "plan_paseo_familiar" to { PlanFamilyPreview() },
+        "40_cambiar" to { PlanChangePreview() },
+        "41_agregar_parada" to { PlanAddStopPreview() },
+        "crear_plan" to { ManualPlanPreview() },
+        "26_checkin_ok" to { ArrivalOkPreview() },
+        "llegada_sin_permiso" to { ArrivalPermissionPreview() }
     )
 
     @Test

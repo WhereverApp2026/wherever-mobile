@@ -325,6 +325,17 @@
 - A evitar: `|` dentro de una celda de tabla Markdown, aunque esté entre comillas invertidas: parte la columna.
 - A recordar: `python` no está en el PATH de Git Bash en este equipo (alias de la Microsoft Store).
 
+- Estado (2026-11-22): nv-23 Crear plan con IA (Diego) en `feat/nv-23-ai-plan`: IAPalabra, 17_AjustaPlan y Generando 1/4 a 4/4 sobre `POST /planes/generar` (base nv-48). Decisiones D-23a a D-23e en la spec. Sin probar contra staging.
+- A evitar: `MIN_STOPS`/`MAX_STOPS` ya existen en `feature/plans/ui` (edición, 6 paradas); los de la IA son `AI_MIN_STOPS`/`AI_MAX_STOPS`.
+- A recordar: un Composable que regresa valor va en minúscula (lint `ComposableNaming`), p. ej. `sparkleIcon()`.
+
+- Estado (2026-11-22): nv-24 Plan, detalle y edición (Diego) en `feat/nv-24-plan-detail` (sobre nv-23): 39_Plan, 40_Cambiar, 41_AgregarParada y CrearPlan (`ManualPlanRoute`). Decisiones D-24a a D-24f en la spec.
+- A recordar: las horas en capturas dependen de la zona del equipo (Windows local, Linux UTC en CI); las pantallas con horas reciben `zone` y las vistas previas pasan `PREVIEW_ZONE`.
+- A evitar: pedir la ficha del lugar después de guardar o crear un plan: `PlansIntegrationTest` espera una sola llamada. `toPlan(lookupMissing = false)` al guardar.
+
+- Estado (2026-11-22): nv-30 parcial (Diego) en `feat/nv-30-checkin` (sobre nv-24): check-in real y 26_CheckinOk en `feature/checkin`, «Cómo llegar» con la app de mapas. 13, 14, 15 y 18 esperan D25. `LocationProvider` sin precisión (D-30c).
+- A recordar: el conector de Figma (plan Starter) tiene límite de llamadas; si se acaba, abrir el frame en el panel del navegador con `?node-id=` y arrastrar el lienzo con la mano.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

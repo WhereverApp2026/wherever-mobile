@@ -42,11 +42,18 @@ import java.time.ZoneId
 import java.util.Locale
 
 @StringRes
-internal fun whenLabel(option: PlanWhen): Int = when (option) {
-    PlanWhen.NOW -> R.string.when_now
-    PlanWhen.LATER -> R.string.when_later
-    PlanWhen.TONIGHT -> R.string.when_tonight
-    PlanWhen.TOMORROW -> R.string.when_tomorrow
+internal fun companyLabel(company: Company): Int = when (company) {
+    Company.SOLO -> R.string.plan_company_solo
+    Company.FRIENDS -> R.string.plan_company_friends
+    Company.COUPLE -> R.string.plan_company_couple
+    Company.FAMILY -> R.string.plan_company_family
+}
+
+@StringRes
+internal fun priceLabel(price: PriceLevel): Int = when (price) {
+    PriceLevel.LOW -> R.string.plan_price_low
+    PriceLevel.MEDIUM -> R.string.plan_price_medium
+    PriceLevel.HIGH -> R.string.plan_price_high
 }
 
 @StringRes

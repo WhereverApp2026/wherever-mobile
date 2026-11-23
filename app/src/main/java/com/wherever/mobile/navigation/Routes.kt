@@ -93,6 +93,20 @@ data class SearchRoute(val query: String = "")
 @Serializable
 data class CreatePlanRoute(val phrase: String = "")
 
+/** Llegada a una parada y 26_CheckinOk (specs/nv-30); ArrivalViewModel lee los campos por su nombre. */
+@Serializable
+data class ArrivalRoute(
+    val placeId: String,
+    val placeName: String = "",
+    val planId: String = "",
+    val nextName: String = "",
+    val nextMinutes: Int = 0
+)
+
+/** CrearPlan: plan a mano (specs/nv-24). */
+@Serializable
+data object ManualPlanRoute
+
 /** `id` lo lee PlanDetailViewModel. */
 @Serializable
 data class PlanRoute(val id: String)

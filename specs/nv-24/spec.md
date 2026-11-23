@@ -84,18 +84,25 @@ Contrato vivo: `wherever-backend/docs/endpoints.md`. Toda edición manda `If-Mat
 
 | Método | Ruta | Uso |
 |---|---|---|
-| POST | `/planes` | Crear: `{nombre, fecha, personas, presupuesto, movilidad, origen?, paradas[{negocio_id, llega, minutos, precio, nota?}]}` (1 a 6 paradas) |
-| GET | `/planes/{id}` | Plan con traslados, costos y `version`; ajeno o borrado = 404 |
-| PATCH / DELETE | `/planes/{id}` | Renombrar y otros cambios / borrar |
-| POST | `/planes/{id}/clonar` | Repetir mañana |
-| POST | `/planes/{id}/paradas` | Agregar parada |
-| PUT | `/planes/{id}/paradas/orden` | Reordenar |
-| PATCH / DELETE | `/planes/{id}/paradas/{parada_id}` | Mover la hora / quitar |
-| GET | `/planes/{id}/paradas/{parada_id}/alternativas` | Alternativas, con `?q=` para buscar |
-| POST | `/planes/{id}/paradas/{parada_id}/cambiar` | Cambiar por `{negocio_id}` |
-| POST / DELETE | `/planes/{id}/compartir` | Enlace de 7 días / retirarlo |
-| GET | `/lugares/buscar`, `/lugares/{id}` | Buscar lugar para agregar; nombre de cada parada |
-| GET | `/recomendaciones` | Propuesta para la pestaña Sugeridas |
+| GET | `/planes/{id}` | 39_Plan (la foto y el nivel de precio de cada parada salen de `GET /lugares/{id}`, una vez por lugar). |
+| POST | `/planes` | CrearPlan, sin `origen`; «Visible para mis amigos» = `PATCH /planes/{id}` con `visibilidad: publico`. |
+| PATCH/DELETE | `/planes/{id}` | Renombrar y borrar (`If-Match`). |
+| POST | `/planes/{id}/paradas` | Agregar parada (41). |
+| PUT | `/planes/{id}/paradas/orden` | Subir o bajar una parada. |
+| PATCH/DELETE | `/planes/{id}/paradas/{parada_id}` | Mover la hora ±15 min y quitar la parada. |
+| GET | `/planes/{id}/paradas/{parada_id}/alternativas` | 40_Cambiar (con `?q=` para «Buscar otro lugar») y Sugeridas de 41 (alternativas de la última parada). |
+| POST | `/planes/{id}/paradas/{parada_id}/cambiar` | Cambiar parada. |
+
+La API recalcula horarios, traslados y costos en cada edición.
+
+### Decisiones al implementar (2026-11-22)
+
+- **D-24a Sin mapa:** la tarjeta del mapa, «Ver mapa completo» y «Cómo llegar» esperan al proveedor de mapa (D25, nv-30).
+- **D-24b Sin Room:** el plan vive en la API (fuente de verdad, nv-48); el modo sin red llega con el paquete offline de nv-30.
+- **D-24c «Invitar amigos» y «Reservar todo»** no se dibujan: InvitarPlan es de nv-25 y la API no reserva varias paradas a la vez (nv-27).
+- **D-24d CrearPlan:** la API pide `personas` y el frame no tiene contador; se toma de «¿Quién va?» (Solo 1, Pareja 2, Amigos 3, Familia 4). Cada parada dura 60 min y la siguiente empieza 15 min después.
+- **D-24e Afluencia** («Poco concurrido a las 11:00») no viene en las alternativas; no se dibuja.
+- **D-24f Hasta 4 paradas** al editar y al crear (la API acepta 6). Subir, bajar y ±15 min siguen en la hoja 40.
 
 ## 4. Modelo de datos
 
@@ -126,4 +133,4 @@ Lo hecho entró con nv-48. Lo que falta: rama `feat/nv-24-plan` (Fase 2 de `docs
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** ✅ Aprobada (Jorge, 2026-11-06). Conciliación del 2026-11-22 en borrador, con evidencia, pendiente de Osmar.
+**Estado:** ✅ Aprobada (Jorge, 2026-11-06). Conciliación del 2026-11-22 en borrador, con evidencia, pendiente de Osmar. Implementada el 2026-11-22 (Diego) en `feat/nv-24-plan-detail`, sobre nv-48 y nv-23; sin probar contra staging.

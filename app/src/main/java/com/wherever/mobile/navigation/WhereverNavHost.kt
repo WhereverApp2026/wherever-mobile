@@ -32,6 +32,8 @@ import com.wherever.mobile.feature.auth.ui.RecoverRoute as RecoverScreen
 import com.wherever.mobile.feature.auth.ui.RegisterRoute as RegisterScreen
 import com.wherever.mobile.feature.auth.ui.VerifyEmailRoute as VerifyEmailScreen
 import com.wherever.mobile.feature.auth.ui.WelcomeScreen
+import com.wherever.mobile.feature.checkin.ui.ArrivalNavigation
+import com.wherever.mobile.feature.checkin.ui.ArrivalRoute as ArrivalScreen
 import com.wherever.mobile.feature.feed.ui.FriendPlanNavigation
 import com.wherever.mobile.feature.feed.ui.FriendPlanRoute as FriendPlanScreen
 import com.wherever.mobile.feature.feed.ui.MomentDetailRoute
@@ -57,6 +59,7 @@ import com.wherever.mobile.feature.places.ui.ExploreRoute as ExploreScreen
 import com.wherever.mobile.feature.places.ui.FavoritesRoute as FavoritesScreen
 import com.wherever.mobile.feature.places.ui.PlaceDetailRoute as PlaceDetailScreen
 import com.wherever.mobile.feature.plans.ui.CreatePlanRoute as CreatePlanScreen
+import com.wherever.mobile.feature.plans.ui.ManualPlanRoute as ManualPlanScreen
 import com.wherever.mobile.feature.plans.ui.MyPlansRoute as MyPlansScreen
 import com.wherever.mobile.feature.plans.ui.PlanDetailRoute as PlanDetailScreen
 import com.wherever.mobile.feature.profile.ui.BadgesRoute as BadgesScreen
@@ -323,15 +326,48 @@ fun WhereverNavHost(
         composable<CreatePlanRoute> { e ->
             CreatePlanScreen(
                 onBack = { navController.popFrom(e) },
+                onManual = { navController.navigateFrom(e, ManualPlanRoute) },
                 onSaved = { id ->
                     navController.navigateOnResult(e, PlanRoute(id)) { popUpTo<CreatePlanRoute> { inclusive = true } }
+                }
+            )
+        }
+        composable<ManualPlanRoute> { e ->
+            ManualPlanScreen(
+                onBack = { navController.popFrom(e) },
+                onCreated = { id ->
+                    navController.navigateOnResult(e, PlanRoute(id)) { popUpTo<ManualPlanRoute> { inclusive = true } }
                 }
             )
         }
         composable<PlanRoute> { e ->
             PlanDetailScreen(
                 onBack = { navController.popOnResult(e) },
-                onOpenPlan = { id -> navController.navigateOnResult(e, PlanRoute(id)) }
+                onOpenPlan = { id -> navController.navigateOnResult(e, PlanRoute(id)) },
+                onArrived = { target ->
+                    navController.navigateFrom(
+                        e,
+                        ArrivalRoute(
+                            target.placeId,
+                            target.placeName,
+                            target.planId,
+                            target.nextName.orEmpty(),
+                            target.nextMinutes ?: 0
+                        )
+                    )
+                }
+            )
+        }
+        composable<ArrivalRoute> { e ->
+            val route = e.toRoute<ArrivalRoute>()
+            ArrivalScreen(
+                ArrivalNavigation(
+                    onBack = { navController.popFrom(e) },
+                    onPostcard = {
+                        navController.navigateFrom(e, CameraRoute(route.placeId, route.placeName, route.planId))
+                    },
+                    onNext = { navController.popFrom(e) }
+                )
             )
         }
         composable<MyPlansRoute> { e ->
@@ -486,7 +522,7 @@ private fun NavHostController.openCreate(from: NavBackStackEntry, option: Create
         CreateOption.WITH_FRIENDS -> MyGroupsRoute
         CreateOption.MOMENT -> CreateMomentRoute()
         CreateOption.REVIEW -> PendingReviewsRoute
-        CreateOption.MANUAL_PLAN -> return
+        CreateOption.MANUAL_PLAN -> ManualPlanRoute
     }
     navigateFrom(from, route)
 }

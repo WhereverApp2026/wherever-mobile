@@ -6,6 +6,8 @@ import com.wherever.mobile.feature.places.data.PlacesApi
 import com.wherever.mobile.feature.plans.data.PlanAssistantRepositoryImpl
 import com.wherever.mobile.feature.plans.data.PlansApi
 import com.wherever.mobile.feature.plans.data.PlansRepositoryImpl
+import com.wherever.mobile.feature.plans.domain.ManualPlan
+import com.wherever.mobile.feature.plans.domain.ManualStop
 import com.wherever.mobile.feature.plans.domain.Mobility
 import com.wherever.mobile.feature.plans.domain.PlanRequest
 import com.wherever.mobile.feature.plans.domain.PlansTab
@@ -25,7 +27,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 
-/** nv-48 (Data): asistente y planes contra MockWebServer (backend nv-30 a nv-33, nv-38, nv-68). */
+/** nv-48 y nv-24 (Data): asistente y planes contra MockWebServer (backend nv-30 a nv-33, nv-38, nv-68). */
 class PlansIntegrationTest {
     @get:Rule
     val timeout: Timeout = Timeout.seconds(20)
@@ -179,5 +181,53 @@ class PlansIntegrationTest {
         assertEquals(2, list.single().stops)
         assertEquals("enlace/plan#codigo=abc", share.link)
         assertEquals(listOf("Tacos"), popular.single().stops)
+    }
+
+    @Test
+    fun `crear a mano manda paradas sin origen y marca publico con If-Match`() = runTest {
+        server.reply(201, planJson)
+        server.reply(200, planJson.replace("privado", "publico"))
+        val manual = ManualPlan(
+            name = "Sábado de cafés",
+            date = "2026-11-19",
+            people = 3,
+            budget = 500,
+            mobility = Mobility.WALK,
+            stops = listOf(
+                ManualStop("n1", "Lugar n1", "cafeteria", null, "2026-11-19T15:00:00Z", 60, 150),
+                ManualStop("n2", "Lugar n2", "cafeteria", null, "2026-11-19T16:15:00Z", 60, 100)
+            ),
+            isPublic = true
+        )
+
+        val plan = (plans.create(manual) as Result.Success).data
+
+        val create = server.takeRequest()
+        val body = create.body!!.utf8()
+        assertEquals("POST", create.method)
+        assertTrue(body.contains("\"nombre\":\"Sábado de cafés\""))
+        assertTrue(!body.contains("origen"))
+        assertTrue(body.contains("\"llega\":\"2026-11-19T16:15:00Z\""))
+        val patch = server.takeRequest()
+        assertEquals("PATCH", patch.method)
+        assertEquals("\"4\"", patch.headers["If-Match"])
+        assertEquals("{\"visibilidad\":\"publico\"}", patch.body!!.utf8())
+        assertTrue(plan.isPublic)
+        assertEquals("Lugar n1", plan.stops.first().name)
+    }
+
+    @Test
+    fun `alternativas con q buscan por nombre y traen la foto`() = runTest {
+        server.reply(
+            200,
+            """{"items":[{"lugar":{"id":"n7","nombre":"Mirador","categoria":"parques","nivel_precio":0,
+            "foto_portada":"https://img/mirador.jpg"},"distancia_m":650,"minutos_extra":10}]}"""
+        )
+
+        val items = (plans.alternatives(samplePlan(), "s2", " mirador ") as Result.Success).data
+
+        assertEquals("mirador", server.takeRequest().url.queryParameter("q"))
+        assertEquals("https://img/mirador.jpg", items.single().coverUrl)
+        assertEquals(10, items.single().extraMinutes)
     }
 }
