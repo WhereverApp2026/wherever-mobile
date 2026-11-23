@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -63,11 +64,34 @@ internal data object BusinessCouponFormDestination
 @Serializable
 internal data object BusinessCapacityDestination
 
+@Serializable
+internal data object BusinessReviewsDestination
+
+/** 52_NegResp recibe la reseña elegida en 51 (no hay `GET` de una sola reseña). */
+@Serializable
+internal data class BusinessReplyDestination(
+    val reviewId: String,
+    val rating: Int,
+    val comment: String,
+    val author: String,
+    val createdAt: String,
+    val currentReply: String? = null,
+    val progress: Int? = null
+) {
+    fun target() = ReplyTarget(reviewId, rating, comment, author, createdAt, currentReply, progress)
+}
+
+@Serializable
+internal data object BusinessMomentsDestination
+
+/** Aviso que 52_NegResp deja a 51_NegResenas al publicar (id de `R.string`). */
+private const val REPLY_MESSAGE_KEY = "biz_reply_message"
+
 /**
  * Pestañas de la barra del negocio que ya tienen pantalla.
- * Reseñas (nv-36) y Perfil (nv-38) llegan con su spec.
+ * Perfil (nv-38) llega con su spec.
  */
-enum class BusinessTab { PANEL, RESERVATIONS, COUPONS }
+enum class BusinessTab { PANEL, RESERVATIONS, COUPONS, REVIEWS }
 
 /**
  * Modo negocio (specs/nv-35): entra con `POST /usuarios/yo/modo` y abre el Panel del negocio activo.
@@ -126,6 +150,43 @@ private fun BusinessShell(header: BusinessHeader) {
             composable<BusinessCapacityDestination> {
                 CapacityRoute(header.selectedId, onBack = { navController.popBackStack() })
             }
+            composable<BusinessReviewsDestination> { backStack ->
+                val message by backStack.savedStateHandle.getStateFlow<Int?>(REPLY_MESSAGE_KEY, null)
+                    .collectAsStateWithLifecycle()
+                BusinessReviewsRoute(
+                    businessId = header.selectedId,
+                    message = message,
+                    onMessageShown = { backStack.savedStateHandle[REPLY_MESSAGE_KEY] = null },
+                    onReply = { review, progress ->
+                        navController.navigate(
+                            BusinessReplyDestination(
+                                review.id,
+                                review.rating,
+                                review.comment,
+                                review.author,
+                                review.createdAt,
+                                review.businessReply,
+                                progress
+                            )
+                        ) { launchSingleTop = true }
+                    },
+                    onMoments = { navController.navigate(BusinessMomentsDestination) { launchSingleTop = true } }
+                )
+            }
+            composable<BusinessReplyDestination> { backStack ->
+                ReviewReplyRoute(
+                    businessId = header.selectedId,
+                    target = backStack.toRoute<BusinessReplyDestination>().target(),
+                    onBack = { navController.popBackStack() },
+                    onPublished = { message ->
+                        navController.previousBackStackEntry?.savedStateHandle?.set(REPLY_MESSAGE_KEY, message)
+                        navController.popBackStack()
+                    }
+                )
+            }
+            composable<BusinessMomentsDestination> {
+                BusinessMomentsRoute(header.selectedId, onBack = { navController.popBackStack() })
+            }
             composable<BusinessStatsDestination> {
                 BusinessStatsRoute(header.selectedId, onBack = { navController.popBackStack() })
             }
@@ -152,6 +213,9 @@ private fun NavDestination?.tab(): BusinessTab = when {
     this == null -> BusinessTab.PANEL
     hasRoute<BusinessReservationsDestination>() || hasRoute<BusinessCheckinDestination>() -> BusinessTab.RESERVATIONS
     hasRoute<BusinessCouponsDestination>() || hasRoute<BusinessCouponFormDestination>() -> BusinessTab.COUPONS
+    hasRoute<BusinessReviewsDestination>() ||
+        hasRoute<BusinessReplyDestination>() ||
+        hasRoute<BusinessMomentsDestination>() -> BusinessTab.REVIEWS
     else -> BusinessTab.PANEL
 }
 
@@ -160,6 +224,7 @@ private fun NavHostController.openTab(tab: BusinessTab) {
         BusinessTab.PANEL -> BusinessPanelDestination
         BusinessTab.RESERVATIONS -> BusinessReservationsDestination
         BusinessTab.COUPONS -> BusinessCouponsDestination
+        BusinessTab.REVIEWS -> BusinessReviewsDestination
     }
     navigate(route) {
         popUpTo(graph.findStartDestination().id) { saveState = true }
@@ -181,6 +246,8 @@ internal fun BusinessBar(selected: BusinessTab, onSelect: (BusinessTab) -> Unit)
                 BusinessTab.RESERVATIONS -> rememberVectorPainter(Icons.Outlined.DateRange) to
                     R.string.business_tab_reservations
                 BusinessTab.COUPONS -> painterResource(R.drawable.ic_wh_ticket) to R.string.business_tab_coupons
+                BusinessTab.REVIEWS -> rememberVectorPainter(Icons.Outlined.Star) to
+                    R.string.business_tab_reviews
             }
             BarItem(tab == selected, icon, label, "business_bar_${tab.name.lowercase()}") { onSelect(tab) }
         }

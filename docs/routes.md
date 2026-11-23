@@ -56,7 +56,7 @@
 | `EditProfileRoute` | Editar perfil | ninguno | release | nv-14 |
 | `SettingsRoute` | Ajustes | ninguno | release | nv-13 |
 | `BusinessOnboardingRoute` | Alta del negocio: registro, ubicación, operación, verificación y solicitud enviada (43 a 47) | ubicación aproximada al tocar «Estoy en mi negocio» | release | nv-34 |
-| `BusinessHomeRoute` | Modo negocio: entra con `POST /usuarios/yo/modo` y abre el Panel del negocio activo (barra interna Panel y Reservas; Cupones, Reseñas y Perfil llegan con nv-36 a nv-38) | ninguno | release | nv-35 |
+| `BusinessHomeRoute` | Modo negocio: entra con `POST /usuarios/yo/modo` y abre el Panel del negocio activo (barra interna Panel, Reservas, Cupones y Reseñas; Perfil llega con nv-38) | ninguno | release | nv-35 |
 | `BusinessPanelDestination` (interna) | 48_NegPanel | ninguno | release | nv-35 |
 | `BusinessStatsDestination` (interna) | 56_NegStats y reporte mensual PDF (Descargas, sin permisos) | ninguno | release | nv-35 |
 | `BusinessReservationsDestination` (interna) | 49_NegReservas: Hoy, Próximas, Pasadas, acciones y cerrar horarios | ninguno | release | nv-35 |
@@ -64,6 +64,9 @@
 | `BusinessCouponsDestination` (interna) | 53_NegCupones: Activos, Programados y Terminados con interruptor | ninguno | release | nv-37 |
 | `BusinessCouponFormDestination` (interna) | 54_NegCrear: nuevo cupón con vista previa y título sugerido por IA | ninguno | release | nv-37 |
 | `BusinessCapacityDestination` (interna) | 55_NegHoras: ocupación por hora, cupo y duración del turno | ninguno | release | nv-37 |
+| `BusinessReviewsDestination` (interna) | 51_NegResenas: Sello, resumen por mes o trimestre y reseñas | ninguno | release | nv-36 |
+| `BusinessReplyDestination(reviewId, rating, comment, author, createdAt, currentReply, progress)` (interna) | 52_NegResp: respuesta rápida, sugerencia con IA y publicar | ninguno | release | nv-36 |
+| `BusinessMomentsDestination` (interna) | NegMomentos: Nuevos y Destacados con Agradecer y Destacar | ninguno | release | nv-36 |
 | `SessionsRoute` | Sesiones abiertas | ninguno | release | nv-13 |
 | `PrivacyRoute` | Privacidad | ninguno | release | nv-15 |
 | `ChangePasswordRoute` | Cambiar contraseña | ninguno | release | nv-51 |

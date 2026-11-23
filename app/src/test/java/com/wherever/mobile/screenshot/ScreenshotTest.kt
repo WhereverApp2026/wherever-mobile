@@ -22,11 +22,13 @@ import com.wherever.mobile.feature.auth.ui.WelcomePreview
 import com.wherever.mobile.feature.business.ui.BusinessDonePreview
 import com.wherever.mobile.feature.business.ui.BusinessLocationPreview
 import com.wherever.mobile.feature.business.ui.BusinessMissingPreview
+import com.wherever.mobile.feature.business.ui.BusinessMomentsPreview
 import com.wherever.mobile.feature.business.ui.BusinessOperationPreview
 import com.wherever.mobile.feature.business.ui.BusinessPanelPreview
 import com.wherever.mobile.feature.business.ui.BusinessRegisterPreview
 import com.wherever.mobile.feature.business.ui.BusinessReservationsEmptyPreview
 import com.wherever.mobile.feature.business.ui.BusinessReservationsPreview
+import com.wherever.mobile.feature.business.ui.BusinessReviewsPreview
 import com.wherever.mobile.feature.business.ui.BusinessStatsPreview
 import com.wherever.mobile.feature.business.ui.BusinessVerifyPreview
 import com.wherever.mobile.feature.business.ui.CapacityPreview
@@ -35,6 +37,7 @@ import com.wherever.mobile.feature.business.ui.CheckinPreview
 import com.wherever.mobile.feature.business.ui.CouponFormPreview
 import com.wherever.mobile.feature.business.ui.CouponsEmptyPreview
 import com.wherever.mobile.feature.business.ui.CouponsPreview
+import com.wherever.mobile.feature.business.ui.ReviewReplyPreview
 import com.wherever.mobile.feature.checkin.ui.ArrivalOkPreview
 import com.wherever.mobile.feature.checkin.ui.ArrivalPermissionPreview
 import com.wherever.mobile.feature.feed.ui.FriendPlanPreview
@@ -211,7 +214,10 @@ class ScreenshotTest {
         "53_neg_cupones" to { CouponsPreview() },
         "53_neg_cupones_vacio" to { CouponsEmptyPreview() },
         "54_neg_crear" to { CouponFormPreview() },
-        "55_neg_horas" to { CapacityPreview() }
+        "55_neg_horas" to { CapacityPreview() },
+        "51_neg_resenas" to { BusinessReviewsPreview() },
+        "52_neg_resp" to { ReviewReplyPreview() },
+        "neg_momentos" to { BusinessMomentsPreview() }
     )
 
     @Test

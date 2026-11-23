@@ -6,11 +6,14 @@ import com.wherever.mobile.feature.business.data.BusinessHomeApi
 import com.wherever.mobile.feature.business.data.BusinessHomeRepositoryImpl
 import com.wherever.mobile.feature.business.data.BusinessOnboardingApi
 import com.wherever.mobile.feature.business.data.BusinessOnboardingRepositoryImpl
+import com.wherever.mobile.feature.business.data.BusinessReviewsApi
+import com.wherever.mobile.feature.business.data.BusinessReviewsRepositoryImpl
 import com.wherever.mobile.feature.business.data.MediaStoreReportSaver
 import com.wherever.mobile.feature.business.data.ReportSaver
 import com.wherever.mobile.feature.business.domain.BusinessCouponsRepository
 import com.wherever.mobile.feature.business.domain.BusinessHomeRepository
 import com.wherever.mobile.feature.business.domain.BusinessOnboardingRepository
+import com.wherever.mobile.feature.business.domain.BusinessReviewsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -31,6 +34,9 @@ abstract class BusinessModule {
     abstract fun bindCoupons(impl: BusinessCouponsRepositoryImpl): BusinessCouponsRepository
 
     @Binds
+    abstract fun bindReviews(impl: BusinessReviewsRepositoryImpl): BusinessReviewsRepository
+
+    @Binds
     abstract fun bindReportSaver(impl: MediaStoreReportSaver): ReportSaver
 
     companion object {
@@ -40,6 +46,9 @@ abstract class BusinessModule {
 
         @Provides
         fun provideCouponsApi(retrofit: Retrofit): BusinessCouponsApi = retrofit.create(BusinessCouponsApi::class.java)
+
+        @Provides
+        fun provideReviewsApi(retrofit: Retrofit): BusinessReviewsApi = retrofit.create(BusinessReviewsApi::class.java)
 
         @Provides
         fun provideHomeApi(retrofit: Retrofit): BusinessHomeApi = retrofit.create(BusinessHomeApi::class.java)
