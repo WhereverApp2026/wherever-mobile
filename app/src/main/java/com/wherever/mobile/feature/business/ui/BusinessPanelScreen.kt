@@ -86,6 +86,7 @@ fun BusinessPanelRoute(
     header: BusinessHeader,
     onStats: () -> Unit,
     onReservations: () -> Unit,
+    onCapacity: () -> Unit = {},
     viewModel: BusinessPanelViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -93,7 +94,7 @@ fun BusinessPanelRoute(
         viewModel.start(header.selectedId)
         onPauseOrDispose { }
     }
-    BusinessPanelContent(state, header, onStats, onReservations, viewModel::load)
+    BusinessPanelContent(state, header, onStats, onReservations, viewModel::load, onCapacity)
 }
 
 @Composable
@@ -102,7 +103,8 @@ internal fun BusinessPanelContent(
     header: BusinessHeader,
     onStats: () -> Unit,
     onReservations: () -> Unit,
-    onRetry: () -> Unit
+    onRetry: () -> Unit,
+    onCapacity: () -> Unit = {}
 ) {
     val panel = state.panel
     val error = state.error
@@ -127,7 +129,15 @@ internal fun BusinessPanelContent(
                     onRetry,
                     Modifier.heightIn(max = Sizes.HeroImage)
                 )
-                panel != null -> PanelBody(state, panel, onStats, onReservations)
+                panel != null -> {
+                    PanelBody(state, panel, onStats, onReservations)
+                    // 55_NegHoras (specs/nv-37): entra desde el Panel mientras no exista 58_NegPerfil (nv-38).
+                    WhereverTextLink(
+                        stringResource(R.string.capacity_open),
+                        onCapacity,
+                        Modifier.testTag("business_capacity")
+                    )
+                }
             }
         }
     }

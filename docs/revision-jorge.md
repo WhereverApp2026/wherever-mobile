@@ -1,3 +1,17 @@
+# Revisión — 2026-11-22: nv-37 Negocio, cupones y cupo (Diego)
+
+> Rama `feat/nv-37-business` (sale de `feat/nv-35-business`, PR #55). Frames: `53_NegCupones` (`120:1679`), `54_NegCrear` (`120:1777`), `55_NegHoras` (`120:1852`). Revisor: Osmar.
+
+## Decisiones tomadas
+- **D-37a** (de la spec) un solo cupo para todos los turnos: 55 muestra la ocupación por hora y edita ese cupo y la duración del turno.
+- **D-37b** pestaña Cupones en la barra del negocio; «Horas y cupo» en el Panel hasta que exista 58_NegPerfil.
+- **D-37c** pestañas agrupadas en la app por estado (la doc no lista los valores de `?estado=`).
+- **D-37d** campo «Título del cupón» con «Sugerir título con IA» (la API lo pide; el frame no lo tiene).
+- **D-37e** `reservas_config` se lee de `GET /negocios/mios` (no hay `GET` propio) y el `PUT` conserva anticipo y políticas.
+- **D-37f** validar cupón va en el check-in de nv-35, no aquí.
+
+---
+
 # Revisión para Jorge — 2026-11-22: nv-35 Negocio, panel, reservas y check-in (Osmar)
 
 > Rama `feat/nv-35-business` (sale de `feat/nv-34-business`, que aún no está en `main`), Issue #30. Hecho por Claude con la autorización de Osmar. Frames: `48_NegPanel` (`120:7089`), `49_NegReservas` (`120:7457`), `50_NegCheckin` (`120:7307`), `NegCheckin · *` (`349:788`, `349:862`, `349:936`, `349:1010`), `56_NegStats` (`120:1989`).

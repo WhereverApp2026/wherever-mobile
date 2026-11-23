@@ -44,6 +44,9 @@
 | `BusinessStatsDestination` (interna) | 56_NegStats y reporte mensual PDF (Descargas, sin permisos) | ninguno | release | nv-35 |
 | `BusinessReservationsDestination` (interna) | 49_NegReservas: Hoy, Próximas, Pasadas, acciones y cerrar horarios | ninguno | release | nv-35 |
 | `BusinessCheckinDestination(code)` (interna) | 50_NegCheckin por código escrito (QR en D-35a) | ninguno | release | nv-35 |
+| `BusinessCouponsDestination` (interna) | 53_NegCupones: Activos, Programados y Terminados con interruptor | ninguno | release | nv-37 |
+| `BusinessCouponFormDestination` (interna) | 54_NegCrear: nuevo cupón con vista previa y título sugerido por IA | ninguno | release | nv-37 |
+| `BusinessCapacityDestination` (interna) | 55_NegHoras: ocupación por hora, cupo y duración del turno | ninguno | release | nv-37 |
 | `SessionsRoute` | Sesiones abiertas | ninguno | release | nv-13 |
 | `PrivacyRoute` | Privacidad | ninguno | release | nv-15 |
 | `ChangePasswordRoute` | Cambiar contraseña | ninguno | release | nv-51 |

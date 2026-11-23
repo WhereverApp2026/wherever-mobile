@@ -286,6 +286,9 @@
 - A evitar: datos de ejemplo de las vistas previas dentro de cada pantalla: detekt marca cada número (MagicNumber). Juntarlos en un archivo `*Samples.kt` con la supresión justificada.
 - A evitar: en `strings.xml`, los `plurals` en español piden también `many` (lint `MissingQuantity`).
 
+- Estado (2026-11-22): nv-37 Cupones y cupo (Diego) en `feat/nv-37-business` (sobre nv-35): 53, 54 y 55 con la API real. Decisiones D-37b a D-37f en la spec.
+- A evitar: un `%` suelto en `strings.xml` rompe lint (`StringFormatInvalid`); usar `formatted="false"`.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

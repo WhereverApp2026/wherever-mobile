@@ -1068,4 +1068,72 @@
         <item quantity="many">%1$s, %2$d reservas</item>
         <item quantity="other">%1$s, %2$d reservas</item>
     </plurals>
+    <!-- 53_NegCupones, 54_NegCrear y 55_NegHoras (specs/nv-37) -->
+    <string name="business_tab_coupons">Cupones</string>
+    <string name="business_less">Menos: %1$s</string>
+    <string name="business_more">Más: %1$s</string>
+    <string name="business_minutes">%1$d min</string>
+    <string name="coupons_title">Cupones</string>
+    <string name="coupons_subtitle">Atraen clientes en tus horas tranquilas.</string>
+    <string name="coupons_tab_active">Activos (%1$d)</string>
+    <string name="coupons_tab_scheduled">Programados</string>
+    <string name="coupons_tab_ended">Terminados</string>
+    <string name="coupons_empty_active">No tienes cupones activos. Crea uno para atraer clientes.</string>
+    <string name="coupons_empty_scheduled">No tienes cupones programados.</string>
+    <string name="coupons_empty_ended">Aún no hay cupones terminados.</string>
+    <string name="coupons_until">Hasta el %1$s</string>
+    <string name="coupons_create">Crear cupón</string>
+    <string name="coupons_changed">El cupón cambió en otro lado. Ya cargamos la versión nueva.</string>
+    <plurals name="coupons_used">
+        <item quantity="one">%1$d usado</item>
+        <item quantity="many">%1$d usados</item>
+        <item quantity="other">%1$d usados</item>
+    </plurals>
+    <string name="coupon_new_title">Nuevo cupón</string>
+    <string name="coupon_type">Tipo de descuento</string>
+    <string name="coupon_badge_2x1">2x1</string>
+    <string name="coupon_badge_gift">Regalo</string>
+    <string name="coupon_type_percent">Porcentaje</string>
+    <string name="coupon_type_amount">Monto fijo</string>
+    <string name="coupon_discount">Descuento</string>
+    <string name="coupon_percent_hint">15</string>
+    <string name="coupon_amount_hint">50</string>
+    <string name="coupon_percent_sign" formatted="false">%</string>
+    <string name="coupon_currency">$</string>
+    <string name="coupon_name">Título del cupón</string>
+    <string name="coupon_name_hint" formatted="false">15% entre semana</string>
+    <string name="coupon_suggest">Sugerir título con IA</string>
+    <string name="coupon_suggesting">Pensando un título…</string>
+    <string name="coupon_when">Cuándo aplica (sin días = todos)</string>
+    <string name="coupon_from">Desde</string>
+    <string name="coupon_from_hint">12:00</string>
+    <string name="coupon_to">Hasta</string>
+    <string name="coupon_to_hint">19:00</string>
+    <string name="coupon_until">Vigente hasta</string>
+    <string name="coupon_limit">Límite de usos</string>
+    <string name="coupon_limit_hint">Para no pasarte de cupo</string>
+    <string name="coupon_no_limit">Sin límite</string>
+    <string name="coupon_preview">Así lo verán tus clientes</string>
+    <string name="coupon_publish">Publicar cupón</string>
+    <string name="capacity_open">Horas y cupo</string>
+    <string name="capacity_title">Horas y cupo</string>
+    <string name="capacity_subtitle">Mesas disponibles por hora</string>
+    <string name="capacity_no_slots">Este día no hay turnos para reservar.</string>
+    <string name="capacity_quiet">Tranquilo</string>
+    <string name="capacity_moderate">Moderado</string>
+    <string name="capacity_peak">Hora pico</string>
+    <plurals name="capacity_free">
+        <item quantity="one">%1$d libre</item>
+        <item quantity="many">%1$d libres</item>
+        <item quantity="other">%1$d libres</item>
+    </plurals>
+    <string name="capacity_per_slot">Cupo por horario</string>
+    <string name="capacity_per_slot_hint">Personas que caben en cada turno</string>
+    <string name="capacity_turn">Duración del turno</string>
+    <string name="capacity_turn_hint">En pasos de 15 minutos</string>
+    <string name="capacity_notice">Wherever usa esto para sugerir tus horas tranquilas a los clientes.</string>
+    <string name="capacity_save">Guardar cambios</string>
+    <string name="capacity_saved">Guardamos el cupo.</string>
+    <string name="capacity_changed">La configuración cambió en otro lado. Ya la recargamos.</string>
+    <string name="capacity_not_configured">Tu negocio aún no tiene reservaciones configuradas.</string>
 </resources>

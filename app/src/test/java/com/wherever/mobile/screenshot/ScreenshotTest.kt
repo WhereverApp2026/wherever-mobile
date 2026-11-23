@@ -29,8 +29,12 @@ import com.wherever.mobile.feature.business.ui.BusinessReservationsEmptyPreview
 import com.wherever.mobile.feature.business.ui.BusinessReservationsPreview
 import com.wherever.mobile.feature.business.ui.BusinessStatsPreview
 import com.wherever.mobile.feature.business.ui.BusinessVerifyPreview
+import com.wherever.mobile.feature.business.ui.CapacityPreview
 import com.wherever.mobile.feature.business.ui.CheckinEmptyPreview
 import com.wherever.mobile.feature.business.ui.CheckinPreview
+import com.wherever.mobile.feature.business.ui.CouponFormPreview
+import com.wherever.mobile.feature.business.ui.CouponsEmptyPreview
+import com.wherever.mobile.feature.business.ui.CouponsPreview
 import com.wherever.mobile.feature.feed.ui.FriendPlanPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedEmptyPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedPreview
@@ -109,7 +113,11 @@ class ScreenshotTest {
         "49_neg_reservas_vacio" to { BusinessReservationsEmptyPreview() },
         "50_neg_checkin" to { CheckinPreview() },
         "50_neg_checkin_vacio" to { CheckinEmptyPreview() },
-        "56_neg_stats" to { BusinessStatsPreview() }
+        "56_neg_stats" to { BusinessStatsPreview() },
+        "53_neg_cupones" to { CouponsPreview() },
+        "53_neg_cupones_vacio" to { CouponsEmptyPreview() },
+        "54_neg_crear" to { CouponFormPreview() },
+        "55_neg_horas" to { CapacityPreview() }
     )
 
     @Test

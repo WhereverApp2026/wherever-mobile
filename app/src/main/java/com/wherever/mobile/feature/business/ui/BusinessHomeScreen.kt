@@ -54,11 +54,20 @@ internal data object BusinessStatsDestination
 @Serializable
 internal data class BusinessCheckinDestination(val code: String? = null)
 
+@Serializable
+internal data object BusinessCouponsDestination
+
+@Serializable
+internal data object BusinessCouponFormDestination
+
+@Serializable
+internal data object BusinessCapacityDestination
+
 /**
  * Pestañas de la barra del negocio que ya tienen pantalla.
- * Cupones (nv-37), Reseñas (nv-36) y Perfil (nv-38) llegan con su spec.
+ * Reseñas (nv-36) y Perfil (nv-38) llegan con su spec.
  */
-enum class BusinessTab { PANEL, RESERVATIONS }
+enum class BusinessTab { PANEL, RESERVATIONS, COUPONS }
 
 /**
  * Modo negocio (specs/nv-35): entra con `POST /usuarios/yo/modo` y abre el Panel del negocio activo.
@@ -101,8 +110,21 @@ private fun BusinessShell(header: BusinessHeader) {
                 BusinessPanelRoute(
                     header = header,
                     onStats = { navController.navigate(BusinessStatsDestination) { launchSingleTop = true } },
-                    onReservations = { navController.openTab(BusinessTab.RESERVATIONS) }
+                    onReservations = { navController.openTab(BusinessTab.RESERVATIONS) },
+                    onCapacity = { navController.navigate(BusinessCapacityDestination) { launchSingleTop = true } }
                 )
+            }
+            composable<BusinessCouponsDestination> {
+                CouponsRoute(
+                    businessId = header.selectedId,
+                    onCreate = { navController.navigate(BusinessCouponFormDestination) { launchSingleTop = true } }
+                )
+            }
+            composable<BusinessCouponFormDestination> {
+                CouponFormRoute(header.selectedId, onBack = { navController.popBackStack() })
+            }
+            composable<BusinessCapacityDestination> {
+                CapacityRoute(header.selectedId, onBack = { navController.popBackStack() })
             }
             composable<BusinessStatsDestination> {
                 BusinessStatsRoute(header.selectedId, onBack = { navController.popBackStack() })
@@ -129,6 +151,7 @@ private fun BusinessShell(header: BusinessHeader) {
 private fun NavDestination?.tab(): BusinessTab = when {
     this == null -> BusinessTab.PANEL
     hasRoute<BusinessReservationsDestination>() || hasRoute<BusinessCheckinDestination>() -> BusinessTab.RESERVATIONS
+    hasRoute<BusinessCouponsDestination>() || hasRoute<BusinessCouponFormDestination>() -> BusinessTab.COUPONS
     else -> BusinessTab.PANEL
 }
 
@@ -136,6 +159,7 @@ private fun NavHostController.openTab(tab: BusinessTab) {
     val route: Any = when (tab) {
         BusinessTab.PANEL -> BusinessPanelDestination
         BusinessTab.RESERVATIONS -> BusinessReservationsDestination
+        BusinessTab.COUPONS -> BusinessCouponsDestination
     }
     navigate(route) {
         popUpTo(graph.findStartDestination().id) { saveState = true }
@@ -156,6 +180,7 @@ internal fun BusinessBar(selected: BusinessTab, onSelect: (BusinessTab) -> Unit)
                 BusinessTab.PANEL -> painterResource(R.drawable.ic_wh_bar_chart) to R.string.business_tab_panel
                 BusinessTab.RESERVATIONS -> rememberVectorPainter(Icons.Outlined.DateRange) to
                     R.string.business_tab_reservations
+                BusinessTab.COUPONS -> painterResource(R.drawable.ic_wh_ticket) to R.string.business_tab_coupons
             }
             BarItem(tab == selected, icon, label, "business_bar_${tab.name.lowercase()}") { onSelect(tab) }
         }
