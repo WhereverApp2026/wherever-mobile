@@ -35,7 +35,7 @@ class BadgesContentTest {
         compose.onNodeWithTag("badges_level").assertIsDisplayed()
         compose.onNodeWithText("Explorador").assertIsDisplayed()
         compose.onNodeWithText(
-            context.resources.getQuantityString(R.plurals.badges_to_next, 200, 200, "Aventurero")
+            context.getString(R.string.badges_points_of_next, 50, 250, "Aventurero")
         ).assertIsDisplayed()
         compose.onNodeWithText("Reseñista").assertIsDisplayed()
         compose.onNodeWithTag("badge_catador_cafe").assertIsDisplayed()

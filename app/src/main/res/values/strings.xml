@@ -206,10 +206,7 @@
     <!-- 81_Perfil -->
     <string name="profile_settings">Ajustes</string>
     <string name="profile_edit">Editar perfil</string>
-    <string name="profile_points">puntos</string>
     <string name="profile_level">nivel</string>
-    <string name="profile_streak">semanas de racha</string>
-    <string name="profile_tastes">Mis gustos</string>
     <string name="profile_verify_notice">Aún no verificas tu correo.</string>
     <string name="profile_verify_action">Verificar mi correo</string>
 
@@ -410,7 +407,6 @@
     <string name="day_saturday">Sábado</string>
 
     <!-- Favoritos (nv-47) -->
-    <string name="profile_favorites">Mis favoritos</string>
     <string name="favorites_title">Mis favoritos</string>
     <string name="favorites_empty">Aún no guardas lugares. Toca el corazón en la ficha de un negocio para encontrarlo aquí.</string>
 
@@ -652,7 +648,6 @@
     <string name="settings_quiet_range">De %1$s a %2$s</string>
 
     <!-- Amigos (nv-53) -->
-    <string name="profile_friends">Amigos</string>
     <string name="friends_title">Amigos</string>
     <string name="friends_add">Agregar</string>
     <string name="friends_tab_friends">Amigos</string>
@@ -775,7 +770,6 @@
 
     <!-- Reservas (nv-54) -->
     <string name="place_reserve">Reservar</string>
-    <string name="profile_reservations">Mis reservas</string>
     <string name="profile_badges">Insignias</string>
     <string name="search_title">Buscar</string>
     <string name="search_placeholder">Lugares, personas o planes</string>
@@ -803,16 +797,6 @@
     <string name="notification_request_gone">Esa solicitud ya no está: la cancelaron o ya la respondiste.</string>
     <string name="badges_title">Mis insignias</string>
     <string name="badges_level_label">Tu nivel</string>
-    <plurals name="badges_points">
-        <item quantity="one">%1$d punto</item>
-        <item quantity="many">%1$d puntos</item>
-        <item quantity="other">%1$d puntos</item>
-    </plurals>
-    <plurals name="badges_to_next">
-        <item quantity="one">Te falta %1$d punto para %2$s</item>
-        <item quantity="many">Te faltan %1$d puntos para %2$s</item>
-        <item quantity="other">Te faltan %1$d puntos para %2$s</item>
-    </plurals>
     <string name="badges_max_level">Llegaste al nivel más alto.</string>
     <string name="badges_earned">Ganadas</string>
     <string name="badges_locked">Por desbloquear</string>
@@ -1020,7 +1004,6 @@
     <string name="business_edit_request">Editar mi solicitud</string>
     <!-- Reseñas (specs/nv-32) -->
     <string name="profile_my_reviews">Mis reseñas</string>
-    <string name="profile_pending_reviews">Por reseñar</string>
     <string name="place_see_reviews">Ver reseñas</string>
     <string name="reviews_close">Cerrar</string>
     <string name="reviews_form_title">¿Cómo estuvo?</string>
@@ -1108,7 +1091,6 @@
 
     <!-- Recuerdos y postales (specs/nv-31) -->
     <string name="profile_memories">Recuerdos</string>
-    <string name="profile_new_moment">Nuevo momento</string>
     <string name="memories_title">Recuerdos</string>
     <string name="memories_subtitle">%1$s de %2$s</string>
     <string name="memories_by_plan_empty">Todavía no hay recuerdos por plan. Cuando hagas check-in en un plan, sus fotos se juntan aquí.</string>
@@ -1585,7 +1567,6 @@
     <string name="app_lock_prompt_subtitle">Confirma que eres tú</string>
     <string name="settings_app_lock">Desbloquear con huella o rostro</string>
     <string name="settings_app_lock_hint">Al abrir la app y al volver después de un minuto.</string>
-    <string name="settings_app_lock_unavailable">Configura una huella, rostro o bloqueo de pantalla en tu teléfono para usarlo.</string>
     <!-- 81_Perfil (Figma 298:8711) -->
     <string name="profile_notifications">Notificaciones</string>
     <string name="profile_share_code">Compartir mi código</string>
@@ -1624,4 +1605,5 @@
     <!-- 83_Insignias (Figma 298:8945) -->
     <string name="badges_earned_count">Ganadas · %1$d</string>
     <string name="badges_points_of_next">%1$d de %2$d puntos para ser %3$s</string>
+    <string name="badges_cell_a11y">%1$s, %2$s</string>
 </resources>

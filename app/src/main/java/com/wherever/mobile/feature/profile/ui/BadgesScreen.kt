@@ -184,12 +184,16 @@ private fun BadgeGridRow(badges: List<Badge>) {
 
 @Composable
 private fun BadgeCell(badge: Badge, modifier: Modifier) {
-    val state = stringResource(if (badge.earned) R.string.badges_earned else R.string.badges_locked)
+    val description = stringResource(
+        R.string.badges_cell_a11y,
+        badge.name,
+        stringResource(if (badge.earned) R.string.badges_earned else R.string.badges_locked)
+    )
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(Spacing.XS),
         modifier = modifier
-            .semantics { contentDescription = "${badge.name}, $state" }
+            .semantics { contentDescription = description }
             .testTag("badge_${badge.id}")
     ) {
         val color = badgeColor(badge.id)
