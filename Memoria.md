@@ -307,6 +307,24 @@
 - Límite: en un repo de cuenta personal no se puede restringir quién presiona "Merge"; la regla lo cubre exigiendo la aprobación.
 - A evitar: activar la regla antes de integrar este `CODEOWNERS`, porque el code owner sería Jorge.
 
+## Planes pasa a Borre: itinerario (2026-11-22)
+- Estado: rama `spec/planes-itinerario` (solo `.md`). Planes (nv-23, nv-24, nv-26, nv-30) pasa de Diego a Borre, por acuerdo del equipo según Borre. `docs/itinerario-planes.md` fija 6 fases: 0 specs al día, 1 Room (`nv-56`), 2 nv-24, 3 nv-23, 4 nv-26, 5 nv-30. Reparto actualizado en `CONTRIBUTING.md`, `docs/pendientes.md` y `docs/equipo/`. Puertas: SPECS-OK, SDD-OK, routes OK, critic PASS.
+- Hallazgo: las specs de Planes no se conciliaron con nv-48. nv-23, nv-24 y nv-28 siguen "sin código" y "Pendiente de backend"; nv-26 y nv-30 tienen el contrato viejo; nv-48 eligió "Sin cambios en Room" sin excepción documentada; nv-48 sigue sin firma. Las puertas no lo detectan porque solo revisan la estructura.
+- Decisión: conciliar las specs (Fase 0) antes de escribir código. Porqué: metodología SDD; sin eso no se sabe qué falta en cada frame.
+- Estado (Fase 0): specs nv-23, nv-24 y nv-28 conciliadas con nv-48 (lo hecho marcado con rutas reales; lo que falta, abierto); nv-26 y nv-30 con el contrato real; `specs/README.md` (18 frames, D29 resuelta, D31 en curso) y `docs/avance.md` al día. Contrato leído de una copia de `wherever-backend/docs/endpoints.md` del 2026-11-22. Falta: decisiones 1-5 con Osmar en el PR y la spec `nv-56`.
+- Decisión: la conciliación deja la firma de Jorge del 2026-11-06 y agrega "Revisor de la conciliación: Osmar" sin marcar. Porqué: AGENTS §2, borrador con evidencia; solo se firma con revisor indicado.
+- Hallazgo: el check-in lo inicia la persona (`POST /checkins` con QR del mostrador o ubicación), no el negocio; existe `GET /planes/{id}/paquete-offline` para el modo sin red; `GET /planes` no trae el estado (Reservado, En grupo) que pide Mis planes.
+- A evitar: tomar una spec del reparto sin revisar `docs/equipo/` de `main` actualizado; el reparto cambió el mismo día.
+- Estado: `specs/nv-56` (Planes sin conexión, Room v6) escrita y revisada contra el código; SPECS-OK con 53 specs. Tablas `plan`, `plan_tab_entry`, `plan_stop`, `plan_transfer`, `plan_draft`; `PlansCleaner` como `SessionCleaner`; paquete sin conexión con `ETag` y máximo una vez cada 30 min por plan.
+- Decisión: sin red las ediciones se intentan y, si fallan, no cambian nada; no se encolan ni se apagan botones. Porqué: cada edición exige `If-Match` y un 409 obliga a recargar; y nv-16/nv-40 decidieron que el monitor de red solo informa (daba falsos "sin conexión" en datos móviles).
+- Hallazgo de la revisión: `89_SinConexion` es una capa sobre toda la app que solo se cierra con "Atrás"; `GET /planes` devuelve `PlanDto` sin garantía de paradas (no debe pisar el detalle); registrar una migración toca `core/di/AppModule.kt`, que según `CONTRIBUTING.md` requiere Issue a Jorge.
+- A evitar: escribir una spec que toque `core/di`, `navigation/`, `core/network` o `app/build.gradle.kts` sin prever el Issue a Jorge en su §7.
+- Decisión: Room guarda `paquete-offline` aunque la respuesta diga `Cache-Control: no-store`. Porqué: esa cabecera es para cachés HTTP; guardarlo en la app es el propósito del endpoint, y OkHttp no tiene caché.
+- A recordar: el índice de specs de `specs/README.md` termina en nv-39; nv-40 a nv-56 no están listadas.
+- A evitar: heredocs largos con `cat > archivo <<'EOF'` en la herramienta Bash: falló con "unexpected EOF" y no escribió nada. Usar Write.
+- A evitar: `|` dentro de una celda de tabla Markdown, aunque esté entre comillas invertidas: parte la columna.
+- A recordar: `python` no está en el PATH de Git Bash en este equipo (alias de la Microsoft Store).
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

@@ -1,6 +1,6 @@
 # NV-30 — El día del plan
 
-> Sin ejecutar. Plantilla: `.specify/templates/tasks-template.md`.
+> Sin ejecutar. Contrato conciliado el 2026-11-22 (backend nv-62 y nv-68); Fase 5 de `docs/itinerario-planes.md`. Plantilla: `.specify/templates/tasks-template.md`.
 
 ## T1 — Slice liberable
 - [ ] 1. Spec en `specs/nv-30/spec.md` aprobada

@@ -1,39 +1,40 @@
 # plan.md — NV-26 — Vaca virtual y gastos
 
 > Deriva de `specs/nv-26/spec.md`. Respeta constitución §4 (cadena de red y capas). Plantilla: `.specify/templates/plan-template.md`.
+> Contrato conciliado el 2026-11-22 (backend nv-58).
 
 ## 1. Mapeo
-- Sin código todavía. Paquete `feature/<nombre>/{ui,domain,data}` según `specs/nv-04`; los archivos se fijan al tomar la spec.
-- Ruta en `docs/routes.md` al implementar.
+- Sin código todavía. Propuesta: `feature/groups/{data,domain,ui}` junto a nv-25 (la Vaca cuelga del grupo), con `ExpensesApi`, `ExpenseEntity`/DAO y `SplitViewModel`. Se confirma con Jorge al tomar la spec.
+- Rutas nuevas en `docs/routes.md` al implementar.
 
 ## 2. Guardarraíles
 - Constitución §2-§6: Room como fuente de verdad, cadena de red, textos en `strings.xml`, sin secretos.
 - Sin lógica de negocio en Composables.
-- Lo marcado "Pendiente de backend" no se implementa con datos simulados (constitución §2.7).
+- Montos en centavos (`Long`), nunca `Float`.
+- Toda edición de gasto manda `If-Match`; un 409 recarga.
 
 ## 3. Pruebas
-Previstas, sin implementar (de `spec.md §6`):
 
 ### Unitarias
-- Unit: el ejemplo de la maqueta ($760 entre 4, $190; Jorge debe $70).
-- Unit: redondeo sin centavos perdidos.
+- El ejemplo de la maqueta ($760 entre 4, $190; Jorge debe $70).
+- Validaciones en centavos y suma personalizada.
 
 ### Integración (MockWebServer con el contrato publicado; Room real instrumentada; sin staging)
-- Data: gastos y saldos se guardan en Room y se recalculan tras reiniciar sin red.
+- Gastos y saldos en Room tras reiniciar sin red; reenvío con el mismo `id_cliente`.
 
 ### Seguridad (`docs/masvs-checklist.md`)
-- Security: no hay datos bancarios ni de tarjeta en los gastos y su cuerpo no se registra en logs.
+- Sin datos bancarios ni de tarjeta; el cuerpo no se registra en logs.
 
 ### Otras
 - Estados cargando, vacío, error y sin red cubiertos. Cobertura ≥ 45 % (`CHECKLIST_PR.md`).
 
 ## 4. Secuencia
-1. Spec aprobada.
+1. `46_Grupo` (nv-25) en `main`.
 2. Entidad Room + DAO + migración.
 3. DTO + mapeos + `AppError`.
-4. Repositorio.
+4. Repositorio con cola de envío por `id_cliente`.
 5. ViewModel con `UiState`.
-6. Pantalla y ruta.
+6. Pantallas y rutas.
 7. Pruebas de los tres tipos.
 8. Gates.
 

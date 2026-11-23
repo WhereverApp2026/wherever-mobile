@@ -1,6 +1,6 @@
 # NV-26 — Vaca virtual y gastos
 
-> Sin ejecutar. Plantilla: `.specify/templates/tasks-template.md`.
+> Sin ejecutar. Contrato conciliado el 2026-11-22 (backend nv-58); Fase 4 de `docs/itinerario-planes.md`. Plantilla: `.specify/templates/tasks-template.md`.
 
 ## T1 — Slice liberable
 - [ ] 1. Spec en `specs/nv-26/spec.md` aprobada

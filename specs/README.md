@@ -132,14 +132,14 @@ Pendiente del Sprint 1: `NuevaContrasena` y verificar correo por enlace (D11), S
 | `34_Sello` | nv-21 | Pendiente de backend |
 | `35_Favoritos` | nv-22 | Pendiente de backend |
 | `36_FavVacio` | nv-22 | Pendiente de backend |
-| `IAPalabra` | nv-23 | Pendiente de backend |
-| `17_AjustaPlan` | nv-23 | Pendiente de backend |
-| `Generando *` | nv-23 | Pendiente de backend |
-| `39_Plan` | nv-24 | Pendiente de backend |
-| `Plan · *` | nv-24 | Pendiente de backend |
-| `40_Cambiar` | nv-24 | Pendiente de backend |
-| `41_AgregarParada` | nv-24 | Pendiente de backend |
-| `CrearPlan` | nv-24 | Pendiente de backend |
+| `IAPalabra` | nv-23 | Funciona (nv-48) |
+| `17_AjustaPlan` | nv-23 | Falta (API lista; hoja rápida parcial en nv-48) |
+| `Generando *` | nv-23 | Parcial (3 de 4 pasos, nv-48) |
+| `39_Plan` | nv-24 | Funciona sin mapa, Invitar ni Reservar todo (nv-48) |
+| `Plan · *` | nv-24 | Funciona (nv-48) |
+| `40_Cambiar` | nv-24 | Funciona (nv-48) |
+| `41_AgregarParada` | nv-24 | Parcial: solo Buscar (nv-48) |
+| `CrearPlan` | nv-24 | Falta (API lista: `POST /planes`) |
 | `42_Compartir` | nv-25 | Pendiente de backend |
 | `43_CrearGrupo` | nv-25 | Pendiente de backend |
 | `44_MisGrupos` | nv-25 | Pendiente de backend |
@@ -151,9 +151,9 @@ Pendiente del Sprint 1: `NuevaContrasena` y verificar correo por enlace (D11), S
 | `ChatAmigo` | nv-25 | Pendiente de backend |
 | `ChatAmigo · *` | nv-25 | Pendiente de backend |
 | `InvitarPlan` | nv-25 | Pendiente de backend |
-| `28_Vaca` | nv-26 | Pendiente de backend |
-| `Vaca · *` | nv-26 | Pendiente de backend |
-| `45_AgregarGasto` | nv-26 | Pendiente de backend |
+| `28_Vaca` | nv-26 | Falta (API lista: backend nv-58) |
+| `Vaca · *` | nv-26 | Falta (API lista: backend nv-58) |
+| `45_AgregarGasto` | nv-26 | Falta (API lista: backend nv-58) |
 | `22_Reserva` | nv-27 | Pendiente de backend |
 | `35_Pasarela` | nv-27 | Pendiente de backend |
 | `36_PagoError` | nv-27 | Pendiente de backend |
@@ -163,16 +163,16 @@ Pendiente del Sprint 1: `NuevaContrasena` y verificar correo por enlace (D11), S
 | `DetReserva · *` | nv-27 | Pendiente de backend |
 | `27_Cancelar` | nv-27 | Pendiente de backend |
 | `38_CambiarHora` | nv-27 | Pendiente de backend |
-| `24_MisPlanes` | nv-28 | Pendiente de backend |
-| `41_PlanesVacio` | nv-28 | Pendiente de backend |
+| `24_MisPlanes` | nv-28 | Funciona sin etiqueta de estado (nv-48) |
+| `41_PlanesVacio` | nv-28 | Funciona (nv-48) |
 | `29_Cupones` | nv-29 | Pendiente de backend |
 | `47_DetCupon` | nv-29 | Pendiente de backend |
 | `DetCupon · *` | nv-29 | Pendiente de backend |
-| `13_Mapa` | nv-30 | Pendiente de backend |
-| `14_MapaFull` | nv-30 | Pendiente de backend |
-| `15_Llegar` | nv-30 | Pendiente de backend |
-| `18_Navegando` | nv-30 | Pendiente de backend |
-| `26_CheckinOk` | nv-30 | Pendiente de backend |
+| `13_Mapa` | nv-30 | Falta: sin endpoint de rutas (D25) |
+| `14_MapaFull` | nv-30 | Falta: sin endpoint de rutas (D25) |
+| `15_Llegar` | nv-30 | Falta: sin endpoint de rutas (D25) |
+| `18_Navegando` | nv-30 | Falta: sin endpoint de rutas (D25) |
+| `26_CheckinOk` | nv-30 | Falta (API lista: `POST /checkins`) |
 | `70_CrearPub` | nv-31 | Pendiente de backend |
 | `71_Camara` | nv-31 | Pendiente de backend |
 | `72_Postal` | nv-31 | Pendiente de backend |
@@ -295,9 +295,9 @@ Las dudas siguen abiertas hasta que diseño o backend las confirmen. Mientras ta
 - **D26 · Pasarela de pago.** `35_Pasarela` captura la tarjeta en una pantalla propia, y `22_Reserva` dice "pasarela externa". Falta el proveedor. Capturar tarjeta en UI propia amplía el alcance PCI: propuesta, usar el SDK o la página del proveedor. Tampoco está clara la fórmula del anticipo ($74 con consumo de $420 y cupón de $50).
 - **D27 · Cuenta de negocio.** `42_NegCuenta` crea una cuenta nueva y `85_Ajustes` tiene "Tengo un negocio". La API crea solo rol consumidor y `POST /usuarios/yo/modo` exige rol comerciante. Falta saber si es otra cuenta o la misma con otro rol, y cómo se otorga.
 - **D28 · Tiempo real en chats.** Chats, votaciones y "En línea" necesitan WebSocket o sondeo. No está definido en la API, y el stack no incluye cliente propio más allá de OkHttp.
-- **D29 · Generación del plan con IA.** `Generando 1…4` dibuja cuatro pasos. Falta saber si son reales (requieren sondeo o eventos del backend) o una animación, y si "Cancelar" detiene el trabajo en el servidor.
+- **D29 · Generación del plan con IA.** `Generando 1…4` dibuja cuatro pasos. Falta saber si son reales (requieren sondeo o eventos del backend) o una animación, y si "Cancelar" detiene el trabajo en el servidor. **Resuelta (2026-11-22):** la API no publica avance ni cancelación; los 4 pasos son animación y Cancelar descarta la respuesta (`specs/nv-23`).
 - **D30 · Deshacer al eliminar reseña.** `MisRes · confirmar eliminar` dice "no se puede deshacer", y `MisRes · reseña eliminada` ofrece "Deshacer".
-- **D31 · Qué funciona sin red.** `89_SinConexion` lista planes y reservas guardados, con "Código QR guardado". Falta decidir qué se guarda en Room, y si el QR se genera en el teléfono o viene del servidor.
+- **D31 · Qué funciona sin red.** `89_SinConexion` lista planes y reservas guardados, con "Código QR guardado". Falta decidir qué se guarda en Room, y si el QR se genera en el teléfono o viene del servidor. **En curso (2026-11-22):** para planes, Room en `nv-56` con `GET /planes/{id}/paquete-offline` (ver `docs/itinerario-planes.md`).
 - **D32 · Lugares con y sin reserva.** `33_Detalle` ofrece "Reservar mesa", y `Detalle · Jardín del Cerro` y `Mercado de Tula` ofrecen "Cómo llegar". Hace falta un campo que indique si el lugar acepta reservas.
 - **D33 · Datos fiscales y bancarios.** `46_NegVerif`, `89_NegBanco` y `90_NegFiscal` manejan CLABE, RFC, identificación y comprobantes. Falta definir almacenamiento, retención y si la app guarda algo. Propuesta: nada en Room, solo los últimos 4 dígitos.
 - **D36 · Detalles de texto en la maqueta.** "más de 24 horas de anticipo" (`27_Cancelar`, `86_Ayuda`) parece "anticipación". Hay textos pegados ("Jorgeestuvo aquí", "términosy") y encimados (`17_PostDetalle`) que parecen artefactos de exportación. `DetCupon · Postre de cortesía` recorta "Gratis".

@@ -53,8 +53,8 @@ Reglas: `CONTRIBUTING.md`. Cada spec es una rama y un PR a `main`, aprobado por 
 | Responsable | Área | Specs | Faltan | Lista de trabajo |
 |---|---|---|---|---|
 | Jorge | Social y Explorar; compartido (theme y `core/designsystem`, navegación, cliente de API, CI) | nv-20, nv-21, nv-25 | 14 (+4 por probar) | `docs/equipo/jorge.md` |
-| Diego | Planes y cupones del negocio; cerrar #42, #45 y #48 | nv-23, nv-24, nv-26, nv-30, nv-37 | 16 | `docs/equipo/diego.md` |
-| Borre | Modo negocio | nv-35, nv-36, nv-38 | 17 | `docs/equipo/borre.md` |
+| Diego | Cupones del negocio; cerrar #42, #45 y #48 | nv-37 | 3 | `docs/equipo/diego.md` |
+| Borre | Planes (desde el 2026-11-22) y Modo negocio | nv-23, nv-24, nv-26, nv-30, nv-56; nv-35, nv-36, nv-38 | 30 | `docs/equipo/borre.md`, `docs/itinerario-planes.md` |
 | Osmar | Reserva, pago y cupones; feed social; backend que bloquea; revisor único | nv-17, nv-27, nv-29 | 19 | `docs/equipo/osmar.md` |
 
 Reparto anterior (tres personas, 2026-11-20), con lo que funciona por área:
