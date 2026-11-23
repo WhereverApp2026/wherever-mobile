@@ -13,20 +13,20 @@ Mantener al día el perfil y las fotos del negocio, cobrar los anticipos y volve
 
 **HU.** Como dueño quiero editar mi negocio.
 
-- [ ] `58_NegPerfil`: datos y horario con `PATCH /negocios/{id}` (`If-Match`); Recibir reservaciones = `acepta_reservas` en `PUT reservas-config`; Pausar con `POST /negocios/{id}/pausa`.
-- [ ] `87_NegGaleria`: hasta 10 fotos, arrastrar para ordenar (`PUT fotos/orden`), borrar (mínimo 3 en revisión o aprobado).
-- [ ] `88_NegAgregarFoto`: Tomar foto o Elegir de la galería → `PhotoRepository` + `POST /negocios/{id}/fotos`.
+- [x] `58_NegPerfil`: datos y horario con `PATCH /negocios/{id}` (`If-Match`); Recibir reservaciones = `acepta_reservas` en `PUT reservas-config`; Pausar con `POST /negocios/{id}/pausa`.
+- [x] `87_NegGaleria`: hasta 10 fotos, arrastrar para ordenar (`PUT fotos/orden`), borrar (mínimo 3 en revisión o aprobado).
+- [x] `88_NegAgregarFoto`: Tomar foto o Elegir de la galería → `PhotoRepository` + `POST /negocios/{id}/fotos`.
 
 **HU.** Como dueño quiero cobrar.
 
-- [ ] `57_NegCobros`: `GET saldo` (disponible, en espera, próximo depósito) y `GET liquidaciones` paginado; Conectar cobros abre la URL de Stripe (`POST cobros/conectar`) en Custom Tabs.
-- [ ] `89_NegBanco`: titular y CLABE de 18 dígitos (dígito verificador) → `PUT cuenta-deposito`.
-- [ ] `90_NegFiscal`: RFC, razón social, régimen, uso CFDI, C.P. → `PUT datos-fiscales` (422 `rfc_invalido` explicado).
+- [x] `57_NegCobros`: `GET saldo` (disponible, en espera, próximo depósito) y `GET liquidaciones` paginado; Conectar cobros abre la URL de Stripe (`POST cobros/conectar`) en Custom Tabs.
+- [x] `89_NegBanco`: titular y CLABE de 18 dígitos (dígito verificador) → `PUT cuenta-deposito`.
+- [x] `90_NegFiscal`: RFC, razón social, régimen, uso CFDI, C.P. → `PUT datos-fiscales` (422 `rfc_invalido` explicado).
 
 **HU.** Como dueño quiero salir del modo negocio.
 
-- [ ] Volver a Wherever = `POST /usuarios/yo/modo` con `explorar` → Inicio.
-- [ ] Eliminar negocio: escribir el nombre exacto → `DELETE /negocios/{id}`; Cerrar sesión reutiliza la de Ajustes.
+- [x] Volver a Wherever = `POST /usuarios/yo/modo` con `explorar` → Inicio.
+- [x] Eliminar negocio: escribir el nombre exacto → `DELETE /negocios/{id}`; Cerrar sesión reutiliza la de Ajustes.
 
 ### UI (frames de Figma)
 
@@ -57,6 +57,16 @@ Colores, tipografía, espacios y componentes solo desde `core/designsystem`; tex
 
 - Modo negocio vive en `feature/business` con su propio `NavHost` interno y su barra (Panel, Reservas, Cupones, Reseñas, Perfil) armada con componentes de `core/designsystem`. En el grafo principal solo se registra una ruta, `BusinessHomeRoute` (una línea en `WhereverNavHost`, revisada por Jorge).
 - Importar de Instagram, Descargar estado de cuenta, facturación y depósito de prueba están diferidos en el backend: esas opciones no se dibujan (D-38a).
+
+### Decisiones al implementar (2026-11-23, Diego)
+
+- **D-38b Pestaña Negocio** en la barra (quinta, como en la maqueta). «Datos y horario» no tiene frame: se arma con los componentes del sistema y la fila de horario del alta (nv-34). Nombre y dirección no se editan aquí (la API los manda a `cambios_pendientes`).
+- **D-38c Stripe:** `androidx.browser` no está en el stack; el registro se abre con `ACTION_VIEW` en el navegador. Queda pendiente el Issue para acordar Custom Tabs.
+- **D-38d Perfil:** se lee de `GET /negocios/mios` (no hay `GET /negocios/{id}` del dueño) y se completa con `cuenta_deposito` y `datos_fiscales_completos` del panel. `acepta_reservas` se guarda con el mismo `PUT reservas-config` de nv-37, sin perder los demás campos.
+- **D-38e Galería:** mantener y arrastrar reordena; el menú «⋮» de cada foto agrega «Usar como portada» y «Eliminar» (alternativa accesible al arrastre). El orden se manda completo con «Guardar cambios»; borrar es inmediato. Las fotos nuevas se registran como `interior`.
+- **D-38f Catálogos del SAT:** la API no tiene un catálogo de régimen ni de uso CFDI; se ofrecen los códigos oficiales más comunes (601, 603, 605, 606, 612, 621, 625, 626 y G03, G01, S01). La API valida contra el catálogo completo.
+- **D-38g Pausa:** fila «Pausar mi negocio» (no está en el frame) con hoja de 1 semana, 2 semanas, 1 mes o sin fecha, y motivo opcional; reanudar es directo. Eliminar llama después a `modo explorar` y vuelve a Inicio.
+- **D-38h Cerrar sesión** usa `AuthRepository.logout()` como Ajustes y vuelve a Login. «Volver a Wherever», cerrar sesión y eliminar salen del modo negocio con dos callbacks en `BusinessHomeRoute` (una línea en `WhereverNavHost`).
 - Custom Tabs para Stripe: si `androidx.browser` no está en el stack, se abre con `ACTION_VIEW` y Osmar abre un Issue para acordarlo.
 - Los montos llegan en centavos y se muestran en pesos con el formato de México.
 
@@ -139,4 +149,4 @@ Rama `feat/nv-38-business` desde `main` actualizado → `plan.md` → `task.md` 
 - [ ] CHECKLIST_PR.md OK
 - [x] Sin conflicto con constitución
 
-**Estado:** ✅ Aprobada y lista para ejecutar. Responsable: Osmar.
+**Estado:** ✅ Aprobada y lista para ejecutar. Implementada el 2026-11-23 por Diego (a pedido suyo; reparto: Borre) en `feat/nv-38-business`, sobre nv-36; sin probar contra staging.

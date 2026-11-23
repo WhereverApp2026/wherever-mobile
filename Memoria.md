@@ -364,6 +364,10 @@
 - Estado (2026-11-23): nv-36 Reseñas y momentos del negocio (Diego, a pedido suyo; reparto: Borre) en `feat/nv-36-business` (sobre `integracion/todo`): 51, 52 y NegMomentos con la API real, pestaña Reseñas. Decisiones D-36b a D-36f en la spec. Sin probar contra staging.
 - A evitar: fiarse del nombre del campo en la petición para leer la respuesta: el `PATCH` de momentos manda `agradecido` y la respuesta trae `agradecido_por_negocio`. Revisar la forma del objeto en `endpoints.md`.
 
+- Estado (2026-11-23): nv-38 Perfil, fotos y cobros del negocio (Diego, a pedido suyo; reparto: Borre) en `feat/nv-38-business` (sobre nv-36): 58, Datos y horario, 87, 88, 57, 89 y 90 con la API real; pestaña Negocio; salidas a Inicio y Login. Decisiones D-38b a D-38h en la spec. Sin probar contra staging.
+- A evitar: escribir scripts de Python con texto en español por la entrada estándar de Bash: la consola cambia la «Ñ» y el parche no encuentra el texto. Guardarlos en el scratchpad y correrlos con `python -X utf8`.
+- A evitar: nombres de prueba con `;` o `:` entre comillas invertidas: Kotlin/JVM no los acepta.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

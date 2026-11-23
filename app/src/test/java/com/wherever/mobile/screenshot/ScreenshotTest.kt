@@ -19,12 +19,17 @@ import com.wherever.mobile.feature.auth.ui.PermissionsPreview
 import com.wherever.mobile.feature.auth.ui.RecoverPreview
 import com.wherever.mobile.feature.auth.ui.RegisterPreview
 import com.wherever.mobile.feature.auth.ui.WelcomePreview
+import com.wherever.mobile.feature.business.ui.AddPhotoSheetPreview
+import com.wherever.mobile.feature.business.ui.BankAccountPreview
+import com.wherever.mobile.feature.business.ui.BusinessDataPreview
+import com.wherever.mobile.feature.business.ui.BusinessDeletePreview
 import com.wherever.mobile.feature.business.ui.BusinessDonePreview
 import com.wherever.mobile.feature.business.ui.BusinessLocationPreview
 import com.wherever.mobile.feature.business.ui.BusinessMissingPreview
 import com.wherever.mobile.feature.business.ui.BusinessMomentsPreview
 import com.wherever.mobile.feature.business.ui.BusinessOperationPreview
 import com.wherever.mobile.feature.business.ui.BusinessPanelPreview
+import com.wherever.mobile.feature.business.ui.BusinessProfilePreview
 import com.wherever.mobile.feature.business.ui.BusinessRegisterPreview
 import com.wherever.mobile.feature.business.ui.BusinessReservationsEmptyPreview
 import com.wherever.mobile.feature.business.ui.BusinessReservationsPreview
@@ -37,7 +42,10 @@ import com.wherever.mobile.feature.business.ui.CheckinPreview
 import com.wherever.mobile.feature.business.ui.CouponFormPreview
 import com.wherever.mobile.feature.business.ui.CouponsEmptyPreview
 import com.wherever.mobile.feature.business.ui.CouponsPreview
+import com.wherever.mobile.feature.business.ui.GalleryPreview
+import com.wherever.mobile.feature.business.ui.PaymentsPreview
 import com.wherever.mobile.feature.business.ui.ReviewReplyPreview
+import com.wherever.mobile.feature.business.ui.TaxDataPreview
 import com.wherever.mobile.feature.checkin.ui.ArrivalOkPreview
 import com.wherever.mobile.feature.checkin.ui.ArrivalPermissionPreview
 import com.wherever.mobile.feature.feed.ui.FriendPlanPreview
@@ -217,7 +225,15 @@ class ScreenshotTest {
         "55_neg_horas" to { CapacityPreview() },
         "51_neg_resenas" to { BusinessReviewsPreview() },
         "52_neg_resp" to { ReviewReplyPreview() },
-        "neg_momentos" to { BusinessMomentsPreview() }
+        "neg_momentos" to { BusinessMomentsPreview() },
+        "58_neg_perfil" to { BusinessProfilePreview() },
+        "58_neg_perfil_eliminar" to { BusinessDeletePreview() },
+        "neg_datos" to { BusinessDataPreview() },
+        "87_neg_galeria" to { GalleryPreview() },
+        "88_neg_agregar_foto" to { AddPhotoSheetPreview() },
+        "57_neg_cobros" to { PaymentsPreview() },
+        "89_neg_banco" to { BankAccountPreview() },
+        "90_neg_fiscal" to { TaxDataPreview() }
     )
 
     @Test

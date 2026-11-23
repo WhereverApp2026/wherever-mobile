@@ -390,7 +390,7 @@ private fun OperationStep(state: OnboardingUiState, actions: OnboardingActions) 
 }
 
 @Composable
-private fun ScheduleRow(schedule: DaySchedule, onChange: (DaySchedule) -> Unit) {
+internal fun ScheduleRow(schedule: DaySchedule, onChange: (DaySchedule) -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.S),
