@@ -64,12 +64,21 @@ Nombres de ruta propuestos. Se registran en `docs/routes.md` al implementar la s
 
 ### Endpoints
 
-### Pendiente de backend
+| Método | Ruta | Uso |
+|---|---|---|
+| POST | `/planes/generar` | `{frase, lat, lng, fecha?, personas?, movilidad?}` → plan sin guardar con `fuente`, `aviso`, `parametros` y `plan` (2 a 4 paradas; respaldo por reglas si la IA no responde en 7 s). |
+| POST | `/planes/generar/otra-idea` | Igual, con `excluir` (lugares ya propuestos). |
+| POST | `/planes` | Guardar el plan propuesto (nv-48). |
 
-Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
+La API no tiene avance ni cancelación del lado del servidor: los pasos de `Generando` avanzan en la app mientras espera la respuesta (los tres primeros con el tiempo, el cuarto con la respuesta) y Cancelar corta la llamada.
 
-- Generar plan (entrada: palabra y ajustes; salida: paradas, horarios, costos, traslados).
-- Avance y cancelación.
+### Decisiones al implementar (2026-11-22)
+
+- **D-23a Ajustes en la frase:** la API no recibe compañía, paradas ni presupuesto aparte (los entiende de la frase, `parametros`); 17_AjustaPlan los agrega al final de lo escrito, como ya hacía nv-48 con el presupuesto. Día y hora sí van en `fecha`; personas y movilidad en sus campos.
+- **D-23b Sin Room:** el plan generado es un borrador que la API no guarda; se guarda con `POST /planes` (Guardar) y el plan guardado vive en la API (nv-48). No se agrega `PlanEntity`.
+- **D-23c «Crear plan a mano»** (17_AjustaPlan) no se dibuja: `CrearPlan` es de nv-24.
+- **D-23d Ver mi plan** abre el plan propuesto de nv-48 (Guardar, Otra idea, Ajustar la petición).
+- **D-23e Ánimo:** 17_AjustaPlan muestra las caritas solo con el consentimiento de ánimo (US-048, nv-48); sin él no se dibujan.
 
 ## 4. Modelo de datos
 
@@ -97,4 +106,4 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** ✅ Aprobada (Jorge, 2026-11-06).
+**Estado:** ✅ Aprobada (Jorge, 2026-11-06). Implementada el 2026-11-22 (Diego) en `feat/nv-23-ai-plan`, sobre la base de nv-48; sin probar contra staging.

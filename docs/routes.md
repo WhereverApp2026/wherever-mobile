@@ -31,7 +31,7 @@
 | `SearchRoute(query)` | Buscar: lugares, personas y planes; recientes, ideas y sin resultados | ninguno | release | nv-19 |
 | `FavoritesRoute` | Mis favoritos | ninguno | release | nv-47 |
 | `BadgesRoute` | Insignias: nivel, puntos, ganadas y por desbloquear | ninguno | release | nv-14 |
-| `CreatePlanRoute(phrase)` | Crear plan con IA y hoja rápida | ubicación aproximada (obligatoria para generar) | release | nv-48 |
+| `CreatePlanRoute(phrase)` | Crear plan con IA: IAPalabra, 17_AjustaPlan y Generando 1/4 a 4/4; luego el plan propuesto (Guardar u Otra idea) | ubicación aproximada (obligatoria para generar) | release | nv-48, nv-23 |
 | `PlanRoute(id)` | Plan: línea de tiempo y edición | ninguno | release | nv-48 |
 | `NotificationsRoute` | Avisos: lista, filtros, marcar leídas y borrar | ninguno | release | nv-52 |
 | `ReserveRoute(placeId, placeName)` | Reservar: día, personas, turno, nota y resumen | ninguno | release | nv-54 |

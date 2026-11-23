@@ -307,6 +307,10 @@
 - Límite: en un repo de cuenta personal no se puede restringir quién presiona "Merge"; la regla lo cubre exigiendo la aprobación.
 - A evitar: activar la regla antes de integrar este `CODEOWNERS`, porque el code owner sería Jorge.
 
+- Estado (2026-11-22): nv-23 Crear plan con IA (Diego) en `feat/nv-23-ai-plan`: IAPalabra, 17_AjustaPlan y Generando 1/4 a 4/4 sobre `POST /planes/generar` (base nv-48). Decisiones D-23a a D-23e en la spec. Sin probar contra staging.
+- A evitar: `MIN_STOPS`/`MAX_STOPS` ya existen en `feature/plans/ui` (edición, 6 paradas); los de la IA son `AI_MIN_STOPS`/`AI_MAX_STOPS`.
+- A recordar: un Composable que regresa valor va en minúscula (lint `ComposableNaming`), p. ej. `sparkleIcon()`.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

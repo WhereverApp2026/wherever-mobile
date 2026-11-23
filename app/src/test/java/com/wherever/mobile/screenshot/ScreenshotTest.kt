@@ -41,6 +41,11 @@ import com.wherever.mobile.feature.memories.ui.PostcardDetailPolaroidPreview
 import com.wherever.mobile.feature.memories.ui.PostcardDetailPreview
 import com.wherever.mobile.feature.memories.ui.PostcardEditorPreview
 import com.wherever.mobile.feature.memories.ui.PostcardGonePreview
+import com.wherever.mobile.feature.plans.ui.PlanAdjustPreview
+import com.wherever.mobile.feature.plans.ui.PlanGeneratingPreview
+import com.wherever.mobile.feature.plans.ui.PlanGeneratingStep3Preview
+import com.wherever.mobile.feature.plans.ui.PlanReadyPreview
+import com.wherever.mobile.feature.plans.ui.PlanWordPreview
 import com.wherever.mobile.feature.profile.ui.EditProfilePreview
 import com.wherever.mobile.feature.profile.ui.ProfilePreview
 import com.wherever.mobile.feature.reviews.ui.MyReviewsConfirmPreview
@@ -129,7 +134,12 @@ class ScreenshotTest {
         "76_rec_vacio" to { AlbumEmptyPreview() },
         "86_ayuda" to { HelpPreview() },
         "86_ayuda_sin_resultados" to { HelpNoResultsPreview() },
-        "86_ayuda_reportar" to { HelpReportPreview() }
+        "86_ayuda_reportar" to { HelpReportPreview() },
+        "ia_palabra" to { PlanWordPreview() },
+        "17_ajusta_plan" to { PlanAdjustPreview() },
+        "generando_1" to { PlanGeneratingPreview() },
+        "generando_3" to { PlanGeneratingStep3Preview() },
+        "generando_4" to { PlanReadyPreview() }
     )
 
     @Test

@@ -13,8 +13,8 @@ Orden recomendado: de arriba hacia abajo. Cada spec es una rama y un PR. Desde a
 
 ## nv-23 — Crear plan con IA (lo que falta)
 
-- [ ] Revisar contra la spec qué falta de `IAPalabra`, `17_AjustaPlan` y `Generando *` (4 de 6 frames funcionan)
-- [ ] Compuertas una por una en verde
+- [x] Revisar contra la spec qué falta de `IAPalabra`, `17_AjustaPlan` y `Generando *` (4 de 6 frames funcionan)
+- [x] Compuertas una por una en verde
 - [ ] Probada en teléfono o emulador contra staging
 - [ ] PR a `main` integrado (CI en verde y aprobado por Osmar)
 

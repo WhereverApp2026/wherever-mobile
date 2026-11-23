@@ -1,3 +1,19 @@
+# Revisión — 2026-11-22: nv-23 Crear plan con IA (Diego)
+
+> Rama `feat/nv-23-ai-plan` desde `main`. Frames: `IAPalabra` (`331:3`), `17_AjustaPlan` (`189:844`), `Generando 1/4` (`120:3270`), `2/4` (`358:5`), `3/4` (`358:64`), `4/4` (`358:123`). Revisor: Osmar.
+
+## Decisiones tomadas
+- **Base nv-48:** la generación ya funcionaba con `POST /planes/generar`; se rehicieron las pantallas para que sigan los frames del Boceto 2 (antes eran 15_Asistente y la hoja rápida).
+- **D-23a** compañía, paradas (2 a 4) y presupuesto ($, $$, $$$ = hasta 200, 500 o 1000 por persona) viajan en la frase; día y hora en `fecha` (de ahora a 30 días), personas y movilidad en sus campos.
+- **D-23b** sin Room: el borrador no se guarda en el teléfono; Guardar lo manda a `POST /planes`.
+- **D-23c** «Crear plan a mano» no se dibuja hasta nv-24 (`CrearPlan`).
+- **D-23d** «Ver mi plan» abre el plan propuesto (Guardar, Otra idea, Ajustar).
+- **D-23e** caritas de ánimo solo con su consentimiento.
+- **Generando:** los pasos 1 a 3 avanzan cada 1,8 s mientras responde la API; el 4 («¡Plan listo!») llega con la respuesta. Cancelar regresa al formulario de donde se pidió, con lo escrito. Sin red: «No podemos armar planes sin internet». 422: «Prueba ajustarlos» en 17_AjustaPlan.
+- **Gustos:** el aviso de IAPalabra nombra hasta 3 gustos solo si hay gustos y `aprendizaje_personalizado`.
+
+---
+
 # Revisión para Jorge — 2026-11-22 (tarde): PR de Diego, staging y arreglos
 
 ## Decisiones tomadas sin preguntarte

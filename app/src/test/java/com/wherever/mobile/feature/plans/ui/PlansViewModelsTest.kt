@@ -1,10 +1,13 @@
 package com.wherever.mobile.feature.plans.ui
 
 import androidx.lifecycle.SavedStateHandle
+import com.wherever.mobile.R
 import com.wherever.mobile.core.common.AppError
 import com.wherever.mobile.core.common.Result
+import com.wherever.mobile.core.ui.UiText
 import com.wherever.mobile.feature.plans.domain.Mobility
 import com.wherever.mobile.feature.plans.domain.PlansTab
+import com.wherever.mobile.feature.profile.domain.Tastes
 import com.wherever.mobile.testing.FakeLocationProvider
 import com.wherever.mobile.testing.FakePlacesRepository
 import com.wherever.mobile.testing.FakePlanAssistantRepository
@@ -16,11 +19,16 @@ import com.wherever.mobile.testing.sampleDraft
 import com.wherever.mobile.testing.sampleProfile
 import java.time.Clock
 import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -30,7 +38,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
-/** nv-48: plan con IA, hoja rápida y edición del itinerario. */
+/** nv-48 y nv-23: plan con IA (IAPalabra, 17_AjustaPlan y Generando) y edición del itinerario. */
 @OptIn(ExperimentalCoroutinesApi::class)
 class PlansViewModelsTest {
     @get:Rule
@@ -81,16 +89,18 @@ class PlansViewModelsTest {
         assertEquals(4, request.people)
         assertEquals(Mobility.CAR, request.mobility)
         assertNull(request.dateTime)
+        assertEquals(CreatePhase.READY, vm.state.value.phase)
+        vm.showPlan()
         assertEquals(CreatePhase.RESULT, vm.state.value.phase)
     }
 
     @Test
     fun `presupuesto y animo van en la frase solo con consentimiento`() = runTest(mainDispatcher.dispatcher) {
         val vm = create("cena")
-        vm.onBudget(400)
+        vm.onPrice(PriceLevel.MEDIUM)
         vm.onMood(Mood.RELAXED)
 
-        assertEquals("cena, con presupuesto de hasta $400 por persona", vm.buildPhrase(vm.state.value))
+        assertEquals("cena, con presupuesto de hasta $500 por persona", vm.buildPhrase(vm.state.value))
 
         profiles.profile.value = sampleProfile().let { it.copy(privacy = it.privacy.copy(mood = true)) }
         val allowed = create("cena")
@@ -100,12 +110,28 @@ class PlansViewModelsTest {
     }
 
     @Test
-    fun `hoy en la noche y manana dan la hora en la zona del telefono`() = runTest(mainDispatcher.dispatcher) {
+    fun `dia y hora dan la fecha en la zona del telefono`() = runTest(mainDispatcher.dispatcher) {
         val vm = create()
 
-        assertEquals("2026-11-18T20:00:00-06:00", vm.dateTimeFor(PlanWhen.TONIGHT))
-        assertEquals("2026-11-19T14:00:00-06:00", vm.dateTimeFor(PlanWhen.TOMORROW))
-        assertEquals("2026-11-18T14:00:00-06:00", vm.dateTimeFor(PlanWhen.LATER))
+        assertNull(vm.dateTimeFor(null, null))
+        assertEquals("2026-11-18T20:00:00-06:00", vm.dateTimeFor(null, LocalTime.of(20, 0)))
+        assertEquals("2026-11-19T09:00:00-06:00", vm.dateTimeFor(LocalDate.of(2026, 11, 19), null))
+    }
+
+    @Test
+    fun `una hora que ya paso o a mas de 30 dias no deja armar`() = runTest(mainDispatcher.dispatcher) {
+        val vm = create()
+
+        vm.onTime(LocalTime.of(8, 0))
+        assertTrue(vm.state.value.invalidDateTime)
+        assertFalse(vm.state.value.canGenerate)
+
+        vm.onDate(LocalDate.of(2026, 12, 20))
+        assertTrue(vm.state.value.invalidDateTime)
+
+        vm.onDate(LocalDate.of(2026, 11, 20))
+        assertFalse(vm.state.value.invalidDateTime)
+        assertTrue(vm.state.value.canGenerate)
     }
 
     @Test
@@ -118,7 +144,7 @@ class PlansViewModelsTest {
 
         assertTrue(assistant.requests.isEmpty())
         assertTrue(vm.state.value.noLocation)
-        assertEquals(CreatePhase.EDITING, vm.state.value.phase)
+        assertEquals(CreatePhase.WORD, vm.state.value.phase)
     }
 
     @Test
@@ -127,8 +153,10 @@ class PlansViewModelsTest {
         vm.generate()
         advanceUntilIdle()
 
+        vm.showPlan()
         vm.otherIdea()
         advanceUntilIdle()
+        vm.showPlan()
         vm.otherIdea()
         advanceUntilIdle()
 
@@ -155,8 +183,97 @@ class PlansViewModelsTest {
         vm.generate()
         advanceUntilIdle()
 
-        assertEquals(CreatePhase.EDITING, vm.state.value.phase)
+        assertEquals(CreatePhase.WORD, vm.state.value.phase)
         assertNotNull(vm.state.value.error)
+        assertEquals("antojo", vm.state.value.phrase)
+    }
+
+    @Test
+    fun `los pasos avanzan con el tiempo y el cuarto llega con la respuesta`() = runTest(mainDispatcher.dispatcher) {
+        val gate = CompletableDeferred<Unit>()
+        assistant.beforeAnswer = { gate.await() }
+        val vm = create()
+
+        vm.generate()
+        runCurrent()
+        assertEquals(CreatePhase.GENERATING, vm.state.value.phase)
+        assertEquals(0, vm.state.value.step)
+        advanceTimeBy(STEP_MILLIS + 1)
+        assertEquals(1, vm.state.value.step)
+        advanceTimeBy(STEP_MILLIS * 5)
+        assertEquals(2, vm.state.value.step)
+
+        gate.complete(Unit)
+        advanceUntilIdle()
+        assertEquals(CreatePhase.READY, vm.state.value.phase)
+        assertEquals(GENERATING_STEPS - 1, vm.state.value.step)
+    }
+
+    @Test
+    fun `cancelar regresa al formulario de donde se pidio con lo escrito`() = runTest(mainDispatcher.dispatcher) {
+        assistant.beforeAnswer = { CompletableDeferred<Unit>().await() }
+        val vm = create("tacos")
+        vm.adjust()
+        vm.onCompany(Company.COUPLE)
+
+        vm.generate()
+        runCurrent()
+        vm.cancel()
+        advanceUntilIdle()
+
+        assertEquals(CreatePhase.ADJUST, vm.state.value.phase)
+        assertEquals("tacos", vm.state.value.phrase)
+        assertEquals(Company.COUPLE, vm.state.value.company)
+    }
+
+    @Test
+    fun `sin red avisa que no se arman planes sin internet`() = runTest(mainDispatcher.dispatcher) {
+        assistant.generateResult = Result.Failure(AppError.Network)
+        val vm = create()
+
+        vm.generate()
+        advanceUntilIdle()
+
+        assertEquals(UiText.Res(R.string.plan_offline), vm.state.value.error)
+        assertEquals(CreatePhase.WORD, vm.state.value.phase)
+    }
+
+    @Test
+    fun `sin resultados propone ajustar los detalles`() = runTest(mainDispatcher.dispatcher) {
+        assistant.generateResult = Result.Failure(AppError.Validation())
+        val vm = create()
+
+        vm.generate()
+        advanceUntilIdle()
+
+        assertEquals(CreatePhase.ADJUST, vm.state.value.phase)
+        assertEquals(UiText.Res(R.string.plan_no_results), vm.state.value.error)
+    }
+
+    @Test
+    fun `quien va y paradas van en la frase dentro de 2 a 4`() = runTest(mainDispatcher.dispatcher) {
+        val vm = create("tacos")
+        vm.onCompany(Company.FRIENDS)
+        vm.onStops(9)
+        assertEquals(AI_MAX_STOPS, vm.state.value.stops)
+        vm.onStops(1)
+        assertEquals(AI_MIN_STOPS, vm.state.value.stops)
+        vm.onPeople(0)
+        assertEquals(1, vm.state.value.people)
+
+        assertEquals("tacos, con amigos, con 2 paradas", vm.buildPhrase(vm.state.value))
+    }
+
+    @Test
+    fun `los gustos solo se muestran con aprendizaje personalizado`() = runTest(mainDispatcher.dispatcher) {
+        val tastes = Tastes(listOf("cafes", "tacos"), 0, 0, emptyList(), "")
+        profiles.profile.value = sampleProfile(tastes = tastes)
+        assertEquals(listOf("cafes", "tacos"), create().state.value.tastes)
+
+        profiles.profile.value = sampleProfile(tastes = tastes).let {
+            it.copy(privacy = it.privacy.copy(personalizedLearning = false))
+        }
+        assertTrue(create().state.value.tastes.isEmpty())
     }
 
     @Test

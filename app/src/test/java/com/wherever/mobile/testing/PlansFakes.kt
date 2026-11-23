@@ -57,8 +57,12 @@ class FakePlanAssistantRepository : PlanAssistantRepository {
     val requests = mutableListOf<PlanRequest>()
     val excluded = mutableListOf<List<String>>()
 
+    /** Se espera antes de responder: sirve para ver los pasos de Generando y cancelar (nv-23). */
+    var beforeAnswer: suspend () -> Unit = {}
+
     override suspend fun generate(request: PlanRequest): Result<PlanDraft> {
         requests += request
+        beforeAnswer()
         return generateResult
     }
 
