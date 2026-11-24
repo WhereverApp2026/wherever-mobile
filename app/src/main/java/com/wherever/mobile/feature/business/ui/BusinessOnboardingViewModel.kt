@@ -92,7 +92,10 @@ data class OnboardingUiState(
             (draft?.hasProofOfAddress == true || DocumentType.PROOF_OF_ADDRESS in uploadedDocuments)
 
     val hasDataConsent: Boolean
-        get() = dataConsent || draft?.hasIne == true || draft?.hasProofOfAddress == true
+        get() = dataConsent ||
+            uploadedDocuments.isNotEmpty() ||
+            draft?.hasIne == true ||
+            draft?.hasProofOfAddress == true
 
     val clabeValid: Boolean get() = clabe.isEmpty() || isValidClabe(clabe)
 
