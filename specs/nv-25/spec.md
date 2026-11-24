@@ -92,7 +92,7 @@ El bloqueo "Pendiente de backend" ya no aplica para grupos, chat y votaciones (b
 | Crear grupo desde un plan | `POST /grupos` `{plan_id, invitados}` y `PATCH /grupos/{id}` (nombre, `If-Match`) | sí (43_CrearGrupo, 2026-11-23) |
 | Invitar, salir y sacar | `POST /grupos/{id}/integrantes`, `DELETE /grupos/{id}/integrantes/yo` y `/{usuario_id}` | sí (46_Grupo, 43 en modo invitar e InvitarPlan) |
 | Votaciones | `GET /grupos/{id}/votaciones`, `PUT /votaciones/{id}/voto`, `POST /votaciones/{id}/cerrar` | sí (48_Votar, 2026-11-23); crear una votación (`POST /grupos/{id}/votaciones`) queda para el siguiente PR |
-| Punto de encuentro | `PUT/GET /grupos/{id}/punto-encuentro…` | no (D25 mapa) |
+| Punto de encuentro | `PATCH /grupos/{id}/integrantes/yo` `{ubicacion, compartir_ubicacion}`, `GET …/punto-encuentro/sugerido`, `PUT /grupos/{id}/punto-encuentro` `{negocio_id, hora}`, `GET …/punto-encuentro/traslados` (backend nv-69) | sí (47_PuntoMedio, 2026-11-24) |
 | Compartir plan | `POST /planes/{id}/compartir` | ya en nv-24 |
 | Chat 1 a 1 (ChatAmigo) | `POST /conversaciones` `{usuario_id}`, `GET/POST /conversaciones/{id}/mensajes` (`cursor`, `despues_de`, `adjunto` de plan), `POST /conversaciones/{id}/leido` (backend nv-87) | sí (2026-11-24) |
 
@@ -142,5 +142,10 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 
 - **ChatAmigo** ya tiene backend (nv-87, en staging). Se entra con «Mensaje» en el perfil de un amigo. «Invitar a un plan» abre InvitarPlan: invita a la persona al grupo del plan y deja el plan en el chat con su estado (`invitacion`: «Invitación enviada» o «Mariana se unió al plan»). Sin Room (D43): se lee con red, el envío es optimista con `id_cliente` y Reintentar, y un sondeo de 5 s trae lo nuevo con `despues_de`. «Compartir lugar» y las reacciones quedan para después.
 - Los dos chats dibujaban los mensajes pegados arriba cuando eran pocos (`spacedBy` sin `Alignment.Bottom` en la lista invertida); ahora quedan junto al campo de texto.
+
+### Decisiones (2026-11-24, 47_PuntoMedio)
+
+- Con el mapa de osmdroid (D25) ya hay 47_PuntoMedio: se entra desde 46_Grupo («Punto de encuentro»). Compartir mi ubicación pide el permiso en contexto y manda solo la ubicación aproximada (`ACCESS_COARSE_LOCATION`); dura 6 h y la API nunca la devuelve. Con 2 o más personas compartiendo, la API sugiere 3 lugares abiertos cerca del punto medio; se eligen en la lista o en el mapa y «Usar este punto» los fija. Después se ve cuánto tarda cada quien (exacto para mí, rangos para los demás).
+- El punto arrastrable del diseño no se hizo: la API no da el centro (privacidad, nv-69). La hora es la del punto, o la llegada a la primera parada, o las 19:00 del día del plan.
 
 **Estado:** ✅ Aprobada (Jorge, 2026-11-06). 43, 46, 48 e InvitarPlan implementadas el 2026-11-23 (Jorge); falta probarlas contra staging.

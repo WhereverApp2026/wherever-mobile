@@ -10,6 +10,7 @@ import com.wherever.mobile.feature.groups.domain.Group
 import com.wherever.mobile.feature.groups.domain.GroupMember
 import com.wherever.mobile.feature.groups.domain.GroupsRepository
 import com.wherever.mobile.feature.groups.domain.LastMessage
+import com.wherever.mobile.feature.groups.domain.MeetingPoint
 import com.wherever.mobile.feature.groups.domain.MemberStatus
 import com.wherever.mobile.feature.groups.domain.MessageStatus
 import java.time.Clock
@@ -125,11 +126,15 @@ internal fun GroupDto.toGroup() = Group(
             name = member.person?.name.orEmpty(),
             photoUrl = member.person?.photoUrl?.takeIf { it.isNotBlank() },
             organizer = member.role == "organizador",
-            status = MemberStatus.from(member.status)
+            status = MemberStatus.from(member.status),
+            sharesLocation = member.sharesLocation
         )
     },
     lastMessage = lastMessage?.let { LastMessage(it.text, it.authorId, it.date) },
-    updatedAt = updatedAt
+    updatedAt = updatedAt,
+    meetingPoint = meetingPoint?.let {
+        MeetingPoint(it.name, it.lat, it.lng, it.at, it.placeId?.takeIf(String::isNotBlank))
+    }
 )
 
 internal fun MessageDto.toEntity(groupId: String) = GroupMessageEntity(

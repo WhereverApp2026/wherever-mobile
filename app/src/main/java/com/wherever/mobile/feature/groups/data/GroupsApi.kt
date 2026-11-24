@@ -24,7 +24,17 @@ data class GroupMemberDto(
     @SerialName("usuario_id") val userId: String,
     @SerialName("persona") val person: GroupPersonDto? = null,
     @SerialName("rol") val role: String = "integrante",
-    @SerialName("estado") val status: String = "invitado"
+    @SerialName("estado") val status: String = "invitado",
+    @SerialName("comparte_ubicacion") val sharesLocation: Boolean = false
+)
+
+@Serializable
+data class MeetingPointDto(
+    @SerialName("nombre") val name: String = "",
+    @SerialName("lat") val lat: Double = 0.0,
+    @SerialName("lng") val lng: Double = 0.0,
+    @SerialName("hora") val at: String,
+    @SerialName("negocio_id") val placeId: String? = null
 )
 
 @Serializable
@@ -52,7 +62,8 @@ data class GroupDto(
     @SerialName("resumen") val summary: GroupSummaryDto = GroupSummaryDto(),
     @SerialName("integrantes") val members: List<GroupMemberDto> = emptyList(),
     @SerialName("ultimo_mensaje") val lastMessage: LastMessageDto? = null,
-    @SerialName("actualizado_en") val updatedAt: String = ""
+    @SerialName("actualizado_en") val updatedAt: String = "",
+    @SerialName("punto_encuentro") val meetingPoint: MeetingPointDto? = null
 )
 
 @Serializable

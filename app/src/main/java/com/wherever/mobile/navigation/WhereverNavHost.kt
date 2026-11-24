@@ -53,6 +53,7 @@ import com.wherever.mobile.feature.groups.ui.GroupChatRoute as GroupChatScreen
 import com.wherever.mobile.feature.groups.ui.GroupDetailNavigation
 import com.wherever.mobile.feature.groups.ui.GroupDetailRoute as GroupDetailScreen
 import com.wherever.mobile.feature.groups.ui.InvitePlanRoute as InvitePlanScreen
+import com.wherever.mobile.feature.groups.ui.MeetingPointRoute as MeetingPointScreen
 import com.wherever.mobile.feature.groups.ui.MyGroupsRoute as MyGroupsScreen
 import com.wherever.mobile.feature.groups.ui.VoteRoute as VoteScreen
 import com.wherever.mobile.feature.help.ui.HelpRoute as HelpScreen
@@ -448,6 +449,7 @@ fun WhereverNavHost(
                     onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
                     onVotes = { navController.navigateFrom(e, VoteRoute(it)) },
                     onVaca = { navController.navigateFrom(e, VacaRoute(it)) },
+                    onMeetingPoint = { navController.navigateFrom(e, MeetingPointRoute(it)) },
                     onInvite = { plan, group -> navController.navigateFrom(e, CreateGroupRoute(plan, group)) },
                     onGone = { navController.leaveGroup(e) }
                 )
@@ -455,6 +457,9 @@ fun WhereverNavHost(
         }
         composable<VoteRoute> { e ->
             VoteScreen(onBack = { navController.popFrom(e) })
+        }
+        composable<MeetingPointRoute> { e ->
+            MeetingPointScreen(onBack = { navController.popFrom(e) })
         }
         composable<CreateGroupRoute> { e ->
             CreateGroupScreen(

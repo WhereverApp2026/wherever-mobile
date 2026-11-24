@@ -158,6 +158,10 @@ data class StoryRoute(val authorId: String)
 @Serializable
 data class GroupRoute(val id: String)
 
+/** 47_PuntoMedio del grupo; MeetingPointViewModel lee `id` (specs/nv-25). */
+@Serializable
+data class MeetingPointRoute(val id: String)
+
 /** 48_Votar del grupo; VoteViewModel lee `id` (specs/nv-25). */
 @Serializable
 data class VoteRoute(val id: String)

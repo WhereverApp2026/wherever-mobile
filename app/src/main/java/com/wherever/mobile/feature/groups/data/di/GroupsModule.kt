@@ -7,9 +7,12 @@ import com.wherever.mobile.feature.groups.data.GroupMessageDao
 import com.wherever.mobile.feature.groups.data.GroupMessagesCleaner
 import com.wherever.mobile.feature.groups.data.GroupsApi
 import com.wherever.mobile.feature.groups.data.GroupsRepositoryImpl
+import com.wherever.mobile.feature.groups.data.MeetingPointApi
+import com.wherever.mobile.feature.groups.data.MeetingPointRepositoryImpl
 import com.wherever.mobile.feature.groups.data.VotesRepositoryImpl
 import com.wherever.mobile.feature.groups.domain.GroupMembersRepository
 import com.wherever.mobile.feature.groups.domain.GroupsRepository
+import com.wherever.mobile.feature.groups.domain.MeetingPointRepository
 import com.wherever.mobile.feature.groups.domain.VotesRepository
 import dagger.Binds
 import dagger.Module
@@ -32,12 +35,18 @@ abstract class GroupsModule {
     abstract fun bindVotes(impl: VotesRepositoryImpl): VotesRepository
 
     @Binds
+    abstract fun bindMeetingPoint(impl: MeetingPointRepositoryImpl): MeetingPointRepository
+
+    @Binds
     @IntoSet
     abstract fun bindCleaner(impl: GroupMessagesCleaner): SessionCleaner
 
     companion object {
         @Provides
         fun provideApi(retrofit: Retrofit): GroupsApi = retrofit.create(GroupsApi::class.java)
+
+        @Provides
+        fun provideMeetingApi(retrofit: Retrofit): MeetingPointApi = retrofit.create(MeetingPointApi::class.java)
 
         @Provides
         fun provideMessageDao(database: WhereverDatabase): GroupMessageDao = database.groupMessageDao()
