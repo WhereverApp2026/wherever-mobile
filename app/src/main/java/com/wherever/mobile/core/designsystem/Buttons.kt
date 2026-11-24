@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.Sizes
 import com.wherever.mobile.core.designsystem.Spacing
@@ -92,6 +93,7 @@ fun WhereverOutlinedButton(
         shape = CircleShape,
         border = BorderStroke(Strokes.Hairline, borderColor),
         colors = ButtonDefaults.outlinedButtonColors(contentColor = contentColor),
+        contentPadding = PaddingValues(horizontal = Spacing.L, vertical = Spacing.S),
         modifier = modifier.height(ButtonHeight).testTag(tag)
     ) {
         ButtonContent(text, icon)
@@ -113,7 +115,7 @@ fun WhereverGoogleButton(text: String, onClick: () -> Unit, modifier: Modifier =
     ) {
         Image(painterResource(R.drawable.ic_google), contentDescription = null, modifier = Modifier.size(Sizes.IconM))
         Spacer(Modifier.width(Spacing.M))
-        Text(text = text, style = ButtonText)
+        Text(text = text, style = ButtonText, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }
 
@@ -207,6 +209,7 @@ private fun ButtonContent(text: String, icon: ImageVector?) {
             Icon(icon, contentDescription = null, modifier = Modifier.size(Sizes.IconM))
             Spacer(Modifier.width(Spacing.S))
         }
-        Text(text = text, style = ButtonText)
+        // Una sola línea: un botón angosto (p. ej. tres en fila) recorta con puntos y no parte el texto.
+        Text(text = text, style = ButtonText, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }
