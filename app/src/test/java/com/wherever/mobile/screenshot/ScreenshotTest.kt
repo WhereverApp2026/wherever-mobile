@@ -63,6 +63,8 @@ import com.wherever.mobile.feature.groups.ui.GroupChatPreview
 import com.wherever.mobile.feature.groups.ui.GroupDetailPreview
 import com.wherever.mobile.feature.groups.ui.InvitePlanPreview
 import com.wherever.mobile.feature.groups.ui.InviteToGroupPreview
+import com.wherever.mobile.feature.groups.ui.MeetingPointNeedLocationsPreview
+import com.wherever.mobile.feature.groups.ui.MeetingPointPreview
 import com.wherever.mobile.feature.groups.ui.MyGroupsPreview
 import com.wherever.mobile.feature.groups.ui.VotePreview
 import com.wherever.mobile.feature.help.ui.HelpNoResultsPreview
@@ -165,6 +167,8 @@ class ScreenshotTest {
         "44_mis_grupos" to { MyGroupsPreview() },
         "45_grupo_chat" to { GroupChatPreview() },
         "46_grupo" to { GroupDetailPreview() },
+        "47_punto_medio" to { MeetingPointPreview() },
+        "47_punto_medio_faltan" to { MeetingPointNeedLocationsPreview() },
         "32_exp_mapa_tarjeta" to { PlaceMapCardPreview() },
         "17_post_detalle_social" to { MomentSocialPreview() },
         "historias_fila" to { StoriesRowPreview() },

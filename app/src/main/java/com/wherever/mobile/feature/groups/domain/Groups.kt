@@ -20,7 +20,9 @@ data class GroupMember(
     val name: String,
     val photoUrl: String?,
     val organizer: Boolean,
-    val status: MemberStatus
+    val status: MemberStatus,
+    /** Comparte su ubicación con el grupo (47_PuntoMedio); la ubicación nunca llega a la app. */
+    val sharesLocation: Boolean = false
 )
 
 data class LastMessage(val text: String, val authorId: String?, val sentAt: String)
@@ -37,7 +39,8 @@ data class Group(
     val confirmed: Int,
     val members: List<GroupMember>,
     val lastMessage: LastMessage?,
-    val updatedAt: String
+    val updatedAt: String,
+    val meetingPoint: MeetingPoint? = null
 )
 
 enum class MessageStatus { SENT, PENDING, FAILED }

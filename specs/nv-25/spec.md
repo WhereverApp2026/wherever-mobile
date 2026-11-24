@@ -92,7 +92,7 @@ El bloqueo "Pendiente de backend" ya no aplica para grupos, chat y votaciones (b
 | Crear grupo desde un plan | `POST /grupos` `{plan_id, invitados}` y `PATCH /grupos/{id}` (nombre, `If-Match`) | sí (43_CrearGrupo, 2026-11-23) |
 | Invitar, salir y sacar | `POST /grupos/{id}/integrantes`, `DELETE /grupos/{id}/integrantes/yo` y `/{usuario_id}` | sí (46_Grupo, 43 en modo invitar e InvitarPlan) |
 | Votaciones | `GET /grupos/{id}/votaciones`, `PUT /votaciones/{id}/voto`, `POST /votaciones/{id}/cerrar` | sí (48_Votar, 2026-11-23); crear una votación (`POST /grupos/{id}/votaciones`) queda para el siguiente PR |
-| Punto de encuentro | `PUT/GET /grupos/{id}/punto-encuentro…` | no (D25 mapa) |
+| Punto de encuentro | `PATCH /grupos/{id}/integrantes/yo` `{ubicacion, compartir_ubicacion}`, `GET …/punto-encuentro/sugerido`, `PUT /grupos/{id}/punto-encuentro` `{negocio_id, hora}`, `GET …/punto-encuentro/traslados` (backend nv-69) | sí (47_PuntoMedio, 2026-11-24) |
 | Compartir plan | `POST /planes/{id}/compartir` | ya en nv-24 |
 | Chat 1 a 1 (ChatAmigo) | — | **no existe en el backend**: no se dibuja (constitución §2.7) |
 
@@ -137,5 +137,10 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 - **43_CrearGrupo:** el nombre es opcional y se pone con `PATCH` después de crear; si falla, el grupo ya existe y se renombra en 46. Hasta 11 amigos menos quienes ya están. Entrada: «Invitar amigos» en 39_Plan.
 - **48_Votar:** el reloj se inyecta; una votación vencida según el teléfono ya no deja votar aunque la API aún no la cierre. Un 409 (cerrada) avisa y recarga.
 - **ChatAmigo** sigue sin dibujarse: no hay chat 1 a 1 en el backend. **42_Compartir** ya existe como compartir del sistema en 39_Plan (nv-24).
+
+### Decisiones (2026-11-24, 47_PuntoMedio)
+
+- Con el mapa de osmdroid (D25) ya hay 47_PuntoMedio: se entra desde 46_Grupo («Punto de encuentro»). Compartir mi ubicación pide el permiso en contexto y manda solo la ubicación aproximada (`ACCESS_COARSE_LOCATION`); dura 6 h y la API nunca la devuelve. Con 2 o más personas compartiendo, la API sugiere 3 lugares abiertos cerca del punto medio; se eligen en la lista o en el mapa y «Usar este punto» los fija. Después se ve cuánto tarda cada quien (exacto para mí, rangos para los demás).
+- El punto arrastrable del diseño no se hizo: la API no da el centro (privacidad, nv-69). La hora es la del punto, o la llegada a la primera parada, o las 19:00 del día del plan.
 
 **Estado:** ✅ Aprobada (Jorge, 2026-11-06). 43, 46, 48 e InvitarPlan implementadas el 2026-11-23 (Jorge); falta probarlas contra staging.

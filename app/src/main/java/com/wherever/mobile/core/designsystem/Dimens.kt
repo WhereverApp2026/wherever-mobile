@@ -122,6 +122,9 @@ object Sizes {
     val ThumbnailL: Dp = 72.dp
     val CardImage: Dp = 132.dp
     val HeroImage: Dp = 240.dp
+
+    /** Mapa dentro de una pantalla con más contenido (47_PuntoMedio). */
+    val MapPreview: Dp = 220.dp
     val BadgeL: Dp = 64.dp
     val GalleryPhotoWidth: Dp = 300.dp
     val EventCardWidth: Dp = 240.dp

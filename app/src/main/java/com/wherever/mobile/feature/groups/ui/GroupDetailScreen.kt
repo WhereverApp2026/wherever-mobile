@@ -59,6 +59,8 @@ data class GroupDetailNavigation(
     val onPlan: (String) -> Unit = {},
     val onVotes: (String) -> Unit = {},
     val onVaca: (String) -> Unit = {},
+    /** 47_PuntoMedio. */
+    val onMeetingPoint: (String) -> Unit = {},
     /** 43_CrearGrupo en modo invitar: plan y grupo. */
     val onInvite: (planId: String, groupId: String) -> Unit = { _, _ -> },
     val onGone: () -> Unit = {}
@@ -183,6 +185,12 @@ internal fun GroupDetailContent(
                     title = stringResource(R.string.vaca_title),
                     onClick = { navigation.onVaca(group.id) },
                     tag = "group_vaca"
+                )
+                NavRow(
+                    title = stringResource(R.string.meeting_title),
+                    onClick = { navigation.onMeetingPoint(group.id) },
+                    value = group.meetingPoint?.name,
+                    tag = "group_meeting_point"
                 )
             }
         }

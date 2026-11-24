@@ -42,6 +42,7 @@
 | `FriendsRoute` | Amigos: lista, solicitudes recibidas y enviadas | ninguno | release | nv-53 |
 | `MyGroupsRoute` | Mis grupos: grupos por actividad, aceptar o rechazar la invitación | ninguno | release | nv-25 |
 | `GroupChatRoute(id)` | Chat del grupo con plan fijado, envío optimista y lectura sin red | ninguno | release | nv-25 |
+| `MeetingPointRoute(id)` | 47_PuntoMedio: compartir mi ubicación aproximada, puntos medios sugeridos en el mapa, fijar el punto y cuánto tarda cada quien | ubicación aproximada (en contexto, opcional) | release | nv-25 |
 | `ExploreMapRoute` | 32_ExpMapa: lugares en el mapa (osmdroid), Buscar en esta zona, filtros, Ver detalle y A mi plan | ubicación aproximada (opcional, solo para centrar) | release | nv-21 |
 | `StoryRoute(authorId)` | Visor de historias de amigos (24 h), con avance automático y «Ver publicación» | ninguno | release | nv-17 |
 | `GroupRoute(id)` | 46_Grupo: integrantes, plan, votaciones y La vaca; el organizador invita, renombra y saca | ninguno | release | nv-25 |
