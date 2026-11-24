@@ -115,6 +115,13 @@ class MomentSocialIntegrationTest {
     }
 
     @Test
+    fun `la ultima pagina de comentarios trae cursor vacio y queda sin cursor`() = runTest {
+        server.reply(200, """{"items":[],"siguiente_cursor":"","limite":20}""")
+        val page = (repository.comments("m1", null) as Result.Success).data
+        assertNull(page.nextCursor)
+    }
+
+    @Test
     fun `historias por persona sin las vacias`() = runTest {
         server.reply(
             200,

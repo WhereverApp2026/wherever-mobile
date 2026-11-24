@@ -3,6 +3,7 @@ package com.wherever.mobile.feature.feed.ui
 import androidx.lifecycle.SavedStateHandle
 import com.wherever.mobile.R
 import com.wherever.mobile.core.common.AppError
+import com.wherever.mobile.core.common.FieldError
 import com.wherever.mobile.core.common.PageResult
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.ui.UiText
@@ -131,10 +132,12 @@ class MomentSocialViewModelsTest {
         assertTrue("add:Gracias:c1" in social.calls)
         assertEquals(1, vm.state.value.comments.first().replies.size)
         assertNull(vm.state.value.replyTo)
+        assertEquals("el conteo sube con cada comentario", 2, vm.state.value.commentsDelta)
 
         vm.delete(vm.state.value.comments.last())
         advanceUntilIdle()
         assertEquals(listOf("c1"), vm.state.value.comments.map { it.id })
+        assertEquals("y baja al borrar", 1, vm.state.value.commentsDelta)
         assertEquals(UiText.Res(R.string.comment_deleted), vm.state.value.message)
     }
 
@@ -148,6 +151,21 @@ class MomentSocialViewModelsTest {
         vm.send()
         advanceUntilIdle()
         assertEquals(UiText.Res(R.string.comment_in_review), vm.state.value.message)
+    }
+
+    @Test
+    fun `si la API rechaza el texto muestra su motivo y no cuenta el comentario`() = runTest {
+        social.addResult = Result.Failure(
+            AppError.Validation(listOf(FieldError("texto", "el texto no cumple las normas de la comunidad")))
+        )
+        val vm = vm()
+        advanceUntilIdle()
+        vm.onDraft("Si verdad")
+        vm.send()
+        advanceUntilIdle()
+        assertEquals(UiText.Plain("El texto no cumple las normas de la comunidad"), vm.state.value.error)
+        assertEquals(0, vm.state.value.commentsDelta)
+        assertEquals("Si verdad", vm.state.value.draft)
     }
 
     @Test

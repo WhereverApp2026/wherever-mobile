@@ -166,7 +166,8 @@ class MomentSocialRepositoryImpl @Inject constructor(private val api: MomentSoci
 
     override suspend fun comments(momentId: String, cursor: String?): Result<PageResult<Comment>> = safeApiCall {
         val page = api.comments(momentId, cursor)
-        PageResult(page.items.map { it.toDomain() }, page.nextCursor)
+        // La API manda `siguiente_cursor: ""` en la última página: sin cursor no hay «Ver más».
+        PageResult(page.items.map { it.toDomain() }, page.nextCursor?.takeIf(String::isNotBlank))
     }
 
     override suspend fun addComment(momentId: String, text: String, parentId: String?): Result<Comment> =

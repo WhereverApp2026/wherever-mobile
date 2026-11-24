@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.wherever.mobile.R
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.ui.UiText
+import com.wherever.mobile.core.ui.fieldErrors
 import com.wherever.mobile.core.ui.toUiText
 import com.wherever.mobile.feature.feed.domain.Comment
 import com.wherever.mobile.feature.feed.domain.CommentState
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 
 /** Límite de la API para un comentario (backend nv-83). */
 const val MAX_COMMENT = 300
+private const val TEXT_FIELD = "texto"
 
 /** La hoja 13_Reacciones abierta en una pestaña. */
 data class ReactionsSheet(
@@ -40,6 +42,8 @@ data class MomentSocialUiState(
     val commentsLoading: Boolean = true,
     val commentsCursor: String? = null,
     val commentsError: UiText? = null,
+    /** Lo que cambió el conteo de comentarios del momento desde que se abrió (agregados − borrados). */
+    val commentsDelta: Int = 0,
     val draft: String = "",
     val replyTo: Comment? = null,
     val sending: Boolean = false,
@@ -149,13 +153,18 @@ class MomentSocialViewModel @Inject constructor(
                         draft = "",
                         replyTo = null,
                         comments = it.comments.withComment(result.data),
+                        commentsDelta = it.commentsDelta + 1,
                         message = if (result.data.state == CommentState.IN_MODERATION) {
                             UiText.Res(R.string.comment_in_review)
                         } else {
                             null
                         }
                     )
-                    is Result.Failure -> it.copy(sending = false, error = result.error.toUiText())
+                    // La API explica en `campos[texto]` por qué no aceptó el texto (p. ej. normas de la comunidad).
+                    is Result.Failure -> it.copy(
+                        sending = false,
+                        error = result.error.fieldErrors()[TEXT_FIELD] ?: result.error.toUiText()
+                    )
                 }
             }
         }
@@ -166,7 +175,11 @@ class MomentSocialViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = social.deleteComment(comment.id)) {
                 is Result.Success -> mutableState.update {
-                    it.copy(comments = it.comments.without(comment.id), message = UiText.Res(R.string.comment_deleted))
+                    it.copy(
+                        comments = it.comments.without(comment.id),
+                        commentsDelta = it.commentsDelta - 1,
+                        message = UiText.Res(R.string.comment_deleted)
+                    )
                 }
                 is Result.Failure -> mutableState.update { it.copy(error = result.error.toUiText()) }
             }

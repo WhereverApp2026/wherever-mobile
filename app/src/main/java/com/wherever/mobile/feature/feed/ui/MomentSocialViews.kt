@@ -46,6 +46,7 @@ import com.wherever.mobile.feature.profile.ui.ProfileAvatar
 @Composable
 internal fun LikeBar(state: MomentSocialUiState, comments: Int, actions: MomentSocialActions) {
     val likes = state.likes ?: 0
+    val commentCount = (comments + state.commentsDelta).coerceAtLeast(0)
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
         WhereverIconButton(onClick = actions.onLike, modifier = Modifier.testTag("moment_like")) {
             Icon(
@@ -71,7 +72,7 @@ internal fun LikeBar(state: MomentSocialUiState, comments: Int, actions: MomentS
                 modifier = Modifier.padding(start = Spacing.S)
             )
             Text(
-                pluralStringResource(R.plurals.moment_comments, comments, comments),
+                pluralStringResource(R.plurals.moment_comments, commentCount, commentCount),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
