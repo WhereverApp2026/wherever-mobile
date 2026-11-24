@@ -256,6 +256,7 @@ Las dudas siguen abiertas hasta que diseño o backend las confirmen. Mientras ta
 - **D40 · Tema que no cambia, intermitente.** Al elegir Oscuro, el `PATCH /usuarios/yo/preferencias` respondió 200 y la app siguió en Claro. Pasó 1 de 8 veces y no se reprodujo. Hipótesis sin confirmar: el `GET /usuarios/yo` posterior devolvió el valor anterior y sobrescribió Room. Falta saber si staging puede leer un valor viejo justo después de escribir.
 - **D41 · Pesos de fuente en Xiaomi.** En un Xiaomi 2311DRK48G con Android 16, títulos y botones se vieron sin negrita; en el Samsung sí salen bien. No se sabe si es la configuración de ese teléfono o algo general de HyperOS. No se corrigió y falta repetir la prueba allí.
 - **D42 · Fecha de nacimiento y accesibilidad.** La capa que abre el selector oculta el valor del campo en el árbol de accesibilidad. Falta probarlo con TalkBack.
+- **D43 · ChatAmigo sin Room.** Los mensajes directos se leen con red y viven en memoria mientras la pantalla está abierta; no hay tabla ni migración. Porqué: el backend acaba de abrir `/conversaciones` (nv-87) y la lectura sin red de los chats ya la cubre el chat de grupo. Si se pide leer los directos sin red, se agrega una tabla como `group_messages`.
 
 ### Afectan al Sprint 1 (3 al 16 nov 2026)
 

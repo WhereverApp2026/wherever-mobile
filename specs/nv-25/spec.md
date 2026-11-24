@@ -94,7 +94,7 @@ El bloqueo "Pendiente de backend" ya no aplica para grupos, chat y votaciones (b
 | Votaciones | `GET /grupos/{id}/votaciones`, `PUT /votaciones/{id}/voto`, `POST /votaciones/{id}/cerrar` | sí (48_Votar, 2026-11-23); crear una votación (`POST /grupos/{id}/votaciones`) queda para el siguiente PR |
 | Punto de encuentro | `PUT/GET /grupos/{id}/punto-encuentro…` | no (D25 mapa) |
 | Compartir plan | `POST /planes/{id}/compartir` | ya en nv-24 |
-| Chat 1 a 1 (ChatAmigo) | — | **no existe en el backend**: no se dibuja (constitución §2.7) |
+| Chat 1 a 1 (ChatAmigo) | `POST /conversaciones` `{usuario_id}`, `GET/POST /conversaciones/{id}/mensajes` (`cursor`, `despues_de`, `adjunto` de plan), `POST /conversaciones/{id}/leido` (backend nv-87) | sí (2026-11-24) |
 
 ### Decisiones (2026-11-21)
 
@@ -137,5 +137,10 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 - **43_CrearGrupo:** el nombre es opcional y se pone con `PATCH` después de crear; si falla, el grupo ya existe y se renombra en 46. Hasta 11 amigos menos quienes ya están. Entrada: «Invitar amigos» en 39_Plan.
 - **48_Votar:** el reloj se inyecta; una votación vencida según el teléfono ya no deja votar aunque la API aún no la cierre. Un 409 (cerrada) avisa y recarga.
 - **ChatAmigo** sigue sin dibujarse: no hay chat 1 a 1 en el backend. **42_Compartir** ya existe como compartir del sistema en 39_Plan (nv-24).
+
+### Decisiones (2026-11-24)
+
+- **ChatAmigo** ya tiene backend (nv-87, en staging). Se entra con «Mensaje» en el perfil de un amigo. «Invitar a un plan» abre InvitarPlan: invita a la persona al grupo del plan y deja el plan en el chat con su estado (`invitacion`: «Invitación enviada» o «Mariana se unió al plan»). Sin Room (D43): se lee con red, el envío es optimista con `id_cliente` y Reintentar, y un sondeo de 5 s trae lo nuevo con `despues_de`. «Compartir lugar» y las reacciones quedan para después.
+- Los dos chats dibujaban los mensajes pegados arriba cuando eran pocos (`spacedBy` sin `Alignment.Bottom` en la lista invertida); ahora quedan junto al campo de texto.
 
 **Estado:** ✅ Aprobada (Jorge, 2026-11-06). 43, 46, 48 e InvitarPlan implementadas el 2026-11-23 (Jorge); falta probarlas contra staging.

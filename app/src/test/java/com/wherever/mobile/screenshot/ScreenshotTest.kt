@@ -48,6 +48,8 @@ import com.wherever.mobile.feature.business.ui.ReviewReplyPreview
 import com.wherever.mobile.feature.business.ui.TaxDataPreview
 import com.wherever.mobile.feature.checkin.ui.ArrivalOkPreview
 import com.wherever.mobile.feature.checkin.ui.ArrivalPermissionPreview
+import com.wherever.mobile.feature.directchat.ui.DirectChatJoinedPreview
+import com.wherever.mobile.feature.directchat.ui.DirectChatPreview
 import com.wherever.mobile.feature.feed.ui.FriendPlanPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedEmptyPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedPreview
@@ -177,6 +179,8 @@ class ScreenshotTest {
         "43_crear_grupo" to { CreateGroupPreview() },
         "invitar_al_grupo" to { InviteToGroupPreview() },
         "invitar_plan" to { InvitePlanPreview() },
+        "chat_amigo" to { DirectChatPreview() },
+        "chat_amigo_se_unio" to { DirectChatJoinedPreview() },
         "25_mi_codigo_escanear" to { MyCodeScanPreview() },
         "89_sin_conexion" to { OfflinePreview() },
         "89_sin_conexion_aviso" to { OfflineNoticePreview() },

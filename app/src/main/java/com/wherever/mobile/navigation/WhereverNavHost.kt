@@ -37,6 +37,7 @@ import com.wherever.mobile.feature.business.ui.BusinessOnboardingRoute as Busine
 import com.wherever.mobile.feature.business.ui.OnboardingNavigation
 import com.wherever.mobile.feature.checkin.ui.ArrivalNavigation
 import com.wherever.mobile.feature.checkin.ui.ArrivalRoute as ArrivalScreen
+import com.wherever.mobile.feature.directchat.ui.DirectChatRoute as DirectChatScreen
 import com.wherever.mobile.feature.feed.ui.FriendPlanNavigation
 import com.wherever.mobile.feature.feed.ui.FriendPlanRoute as FriendPlanScreen
 import com.wherever.mobile.feature.feed.ui.MomentDetailRoute
@@ -470,7 +471,18 @@ fun WhereverNavHost(
                     navController.navigateFrom(e, GroupChatRoute(groupId)) {
                         popUpTo<InvitePlanRoute> { inclusive = true }
                     }
-                }
+                },
+                onShared = { navController.popOnResult(e) }
+            )
+        }
+        composable<DirectChatRoute> { e ->
+            DirectChatScreen(
+                onBack = { navController.popFrom(e) },
+                onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
+                onInvitePlan = { id, name, conversation ->
+                    navController.navigateFrom(e, InvitePlanRoute(id, name, conversation))
+                },
+                onGone = { navController.popOnResult(e) }
             )
         }
         composable<VacaRoute> { e ->
@@ -529,7 +541,8 @@ fun WhereverNavHost(
             PersonScreen(
                 onBack = { navController.popFrom(e) },
                 onBlocked = { navController.popOnResult(e) },
-                onInvitePlan = { id, name -> navController.navigateFrom(e, InvitePlanRoute(id, name)) }
+                onInvitePlan = { id, name -> navController.navigateFrom(e, InvitePlanRoute(id, name)) },
+                onMessage = { id, name -> navController.navigateFrom(e, DirectChatRoute(id, name)) }
             )
         }
         composable<ProfileRoute> { e ->

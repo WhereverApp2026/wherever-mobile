@@ -1562,6 +1562,14 @@
     <string name="invite_plan_sent">Listo, %1$s ya tiene tu invitación.</string>
     <string name="invite_plan_open_group">Ir al grupo</string>
     <string name="person_invite_plan">Invitar a un plan</string>
+    <string name="person_message">Mensaje</string>
+    <string name="direct_chat_empty">Aún no hay mensajes. Saluda a %1$s.</string>
+    <string name="direct_chat_plan">Plan</string>
+    <string name="direct_chat_invite_text">¡Te invito a este plan!</string>
+    <string name="direct_chat_invite_sent">Invitación enviada</string>
+    <string name="direct_chat_invite_received">Te invitó a este plan</string>
+    <string name="direct_chat_invite_joined">%1$s se unió al plan</string>
+    <string name="direct_chat_invite_you_joined">Ya estás en este plan</string>
     <string name="plan_invite_friends">Invitar amigos</string>
     <!-- Integridad del dispositivo (constitución §6) -->
     <string name="integrity_blocked_title">No podemos abrir Wherever en este teléfono</string>
