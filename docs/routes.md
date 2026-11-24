@@ -47,7 +47,8 @@
 | `GroupRoute(id)` | 46_Grupo: integrantes, plan, votaciones y La vaca; el organizador invita, renombra y saca | ninguno | release | nv-25 |
 | `VoteRoute(id)` | 48_Votar: votaciones del grupo, un voto por persona y cierre del organizador | ninguno | release | nv-25 |
 | `CreateGroupRoute(planId, groupId)` | 43_CrearGrupo: grupo del plan con hasta 11 amigos, o invitar a más (`groupId`) | ninguno | release | nv-25 |
-| `InvitePlanRoute(personId, personName)` | InvitarPlan: invitar a un amigo a uno de mis próximos planes | ninguno | release | nv-25 |
+| `InvitePlanRoute(personId, personName, conversationId)` | InvitarPlan: invitar a un amigo a uno de mis próximos planes; desde ChatAmigo el plan queda compartido en el chat | ninguno | release | nv-25 |
+| `DirectChatRoute(personId, personName)` | ChatAmigo: chat 1 a 1 con un amigo, Invitar a un plan y tarjeta del plan con su invitación | ninguno | release | nv-25 |
 | `VacaRoute(id)` | La Vaca virtual del grupo: total, quién pagó y quién debe a quién (28_Vaca y variantes) | ninguno | release | nv-26 |
 | `AddExpenseRoute(id, mode)` | Agregar gasto en partes iguales o personalizado (45_AgregarGasto) | ninguno | release | nv-26 |
 | `AddFriendRoute` | Agregar amigos: buscar, código, sugerencias y mi usuario | ninguno | release | nv-53 |

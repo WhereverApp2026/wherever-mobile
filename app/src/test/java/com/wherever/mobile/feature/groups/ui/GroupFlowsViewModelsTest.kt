@@ -11,6 +11,7 @@ import com.wherever.mobile.feature.friends.domain.FriendshipPage
 import com.wherever.mobile.feature.friends.domain.Person
 import com.wherever.mobile.feature.groups.domain.GroupMember
 import com.wherever.mobile.feature.groups.domain.MemberStatus
+import com.wherever.mobile.testing.FakeDirectChatRepository
 import com.wherever.mobile.testing.FakeFriendsRepository
 import com.wherever.mobile.testing.FakeGroupsRepository
 import com.wherever.mobile.testing.FakePlansRepository
@@ -247,7 +248,8 @@ class GroupFlowsViewModelsTest {
         val vm = InvitePlanViewModel(
             SavedStateHandle(mapOf("personId" to "u7", "personName" to "Mariana")),
             groups,
-            plans
+            plans,
+            FakeDirectChatRepository()
         )
         advanceUntilIdle()
         assertEquals("Mariana", vm.state.value.personName)
@@ -266,12 +268,51 @@ class GroupFlowsViewModelsTest {
     @Test
     fun `invitar a un plan muestra el error de la API`() = runTest {
         groups.inviteResult = Result.Failure(AppError.Conflict("El grupo ya está lleno"))
-        val vm = InvitePlanViewModel(SavedStateHandle(mapOf("personId" to "u7")), groups, plans)
+        val vm =
+            InvitePlanViewModel(SavedStateHandle(mapOf("personId" to "u7")), groups, plans, FakeDirectChatRepository())
         advanceUntilIdle()
         vm.select("plan1")
         vm.send()
         advanceUntilIdle()
         assertEquals(UiText.Plain("El grupo ya está lleno"), vm.state.value.error)
         assertNull(vm.state.value.sentToGroup)
+    }
+
+    @Test
+    fun `desde ChatAmigo invita y comparte el plan en el chat`() = runTest {
+        val chats = FakeDirectChatRepository()
+        val vm = InvitePlanViewModel(
+            SavedStateHandle(mapOf("personId" to "u7", "conversationId" to "c1")),
+            groups,
+            plans,
+            chats
+        )
+        advanceUntilIdle()
+        vm.select("plan1")
+        vm.send("¡Te invito a este plan!")
+        advanceUntilIdle()
+
+        assertEquals(listOf("inviteToPlan:plan1:u7"), groups.calls)
+        assertEquals(listOf("send:c1:¡Te invito a este plan!:plan1"), chats.calls)
+        assertTrue(vm.state.value.sharedInChat)
+    }
+
+    @Test
+    fun `si el mensaje del chat falla la invitacion queda con Ir al grupo`() = runTest {
+        val chats = FakeDirectChatRepository().apply { sendResult = { _, _ -> Result.Failure(AppError.Network) } }
+        val vm = InvitePlanViewModel(
+            SavedStateHandle(mapOf("personId" to "u7", "conversationId" to "c1")),
+            groups,
+            plans,
+            chats
+        )
+        advanceUntilIdle()
+        vm.select("plan1")
+        vm.send("Hola")
+        advanceUntilIdle()
+
+        assertFalse(vm.state.value.sharedInChat)
+        assertEquals("g9", vm.state.value.sentToGroup)
+        assertTrue(vm.state.value.error != null)
     }
 }
