@@ -37,6 +37,7 @@ import com.wherever.mobile.feature.business.ui.BusinessOnboardingRoute as Busine
 import com.wherever.mobile.feature.business.ui.OnboardingNavigation
 import com.wherever.mobile.feature.checkin.ui.ArrivalNavigation
 import com.wherever.mobile.feature.checkin.ui.ArrivalRoute as ArrivalScreen
+import com.wherever.mobile.feature.directchat.ui.DirectChatRoute as DirectChatScreen
 import com.wherever.mobile.feature.feed.ui.FriendPlanNavigation
 import com.wherever.mobile.feature.feed.ui.FriendPlanRoute as FriendPlanScreen
 import com.wherever.mobile.feature.feed.ui.MomentDetailRoute
@@ -71,6 +72,7 @@ import com.wherever.mobile.feature.places.ui.ExploreMapRoute as ExploreMapScreen
 import com.wherever.mobile.feature.places.ui.ExploreRoute as ExploreScreen
 import com.wherever.mobile.feature.places.ui.FavoritesRoute as FavoritesScreen
 import com.wherever.mobile.feature.places.ui.PlaceDetailRoute as PlaceDetailScreen
+import com.wherever.mobile.feature.places.ui.SealRoute as SealScreen
 import com.wherever.mobile.feature.plans.ui.CreatePlanRoute as CreatePlanScreen
 import com.wherever.mobile.feature.plans.ui.ManualPlanRoute as ManualPlanScreen
 import com.wherever.mobile.feature.plans.ui.MyPlansRoute as MyPlansScreen
@@ -303,7 +305,15 @@ fun WhereverNavHost(
             PlaceDetailScreen(
                 onBack = { navController.popFrom(e) },
                 onReserve = { id, name -> navController.navigateFrom(e, ReserveRoute(id, name)) },
-                onReviews = { id, name -> navController.navigateFrom(e, PlaceReviewsRoute(id, name)) }
+                onReviews = { id, name -> navController.navigateFrom(e, PlaceReviewsRoute(id, name)) },
+                onSeal = { navController.navigateFrom(e, SealRoute) }
+            )
+        }
+        composable<SealRoute> { e ->
+            SealScreen(
+                onBack = { navController.popFrom(e) },
+                onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "busqueda")) },
+                onSeeAll = { navController.navigateFrom(e, ExploreRoute(seal = true)) }
             )
         }
         composable<PlaceReviewsRoute> { e -> PlaceReviewsScreen(onBack = { navController.popFrom(e) }) }
@@ -466,7 +476,18 @@ fun WhereverNavHost(
                     navController.navigateFrom(e, GroupChatRoute(groupId)) {
                         popUpTo<InvitePlanRoute> { inclusive = true }
                     }
-                }
+                },
+                onShared = { navController.popOnResult(e) }
+            )
+        }
+        composable<DirectChatRoute> { e ->
+            DirectChatScreen(
+                onBack = { navController.popFrom(e) },
+                onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
+                onInvitePlan = { id, name, conversation ->
+                    navController.navigateFrom(e, InvitePlanRoute(id, name, conversation))
+                },
+                onGone = { navController.popOnResult(e) }
             )
         }
         composable<VacaRoute> { e ->
@@ -525,7 +546,8 @@ fun WhereverNavHost(
             PersonScreen(
                 onBack = { navController.popFrom(e) },
                 onBlocked = { navController.popOnResult(e) },
-                onInvitePlan = { id, name -> navController.navigateFrom(e, InvitePlanRoute(id, name)) }
+                onInvitePlan = { id, name -> navController.navigateFrom(e, InvitePlanRoute(id, name)) },
+                onMessage = { id, name -> navController.navigateFrom(e, DirectChatRoute(id, name)) }
             )
         }
         composable<ProfileRoute> { e ->

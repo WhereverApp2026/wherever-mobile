@@ -38,6 +38,7 @@ import com.wherever.mobile.core.designsystem.Radius
 import com.wherever.mobile.core.designsystem.RouteBlueTint
 import com.wherever.mobile.core.designsystem.Sizes
 import com.wherever.mobile.core.designsystem.Spacing
+import com.wherever.mobile.core.designsystem.StatusPill
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.feature.places.domain.PlaceCard
 import java.util.Locale
@@ -158,6 +159,7 @@ fun PlaceCardItem(
             )
             PlaceMetaLine(place.category, place.priceLevel, place.distanceMeters, place.openNow)
             RatingRow(place.rating, place.reviews)
+            if (place.seal) StatusPill(stringResource(R.string.place_seal), modifier = Modifier.testTag("place_seal"))
             extra?.invoke()
         }
     }

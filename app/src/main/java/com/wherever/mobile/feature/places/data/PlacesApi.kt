@@ -18,6 +18,7 @@ interface PlacesApi {
         @Query("categoria") category: String?,
         @Query("precio_max") maxPriceLevel: Int?,
         @Query("abierto_ahora") openNow: Boolean?,
+        @Query("con_sello") seal: Boolean?,
         @Query("lat") lat: Double?,
         @Query("lng") lng: Double?,
         @Query("radio_m") radiusMeters: Int?,

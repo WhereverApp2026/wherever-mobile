@@ -148,7 +148,19 @@ class PlacesIntegrationTest {
         val url = server.takeRequest().url
         assertNull(url.queryParameter("radio_m"))
         assertNull(url.queryParameter("abierto_ahora"))
+        assertNull(url.queryParameter("con_sello"))
         assertNull(page.nextCursor)
+    }
+
+    @Test
+    fun `con Sello manda con_sello y la tarjeta trae sello_excelencia`() = runTest {
+        val sealed = card.replace("\"abierto_ahora\":true", "\"abierto_ahora\":true,\"sello_excelencia\":true")
+        server.reply(200, """{"items":[$sealed],"siguiente_cursor":"","limite":20}""")
+
+        val page = (places.list(PlaceFilters(seal = true), TEST_POINT, cursor = null) as Result.Success).data
+
+        assertEquals("true", server.takeRequest().url.queryParameter("con_sello"))
+        assertTrue(page.items.single().seal)
     }
 
     @Test

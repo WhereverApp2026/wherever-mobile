@@ -80,11 +80,15 @@ data object DeletionPendingRoute
 
 /** `query` y `category` los lee ExploreViewModel de SavedStateHandle por su nombre. */
 @Serializable
-data class ExploreRoute(val query: String = "", val category: String = "")
+data class ExploreRoute(val query: String = "", val category: String = "", val seal: Boolean = false)
 
 /** `id` y `origin` (busqueda, inicio, mapa, plan_ia o cupon) los lee PlaceDetailViewModel. */
 @Serializable
 data class PlaceRoute(val id: String, val origin: String = "")
+
+/** 34_Sello: qué es el Sello de Excelencia y los negocios con Sello cerca (specs/nv-21). */
+@Serializable
+data object SealRoute
 
 @Serializable
 data object FavoritesRoute
@@ -166,9 +170,13 @@ data class VoteRoute(val id: String)
 @Serializable
 data class CreateGroupRoute(val planId: String, val groupId: String = "")
 
-/** InvitarPlan: invitar a un amigo a uno de mis planes (specs/nv-25). */
+/** InvitarPlan a uno de mis planes; con `conversationId` el plan queda compartido en ChatAmigo (specs/nv-25). */
 @Serializable
-data class InvitePlanRoute(val personId: String, val personName: String = "")
+data class InvitePlanRoute(val personId: String, val personName: String = "", val conversationId: String = "")
+
+/** ChatAmigo: chat 1 a 1 con un amigo; DirectChatViewModel lee `personId` y `personName` (specs/nv-25). */
+@Serializable
+data class DirectChatRoute(val personId: String, val personName: String = "")
 
 /** 28_Vaca del grupo; VacaViewModel lee `id` (specs/nv-26). */
 @Serializable

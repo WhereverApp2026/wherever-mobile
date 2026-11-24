@@ -48,6 +48,8 @@ import com.wherever.mobile.feature.business.ui.ReviewReplyPreview
 import com.wherever.mobile.feature.business.ui.TaxDataPreview
 import com.wherever.mobile.feature.checkin.ui.ArrivalOkPreview
 import com.wherever.mobile.feature.checkin.ui.ArrivalPermissionPreview
+import com.wherever.mobile.feature.directchat.ui.DirectChatJoinedPreview
+import com.wherever.mobile.feature.directchat.ui.DirectChatPreview
 import com.wherever.mobile.feature.feed.ui.FriendPlanPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedEmptyPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedPreview
@@ -82,6 +84,8 @@ import com.wherever.mobile.feature.memories.ui.PostcardDetailPreview
 import com.wherever.mobile.feature.memories.ui.PostcardEditorPreview
 import com.wherever.mobile.feature.memories.ui.PostcardGonePreview
 import com.wherever.mobile.feature.places.ui.PlaceMapCardPreview
+import com.wherever.mobile.feature.places.ui.SealEmptyPreview
+import com.wherever.mobile.feature.places.ui.SealPreview
 import com.wherever.mobile.feature.plans.ui.ManualPlanPreview
 import com.wherever.mobile.feature.plans.ui.PlanAddStopPreview
 import com.wherever.mobile.feature.plans.ui.PlanAdjustPreview
@@ -170,6 +174,8 @@ class ScreenshotTest {
         "47_punto_medio" to { MeetingPointPreview() },
         "47_punto_medio_faltan" to { MeetingPointNeedLocationsPreview() },
         "32_exp_mapa_tarjeta" to { PlaceMapCardPreview() },
+        "34_sello" to { SealPreview() },
+        "34_sello_vacio" to { SealEmptyPreview() },
         "17_post_detalle_social" to { MomentSocialPreview() },
         "historias_fila" to { StoriesRowPreview() },
         "historias_visor" to { StoryViewerPreview() },
@@ -177,6 +183,8 @@ class ScreenshotTest {
         "43_crear_grupo" to { CreateGroupPreview() },
         "invitar_al_grupo" to { InviteToGroupPreview() },
         "invitar_plan" to { InvitePlanPreview() },
+        "chat_amigo" to { DirectChatPreview() },
+        "chat_amigo_se_unio" to { DirectChatJoinedPreview() },
         "25_mi_codigo_escanear" to { MyCodeScanPreview() },
         "89_sin_conexion" to { OfflinePreview() },
         "89_sin_conexion_aviso" to { OfflineNoticePreview() },

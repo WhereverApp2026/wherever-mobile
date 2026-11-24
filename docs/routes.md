@@ -13,8 +13,9 @@
 | `TastesRoute(fromSettings)` | Gustos | ninguno | release | nv-10 |
 | `PermissionsRoute` | Permisos (paso 3 de 3) | ninguno | release | nv-11 |
 | `HomeRoute` | Inicio con recomendaciones, clima y eventos | ubicación aproximada (opcional, en contexto) | release | nv-47 |
-| `ExploreRoute(query, category)` | Explorar: búsqueda, filtros y recientes | ubicación aproximada (opcional) | release | nv-47 |
+| `ExploreRoute(query, category, seal)` | Explorar: búsqueda, filtros (con «Con Sello») y recientes | ubicación aproximada (opcional) | release | nv-47 |
 | `PlaceRoute(id, origin)` | Ficha del lugar | ninguno | release | nv-47 |
+| `SealRoute` | 34_Sello: qué es el Sello de Excelencia, su regla y los negocios con Sello cerca | ubicación aproximada (opcional) | release | nv-21 |
 | `MomentRoute(id)` | Publicación de un amigo (17_PostDetalle) | ninguno | release | nv-17 |
 | `FriendPlanRoute(id)` | Plan de un amigo con Me apunto y Hacer mi versión (29_PlanAmigo) | ninguno | release | nv-17 |
 | `PendingReviewsRoute` | Por reseñar (77_ResPend) | ninguno | release | nv-32 |
@@ -48,7 +49,8 @@
 | `GroupRoute(id)` | 46_Grupo: integrantes, plan, votaciones y La vaca; el organizador invita, renombra y saca | ninguno | release | nv-25 |
 | `VoteRoute(id)` | 48_Votar: votaciones del grupo, un voto por persona y cierre del organizador | ninguno | release | nv-25 |
 | `CreateGroupRoute(planId, groupId)` | 43_CrearGrupo: grupo del plan con hasta 11 amigos, o invitar a más (`groupId`) | ninguno | release | nv-25 |
-| `InvitePlanRoute(personId, personName)` | InvitarPlan: invitar a un amigo a uno de mis próximos planes | ninguno | release | nv-25 |
+| `InvitePlanRoute(personId, personName, conversationId)` | InvitarPlan: invitar a un amigo a uno de mis próximos planes; desde ChatAmigo el plan queda compartido en el chat | ninguno | release | nv-25 |
+| `DirectChatRoute(personId, personName)` | ChatAmigo: chat 1 a 1 con un amigo, Invitar a un plan y tarjeta del plan con su invitación | ninguno | release | nv-25 |
 | `VacaRoute(id)` | La Vaca virtual del grupo: total, quién pagó y quién debe a quién (28_Vaca y variantes) | ninguno | release | nv-26 |
 | `AddExpenseRoute(id, mode)` | Agregar gasto en partes iguales o personalizado (45_AgregarGasto) | ninguno | release | nv-26 |
 | `AddFriendRoute` | Agregar amigos: buscar, código, sugerencias y mi usuario | ninguno | release | nv-53 |
