@@ -116,7 +116,8 @@ data class LegalVersionsDto(
 data class BusinessConsentDto(
     @SerialName("version_terminos") val terms: String,
     @SerialName("version_aviso_privacidad") val privacyNotice: String,
-    @SerialName("datos_negocio") val businessData: Boolean = true
+    // Sin valor por defecto: ApiJson no codifica los valores por defecto y la API debe recibir `true`.
+    @SerialName("datos_negocio") val businessData: Boolean
 )
 
 @Serializable

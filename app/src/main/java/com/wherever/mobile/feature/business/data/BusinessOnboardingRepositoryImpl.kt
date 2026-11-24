@@ -98,7 +98,7 @@ class BusinessOnboardingRepositoryImpl @Inject constructor(
 
     override suspend fun acceptBusinessDataConsent(): Result<Unit> = safeApiCall {
         val versions = api.legalVersions()
-        api.consent(BusinessConsentDto(versions.terms, versions.privacyNotice))
+        api.consent(BusinessConsentDto(versions.terms, versions.privacyNotice, businessData = true))
     }
 
     override suspend fun uploadDocument(draft: BusinessDraft, type: DocumentType, source: String): Result<Unit> {
