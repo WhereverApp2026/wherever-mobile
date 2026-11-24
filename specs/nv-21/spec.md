@@ -102,6 +102,11 @@ Estos datos no tienen endpoint publicado. Lista de necesidades, no un contrato.
 
 Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. Requiere `nv-01` y `nv-02` ejecutadas, y los endpoints de "Pendiente de backend". Ver `plan.md`, `task.md` y `checklists/gates.md`.
 
+## Decisiones (2026-11-24)
+
+- **34_Sello** con la API real: `GET /lugares?con_sello=true` (backend nv-85) y `sello_excelencia` en la tarjeta. Se entra tocando «Sello de Excelencia» en la ficha; muestra la regla del Sello de nv-56 (60 días, 20 reseñas verificadas en 90 días, promedio ≥ 4.5, sin rechazos de moderación), hasta 3 negocios con Sello cerca (por distancia con ubicación, por calificación sin ella) y «Ver negocios con Sello» abre Explorar con «Con Sello» puesto. En staging aún ningún negocio tiene Sello: sale el estado vacío.
+- Explorar suma el chip «Con Sello» y la tarjeta muestra la insignia. «Abierto ahora» y «Con Sello» comparten `onToggle(FilterFlag)`.
+
 ## Aprobación
 - [x] Revisor: Jorge — fecha: 2026-11-06
 - [ ] CHECKLIST_PR.md OK

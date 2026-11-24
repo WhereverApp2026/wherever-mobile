@@ -6,6 +6,7 @@ import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.feature.places.domain.PlaceFilters
 import com.wherever.mobile.feature.places.domain.PlacePage
 import com.wherever.mobile.feature.places.domain.ReportReason
+import com.wherever.mobile.feature.places.domain.SortOrder
 import com.wherever.mobile.testing.FakeLocationProvider
 import com.wherever.mobile.testing.FakePlacesRepository
 import com.wherever.mobile.testing.MainDispatcherRule
@@ -102,7 +103,7 @@ class PlacesViewModelsTest {
     fun `los filtros se encienden y se apagan`() = runTest(mainDispatcher.dispatcher) {
         val vm = explore()
 
-        vm.onOpenNow()
+        vm.onToggle(FilterFlag.OPEN_NOW)
         vm.onMaxPrice(2)
         advanceUntilIdle()
         assertEquals(PlaceFilters(openNow = true, maxPriceLevel = 2), places.listCalls.last().first)
@@ -116,7 +117,7 @@ class PlacesViewModelsTest {
     fun `sin resultados muestra el vacio y quitar filtros limpia todo`() = runTest(mainDispatcher.dispatcher) {
         places.listResult = Result.Success(PlacePage(emptyList(), null))
         val vm = explore()
-        vm.onOpenNow()
+        vm.onToggle(FilterFlag.OPEN_NOW)
         advanceUntilIdle()
         assertTrue(vm.state.value.showEmpty)
 
@@ -236,5 +237,45 @@ class PlacesViewModelsTest {
         advanceUntilIdle()
         assertTrue(vm.state.value.items.isEmpty())
         assertEquals(listOf("p1" to false), places.favoriteCalls)
+    }
+
+    @Test
+    fun `Ver negocios con Sello abre Explorar con el filtro puesto y se puede quitar`() =
+        runTest(mainDispatcher.dispatcher) {
+            val vm = explore(mapOf("seal" to true))
+            assertTrue(places.listCalls.single().first.seal)
+
+            vm.onToggle(FilterFlag.SEAL)
+            advanceUntilIdle()
+            assertFalse(places.listCalls.last().first.seal)
+            assertFalse(PlaceFilters(seal = true).matches(samplePlace()))
+            assertTrue(PlaceFilters(seal = true).matches(samplePlace().copy(seal = true)))
+        }
+
+    @Test
+    fun `34_Sello pide los negocios con Sello cerca y muestra tres`() = runTest(mainDispatcher.dispatcher) {
+        places.listResult = Result.Success(PlacePage((1..5).map { samplePlace(id = "p$it").copy(seal = true) }, "mas"))
+        val vm = SealViewModel(places, FakeLocationProvider(granted = true))
+        advanceUntilIdle()
+
+        val filters = places.listCalls.single().first
+        assertTrue(filters.seal)
+        assertNull("con ubicación ordena la API por distancia", filters.order)
+        assertEquals(SEAL_NEARBY_LIMIT, vm.state.value.places.size)
+    }
+
+    @Test
+    fun `34_Sello sin red muestra el error y Reintentar vuelve a pedir`() = runTest(mainDispatcher.dispatcher) {
+        places.listResult = NETWORK_FAILURE
+        val vm = SealViewModel(places, FakeLocationProvider(point = null))
+        advanceUntilIdle()
+        assertNotNull(vm.state.value.error)
+        assertEquals(SortOrder.RATING, places.listCalls.single().first.order)
+
+        places.listResult = Result.Success(PlacePage(emptyList(), null))
+        vm.load()
+        advanceUntilIdle()
+        assertNull(vm.state.value.error)
+        assertTrue(vm.state.value.places.isEmpty())
     }
 }

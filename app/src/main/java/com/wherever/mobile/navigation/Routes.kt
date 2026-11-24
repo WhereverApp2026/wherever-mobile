@@ -80,11 +80,15 @@ data object DeletionPendingRoute
 
 /** `query` y `category` los lee ExploreViewModel de SavedStateHandle por su nombre. */
 @Serializable
-data class ExploreRoute(val query: String = "", val category: String = "")
+data class ExploreRoute(val query: String = "", val category: String = "", val seal: Boolean = false)
 
 /** `id` y `origin` (busqueda, inicio, mapa, plan_ia o cupon) los lee PlaceDetailViewModel. */
 @Serializable
 data class PlaceRoute(val id: String, val origin: String = "")
+
+/** 34_Sello: qué es el Sello de Excelencia y los negocios con Sello cerca (specs/nv-21). */
+@Serializable
+data object SealRoute
 
 @Serializable
 data object FavoritesRoute

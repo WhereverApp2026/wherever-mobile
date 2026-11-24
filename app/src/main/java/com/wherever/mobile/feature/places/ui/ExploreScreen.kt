@@ -156,8 +156,16 @@ private fun FilterChips(state: ExploreUiState, viewModel: ExploreViewModel) {
             SelectChip(
                 stringResource(R.string.explore_filter_open),
                 filters.openNow,
-                viewModel::onOpenNow,
+                { viewModel.onToggle(FilterFlag.OPEN_NOW) },
                 tag = "filter_open"
+            )
+        }
+        item {
+            SelectChip(
+                stringResource(R.string.explore_filter_seal),
+                filters.seal,
+                { viewModel.onToggle(FilterFlag.SEAL) },
+                tag = "filter_seal"
             )
         }
         if (state.hasLocation) {

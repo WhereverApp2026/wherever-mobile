@@ -41,6 +41,7 @@ class PlacesRepositoryImpl @Inject constructor(private val api: PlacesApi) : Pla
                 category = filters.category,
                 maxPriceLevel = filters.maxPriceLevel,
                 openNow = filters.openNow.takeIf { it },
+                seal = filters.seal.takeIf { it },
                 lat = near?.lat,
                 lng = near?.lng,
                 // La API pide `lat` y `lng` para filtrar por distancia; sin ubicación el radio no aplica.
@@ -136,7 +137,8 @@ fun PlaceCardDto.toDomain(): PlaceCard = PlaceCard(
     coverUrl = cover?.takeIf { it.isNotBlank() },
     distanceMeters = distanceMeters,
     openNow = openNow,
-    why = why?.takeIf { it.isNotBlank() }
+    why = why?.takeIf { it.isNotBlank() },
+    seal = seal
 )
 
 internal fun PlaceDetailDto.toDomain(): PlaceDetail = PlaceDetail(
