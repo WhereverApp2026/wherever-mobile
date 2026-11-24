@@ -6,20 +6,20 @@
 
 ## % real
 
-**96 de 162 = 59,3 %** con la API real (2026-11-23, 16:10: 32_ExpMapa con osmdroid probado contra staging en el Xiaomi, en #68; antes, 09:50: 83_Insignias, 43_CrearGrupo, 46_Grupo, 48_Votar, IAPalabra, 17_AjustaPlan, 41_AgregarParada, CrearPlan y 28_Vaca).
+**98 de 162 = 60,5 %** con la API real (2026-11-24, 01:45: 13_Reacciones y 16_Historia probadas contra staging con QA A/B en el Xiaomi, en #68; antes, 2026-11-23 16:10: 32_ExpMapa con osmdroid probado contra staging en el Xiaomi, en #68; antes, 09:50: 83_Insignias, 43_CrearGrupo, 46_Grupo, 48_Votar, IAPalabra, 17_AjustaPlan, 41_AgregarParada, CrearPlan y 28_Vaca).
 
 **Por sumar (2026-11-23, PR #67 `integracion/todo`, con código, pruebas y capturas; falta probar contra staging en el teléfono):** Jorge: 83_Insignias (ya con API real), 07_EncuentraAmigos, 43_CrearGrupo, 46_Grupo, 48_Votar, InvitarPlan. Diego: IAPalabra, 17_AjustaPlan, Generando 1/4–4/4, 39_Plan, 40_Cambiar, 41_AgregarParada, CrearPlan, 26_CheckinOk, 28_Vaca y variantes, 45_AgregarGasto. Negocio (nv-34/35/37): alta, panel, reservas, estadísticas, check-in, cupones y horas. Se cuentan al probarlos con staging (L-V 08:00–22:00).
 
 | Área | Specs | Frames | Funcionan | % |
 |---|---|---|---|---|
 | Cuenta y acceso | nv-06 a nv-16 | 17 | 17 | 100 % |
-| Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 19 | 66 % |
+| Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 21 | 72 % |
 | Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 21 | 68 % |
 | Planes: IA, detalle, Vaca, Mis planes, día del plan | nv-23, nv-24, nv-26, nv-28, nv-30 | 22 | 13 | 59 % |
 | Reserva, pago y cupones | nv-27, nv-29 | 15 | 4 | 27 % |
 | Después del plan: Recuerdos, Reseñas, Ayuda | nv-31 a nv-33 | 22 | 22 | 100 % |
 | Modo negocio | nv-34 a nv-38 | 26 | 0 | 0 % |
-| **Total** | | **162** | **96** | **59,3 %** |
+| **Total** | | **162** | **98** | **60,5 %** |
 
 ## Pruebas con staging en el Xiaomi (2026-11-22, domingo con staging encendido)
 
@@ -44,7 +44,7 @@
 - Rama `feat/nv-17-feed` (sale de `wip/pausa`), PR a `main`. Compuertas locales en verde: ktlint, detekt, lint, unitarias + capturas, kover, debug y release, critic, sdd, specs, routes, strings, coverage 79,7 %, semgrep 0. Delta 27,5 % (advisory).
 - **Probado en el teléfono (Xiaomi, staging):** cuenta A ve el momento de B en Amigos con foto real; abre 17_PostDetalle. `FriendsFeedTest` (vacío; Agregar → Solicitud enviada) verde en el teléfono.
 - **Arreglos de esta vuelta:** botones de 29_PlanAmigo apilados ("Hacer mi versión" se cortaba); tinte de fondo mientras carga la foto del momento (se veía un hueco gris/blanco); plurales `many`; rutas `MomentRoute` y `FriendPlanRoute` en `docs/routes.md`.
-- **Falta:** 29_PlanAmigo y 14_MeApunto en el teléfono: hace falta un momento de staging con `plan_id` (B publica un momento desde un plan público). Sin API: historias, reacciones, comentarios.
+- **Falta:** 29_PlanAmigo y 14_MeApunto en el teléfono: hace falta un momento de staging con `plan_id` (B publica un momento desde un plan público). Historias, reacciones y comentarios ya con la API real y probados (2026-11-24, #68).
 - **Siguiente:** nv-25 Grupos y chats (27_AmigoOpc y 25_MiCodigo ya en `main`).
 - **Protección de `main`:** regla en `.github/rulesets/main.json`; solo Osmar aprueba (ver `CONTRIBUTING.md`, "Aprobación").
 
