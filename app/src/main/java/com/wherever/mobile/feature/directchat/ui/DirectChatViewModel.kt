@@ -135,9 +135,10 @@ class DirectChatViewModel @Inject constructor(
     fun startPolling() {
         if (polling?.isActive == true) return
         polling = viewModelScope.launch {
+            // Al volver (p. ej. de InvitarPlan) se pregunta de inmediato y luego cada 5 s.
             while (isActive) {
-                delay(POLL_MILLIS)
                 pollOnce()
+                delay(POLL_MILLIS)
             }
         }
     }

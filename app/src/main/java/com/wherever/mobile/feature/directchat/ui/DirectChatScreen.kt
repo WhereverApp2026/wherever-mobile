@@ -189,6 +189,12 @@ private fun MessageList(state: DirectChatUiState, actions: DirectChatActions, zo
         }
     }
     LaunchedEffect(nearTop, state.olderCursor) { if (nearTop && state.olderCursor != null) actions.onOlder() }
+    // Si llega uno nuevo mientras se ve lo último, la lista baja a mostrarlo; si se leía algo viejo, no se mueve.
+    val newest = state.messages.firstOrNull()?.id
+    LaunchedEffect(newest) {
+        val following = listState.firstVisibleItemIndex <= FOLLOW_NEWEST_THRESHOLD
+        if (newest != null && following) listState.animateScrollToItem(0)
+    }
     val otherName = state.title.substringBefore(' ')
     LazyColumn(
         state = listState,
@@ -204,6 +210,9 @@ private fun MessageList(state: DirectChatUiState, actions: DirectChatActions, zo
 }
 
 private const val OLDER_THRESHOLD = 3
+
+/** Al insertar el nuevo en el índice 0, lo que se veía pasa al 1. */
+private const val FOLLOW_NEWEST_THRESHOLD = 1
 
 @Composable
 private fun Bubble(message: DirectMessage, mine: Boolean, otherName: String, zone: ZoneId, actions: DirectChatActions) {
