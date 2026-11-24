@@ -243,7 +243,8 @@ private fun MessageList(state: GroupChatUiState, actions: GroupChatActions, zone
     LazyColumn(
         state = listState,
         reverseLayout = true,
-        verticalArrangement = Arrangement.spacedBy(Spacing.S),
+        // Pegados al campo de texto, como en cualquier chat, aunque sean pocos.
+        verticalArrangement = Arrangement.spacedBy(Spacing.S, Alignment.Bottom),
         modifier = Modifier.fillMaxSize().padding(horizontal = ScreenPadding).testTag("chat_messages")
     ) {
         items(state.messages, key = ChatMessage::id) { message ->
