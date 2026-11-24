@@ -23,6 +23,7 @@ internal data class OnboardingActions(
     val onAveragePrice: (String) -> Unit = {},
     val onToggleService: (String) -> Unit = {},
     val onAddPhoto: () -> Unit = {},
+    val onDataConsent: (Boolean) -> Unit = {},
     val onDocument: (DocumentType) -> Unit = {},
     val onClabe: (String) -> Unit = {},
     val onHolder: (String) -> Unit = {},

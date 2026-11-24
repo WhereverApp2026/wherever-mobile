@@ -172,6 +172,7 @@
     <string name="tastes_allergies_label">¿A qué tienes alergia?</string>
     <string name="tastes_allergies_placeholder">Ej. nueces</string>
     <string name="tastes_allergies_consent">Acepto que Wherever guarde mis alergias. Son un dato de salud y puedo retirar este permiso en Privacidad.</string>
+    <string name="business_data_consent">Acepto que Wherever reciba mi INE, comprobante de domicilio y cuenta de depósito solo para verificar mi negocio y pagarme, como dice el aviso de privacidad. Puedo retirarlo en Privacidad.</string>
     <string name="tastes_allergies_consent_required">Marca la casilla para guardar tus alergias</string>
     <string name="tastes_skip">Omitir por ahora</string>
     <string name="taste_tacos">🌮 Tacos</string>

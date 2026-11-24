@@ -60,6 +60,7 @@ import com.wherever.mobile.core.designsystem.FormScreen
 import com.wherever.mobile.core.designsystem.InfoBanner
 import com.wherever.mobile.core.designsystem.Ink
 import com.wherever.mobile.core.designsystem.InlineProgress
+import com.wherever.mobile.core.designsystem.LabeledCheckbox
 import com.wherever.mobile.core.designsystem.LabeledTextField
 import com.wherever.mobile.core.designsystem.LoadingState
 import com.wherever.mobile.core.designsystem.Mint
@@ -138,6 +139,7 @@ fun BusinessOnboardingRoute(
         onAveragePrice = viewModel::onAveragePrice,
         onToggleService = viewModel::onToggleService,
         onAddPhoto = { gallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+        onDataConsent = viewModel::onDataConsent,
         onDocument = { type ->
             pendingDocument = type
             documentPicker.launch(DOCUMENT_MIME)
@@ -487,13 +489,21 @@ private fun VerifyStep(state: OnboardingUiState, actions: OnboardingActions) {
             style = MaterialTheme.typography.titleSmall,
             modifier = Modifier.padding(start = Spacing.L, top = Spacing.M)
         )
+        LabeledCheckbox(
+            checked = state.hasDataConsent,
+            onCheckedChange = actions.onDataConsent,
+            tag = "business_data_consent",
+            modifier = Modifier.padding(end = Spacing.L)
+        ) {
+            Text(stringResource(R.string.business_data_consent), style = MaterialTheme.typography.bodySmall)
+        }
         DOCUMENTS.forEach { (type, title, hint) ->
             DocumentRow(
                 title = stringResource(title),
                 hint = stringResource(hint),
                 done = type in state.uploadedDocuments || state.draft.hasDocument(type),
                 uploading = state.uploadingDocument == type,
-                onUpload = { actions.onDocument(type) },
+                onUpload = { if (state.hasDataConsent) actions.onDocument(type) },
                 tag = "business_doc_${type.apiKey}"
             )
         }
