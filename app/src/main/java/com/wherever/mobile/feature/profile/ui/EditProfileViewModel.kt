@@ -136,3 +136,13 @@ class EditProfileViewModel @Inject constructor(private val repository: ProfileRe
         val INVALID_NAME = UiText.Res(R.string.validation_name)
     }
 }
+
+/** Acciones de 84_DatosPers; la pantalla solo las envía. */
+internal data class PersonalDataActions(
+    val onNameChange: (String) -> Unit = {},
+    val onCityQuery: (String) -> Unit = {},
+    val onCitySelect: (CitySuggestion) -> Unit = {},
+    val onSave: () -> Unit = {},
+    val onBack: () -> Unit = {},
+    val onDeleteAccount: () -> Unit = {}
+)

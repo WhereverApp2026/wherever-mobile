@@ -2,6 +2,7 @@ package com.wherever.mobile.feature.friends.data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -26,7 +27,8 @@ data class PersonDetailDto(
     @SerialName("nombre_usuario") val username: String? = null,
     @SerialName("foto_url") val photoUrl: String? = null,
     @SerialName("relacion") val relation: String = "ninguna",
-    @SerialName("nivel") val level: String? = null,
+    /** Antes texto («Explorador»); el backend ahora manda `{numero, nombre}`. Se aceptan los dos. */
+    @SerialName("nivel") val level: JsonElement? = null,
     @SerialName("amigos_en_comun") val mutualFriends: Int? = null,
     @SerialName("grupos_en_comun") val mutualGroups: Int? = null,
     @SerialName("silenciado") val muted: Boolean = false

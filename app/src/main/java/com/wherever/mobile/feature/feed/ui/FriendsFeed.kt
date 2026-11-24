@@ -183,6 +183,19 @@ internal fun MomentCard(item: FeedItem, actions: FriendsFeedActions, modifier: M
                     modifier = Modifier.padding(horizontal = Spacing.L, vertical = Spacing.M)
                 )
             }
+            // Conteos de nv-83; el corazón y los comentarios se usan en 17_PostDetalle.
+            Text(
+                stringResource(
+                    R.string.feed_counts,
+                    pluralStringResource(R.plurals.moment_likes, moment.likes, moment.likes),
+                    pluralStringResource(R.plurals.moment_comments, moment.comments, moment.comments)
+                ),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(
+                    horizontal = Spacing.L
+                ).padding(bottom = Spacing.S).testTag("moment_counts_${moment.id}")
+            )
         }
         if (moment.placeId != null || moment.planId != null) {
             Row(

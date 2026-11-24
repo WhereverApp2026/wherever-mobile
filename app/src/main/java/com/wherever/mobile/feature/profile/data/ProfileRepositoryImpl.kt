@@ -6,21 +6,46 @@ import com.wherever.mobile.core.network.safeApiCall
 import com.wherever.mobile.feature.profile.domain.CitySuggestion
 import com.wherever.mobile.feature.profile.domain.PreferencesPatch
 import com.wherever.mobile.feature.profile.domain.PrivacyPatch
+import com.wherever.mobile.feature.profile.domain.ProfileExtras
 import com.wherever.mobile.feature.profile.domain.ProfileRepository
 import com.wherever.mobile.feature.profile.domain.Tastes
 import com.wherever.mobile.feature.profile.domain.UserProfile
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 
 private const val CITY_SUGGESTIONS = 8
 
 @Suppress("TooManyFunctions") // Una función por endpoint de la API (docs/contexto_api_sprint1.md).
-class ProfileRepositoryImpl @Inject constructor(private val api: UsersApi, private val dao: UserProfileDao) :
-    ProfileRepository {
+/** Único en la app: guarda en memoria los extras del perfil (bio y contadores). */
+@Singleton
+class ProfileRepositoryImpl @Inject constructor(
+    private val api: UsersApi,
+    // Room es la fuente de verdad del perfil (constitución §2.1).
+    private val dao: UserProfileDao
+) : ProfileRepository {
+    private val extras = MutableStateFlow<ProfileExtras?>(null)
+
     override fun observeProfile(): Flow<UserProfile?> = dao.observe().map { it?.toDomain() }
 
-    override suspend fun refresh(): Result<UserProfile> = store(safeApiCall { api.getMe() })
+    override fun observeExtras(): Flow<ProfileExtras?> = extras.asStateFlow()
+
+    override suspend fun refresh(): Result<UserProfile> = store(
+        safeApiCall {
+            api.getMe().also { dto ->
+                extras.value = ProfileExtras(
+                    description = dto.description?.takeIf { it.isNotBlank() },
+                    levelNumber = dto.levelNumber,
+                    plans = dto.counters?.plans,
+                    friends = dto.counters?.friends,
+                    reviews = dto.counters?.reviews
+                )
+            }
+        }
+    )
 
     override suspend fun updateProfile(name: String?, cityId: String?): Result<UserProfile> {
         val version = dao.get()?.version ?: when (val fetched = refresh()) {
@@ -34,6 +59,17 @@ class ProfileRepositoryImpl @Inject constructor(private val api: UsersApi, priva
 
     override suspend fun updateUsername(username: String): Result<UserProfile> =
         patch(ProfilePatchDto(username = username.trim().removePrefix("@").lowercase()))
+
+    override suspend fun updateBio(bio: String): Result<UserProfile> {
+        val clean = bio.trim().replace(Regex("\\s+"), " ")
+        val result = patch(ProfilePatchDto(description = clean))
+        if (result is Result.Success) {
+            val current = extras.value
+            extras.value = current?.copy(description = clean.ifEmpty { null })
+                ?: ProfileExtras(clean.ifEmpty { null }, null, null, null, null)
+        }
+        return result
+    }
 
     /** `PATCH /usuarios/yo` con la versión guardada en Room (`If-Match`). */
     private suspend fun patch(body: ProfilePatchDto): Result<UserProfile> {

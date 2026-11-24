@@ -50,6 +50,7 @@ import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverTextButton
 import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.core.designsystem.rememberFormSubmit
+import com.wherever.mobile.core.ui.SecureScreen
 import com.wherever.mobile.core.ui.formatCountdown
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -65,6 +66,7 @@ fun RegisterRoute(
     onHelp: () -> Unit,
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
+    SecureScreen()
     val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(viewModel) { viewModel.registered.collect { onRegistered() } }
     RegisterContent(

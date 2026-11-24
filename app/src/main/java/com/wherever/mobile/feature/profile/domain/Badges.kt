@@ -19,8 +19,27 @@ data class Badge(
 }
 
 /** Insignias ganadas y por desbloquear, en el orden del catálogo de la API. */
+/** Nivel que calcula el backend (nv-79): número, nombre, puntos y el siguiente con su meta. */
+data class ApiLevel(
+    val number: Int,
+    val name: String,
+    val points: Int,
+    val nextName: String?,
+    val nextPoints: Int?,
+    val nextNumber: Int? = null
+) {
+    fun toProgress(): LevelProgress = LevelProgress(
+        current = LevelStep(name, 0),
+        next = if (nextName != null && nextPoints != null) LevelStep(nextName, nextPoints) else null,
+        points = points
+    )
+}
+
 interface BadgesRepository {
     suspend fun badges(): Result<List<Badge>>
+
+    /** El nivel de la última lectura de `badges()`, o `null` si la API no lo trajo. */
+    fun lastLevel(): ApiLevel? = null
 }
 
 /** Peldaño de la escalera de niveles. */

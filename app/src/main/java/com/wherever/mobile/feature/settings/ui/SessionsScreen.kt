@@ -32,10 +32,12 @@ import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.TopTitleRow
 import com.wherever.mobile.core.designsystem.WhereverDangerButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
+import com.wherever.mobile.core.ui.SecureScreen
 
 /** Sin frame en la maqueta (duda D07). */
 @Composable
 fun SessionsRoute(onBack: () -> Unit, onAllClosed: () -> Unit, viewModel: SessionsViewModel = hiltViewModel()) {
+    SecureScreen()
     val state by viewModel.state.collectAsStateWithLifecycle()
     var confirmAll by remember { mutableStateOf(false) }
     LaunchedEffect(viewModel) { viewModel.allClosed.collect { onAllClosed() } }

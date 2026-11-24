@@ -41,6 +41,9 @@ import com.wherever.mobile.feature.feed.ui.FriendPlanPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedEmptyPreview
 import com.wherever.mobile.feature.feed.ui.FriendsFeedPreview
 import com.wherever.mobile.feature.feed.ui.MomentDetailPreview
+import com.wherever.mobile.feature.feed.ui.MomentSocialPreview
+import com.wherever.mobile.feature.feed.ui.StoriesRowPreview
+import com.wherever.mobile.feature.feed.ui.StoryViewerPreview
 import com.wherever.mobile.feature.friends.ui.FindFriendsPreview
 import com.wherever.mobile.feature.friends.ui.MyCodePreview
 import com.wherever.mobile.feature.friends.ui.MyCodeScanPreview
@@ -65,6 +68,7 @@ import com.wherever.mobile.feature.memories.ui.PostcardDetailPolaroidPreview
 import com.wherever.mobile.feature.memories.ui.PostcardDetailPreview
 import com.wherever.mobile.feature.memories.ui.PostcardEditorPreview
 import com.wherever.mobile.feature.memories.ui.PostcardGonePreview
+import com.wherever.mobile.feature.places.ui.PlaceMapCardPreview
 import com.wherever.mobile.feature.plans.ui.ManualPlanPreview
 import com.wherever.mobile.feature.plans.ui.PlanAddStopPreview
 import com.wherever.mobile.feature.plans.ui.PlanAdjustPreview
@@ -77,6 +81,7 @@ import com.wherever.mobile.feature.plans.ui.PlanReadyPreview
 import com.wherever.mobile.feature.plans.ui.PlanWordPreview
 import com.wherever.mobile.feature.profile.ui.BadgesPreview
 import com.wherever.mobile.feature.profile.ui.EditProfilePreview
+import com.wherever.mobile.feature.profile.ui.ProfileEditorPreview
 import com.wherever.mobile.feature.profile.ui.ProfilePreview
 import com.wherever.mobile.feature.reviews.ui.MyReviewsConfirmPreview
 import com.wherever.mobile.feature.reviews.ui.MyReviewsPreview
@@ -133,7 +138,8 @@ class ScreenshotTest {
         "06_gustos" to { TastesPreview() },
         "08_permisos" to { PermissionsPreview() },
         "perfil" to { ProfilePreview() },
-        "editar_perfil" to { EditProfilePreview() },
+        "84_datos_personales" to { EditProfilePreview() },
+        "82_editar_perfil" to { ProfileEditorPreview() },
         "85_ajustes" to { SettingsPreview() },
         "28_priv_social" to { PrivacyPreview() },
         "eliminar_cuenta" to { DeleteAccountPreview() },
@@ -148,6 +154,10 @@ class ScreenshotTest {
         "44_mis_grupos" to { MyGroupsPreview() },
         "45_grupo_chat" to { GroupChatPreview() },
         "46_grupo" to { GroupDetailPreview() },
+        "32_exp_mapa_tarjeta" to { PlaceMapCardPreview() },
+        "17_post_detalle_social" to { MomentSocialPreview() },
+        "historias_fila" to { StoriesRowPreview() },
+        "historias_visor" to { StoryViewerPreview() },
         "48_votar" to { VotePreview() },
         "43_crear_grupo" to { CreateGroupPreview() },
         "invitar_al_grupo" to { InviteToGroupPreview() },

@@ -29,3 +29,6 @@ maqueta/
 
 # Python
 __pycache__/
+
+# Capturas del navegador de Playwright (MCP)
+.playwright-mcp/

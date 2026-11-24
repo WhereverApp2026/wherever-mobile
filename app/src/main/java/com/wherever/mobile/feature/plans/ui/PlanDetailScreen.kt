@@ -432,11 +432,16 @@ private fun AlternativeRow(alt: Alternative, selected: Boolean, onClick: () -> U
             Column(modifier = Modifier.weight(1f)) {
                 Text(alt.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                 Text(
-                    stringResource(
-                        R.string.plan_alternative_line,
-                        priceText(0, alt.priceLevel),
-                        alt.extraMinutes
-                    ),
+                    // Encontrado con staging: un traslado más corto salía «-3 min más».
+                    if (alt.extraMinutes < 0) {
+                        stringResource(
+                            R.string.plan_alternative_line_less,
+                            priceText(0, alt.priceLevel),
+                            -alt.extraMinutes
+                        )
+                    } else {
+                        stringResource(R.string.plan_alternative_line, priceText(0, alt.priceLevel), alt.extraMinutes)
+                    },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -498,7 +503,11 @@ private fun AddStopScreen(
                             alt.name,
                             alt.coverUrl,
                             priceText(0, alt.priceLevel),
-                            stringResource(R.string.plan_plus_minutes, alt.extraMinutes),
+                            if (alt.extraMinutes < 0) {
+                                stringResource(R.string.plan_minus_minutes, -alt.extraMinutes)
+                            } else {
+                                stringResource(R.string.plan_plus_minutes, alt.extraMinutes)
+                            },
                             tag = "add_${alt.placeId}"
                         ) { actions.onAddSuggestion(alt) }
                     }

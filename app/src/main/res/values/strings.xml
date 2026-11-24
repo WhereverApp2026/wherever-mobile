@@ -206,10 +206,7 @@
     <!-- 81_Perfil -->
     <string name="profile_settings">Ajustes</string>
     <string name="profile_edit">Editar perfil</string>
-    <string name="profile_points">puntos</string>
     <string name="profile_level">nivel</string>
-    <string name="profile_streak">semanas de racha</string>
-    <string name="profile_tastes">Mis gustos</string>
     <string name="profile_verify_notice">Aún no verificas tu correo.</string>
     <string name="profile_verify_action">Verificar mi correo</string>
 
@@ -410,7 +407,6 @@
     <string name="day_saturday">Sábado</string>
 
     <!-- Favoritos (nv-47) -->
-    <string name="profile_favorites">Mis favoritos</string>
     <string name="favorites_title">Mis favoritos</string>
     <string name="favorites_empty">Aún no guardas lugares. Toca el corazón en la ficha de un negocio para encontrarlo aquí.</string>
 
@@ -652,7 +648,6 @@
     <string name="settings_quiet_range">De %1$s a %2$s</string>
 
     <!-- Amigos (nv-53) -->
-    <string name="profile_friends">Amigos</string>
     <string name="friends_title">Amigos</string>
     <string name="friends_add">Agregar</string>
     <string name="friends_tab_friends">Amigos</string>
@@ -775,7 +770,6 @@
 
     <!-- Reservas (nv-54) -->
     <string name="place_reserve">Reservar</string>
-    <string name="profile_reservations">Mis reservas</string>
     <string name="profile_badges">Insignias</string>
     <string name="search_title">Buscar</string>
     <string name="search_placeholder">Lugares, personas o planes</string>
@@ -801,18 +795,8 @@
     <string name="notification_accept">Aceptar</string>
     <string name="notification_now_friends">Ya es tu amigo. Ahora pueden hacer planes juntos.</string>
     <string name="notification_request_gone">Esa solicitud ya no está: la cancelaron o ya la respondiste.</string>
-    <string name="badges_title">Insignias</string>
+    <string name="badges_title">Mis insignias</string>
     <string name="badges_level_label">Tu nivel</string>
-    <plurals name="badges_points">
-        <item quantity="one">%1$d punto</item>
-        <item quantity="many">%1$d puntos</item>
-        <item quantity="other">%1$d puntos</item>
-    </plurals>
-    <plurals name="badges_to_next">
-        <item quantity="one">Te falta %1$d punto para %2$s</item>
-        <item quantity="many">Te faltan %1$d puntos para %2$s</item>
-        <item quantity="other">Te faltan %1$d puntos para %2$s</item>
-    </plurals>
     <string name="badges_max_level">Llegaste al nivel más alto.</string>
     <string name="badges_earned">Ganadas</string>
     <string name="badges_locked">Por desbloquear</string>
@@ -1020,7 +1004,6 @@
     <string name="business_edit_request">Editar mi solicitud</string>
     <!-- Reseñas (specs/nv-32) -->
     <string name="profile_my_reviews">Mis reseñas</string>
-    <string name="profile_pending_reviews">Por reseñar</string>
     <string name="place_see_reviews">Ver reseñas</string>
     <string name="reviews_close">Cerrar</string>
     <string name="reviews_form_title">¿Cómo estuvo?</string>
@@ -1108,7 +1091,6 @@
 
     <!-- Recuerdos y postales (specs/nv-31) -->
     <string name="profile_memories">Recuerdos</string>
-    <string name="profile_new_moment">Nuevo momento</string>
     <string name="memories_title">Recuerdos</string>
     <string name="memories_subtitle">%1$s de %2$s</string>
     <string name="memories_by_plan_empty">Todavía no hay recuerdos por plan. Cuando hagas check-in en un plan, sus fotos se juntan aquí.</string>
@@ -1567,4 +1549,116 @@
     <string name="invite_plan_open_group">Ir al grupo</string>
     <string name="person_invite_plan">Invitar a un plan</string>
     <string name="plan_invite_friends">Invitar amigos</string>
+    <!-- Integridad del dispositivo (constitución §6) -->
+    <string name="integrity_blocked_title">No podemos abrir Wherever en este teléfono</string>
+    <string name="integrity_blocked_body">Para proteger tu cuenta, Wherever no funciona si detecta: %1$s. Usa un teléfono sin modificar o instala la app desde la tienda oficial.</string>
+    <string name="integrity_close">Cerrar la app</string>
+    <string name="integrity_debug_warning">Modo de desarrollo: detectamos %1$s. En la versión publicada la app se bloquearía.</string>
+    <string name="integrity_dismiss">Entendido</string>
+    <string name="integrity_reason_root">acceso root</string>
+    <string name="integrity_reason_test_keys">un sistema modificado</string>
+    <string name="integrity_reason_debugger">un depurador conectado</string>
+    <string name="integrity_reason_tampered">una copia alterada de la app</string>
+    <!-- Desbloqueo con huella o PIN (constitución E-05) -->
+    <string name="app_lock_title">Wherever está bloqueada</string>
+    <string name="app_lock_body">Desbloquéala con tu huella, tu rostro o el PIN de tu teléfono.</string>
+    <string name="app_lock_unlock">Desbloquear</string>
+    <string name="app_lock_prompt_title">Desbloquear Wherever</string>
+    <string name="app_lock_prompt_subtitle">Confirma que eres tú</string>
+    <string name="settings_app_lock">Desbloquear con huella o rostro</string>
+    <string name="settings_app_lock_hint">Al abrir la app y al volver después de un minuto.</string>
+    <!-- 81_Perfil (Figma 298:8711) -->
+    <string name="profile_notifications">Notificaciones</string>
+    <string name="profile_share_code">Compartir mi código</string>
+    <string name="profile_count_plans">planes</string>
+    <string name="profile_count_friends">amigos</string>
+    <string name="profile_count_reviews">reseñas</string>
+    <string name="profile_count_unknown">—</string>
+    <string name="profile_level_number">Nv. %1$d</string>
+    <string name="profile_badges_more">+%1$d</string>
+    <string name="profile_shortcut_reservations">Reservas</string>
+    <string name="profile_shortcut_favorites">Favoritos</string>
+    <string name="profile_shortcut_coupons">Cupones</string>
+    <string name="profile_coupons_soon">Tus cupones llegan muy pronto.</string>
+    <string name="profile_my_reviews_hint">Publicadas y pendientes</string>
+    <plurals name="profile_pending_new">
+        <item quantity="one">%1$d nueva</item>
+        <item quantity="many">%1$d nuevas</item>
+        <item quantity="other">%1$d nuevas</item>
+    </plurals>
+    <string name="profile_tab_posts">Publicaciones</string>
+    <string name="profile_tab_plans">Planes</string>
+    <string name="profile_tab_saved">Guardados</string>
+    <string name="profile_empty_posts">Aún no publicas postales. Toma una en tu próxima visita.</string>
+    <string name="profile_empty_plans">No tienes planes próximos.</string>
+    <string name="profile_empty_saved">Todavía no guardas lugares.</string>
+    <!-- 82_EditarPerfil y 84_DatosPers -->
+    <string name="personal_data_title">Datos personales</string>
+    <string name="personal_data_save">Guardar cambios</string>
+    <string name="profile_editor_done">Listo</string>
+    <string name="profile_editor_username">Usuario</string>
+    <string name="profile_editor_bio">Bio</string>
+    <string name="profile_editor_bio_hint">Cuéntales a tus amigos qué te gusta hacer</string>
+    <string name="profile_editor_add_tastes">Elegir mis gustos</string>
+    <string name="profile_editor_privacy">Privacidad social</string>
+    <string name="profile_editor_privacy_hint">Quién ve tu actividad, tus planes y tus reseñas</string>
+    <!-- 83_Insignias (Figma 298:8945) -->
+    <string name="badges_earned_count">Ganadas · %1$d</string>
+    <string name="badges_points_of_next">%1$d de %2$d puntos para ser %3$s</string>
+    <string name="badges_cell_a11y">%1$s, %2$s</string>
+    <string name="badges_points_to_level">%1$d de %2$d puntos para llegar al nivel %3$d</string>
+    <string name="vaca_need_two">Para dividir un gasto hacen falta al menos 2 personas que ya aceptaron el grupo.</string>
+    <string name="plan_alternative_line_less">%1$s · %2$d min menos de traslado</string>
+    <string name="plan_minus_minutes">−%1$d min</string>
+    <!-- Motivos de una parada que no sirve (backend planes/recalculo.go) -->
+    <string name="plan_stop_closed">%1$s está cerrado a esa hora. Cambia la hora de inicio o el lugar.</string>
+    <string name="plan_stop_overlap">%1$s no cabe en el horario del plan. Ajusta las horas o quita una parada.</string>
+    <string name="plan_stop_duration">La duración en %1$s no es válida.</string>
+    <string name="plan_stop_price">El precio de %1$s no es válido.</string>
+    <string name="plan_stop_unavailable">%1$s ya no está disponible. Elige otro lugar.</string>
+    <!-- Me gusta, comentarios y 13_Reacciones (backend nv-83) -->
+    <string name="moment_like">Me gusta</string>
+    <string name="moment_unlike">Quitar me gusta</string>
+    <plurals name="moment_likes">
+        <item quantity="one">%1$d me gusta</item>
+        <item quantity="many">%1$d me gusta</item>
+        <item quantity="other">%1$d me gusta</item>
+    </plurals>
+    <plurals name="moment_comments">
+        <item quantity="one">%1$d comentario</item>
+        <item quantity="many">%1$d comentarios</item>
+        <item quantity="other">%1$d comentarios</item>
+    </plurals>
+    <string name="comments_title">Comentarios</string>
+    <string name="comments_empty">Aún no hay comentarios. Escribe el primero.</string>
+    <string name="comments_more">Ver más comentarios</string>
+    <string name="comment_removed">Comentario eliminado</string>
+    <string name="comment_moderation_label">En revisión</string>
+    <string name="comment_reply">Responder</string>
+    <string name="comment_delete">Borrar</string>
+    <string name="comment_in_review">Tu comentario está en revisión. Solo tú lo ves hasta que se apruebe.</string>
+    <string name="comment_deleted">Listo, borramos el comentario.</string>
+    <string name="comment_hint">Escribe un comentario…</string>
+    <string name="comment_send">Enviar comentario</string>
+    <string name="comment_replying_to">Respondiendo a %1$s</string>
+    <string name="reactions_title">Reacciones</string>
+    <string name="reactions_all">Todos · %1$d</string>
+    <string name="reactions_likes">Me gusta · %1$d</string>
+    <string name="reactions_empty">Nadie ha reaccionado todavía.</string>
+    <string name="reactions_you">Tú</string>
+    <string name="reactions_see_profile">Ver perfil</string>
+    <string name="feed_counts">%1$s · %2$s</string>
+    <!-- Historias (backend nv-84) -->
+    <string name="stories_open">Ver las historias de %1$s</string>
+    <string name="stories_close">Cerrar historias</string>
+    <string name="stories_verified">Visita verificada</string>
+    <string name="stories_see_post">Ver publicación</string>
+    <!-- 32_ExpMapa (D25: OpenStreetMap) -->
+    <string name="explore_map">Ver mapa</string>
+    <string name="map_search_here">Buscar en esta zona</string>
+    <string name="map_empty">No hay lugares en esta zona. Mueve el mapa o quita el filtro.</string>
+    <string name="map_attribution">© colaboradores de OpenStreetMap</string>
+    <string name="map_card_line">%1$s · ★ %2$.1f</string>
+    <string name="map_see_detail">Ver detalle</string>
+    <string name="map_to_plan">A mi plan</string>
 </resources>

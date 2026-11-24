@@ -18,6 +18,7 @@ import com.wherever.mobile.feature.profile.domain.Preferences
 import com.wherever.mobile.feature.profile.domain.PreferencesPatch
 import com.wherever.mobile.feature.profile.domain.Privacy
 import com.wherever.mobile.feature.profile.domain.PrivacyPatch
+import com.wherever.mobile.feature.profile.domain.ProfileExtras
 import com.wherever.mobile.feature.profile.domain.ProfileRepository
 import com.wherever.mobile.feature.profile.domain.Tastes
 import com.wherever.mobile.feature.profile.domain.UserProfile
@@ -138,6 +139,16 @@ fun sampleProfile(
 /** Repositorio programable para probar ViewModels con respuestas falsas. */
 class FakeProfileRepository(initial: UserProfile? = null) : ProfileRepository {
     val profile = MutableStateFlow(initial)
+    val extras = MutableStateFlow<ProfileExtras?>(null)
+    val editorCalls = mutableListOf<String>()
+
+    override suspend fun updateBio(bio: String): Result<UserProfile> {
+        editorCalls += "bio:$bio"
+        return Result.Success(profile.value ?: sampleProfile())
+    }
+
+    override fun observeExtras(): Flow<ProfileExtras?> = extras
+
     var refreshResult: Result<UserProfile>? = null
     var updateProfileResult: Result<UserProfile>? = null
     var tastesResult: Result<Unit> = Result.Success(Unit)
@@ -184,6 +195,7 @@ class FakeProfileRepository(initial: UserProfile? = null) : ProfileRepository {
 
     override suspend fun updateUsername(username: String): Result<UserProfile> {
         usernameUpdates += username
+        editorCalls += "username:$username"
         val result = usernameResult
             ?: profile.value?.let { Result.Success(it.copy(username = username)) }
             ?: Result.Failure(AppError.NotFound())

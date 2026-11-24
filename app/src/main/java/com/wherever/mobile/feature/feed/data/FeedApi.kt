@@ -30,7 +30,10 @@ data class MomentDto(
     @SerialName("texto") val text: String? = null,
     @SerialName("plan_id") val planId: String? = null,
     @SerialName("propio") val own: Boolean = false,
-    @SerialName("creado_en") val createdAt: String = ""
+    @SerialName("creado_en") val createdAt: String = "",
+    /** nv-83: me gusta y comentarios publicados. */
+    @SerialName("reacciones_total") val likes: Int = 0,
+    @SerialName("comentarios_total") val comments: Int = 0
 )
 
 @Serializable

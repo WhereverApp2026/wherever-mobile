@@ -61,6 +61,9 @@
 | 2026-11-20 | nv-19 Personas | BuscarPersonas · solicitud enviada (y Amigos) | 57 (+1 locales) | 35,2 % |
 | 2026-11-20 | nv-17 feed de amigos | 11_InicioAmigos, 12_InicioMas, InicioMas · solicitud enviada, 17_PostDetalle | 61 (+1 locales) | 37,7 % |
 | 2026-11-20 | nv-20 opciones de amigo | 27_AmigoOpc: Silenciar, Eliminar, Bloquear | 62 (+1 locales) | 38,3 % |
+| 2026-11-23 | #68 mapa | 32_ExpMapa con osmdroid contra staging | 96 | 59,3 % |
+| 2026-11-24 | #68 social nv-17 | 13_Reacciones y 16_Historia contra staging (QA A/B); arreglos de conteo y «Ver más» en comentarios | 98 | 60,5 % |
+| 2026-11-24 | #68 social y vaca | InvitarPlan y 45_AgregarGasto contra staging (QA A/B); 26_PerfilAmigo con `nivel` como objeto | 100 | 61,7 % |
 
 ---
 

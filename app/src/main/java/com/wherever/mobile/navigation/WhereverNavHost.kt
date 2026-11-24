@@ -41,6 +41,7 @@ import com.wherever.mobile.feature.feed.ui.FriendPlanNavigation
 import com.wherever.mobile.feature.feed.ui.FriendPlanRoute as FriendPlanScreen
 import com.wherever.mobile.feature.feed.ui.MomentDetailRoute
 import com.wherever.mobile.feature.feed.ui.MomentNavigation
+import com.wherever.mobile.feature.feed.ui.StoryViewerRoute as StoryViewerScreen
 import com.wherever.mobile.feature.friends.ui.AddFriendRoute as AddFriendScreen
 import com.wherever.mobile.feature.friends.ui.FindFriendsRoute as FindFriendsScreen
 import com.wherever.mobile.feature.friends.ui.FriendsRoute as FriendsScreen
@@ -64,6 +65,8 @@ import com.wherever.mobile.feature.memories.ui.CreateMomentRoute as CreateMoment
 import com.wherever.mobile.feature.memories.ui.PostcardDetailRoute as PostcardDetailScreen
 import com.wherever.mobile.feature.memories.ui.PostcardEditorRoute as PostcardEditorScreen
 import com.wherever.mobile.feature.notifications.ui.NotificationsRoute as NotificationsScreen
+import com.wherever.mobile.feature.places.ui.ExploreMapNavigation
+import com.wherever.mobile.feature.places.ui.ExploreMapRoute as ExploreMapScreen
 import com.wherever.mobile.feature.places.ui.ExploreRoute as ExploreScreen
 import com.wherever.mobile.feature.places.ui.FavoritesRoute as FavoritesScreen
 import com.wherever.mobile.feature.places.ui.PlaceDetailRoute as PlaceDetailScreen
@@ -73,6 +76,8 @@ import com.wherever.mobile.feature.plans.ui.MyPlansRoute as MyPlansScreen
 import com.wherever.mobile.feature.plans.ui.PlanDetailRoute as PlanDetailScreen
 import com.wherever.mobile.feature.profile.ui.BadgesRoute as BadgesScreen
 import com.wherever.mobile.feature.profile.ui.EditProfileRoute as EditProfileScreen
+import com.wherever.mobile.feature.profile.ui.ProfileEditorRoute as ProfileEditorScreen
+import com.wherever.mobile.feature.profile.ui.ProfileNavigation
 import com.wherever.mobile.feature.profile.ui.ProfileRoute as ProfileScreen
 import com.wherever.mobile.feature.reservations.ui.MyReservationsRoute as MyReservationsScreen
 import com.wherever.mobile.feature.reservations.ui.ReservationRoute as ReservationScreen
@@ -235,8 +240,15 @@ fun WhereverNavHost(
                     onMoment = { navController.navigateFrom(e, MomentRoute(it)) },
                     onFriendPlan = { navController.navigateFrom(e, FriendPlanRoute(it)) },
                     onPerson = { navController.navigateFrom(e, PersonRoute(it)) },
-                    onAddFriends = { navController.navigateFrom(e, AddFriendRoute) }
+                    onAddFriends = { navController.navigateFrom(e, AddFriendRoute) },
+                    onStory = { navController.navigateFrom(e, StoryRoute(it)) }
                 )
+            )
+        }
+        composable<StoryRoute> { e ->
+            StoryViewerScreen(
+                onClose = { navController.popOnResult(e) },
+                onMoment = { navController.navigateFrom(e, MomentRoute(it)) }
             )
         }
         composable<MomentRoute> { e ->
@@ -244,7 +256,8 @@ fun WhereverNavHost(
                 MomentNavigation(
                     onBack = { navController.popFrom(e) },
                     onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "inicio")) },
-                    onPlan = { navController.navigateFrom(e, FriendPlanRoute(it)) }
+                    onPlan = { navController.navigateFrom(e, FriendPlanRoute(it)) },
+                    onPerson = { navController.navigateFrom(e, PersonRoute(it)) }
                 )
             )
         }
@@ -272,7 +285,17 @@ fun WhereverNavHost(
             ExploreScreen(
                 onTab = { navController.openTab(e, it) },
                 onCreate = { navController.openCreate(e, it) },
-                onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "busqueda")) }
+                onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "busqueda")) },
+                onMap = { navController.navigateFrom(e, ExploreMapRoute) }
+            )
+        }
+        composable<ExploreMapRoute> { e ->
+            ExploreMapScreen(
+                ExploreMapNavigation(
+                    onBack = { navController.popFrom(e) },
+                    onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "mapa")) },
+                    onPlan = { navController.navigateFrom(e, CreatePlanRoute(phrase = it)) }
+                )
             )
         }
         composable<PlaceRoute> { e ->
@@ -502,21 +525,27 @@ fun WhereverNavHost(
         }
         composable<ProfileRoute> { e ->
             ProfileScreen(
-                onTab = { navController.openTab(e, it) },
-                onCreate = { navController.openCreate(e, it) },
-                onEdit = { navController.navigateFrom(e, EditProfileRoute) },
-                onFavorites = { navController.navigateFrom(e, FavoritesRoute) },
-                onFriends = { navController.navigateFrom(e, FriendsRoute) },
-                onReservations = { navController.navigateFrom(e, MyReservationsRoute) },
-                onBadges = { navController.navigateFrom(e, BadgesRoute) },
-                onMyReviews = { navController.navigateFrom(e, MyReviewsRoute) },
-                onPendingReviews = { navController.navigateFrom(e, PendingReviewsRoute) },
-                onMemories = { navController.navigateFrom(e, AlbumRoute) },
-                onNewMoment = { navController.navigateFrom(e, CreateMomentRoute()) },
-                onSettings = { navController.navigateFrom(e, SettingsRoute) },
-                onVerifyEmail = { email ->
-                    navController.navigateFrom(e, CheckEmailRoute(CheckEmailMode.VERIFICATION.name, email))
-                }
+                ProfileNavigation(
+                    onTab = { navController.openTab(e, it) },
+                    onCreate = { navController.openCreate(e, it) },
+                    onEdit = { navController.navigateFrom(e, ProfileEditorRoute) },
+                    onSettings = { navController.navigateFrom(e, SettingsRoute) },
+                    onNotifications = { navController.navigateFrom(e, NotificationsRoute) },
+                    onMyCode = { navController.navigateFrom(e, MyCodeRoute()) },
+                    onFriends = { navController.navigateFrom(e, FriendsRoute) },
+                    onBadges = { navController.navigateFrom(e, BadgesRoute) },
+                    onReservations = { navController.navigateFrom(e, MyReservationsRoute) },
+                    onFavorites = { navController.navigateFrom(e, FavoritesRoute) },
+                    onMemories = { navController.navigateFrom(e, AlbumRoute) },
+                    onMyReviews = { navController.navigateFrom(e, MyReviewsRoute) },
+                    onPendingReviews = { navController.navigateFrom(e, PendingReviewsRoute) },
+                    onVerifyEmail = { email ->
+                        navController.navigateFrom(e, CheckEmailRoute(CheckEmailMode.VERIFICATION.name, email))
+                    },
+                    onPostcard = { navController.navigateFrom(e, PostcardRoute(it)) },
+                    onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
+                    onPlace = { navController.navigateFrom(e, PlaceRoute(it)) }
+                )
             )
         }
         composable<BadgesRoute> { e ->
@@ -525,9 +554,14 @@ fun WhereverNavHost(
         composable<EditProfileRoute> { e ->
             EditProfileScreen(
                 onBack = { navController.popFrom(e) },
-                onTastes = { navController.navigateFrom(e, TastesRoute(fromSettings = true)) },
-                onPrivacy = { navController.navigateFrom(e, PrivacyRoute) },
                 onDeleteAccount = { navController.navigateFrom(e, DeleteAccountRoute) }
+            )
+        }
+        composable<ProfileEditorRoute> { e ->
+            ProfileEditorScreen(
+                onBack = { navController.popFrom(e) },
+                onTastes = { navController.navigateFrom(e, TastesRoute(fromSettings = true)) },
+                onPrivacy = { navController.navigateFrom(e, PrivacyRoute) }
             )
         }
         composable<SettingsRoute> { e ->

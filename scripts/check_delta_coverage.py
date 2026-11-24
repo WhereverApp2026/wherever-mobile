@@ -12,6 +12,7 @@ import argparse
 import glob
 import subprocess
 import sys
+from pathlib import Path
 import xml.etree.ElementTree as ET
 
 
@@ -33,7 +34,12 @@ def changed_files(base: str) -> list[str]:
 
 
 def file_coverage(report: str) -> dict[str, tuple[int, int]]:
-    root = ET.parse(report).getroot()
+    text = Path(report).read_text(encoding="utf-8")
+    # El reporte lo genera Kover en esta misma build; aun así se rechazan DTD y entidades
+    # (XXE y "billion laughs") antes de leerlo, que es lo que haría defusedxml.
+    if "<!DOCTYPE" in text or "<!ENTITY" in text:
+        raise ValueError(f"{report}: XML con DTD o entidades, no se procesa")
+    root = ET.fromstring(text)  # nosemgrep: python.lang.security.use-defused-xml-parse.use-defused-xml-parse
     result: dict[str, tuple[int, int]] = {}
     for source in root.iter("sourcefile"):
         name = source.get("name") or ""

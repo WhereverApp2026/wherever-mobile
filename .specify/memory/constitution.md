@@ -1,7 +1,7 @@
 ---
 version: 1.0.0
 ratified: 2026-10-28
-last_amended: 2026-10-28
+last_amended: 2026-11-23
 status: borrador (pendiente de firma del revisor)
 source_of_truth: .specify/memory/constitution.md
 mirror: ./constitution.md
@@ -39,14 +39,26 @@ methodology: SDD
 | DI y navegación | Hilt, Navigation Compose |
 | Red | Retrofit + OkHttp + kotlinx.serialization |
 | Local | Room con esquemas exportados, WorkManager |
-| Imágenes y mapas | Coil, Maps Compose (posterior) |
+| Imágenes y mapas | Coil; mapa con osmdroid + OpenStreetMap (excepción E-04) |
 | Notificaciones | Firebase Cloud Messaging |
-| Seguridad | Android Keystore + almacenamiento cifrado; `networkSecurityConfig` solo HTTPS |
+| Seguridad | Android Keystore + almacenamiento cifrado; Room cifrada con SQLCipher (E-06); `androidx.biometric` (E-05); `networkSecurityConfig` solo HTTPS con *pinning* |
 | Tests | JUnit, MockK, Turbine, MockWebServer, Compose Testing, Konsist |
 | Calidad | ktlint, detekt, Android Lint, Kover, Semgrep, OWASP Dependency-Check |
 | Build y CI | Gradle Kotlin DSL + catálogo de versiones; GitHub Actions solo `ci-pr.yml`, sin deploy |
 
 No se agregan librerías sin evaluar licencia, mantenimiento y seguridad. Regla de excepción en `nv-00`.
+
+### Excepciones de stack vigentes
+
+| Id | Librería | Para qué | Licencia | Acordada | Límite |
+|---|---|---|---|---|---|
+| E-01 | Robolectric + Roborazzi | Capturas de pantalla en pruebas JVM | Apache 2.0 | `specs/nv-55` §2 | Solo `testImplementation` |
+| E-02 | ZXing `core` + `zxing-android-embedded` | Generar y leer el QR del código de amigo y del mostrador | Apache 2.0 | `specs/nv-20` §2.5 | El lector pide la cámara en contexto |
+| E-03 | Konsist | Reglas de arquitectura en pruebas | Apache 2.0 | `nv-03` | Solo pruebas |
+| E-04 | osmdroid (OpenStreetMap) | Mapas de Explorar, día del plan y punto de encuentro (D25) | Apache 2.0; datos ODbL con atribución visible | Jorge, 2026-11-23 | Sin llave; atribución «© OpenStreetMap» en cada mapa; rutas paso a paso en la app de mapas del teléfono; agente de usuario propio (política de teselas de OSM) |
+| E-05 | `androidx.biometric` | Desbloqueo con huella o rostro al abrir la app | Apache 2.0 (Google) | Jorge, 2026-11-23 | Opcional, se activa en Ajustes; sin biometría la app funciona igual |
+| E-06 | SQLCipher (`net.zetetic:sqlcipher-android`) | Cifrar la base de Room | BSD (Zetetic) | Jorge, 2026-11-23 | Llave aleatoria envuelta con Android Keystore; migración de la base sin cifrar probada con datos reales |
+| E-07 | CycloneDX Gradle | SBOM de dependencias en la CI | Apache 2.0 | Jorge, 2026-11-23 | Solo build |
 
 ## 4. Arquitectura
 
@@ -69,13 +81,17 @@ No se agregan librerías sin evaluar licencia, mantenimiento y seguridad. Regla 
 ## 6. Seguridad y privacidad (DevSecOps)
 
 - Tokens cifrados con Keystore; nunca en logs, `SharedPreferences` sin cifrar ni respaldos (`allowBackup=false` o reglas explícitas).
-- `networkSecurityConfig`: solo HTTPS; sin certificados confiados a ciegas.
+- `networkSecurityConfig`: solo HTTPS; sin certificados confiados a ciegas; *certificate pinning* de las CA raíz del servidor con respaldo (al menos dos pines) y fecha de vencimiento.
 - Sin llaves de API ni `google-services.json` en el repositorio (`local.properties` y secretos de CI).
 - Permisos (ubicación, cámara, notificaciones) en contexto; la app funciona si se niegan.
 - Aviso de privacidad visible y opción de eliminar la cuenta (posterior).
 - El `Authenticator` reintenta una sola vez; si el refresh falla, se limpia la sesión.
 - `docs/routes.md`, `docs/permissions-matrix.md` y `docs/masvs-checklist.md` están vivos; las specs solo los enlazan.
-- Trivy/MobSF/Frida y firma automática se documentan como deuda diferida, no exigidas en esta etapa.
+- Pantallas con datos sensibles (contraseñas, código de amigo, datos personales) con `FLAG_SECURE`.
+- Detección de root, depurador y app alterada: en debug solo avisa; en release bloquea con una pantalla propia.
+- Base local cifrada (E-06) y desbloqueo biométrico opcional (E-05).
+- CI: Semgrep completo y OSV bloqueantes; SBOM CycloneDX como artefacto; build de release firmado con secretos de la CI cuando existan.
+- Trivy/MobSF/Frida y la publicación automática se documentan como deuda diferida, no exigidas en esta etapa.
 
 ## 7. Testing y QA
 

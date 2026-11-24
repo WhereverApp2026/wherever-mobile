@@ -26,10 +26,12 @@ import com.wherever.mobile.core.designsystem.TitleBlock
 import com.wherever.mobile.core.designsystem.WhereverDangerButton
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
 import com.wherever.mobile.core.designsystem.WhereverTheme
+import com.wherever.mobile.core.ui.SecureScreen
 
 /** EliminarCuenta. Sigue a la API: se escribe ELIMINAR y hay 30 días para cancelar (duda D03). */
 @Composable
 fun DeleteAccountRoute(onBack: () -> Unit, onDeleted: () -> Unit, viewModel: DeleteAccountViewModel = hiltViewModel()) {
+    SecureScreen()
     val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(viewModel) { viewModel.deleted.collect { onDeleted() } }
     DeleteAccountContent(state, viewModel::onConfirmationChange, viewModel::delete, onBack)

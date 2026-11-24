@@ -42,6 +42,8 @@
 | `FriendsRoute` | Amigos: lista, solicitudes recibidas y enviadas | ninguno | release | nv-53 |
 | `MyGroupsRoute` | Mis grupos: grupos por actividad, aceptar o rechazar la invitación | ninguno | release | nv-25 |
 | `GroupChatRoute(id)` | Chat del grupo con plan fijado, envío optimista y lectura sin red | ninguno | release | nv-25 |
+| `ExploreMapRoute` | 32_ExpMapa: lugares en el mapa (osmdroid), Buscar en esta zona, filtros, Ver detalle y A mi plan | ubicación aproximada (opcional, solo para centrar) | release | nv-21 |
+| `StoryRoute(authorId)` | Visor de historias de amigos (24 h), con avance automático y «Ver publicación» | ninguno | release | nv-17 |
 | `GroupRoute(id)` | 46_Grupo: integrantes, plan, votaciones y La vaca; el organizador invita, renombra y saca | ninguno | release | nv-25 |
 | `VoteRoute(id)` | 48_Votar: votaciones del grupo, un voto por persona y cierre del organizador | ninguno | release | nv-25 |
 | `CreateGroupRoute(planId, groupId)` | 43_CrearGrupo: grupo del plan con hasta 11 amigos, o invitar a más (`groupId`) | ninguno | release | nv-25 |
@@ -53,7 +55,8 @@
 | `PersonRoute(id)` | Perfil de otra persona con su acción | ninguno | release | nv-53 |
 | `MyPlansRoute` | Mis planes (próximos, guardados y pasados) | ninguno | release | nv-48 |
 | `ProfileRoute` | Perfil | ninguno | release | nv-14 |
-| `EditProfileRoute` | Editar perfil | ninguno | release | nv-14 |
+| `EditProfileRoute` | 84_DatosPers: nombre, correo, ciudad, foto y eliminar la cuenta | ninguno | release | nv-14 |
+| `ProfileEditorRoute` | 82_EditarPerfil: nombre, usuario, bio, gustos y privacidad social | ninguno | release | nv-14 |
 | `SettingsRoute` | Ajustes | ninguno | release | nv-13 |
 | `BusinessOnboardingRoute` | Alta del negocio: registro, ubicación, operación, verificación y solicitud enviada (43 a 47) | ubicación aproximada al tocar «Estoy en mi negocio» | release | nv-34 |
 | `BusinessHomeRoute` | Modo negocio: entra con `POST /usuarios/yo/modo` y abre el Panel del negocio activo (barra interna Panel y Reservas; Cupones, Reseñas y Perfil llegan con nv-36 a nv-38) | ninguno | release | nv-35 |

@@ -46,6 +46,10 @@ data object BadgesRoute
 @Serializable
 data object EditProfileRoute
 
+/** 82_EditarPerfil: nombre, usuario, bio, gustos y privacidad social (specs/nv-14). */
+@Serializable
+data object ProfileEditorRoute
+
 @Serializable
 data object SettingsRoute
 
@@ -137,6 +141,14 @@ data object MyGroupsRoute
 /** 45_GrupoChat; `id` lo lee GroupChatViewModel de SavedStateHandle por su nombre (specs/nv-25). */
 @Serializable
 data class GroupChatRoute(val id: String)
+
+/** 32_ExpMapa: lugares en el mapa (specs/nv-21, D25 osmdroid). */
+@Serializable
+data object ExploreMapRoute
+
+/** Visor de historias; StoryViewerViewModel lee `authorId` (backend nv-84, specs/nv-17). */
+@Serializable
+data class StoryRoute(val authorId: String)
 
 /** 46_Grupo; GroupDetailViewModel lee `id` (specs/nv-25). */
 @Serializable

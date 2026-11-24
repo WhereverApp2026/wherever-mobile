@@ -19,10 +19,12 @@ import com.wherever.mobile.core.designsystem.LabeledTextField
 import com.wherever.mobile.core.designsystem.TopTitleRow
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.rememberFormSubmit
+import com.wherever.mobile.core.ui.SecureScreen
 
 /** Ajustes → Cambiar correo (US-017, specs/nv-51). */
 @Composable
 fun ChangeEmailRoute(onBack: () -> Unit, viewModel: ChangeEmailViewModel = hiltViewModel()) {
+    SecureScreen()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val submit = rememberFormSubmit(viewModel::submit)
     val sentTo = state.sentTo

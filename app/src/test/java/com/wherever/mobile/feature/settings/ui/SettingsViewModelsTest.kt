@@ -37,7 +37,7 @@ class SettingsViewModelsTest {
 
     @Test
     fun `cambiar tema manda el PATCH parcial`() = runTest {
-        val viewModel = SettingsViewModel(profiles, auth)
+        val viewModel = SettingsViewModel(profiles, auth, FakeAppLockPreferences())
 
         viewModel.setTheme("oscuro")
         advanceUntilIdle()
@@ -47,7 +47,7 @@ class SettingsViewModelsTest {
 
     @Test
     fun `interruptor de votaciones usa grupos`() = runTest {
-        val viewModel = SettingsViewModel(profiles, auth)
+        val viewModel = SettingsViewModel(profiles, auth, FakeAppLockPreferences())
 
         viewModel.setGroups(false)
         advanceUntilIdle()
@@ -57,7 +57,7 @@ class SettingsViewModelsTest {
 
     @Test
     fun `usar ubicacion va a privacidad`() = runTest {
-        val viewModel = SettingsViewModel(profiles, auth)
+        val viewModel = SettingsViewModel(profiles, auth, FakeAppLockPreferences())
 
         viewModel.setUseLocation(false)
         advanceUntilIdle()
@@ -67,7 +67,7 @@ class SettingsViewModelsTest {
 
     @Test
     fun `fallo al guardar muestra el mensaje de la API`() = runTest {
-        val viewModel = SettingsViewModel(profiles, auth)
+        val viewModel = SettingsViewModel(profiles, auth, FakeAppLockPreferences())
         profiles.preferencesResult = Result.Failure(AppError.Validation(apiMessage = "datos inválidos"))
 
         viewModel.setPromotions(true)
@@ -79,7 +79,7 @@ class SettingsViewModelsTest {
 
     @Test
     fun `cerrar sesion llama al repositorio y avisa`() = runTest {
-        val viewModel = SettingsViewModel(profiles, auth)
+        val viewModel = SettingsViewModel(profiles, auth, FakeAppLockPreferences())
 
         viewModel.loggedOut.test {
             viewModel.logout()
@@ -246,5 +246,14 @@ class SettingsViewModelsTest {
 
         assertEquals(UiText.Plain("Fuera de plazo"), viewModel.state.value.error)
         assertFalse(viewModel.state.value.working)
+    }
+}
+
+private class FakeAppLockPreferences : com.wherever.mobile.core.security.AppLockPreferences {
+    private val state = kotlinx.coroutines.flow.MutableStateFlow(false)
+    override val enabled: kotlinx.coroutines.flow.StateFlow<Boolean> = state
+
+    override fun setEnabled(enabled: Boolean) {
+        state.value = enabled
     }
 }

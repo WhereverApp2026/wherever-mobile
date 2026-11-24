@@ -56,9 +56,32 @@ class PlatformSecurityTest {
         assertEquals("false", base.getAttribute("cleartextTrafficPermitted"))
         val sources = (0 until config.getElementsByTagName("certificates").length)
             .map { (config.getElementsByTagName("certificates").item(it) as Element).getAttribute("src") }
-        assertEquals(listOf("system"), sources)
-        assertEquals("Sin excepciones por dominio", 0, config.getElementsByTagName("domain-config").length)
+        assertEquals(listOf("system"), sources.distinct())
         assertEquals("Sin depuración de certificados", 0, config.getElementsByTagName("debug-overrides").length)
+    }
+
+    @Test
+    fun `la API tiene pinning con respaldo, vencimiento y sin texto en claro`() {
+        val config = xml("src/main/res/xml/network_security_config.xml")
+        val domains = config.getElementsByTagName("domain-config")
+        assertEquals("Un solo bloque por dominio: el de la API", 1, domains.length)
+        val domain = domains.item(0) as Element
+        assertEquals("false", domain.getAttribute("cleartextTrafficPermitted"))
+        assertEquals("cloudfront.net", domain.getElementsByTagName("domain").item(0).textContent.trim())
+        val pinSet = domain.getElementsByTagName("pin-set").item(0) as Element
+        val expiration = java.time.LocalDate.parse(pinSet.getAttribute("expiration"))
+        assertTrue("El pinning vence en menos de 2 años", expiration.isBefore(java.time.LocalDate.now().plusYears(2)))
+        val pins = (0 until pinSet.getElementsByTagName("pin").length).map {
+            pinSet.getElementsByTagName("pin").item(it) as Element
+        }
+        assertTrue("Al menos dos pines (respaldo)", pins.size >= 2)
+        assertTrue(pins.all { it.getAttribute("digest") == "SHA-256" && it.textContent.trim().length == SHA256_BASE64 })
+        // Amazon Root CA 1: la raíz de la cadena real de staging.
+        assertTrue(pins.any { it.textContent.trim() == "++MBgDH5WGvL9Bcn5Be30cRcL0f5O+NyoXuWtQdX1aI=" })
+    }
+
+    private companion object {
+        const val SHA256_BASE64 = 44
     }
 
     @Test

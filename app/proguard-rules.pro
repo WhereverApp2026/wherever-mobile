@@ -12,3 +12,7 @@
 # Trazas legibles en los informes de fallos, sin exponer el nombre del archivo fuente.
 -keepattributes SourceFile,LineNumberTable
 -renamesourcefileattribute SourceFile
+
+# SQLCipher (constitución E-06): clases llamadas desde código nativo.
+-keep class net.zetetic.database.** { *; }
+-keep interface net.zetetic.database.** { *; }

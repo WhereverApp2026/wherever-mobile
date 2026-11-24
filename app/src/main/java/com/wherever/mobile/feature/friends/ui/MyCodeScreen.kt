@@ -51,11 +51,13 @@ import com.wherever.mobile.core.designsystem.WhereverIcons
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
 import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverTheme
+import com.wherever.mobile.core.ui.SecureScreen
 import com.wherever.mobile.feature.profile.ui.ProfileAvatar
 
 /** 25_MiCodigo (US-234): pestañas Mi código y Escanear. */
 @Composable
 fun MyCodeRoute(onBack: () -> Unit, onPerson: (String) -> Unit, viewModel: MyCodeViewModel = hiltViewModel()) {
+    SecureScreen()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val shareText = state.code?.let { stringResource(R.string.friends_share_text, it) }

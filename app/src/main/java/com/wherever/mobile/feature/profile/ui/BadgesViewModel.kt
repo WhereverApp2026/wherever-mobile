@@ -22,7 +22,11 @@ data class BadgesUiState(
     val progress: LevelProgress? = null,
     val earned: List<Badge> = emptyList(),
     val locked: List<Badge> = emptyList(),
-    val error: UiText? = null
+    val error: UiText? = null,
+    /** Número del nivel de la API (círculo dorado de 83_Insignias). */
+    val levelNumber: Int? = null,
+    /** Los niveles 1 a 3 se llaman igual («Explorador», backend nv-79): el siguiente se nombra por número. */
+    val nextLevelNumber: Int? = null
 )
 
 /** 83_Insignias: nivel y puntos del perfil (Room, refrescado de `/usuarios/yo`) e insignias. */
@@ -37,7 +41,8 @@ class BadgesViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             profiles.observeProfile().collect { profile ->
-                if (profile != null) {
+                // Sin la API, la escalera local; en cuanto llega el nivel del backend, manda ese.
+                if (profile != null && state.value.levelNumber == null) {
                     mutableState.update { it.copy(progress = LevelProgress.of(profile.points, profile.level)) }
                 }
             }
@@ -55,7 +60,10 @@ class BadgesViewModel @Inject constructor(
                         loading = false,
                         earned = result.data.filter { it.earned },
                         locked = result.data.filterNot { it.earned },
-                        error = (refreshed as? Result.Failure)?.error?.toUiText()
+                        error = (refreshed as? Result.Failure)?.error?.toUiText(),
+                        progress = badges.lastLevel()?.toProgress() ?: s.progress,
+                        levelNumber = badges.lastLevel()?.number ?: s.levelNumber,
+                        nextLevelNumber = badges.lastLevel()?.nextNumber ?: s.nextLevelNumber
                     )
                 }
                 is Result.Failure -> mutableState.update { it.copy(loading = false, error = result.error.toUiText()) }

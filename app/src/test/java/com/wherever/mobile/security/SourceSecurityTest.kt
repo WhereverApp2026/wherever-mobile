@@ -43,8 +43,9 @@ class SourceSecurityTest {
     fun `los tokens solo se guardan cifrados en core security`() {
         val prefsUsers = sources.filter { it.readText().contains("getSharedPreferences") }
         // nv-47: AndroidLocationProvider guarda cuántas veces se negó el permiso (un entero, sin datos personales).
+        // E-05: AppLock guarda si el desbloqueo con huella está encendido (un booleano).
         assertEquals(
-            listOf("AndroidLocationProvider.kt", "SharedOnboardingPreferences.kt"),
+            listOf("AndroidLocationProvider.kt", "AppLock.kt", "SharedOnboardingPreferences.kt"),
             prefsUsers.map { it.name }.sorted()
         )
         assertEquals(

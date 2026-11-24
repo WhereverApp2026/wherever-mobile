@@ -70,10 +70,13 @@ import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.core.notifications.RequestNotificationPermission
 import com.wherever.mobile.core.ui.formatDateTime
+import com.wherever.mobile.feature.feed.domain.StoryPerson
 import com.wherever.mobile.feature.feed.ui.FriendsFeedActions
 import com.wherever.mobile.feature.feed.ui.FriendsFeedUiState
 import com.wherever.mobile.feature.feed.ui.FriendsFeedViewModel
 import com.wherever.mobile.feature.feed.ui.PREVIEW_FEED_ITEM
+import com.wherever.mobile.feature.feed.ui.StoriesRow
+import com.wherever.mobile.feature.feed.ui.StoriesViewModel
 import com.wherever.mobile.feature.feed.ui.friendsFeedItems
 import com.wherever.mobile.feature.home.domain.Company
 import com.wherever.mobile.feature.home.domain.Event
@@ -96,7 +99,9 @@ data class HomeNavigation(
     val onMoment: (String) -> Unit,
     val onFriendPlan: (String) -> Unit,
     val onPerson: (String) -> Unit,
-    val onAddFriends: () -> Unit
+    val onAddFriends: () -> Unit,
+    /** Visor de historias desde la persona tocada (backend nv-84). */
+    val onStory: (String) -> Unit = {}
 )
 
 /** 10_Inicio. */
@@ -105,8 +110,10 @@ fun HomeRouteScreen(
     navigation: HomeNavigation,
     viewModel: HomeViewModel = hiltViewModel(),
     badge: UnreadBadgeViewModel = hiltViewModel(),
-    feed: FriendsFeedViewModel = hiltViewModel()
+    feed: FriendsFeedViewModel = hiltViewModel(),
+    stories: StoriesViewModel = hiltViewModel()
 ) {
+    val storiesState by stories.state.collectAsStateWithLifecycle()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val feedState by feed.state.collectAsStateWithLifecycle()
     var tab by rememberSaveable { mutableIntStateOf(HomeTab.NEARBY.ordinal) }
@@ -144,6 +151,7 @@ fun HomeRouteScreen(
             friends = HomeFriendsTab(
                 selected = tab == HomeTab.FRIENDS.ordinal,
                 state = feedState,
+                stories = storiesState.people,
                 onSelectTab = { tab = it },
                 actions = FriendsFeedActions(
                     onMoment = navigation.onMoment,
@@ -183,7 +191,8 @@ data class HomeFriendsTab(
     val selected: Boolean,
     val state: FriendsFeedUiState,
     val onSelectTab: (Int) -> Unit,
-    val actions: FriendsFeedActions
+    val actions: FriendsFeedActions,
+    val stories: List<StoryPerson> = emptyList()
 )
 
 data class HomeActions(
@@ -237,6 +246,9 @@ private fun HomeContent(
                 )
             }
             if (friends.selected) {
+                if (friends.stories.isNotEmpty()) {
+                    item(key = "stories") { StoriesRow(friends.stories, onOpen = navigation.onStory) }
+                }
                 friendsFeedItems(friends.state, friends.actions)
             } else {
                 nearbyItems(state, navigation, actions, friends)

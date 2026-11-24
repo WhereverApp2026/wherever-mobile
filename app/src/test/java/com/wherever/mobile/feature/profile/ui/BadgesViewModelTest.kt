@@ -4,6 +4,7 @@ import com.wherever.mobile.R
 import com.wherever.mobile.core.common.AppError
 import com.wherever.mobile.core.common.Result
 import com.wherever.mobile.core.ui.UiText
+import com.wherever.mobile.feature.profile.domain.ApiLevel
 import com.wherever.mobile.feature.profile.domain.Badge
 import com.wherever.mobile.feature.profile.domain.BadgesRepository
 import com.wherever.mobile.feature.profile.domain.LevelProgress
@@ -50,6 +51,36 @@ class BadgesViewModelTest {
         assertTrue(state.locked.none { it.earned })
         assertEquals(sampleProfile().points, state.progress?.points)
         assertNull(state.error)
+    }
+
+    @Test
+    fun `con el nivel de la API muestra su numero y la meta del siguiente`() = runTest {
+        val withLevel = object : BadgesRepository {
+            override suspend fun badges(): Result<List<Badge>> = Result.Success(emptyList())
+
+            override fun lastLevel(): ApiLevel = ApiLevel(3, "Explorador", 340, "Anfitrión", 500)
+        }
+        val viewModel = BadgesViewModel(profiles, withLevel)
+        advanceUntilIdle()
+
+        val state = viewModel.state.value
+        assertEquals(3, state.levelNumber)
+        assertEquals("Explorador", state.progress?.current?.name)
+        assertEquals("Anfitrión", state.progress?.next?.name)
+        assertEquals(0.68f, state.progress?.fraction)
+    }
+
+    @Test
+    fun `si el siguiente nivel se llama igual guarda su numero`() = runTest {
+        val sameName = object : BadgesRepository {
+            override suspend fun badges(): Result<List<Badge>> = Result.Success(emptyList())
+
+            override fun lastLevel(): ApiLevel = ApiLevel(1, "Explorador", 85, "Explorador", 150, nextNumber = 2)
+        }
+        val viewModel = BadgesViewModel(profiles, sameName)
+        advanceUntilIdle()
+        assertEquals(2, viewModel.state.value.nextLevelNumber)
+        assertEquals("Explorador", viewModel.state.value.progress?.next?.name)
     }
 
     @Test

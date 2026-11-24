@@ -62,6 +62,7 @@ import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.feature.vaca.domain.ExpenseConcept
+import com.wherever.mobile.feature.vaca.domain.SPLIT_MIN
 import com.wherever.mobile.feature.vaca.domain.SplitMode
 
 /** 45_AgregarGasto (specs/nv-26). */
@@ -239,6 +240,15 @@ private fun SplitCard(state: AddExpenseUiState, actions: AddExpenseActions) {
             }
             state.members.forEachIndexed { index, member ->
                 MemberRow(state, member, index, actions)
+            }
+            // La API divide entre 2 y 12 confirmados (nv-58): con uno solo, se explica por qué no se guarda.
+            if (state.members.size < SPLIT_MIN) {
+                Text(
+                    stringResource(R.string.vaca_need_two),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.testTag("expense_need_two")
+                )
             }
         }
     }

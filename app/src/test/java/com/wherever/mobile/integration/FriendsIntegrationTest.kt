@@ -103,6 +103,23 @@ class FriendsIntegrationTest {
     }
 
     @Test
+    fun `perfil de amigo con nivel como objeto, como lo manda staging hoy`() = runTest {
+        server.reply(
+            200,
+            """{"id":"u1","nombre":"QA B","nombre_usuario":"qa_b","foto_url":"",""" +
+                """"descripcion":"","relacion":"amigo","nivel":{"numero":2,"nombre":"Explorador"},""" +
+                """"contadores":{"planes":0,"amigos":1,"resenas":1},"insignias_total":1,""" +
+                """"insignias_destacadas":[{"id":"resenista","nombre":"Reseñista"}],""" +
+                """"amigos_en_comun":0,"grupos_en_comun":3,"silenciado":false,"degradado":false}"""
+        )
+
+        val detail = (repository.person("u1") as Result.Success).data
+
+        assertEquals("Explorador", detail.level)
+        assertEquals(3, detail.mutualGroups)
+    }
+
+    @Test
     fun `silenciar manda PUT con la marca y devuelve como quedo`() = runTest {
         server.reply(200, """{"id":"f1","silenciado":true}""")
 
