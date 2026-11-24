@@ -70,6 +70,7 @@ import com.wherever.mobile.feature.places.ui.ExploreMapRoute as ExploreMapScreen
 import com.wherever.mobile.feature.places.ui.ExploreRoute as ExploreScreen
 import com.wherever.mobile.feature.places.ui.FavoritesRoute as FavoritesScreen
 import com.wherever.mobile.feature.places.ui.PlaceDetailRoute as PlaceDetailScreen
+import com.wherever.mobile.feature.places.ui.SealRoute as SealScreen
 import com.wherever.mobile.feature.plans.ui.CreatePlanRoute as CreatePlanScreen
 import com.wherever.mobile.feature.plans.ui.ManualPlanRoute as ManualPlanScreen
 import com.wherever.mobile.feature.plans.ui.MyPlansRoute as MyPlansScreen
@@ -302,7 +303,15 @@ fun WhereverNavHost(
             PlaceDetailScreen(
                 onBack = { navController.popFrom(e) },
                 onReserve = { id, name -> navController.navigateFrom(e, ReserveRoute(id, name)) },
-                onReviews = { id, name -> navController.navigateFrom(e, PlaceReviewsRoute(id, name)) }
+                onReviews = { id, name -> navController.navigateFrom(e, PlaceReviewsRoute(id, name)) },
+                onSeal = { navController.navigateFrom(e, SealRoute) }
+            )
+        }
+        composable<SealRoute> { e ->
+            SealScreen(
+                onBack = { navController.popFrom(e) },
+                onPlace = { navController.navigateFrom(e, PlaceRoute(it, origin = "busqueda")) },
+                onSeeAll = { navController.navigateFrom(e, ExploreRoute(seal = true)) }
             )
         }
         composable<PlaceReviewsRoute> { e -> PlaceReviewsScreen(onBack = { navController.popFrom(e) }) }

@@ -15,7 +15,9 @@ data class PlaceCard(
     val coverUrl: String?,
     val distanceMeters: Double?,
     val openNow: Boolean,
-    val why: String? = null
+    val why: String? = null,
+    /** Sello de Excelencia (34_Sello): lo otorga un administrador con la regla de nv-56. */
+    val seal: Boolean = false
 )
 
 data class PlacePage(val items: List<PlaceCard>, val nextCursor: String?)
@@ -28,7 +30,9 @@ data class PlaceFilters(
     val maxPriceLevel: Int? = null,
     val openNow: Boolean = false,
     val radiusMeters: Int? = null,
-    val order: SortOrder? = null
+    val order: SortOrder? = null,
+    /** «Con Sello» (`con_sello`, backend nv-85). */
+    val seal: Boolean = false
 ) {
     val isEmpty: Boolean get() = this == PlaceFilters()
 }

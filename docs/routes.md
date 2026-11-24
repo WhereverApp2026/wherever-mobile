@@ -13,8 +13,9 @@
 | `TastesRoute(fromSettings)` | Gustos | ninguno | release | nv-10 |
 | `PermissionsRoute` | Permisos (paso 3 de 3) | ninguno | release | nv-11 |
 | `HomeRoute` | Inicio con recomendaciones, clima y eventos | ubicación aproximada (opcional, en contexto) | release | nv-47 |
-| `ExploreRoute(query, category)` | Explorar: búsqueda, filtros y recientes | ubicación aproximada (opcional) | release | nv-47 |
+| `ExploreRoute(query, category, seal)` | Explorar: búsqueda, filtros (con «Con Sello») y recientes | ubicación aproximada (opcional) | release | nv-47 |
 | `PlaceRoute(id, origin)` | Ficha del lugar | ninguno | release | nv-47 |
+| `SealRoute` | 34_Sello: qué es el Sello de Excelencia, su regla y los negocios con Sello cerca | ubicación aproximada (opcional) | release | nv-21 |
 | `MomentRoute(id)` | Publicación de un amigo (17_PostDetalle) | ninguno | release | nv-17 |
 | `FriendPlanRoute(id)` | Plan de un amigo con Me apunto y Hacer mi versión (29_PlanAmigo) | ninguno | release | nv-17 |
 | `PendingReviewsRoute` | Por reseñar (77_ResPend) | ninguno | release | nv-32 |

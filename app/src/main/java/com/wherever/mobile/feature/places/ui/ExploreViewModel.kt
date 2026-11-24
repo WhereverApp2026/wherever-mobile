@@ -28,6 +28,9 @@ internal const val SEARCH_DEBOUNCE_MILLIS = 400L
 internal const val MIN_QUERY_LENGTH = 2
 internal const val NEARBY_RADIUS_METERS = 2_000
 
+/** Filtros de sí o no de Explorar. */
+enum class FilterFlag { OPEN_NOW, SEAL }
+
 data class ExploreUiState(
     val query: String = "",
     val filters: PlaceFilters = PlaceFilters(),
@@ -57,7 +60,10 @@ class ExploreViewModel @Inject constructor(
     private val mutableState = MutableStateFlow(
         ExploreUiState(
             query = savedStateHandle.get<String>("query").orEmpty(),
-            filters = PlaceFilters(category = savedStateHandle.get<String>("category")?.takeIf { it.isNotBlank() })
+            filters = PlaceFilters(
+                category = savedStateHandle.get<String>("category")?.takeIf { it.isNotBlank() },
+                seal = savedStateHandle.get<Boolean>("seal") == true
+            )
         )
     )
     val state: StateFlow<ExploreUiState> = mutableState.asStateFlow()
@@ -93,7 +99,13 @@ class ExploreViewModel @Inject constructor(
 
     fun onMaxPrice(level: Int?) = updateFilters { it.copy(maxPriceLevel = level.takeIf { l -> l != it.maxPriceLevel }) }
 
-    fun onOpenNow() = updateFilters { it.copy(openNow = !it.openNow) }
+    /** «Abierto ahora» y «Con Sello»: se prenden y apagan igual. */
+    fun onToggle(flag: FilterFlag) = updateFilters {
+        when (flag) {
+            FilterFlag.OPEN_NOW -> it.copy(openNow = !it.openNow)
+            FilterFlag.SEAL -> it.copy(seal = !it.seal)
+        }
+    }
 
     fun onNearby() = updateFilters {
         it.copy(radiusMeters = NEARBY_RADIUS_METERS.takeIf { _ -> it.radiusMeters == null })
@@ -185,4 +197,5 @@ class ExploreViewModel @Inject constructor(
 /** `GET /lugares/buscar` no recibe filtros: se aplican sobre la página que llega. */
 internal fun PlaceFilters.matches(place: PlaceCard): Boolean = (category == null || place.category == category) &&
     (maxPriceLevel == null || place.priceLevel <= maxPriceLevel) &&
-    (!openNow || place.openNow)
+    (!openNow || place.openNow) &&
+    (!seal || place.seal)

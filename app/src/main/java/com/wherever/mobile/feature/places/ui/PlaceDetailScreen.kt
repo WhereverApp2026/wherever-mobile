@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -89,6 +90,7 @@ fun PlaceDetailRoute(
     onBack: () -> Unit,
     onReserve: (id: String, name: String) -> Unit,
     onReviews: (id: String, name: String) -> Unit = { _, _ -> },
+    onSeal: () -> Unit = {},
     viewModel: PlaceDetailViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -104,7 +106,7 @@ fun PlaceDetailRoute(
         val place = state.place
         Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).padding(padding)) {
             when {
-                place != null -> PlaceContent(place, state, viewModel, onBack, onReserve, onReviews)
+                place != null -> PlaceContent(place, state, viewModel, onBack, PlaceLinks(onReserve, onReviews, onSeal))
                 state.loading -> LoadingState()
                 else -> ErrorState(state.error?.asString().orEmpty(), onRetry = viewModel::load)
             }
@@ -124,15 +126,23 @@ fun PlaceDetailRoute(
     }
 }
 
+/** Salidas de la ficha a otras pantallas. */
+private data class PlaceLinks(
+    val onReserve: (id: String, name: String) -> Unit,
+    val onReviews: (id: String, name: String) -> Unit,
+    val onSeal: () -> Unit
+)
+
 @Composable
 private fun PlaceContent(
     place: PlaceDetail,
     state: PlaceDetailUiState,
     viewModel: PlaceDetailViewModel,
     onBack: () -> Unit,
-    onReserve: (id: String, name: String) -> Unit,
-    onReviews: (id: String, name: String) -> Unit
+    links: PlaceLinks
 ) {
+    val onReserve = links.onReserve
+    val onReviews = links.onReviews
     val context = LocalContext.current
     LazyColumn(
         contentPadding = PaddingValues(bottom = Spacing.XXXL),
@@ -158,7 +168,7 @@ private fun PlaceContent(
                 }
             }
         }
-        item { Header(place) }
+        item { Header(place, links.onSeal) }
         item { Actions(place, context) }
         if (place.acceptsReservations) {
             item {
@@ -234,7 +244,7 @@ private fun Photos(photos: List<String>) {
 }
 
 @Composable
-private fun Header(place: PlaceDetail) {
+private fun Header(place: PlaceDetail, onSeal: () -> Unit) {
     Column(
         modifier = Modifier.padding(horizontal = ScreenPadding),
         verticalArrangement = Arrangement.spacedBy(Spacing.S)
@@ -244,7 +254,14 @@ private fun Header(place: PlaceDetail) {
         RatingRow(place.rating, place.reviews)
         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.S)) {
             if (place.verified) StatusPill(stringResource(R.string.place_verified), container = MintTint)
-            if (place.excellenceSeal) StatusPill(stringResource(R.string.place_seal))
+            // 34_Sello: qué es y quién más lo tiene.
+            if (place.excellenceSeal) {
+                val openSeal = stringResource(R.string.seal_open)
+                StatusPill(
+                    stringResource(R.string.place_seal),
+                    modifier = Modifier.clickable(onClickLabel = openSeal, onClick = onSeal).testTag("place_seal")
+                )
+            }
         }
         if (place.averagePrice > 0) {
             Text(
