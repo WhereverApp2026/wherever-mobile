@@ -77,6 +77,13 @@ class FakeBusinessOnboardingRepository : BusinessOnboardingRepository {
     override suspend fun saveDepositAccount(draft: BusinessDraft, clabe: String, holder: String) =
         Result.Success(Unit).also { calls += "clabe" }
 
+    var consentResult: Result<Unit> = Result.Success(Unit)
+
+    override suspend fun acceptBusinessDataConsent(): Result<Unit> {
+        calls += "consent"
+        return consentResult
+    }
+
     override suspend fun submit(draft: BusinessDraft): Result<BusinessDraft> {
         calls += "submit"
         return submitResult ?: Result.Success(draft.copy(state = BusinessState.IN_REVIEW))

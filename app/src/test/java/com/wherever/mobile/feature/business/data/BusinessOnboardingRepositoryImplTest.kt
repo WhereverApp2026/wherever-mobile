@@ -107,6 +107,22 @@ class BusinessOnboardingRepositoryImplTest {
     }
 
     @Test
+    fun `consentimiento datos_negocio con las versiones vigentes de configuracion`() = runTest(dispatcher) {
+        respond(200, """{"version_terminos":"2026-10","version_aviso_privacidad":"2026-11","mantenimiento":false}""")
+        respond(201, """{"datos_negocio":true,"consentimiento_vigente":true}""")
+
+        assertTrue(repository.acceptBusinessDataConsent() is Result.Success)
+
+        assertEquals("/configuracion", take().url.encodedPath)
+        val request = take()
+        assertEquals("/usuarios/yo/consentimientos", request.url.encodedPath)
+        val body = ApiJson.decodeFromString(JsonObject.serializer(), request.body!!.utf8())
+        assertEquals("2026-10", body["version_terminos"]!!.jsonPrimitive.content)
+        assertEquals("2026-11", body["version_aviso_privacidad"]!!.jsonPrimitive.content)
+        assertEquals("true", body["datos_negocio"]!!.jsonPrimitive.content)
+    }
+
+    @Test
     fun `paso 4 sin cuerpo manda un objeto vacio`() = runTest(dispatcher) {
         respond(200, businessJson(step = 4))
 

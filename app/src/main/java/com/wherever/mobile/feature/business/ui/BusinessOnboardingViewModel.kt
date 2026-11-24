@@ -69,6 +69,9 @@ data class OnboardingUiState(
     val averagePrice: String = "",
     val services: Set<String> = emptySet(),
     val uploadingPhoto: Boolean = false,
+    /** Consentimiento expreso para INE, comprobante y CLABE; ya dado si hay documentos guardados. */
+    val dataConsent: Boolean = false,
+    val savingConsent: Boolean = false,
     val uploadedDocuments: Set<DocumentType> = emptySet(),
     val uploadingDocument: DocumentType? = null,
     val clabe: String = "",
@@ -87,6 +90,12 @@ data class OnboardingUiState(
                 (DocumentType.INE_FRONT in uploadedDocuments && DocumentType.INE_BACK in uploadedDocuments)
             ) &&
             (draft?.hasProofOfAddress == true || DocumentType.PROOF_OF_ADDRESS in uploadedDocuments)
+
+    val hasDataConsent: Boolean
+        get() = dataConsent ||
+            uploadedDocuments.isNotEmpty() ||
+            draft?.hasIne == true ||
+            draft?.hasProofOfAddress == true
 
     val clabeValid: Boolean get() = clabe.isEmpty() || isValidClabe(clabe)
 
@@ -253,9 +262,25 @@ class BusinessOnboardingViewModel @Inject constructor(
         }
     }
 
+    /** Marcar la casilla registra el consentimiento en la API; no se puede retirar desde aquí (va en Privacidad). */
+    fun onDataConsent(checked: Boolean) {
+        val current = state.value
+        if (!checked || current.dataConsent || current.savingConsent) return
+        mutableState.update { it.copy(savingConsent = true, error = null) }
+        viewModelScope.launch {
+            val result = repository.acceptBusinessDataConsent()
+            mutableState.update {
+                when (result) {
+                    is Result.Success -> it.copy(savingConsent = false, dataConsent = true)
+                    is Result.Failure -> it.copy(savingConsent = false, error = result.error.toUiText())
+                }
+            }
+        }
+    }
+
     fun onDocumentPicked(type: DocumentType, source: String) {
         val draft = state.value.draft ?: return
-        if (state.value.uploadingDocument != null) return
+        if (state.value.uploadingDocument != null || !state.value.hasDataConsent) return
         mutableState.update { it.copy(uploadingDocument = type, error = null) }
         viewModelScope.launch {
             when (val result = repository.uploadDocument(draft, type, source)) {

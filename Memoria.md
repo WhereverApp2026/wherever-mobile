@@ -327,7 +327,10 @@
 - Estado (2026-11-24, 01:45): #67 ya en `main`; #68 con CI verde y la regla de `main` ahora pide 0 aprobaciones (solo CI `gates` al día). `Buttons.kt` en `78d4e39` con capturas regrabadas. Punto 22 probado con QA A/B: me gusta, comentar, responder, borrar, 13_Reacciones, historias y visor → % real 98/162 (60,5 %). Arreglado: el conteo de comentarios no se movía (`commentsDelta`), «Ver más comentarios» con `siguiente_cursor: ""` y el 422 mostraba «Datos inválidos» en vez del motivo de `campos[texto]`.
 - Estado (2026-11-24, 02:00): InvitarPlan y 45_AgregarGasto/La vaca probados con QA A/B → 100/162 (61,7 %). Arreglado 26_PerfilAmigo: `GET /personas/{id}` manda `nivel` como objeto `{numero, nombre}` (antes texto); el DTO acepta los dos con `JsonElement`.
 - A recordar: `PATCH /grupos/{id}/integrantes/yo` acepta `confirmado` o `declinado`; `POST /planes` pide `llega` en ISO 8601 con zona.
-- Para Osmar (backend): `GET /inicio` da `recomendaciones: []` con lugares a metros; algunas respuestas con `padre_id` dan 422 «no cumple las normas» con textos inocentes; 422 de `/planes/generar` con lugares cerca.
+- Estado (2026-11-24, 03:00): #68 fusionado en `main` (`a7bf1da`). PR #71 `integracion/negocio` = #69/#70 de Diego sobre `main` (conflicto de `strings.xml` resuelto con los dos lados) + arreglo del alta: la API exige el consentimiento `datos_negocio` antes de documentos y CLABE (`422 consentimiento_requerido`) y la app no lo pedía; ahora hay casilla en el paso de documentos que manda `POST /usuarios/yo/consentimientos` con las versiones de `GET /configuracion`.
+- A recordar: el backend está en `../wherever-backend` (hacer `git fetch`: el checkout local es viejo); leer su código antes de adivinar contratos. Expediente del negocio: 10 subidas por hora por usuario.
+- A evitar: valores por defecto en DTOs de petición que la API necesita recibir: `ApiJson` no codifica los valores por defecto (`datos_negocio = true` no viajaba; lo atrapó la prueba con MockWebServer). Pasar el valor explícito o quitar el defecto.
+- Para Osmar (backend): `POST /negocios/{id}/documentos` da 503 «el expediente no está disponible» en staging (bloquea enviar a revisión y todo Modo negocio); `GET /inicio` da `recomendaciones: []` con lugares a metros; algunas respuestas con `padre_id` dan 422 «no cumple las normas» con textos inocentes; 422 de `/planes/generar` con lugares cerca.
 - A recordar: para una historia de QA B por API: `POST /imagenes/subida` (tipo `image/jpeg`) → formulario a S3 → `POST /imagenes/{id}/confirmar` → `POST /postales` (202, sin cuerpo; el id sale de `GET /postales`) → `POST /momentos {postal_id}`. Una imagen o postal solo se usa una vez (409).
 - A evitar: correr todas las unitarias locales con el JDK 17 del scratchpad en paralelo con otros Gradle: MockK falla al adjuntarse a la JVM (`Could not self-attach`, 15 fallos en negocio y ayuda); por clase también fallan; la CI en Ubuntu es la fuente.
 
@@ -380,6 +383,13 @@
 
 - Estado (2026-11-22): nv-37 Cupones y cupo (Diego) en `feat/nv-37-business` (sobre nv-35): 53, 54 y 55 con la API real. Decisiones D-37b a D-37f en la spec.
 - A evitar: un `%` suelto en `strings.xml` rompe lint (`StringFormatInvalid`); usar `formatted="false"`.
+
+- Estado (2026-11-23): nv-36 Reseñas y momentos del negocio (Diego, a pedido suyo; reparto: Borre) en `feat/nv-36-business` (sobre `integracion/todo`): 51, 52 y NegMomentos con la API real, pestaña Reseñas. Decisiones D-36b a D-36f en la spec. Sin probar contra staging.
+- A evitar: fiarse del nombre del campo en la petición para leer la respuesta: el `PATCH` de momentos manda `agradecido` y la respuesta trae `agradecido_por_negocio`. Revisar la forma del objeto en `endpoints.md`.
+
+- Estado (2026-11-23): nv-38 Perfil, fotos y cobros del negocio (Diego, a pedido suyo; reparto: Borre) en `feat/nv-38-business` (sobre nv-36): 58, Datos y horario, 87, 88, 57, 89 y 90 con la API real; pestaña Negocio; salidas a Inicio y Login. Decisiones D-38b a D-38h en la spec. Sin probar contra staging.
+- A evitar: escribir scripts de Python con texto en español por la entrada estándar de Bash: la consola cambia la «Ñ» y el parche no encuentra el texto. Guardarlos en el scratchpad y correrlos con `python -X utf8`.
+- A evitar: nombres de prueba con `;` o `:` entre comillas invertidas: Kotlin/JVM no los acepta.
 
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).

@@ -60,14 +60,14 @@ class BusinessOnboardingRepositoryImpl @Inject constructor(
         safeApiCall { api.create(BusinessCreateDto(name.trim(), category, description.trim())).toDomain() }
 
     override suspend fun saveLocation(draft: BusinessDraft, address: Address, point: GeoPoint): Result<BusinessDraft> =
-        step(
+        api.saveStep(
             draft,
             STEP_LOCATION,
             ApiJson.encodeToJsonElement(LocationStepDto(address.toDto(), point.toDto())).jsonObject
         )
 
     override suspend fun saveSchedules(draft: BusinessDraft, schedules: List<DaySchedule>): Result<BusinessDraft> =
-        step(
+        api.saveStep(
             draft,
             STEP_SCHEDULES,
             ApiJson.encodeToJsonElement(
@@ -84,7 +84,7 @@ class BusinessOnboardingRepositoryImpl @Inject constructor(
         priceLevel: Int,
         averagePrice: Int,
         services: List<String>
-    ): Result<BusinessDraft> = step(
+    ): Result<BusinessDraft> = api.saveStep(
         draft,
         STEP_OPERATION,
         ApiJson.encodeToJsonElement(OperationStepDto(priceLevel, averagePrice, services)).jsonObject
@@ -94,7 +94,12 @@ class BusinessOnboardingRepositoryImpl @Inject constructor(
         safeApiCall { api.addPhoto(draft.id, BizPhotoCreateDto(imageId, type.apiKey)).toDomain() }
 
     override suspend fun confirmPhotos(draft: BusinessDraft): Result<BusinessDraft> =
-        step(draft, STEP_PHOTOS, JsonObject(emptyMap()))
+        api.saveStep(draft, STEP_PHOTOS, JsonObject(emptyMap()))
+
+    override suspend fun acceptBusinessDataConsent(): Result<Unit> = safeApiCall {
+        val versions = api.legalVersions()
+        api.consent(BusinessConsentDto(versions.terms, versions.privacyNotice, businessData = true))
+    }
 
     override suspend fun uploadDocument(draft: BusinessDraft, type: DocumentType, source: String): Result<Unit> {
         val file = readDocument(source) ?: return Result.Failure(AppError.Validation())
@@ -109,7 +114,7 @@ class BusinessOnboardingRepositoryImpl @Inject constructor(
     }
 
     override suspend fun confirmDocuments(draft: BusinessDraft): Result<BusinessDraft> =
-        step(draft, STEP_DOCUMENTS, JsonObject(emptyMap()))
+        api.saveStep(draft, STEP_DOCUMENTS, JsonObject(emptyMap()))
 
     override suspend fun saveDepositAccount(draft: BusinessDraft, clabe: String, holder: String): Result<Unit> =
         safeApiCall { api.depositAccount(draft.id, DepositAccountDto(clabe, holder.trim())) }
@@ -120,9 +125,6 @@ class BusinessOnboardingRepositoryImpl @Inject constructor(
 
     override suspend fun suggestDescription(draft: BusinessDraft, words: List<String>): Result<String> =
         safeApiCall { api.describe(draft.id, DescriptionWordsDto(words.map { it.trim() })).description }
-
-    private suspend fun step(draft: BusinessDraft, step: Int, body: JsonObject): Result<BusinessDraft> =
-        safeApiCall { api.step(draft.id, step, "\"${draft.version}\"", body).toDomain() }
 
     /**
      * Lee el archivo elegido (bytes y tipo). Fuera de JPEG, PNG o PDF, o arriba de 5 MB, no se sube.
@@ -194,3 +196,10 @@ internal fun BusinessDto.toDomain() = BusinessDraft(
     hasProofOfAddress = documents?.proof == true,
     requiresRefresh = requiresRefresh
 )
+
+/** `PATCH /negocios/{id}/alta/{paso}` con la versión del borrador en `If-Match`. */
+private suspend fun BusinessOnboardingApi.saveStep(
+    draft: BusinessDraft,
+    step: Int,
+    body: JsonObject
+): Result<BusinessDraft> = safeApiCall { step(draft.id, step, "\"${draft.version}\"", body).toDomain() }

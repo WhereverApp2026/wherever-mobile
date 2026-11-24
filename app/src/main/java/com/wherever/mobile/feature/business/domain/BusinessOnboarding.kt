@@ -105,6 +105,9 @@ interface BusinessOnboardingRepository {
     /** Paso 4: confirma que hay al menos 3 fotos. */
     suspend fun confirmPhotos(draft: BusinessDraft): Result<BusinessDraft>
 
+    /** Consentimiento expreso `datos_negocio` con las versiones vigentes; sin él, documentos y CLABE dan 422. */
+    suspend fun acceptBusinessDataConsent(): Result<Unit>
+
     /** Multipart directo a la API (`tipo` y `archivo`), JPEG, PNG o PDF de hasta 5 MB. */
     suspend fun uploadDocument(draft: BusinessDraft, type: DocumentType, source: String): Result<Unit>
 

@@ -1,9 +1,11 @@
 package com.wherever.mobile.feature.business.ui
 
 import app.cash.turbine.test
+import com.wherever.mobile.R
 import com.wherever.mobile.core.common.AppError
 import com.wherever.mobile.core.common.FieldError
 import com.wherever.mobile.core.common.Result
+import com.wherever.mobile.core.ui.UiText
 import com.wherever.mobile.feature.business.domain.Address
 import com.wherever.mobile.feature.business.domain.BusinessState
 import com.wherever.mobile.feature.business.domain.DESCRIPTION_MAX
@@ -116,6 +118,8 @@ class BusinessOnboardingViewModelTest {
 
         viewModel.onPhotoPicked("content://foto")
         advanceUntilIdle()
+        viewModel.onDataConsent(true)
+        advanceUntilIdle()
         DocumentType.entries.forEach {
             viewModel.onDocumentPicked(it, "content://doc")
             advanceUntilIdle()
@@ -135,6 +139,33 @@ class BusinessOnboardingViewModelTest {
     }
 
     @Test
+    fun `sin consentimiento de datos del negocio no se suben documentos`() = runTest {
+        repository.mineResult = Result.Success(listOf(sampleBusinessDraft(step = 6, photos = 3)))
+        val viewModel = create()
+        advanceUntilIdle()
+        assertFalse(viewModel.state.value.hasDataConsent)
+
+        viewModel.onDocumentPicked(DocumentType.INE_FRONT, "content://doc")
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value.uploadedDocuments.isEmpty())
+
+        repository.consentResult = Result.Failure(AppError.Network)
+        viewModel.onDataConsent(true)
+        advanceUntilIdle()
+        assertFalse("si la API falla la casilla queda sin marcar", viewModel.state.value.hasDataConsent)
+        assertEquals(UiText.Res(R.string.error_network), viewModel.state.value.error)
+
+        repository.consentResult = Result.Success(Unit)
+        viewModel.onDataConsent(true)
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value.hasDataConsent)
+        viewModel.onDocumentPicked(DocumentType.INE_FRONT, "content://doc")
+        advanceUntilIdle()
+        assertEquals(setOf(DocumentType.INE_FRONT), viewModel.state.value.uploadedDocuments)
+        assertEquals(2, repository.calls.count { it == "consent" })
+    }
+
+    @Test
     fun `422 de enviar-revision lista lo que falta tal cual`() = runTest {
         repository.mineResult = Result.Success(listOf(sampleBusinessDraft(step = 6, photos = 3)))
         repository.submitResult = Result.Failure(
@@ -143,6 +174,8 @@ class BusinessOnboardingViewModelTest {
             )
         )
         val viewModel = create()
+        advanceUntilIdle()
+        viewModel.onDataConsent(true)
         advanceUntilIdle()
         DocumentType.entries.forEach {
             viewModel.onDocumentPicked(it, "content://doc")
@@ -159,6 +192,8 @@ class BusinessOnboardingViewModelTest {
     fun `CLABE escrita debe ser valida y llevar titular`() = runTest {
         repository.mineResult = Result.Success(listOf(sampleBusinessDraft(step = 6, photos = 3)))
         val viewModel = create()
+        advanceUntilIdle()
+        viewModel.onDataConsent(true)
         advanceUntilIdle()
         DocumentType.entries.forEach {
             viewModel.onDocumentPicked(it, "content://doc")

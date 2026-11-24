@@ -104,6 +104,22 @@ data class OperationStepDto(
 @Serializable
 data class BizPhotoCreateDto(@SerialName("imagen_id") val imageId: String, @SerialName("tipo") val type: String)
 
+/** Versiones vigentes de `GET /configuracion`: el consentimiento debe citarlas. */
+@Serializable
+data class LegalVersionsDto(
+    @SerialName("version_terminos") val terms: String = "",
+    @SerialName("version_aviso_privacidad") val privacyNotice: String = ""
+)
+
+/** `POST /usuarios/yo/consentimientos` con `datos_negocio` (nv-19): la API lo exige antes de documentos y CLABE. */
+@Serializable
+data class BusinessConsentDto(
+    @SerialName("version_terminos") val terms: String,
+    @SerialName("version_aviso_privacidad") val privacyNotice: String,
+    // Sin valor por defecto: ApiJson no codifica los valores por defecto y la API debe recibir `true`.
+    @SerialName("datos_negocio") val businessData: Boolean
+)
+
 @Serializable
 data class DepositAccountDto(@SerialName("clabe") val clabe: String, @SerialName("titular") val holder: String)
 
@@ -142,6 +158,12 @@ interface BusinessOnboardingApi {
 
     @PUT("negocios/{id}/cuenta-deposito")
     suspend fun depositAccount(@Path("id") id: String, @Body body: DepositAccountDto)
+
+    @GET("configuracion")
+    suspend fun legalVersions(): LegalVersionsDto
+
+    @POST("usuarios/yo/consentimientos")
+    suspend fun consent(@Body body: BusinessConsentDto)
 
     @POST("negocios/{id}/enviar-revision")
     suspend fun submit(@Path("id") id: String): BusinessDto
