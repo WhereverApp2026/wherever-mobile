@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -63,18 +65,64 @@ internal data object BusinessCouponFormDestination
 @Serializable
 internal data object BusinessCapacityDestination
 
+@Serializable
+internal data object BusinessReviewsDestination
+
+/** 52_NegResp recibe la reseña elegida en 51 (no hay `GET` de una sola reseña). */
+@Serializable
+internal data class BusinessReplyDestination(
+    val reviewId: String,
+    val rating: Int,
+    val comment: String,
+    val author: String,
+    val createdAt: String,
+    val currentReply: String? = null,
+    val progress: Int? = null
+) {
+    fun target() = ReplyTarget(reviewId, rating, comment, author, createdAt, currentReply, progress)
+}
+
+@Serializable
+internal data object BusinessMomentsDestination
+
+@Serializable
+internal data object BusinessProfileDestination
+
+@Serializable
+internal data object BusinessDataDestination
+
+@Serializable
+internal data object BusinessGalleryDestination
+
+@Serializable
+internal data object BusinessPaymentsDestination
+
+/** 89_NegBanco recibe solo los últimos 4 de la cuenta actual. */
+@Serializable
+internal data class BusinessBankDestination(val lastFour: String? = null)
+
+@Serializable
+internal data class BusinessTaxDestination(val complete: Boolean? = null)
+
+/** Aviso que 52_NegResp deja a 51_NegResenas al publicar (id de `R.string`). */
+private const val REPLY_MESSAGE_KEY = "biz_reply_message"
+
 /**
- * Pestañas de la barra del negocio que ya tienen pantalla.
- * Reseñas (nv-36) y Perfil (nv-38) llegan con su spec.
+ * Pestañas de la barra del negocio (48_NegPanel): Panel, Reservas, Cupones, Reseñas y Negocio.
  */
-enum class BusinessTab { PANEL, RESERVATIONS, COUPONS }
+enum class BusinessTab { PANEL, RESERVATIONS, COUPONS, REVIEWS, PROFILE }
 
 /**
  * Modo negocio (specs/nv-35): entra con `POST /usuarios/yo/modo` y abre el Panel del negocio activo.
  * Sin rol comerciante o sin negocio enviado, [onOnboarding] lleva al alta (nv-34).
  */
 @Composable
-fun BusinessHomeRoute(onOnboarding: () -> Unit, viewModel: BusinessHomeViewModel = hiltViewModel()) {
+fun BusinessHomeRoute(
+    onOnboarding: () -> Unit,
+    onExplore: () -> Unit = {},
+    onLoggedOut: () -> Unit = {},
+    viewModel: BusinessHomeViewModel = hiltViewModel()
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(viewModel) { viewModel.needsOnboarding.collect { onOnboarding() } }
     val error = state.error
@@ -82,12 +130,12 @@ fun BusinessHomeRoute(onOnboarding: () -> Unit, viewModel: BusinessHomeViewModel
     when {
         error != null -> ErrorState(error.asString(), viewModel::load)
         selected == null -> LoadingState()
-        else -> BusinessShell(BusinessHeader(state.businesses, selected.id, viewModel::select))
+        else -> BusinessShell(BusinessHeader(state.businesses, selected.id, viewModel::select), onExplore, onLoggedOut)
     }
 }
 
 @Composable
-private fun BusinessShell(header: BusinessHeader) {
+private fun BusinessShell(header: BusinessHeader, onExplore: () -> Unit, onLoggedOut: () -> Unit) {
     val navController = rememberNavController()
     val entry by navController.currentBackStackEntryAsState()
     val destination = entry?.destination
@@ -126,6 +174,83 @@ private fun BusinessShell(header: BusinessHeader) {
             composable<BusinessCapacityDestination> {
                 CapacityRoute(header.selectedId, onBack = { navController.popBackStack() })
             }
+            composable<BusinessReviewsDestination> { backStack ->
+                val message by backStack.savedStateHandle.getStateFlow<Int?>(REPLY_MESSAGE_KEY, null)
+                    .collectAsStateWithLifecycle()
+                BusinessReviewsRoute(
+                    businessId = header.selectedId,
+                    message = message,
+                    onMessageShown = { backStack.savedStateHandle[REPLY_MESSAGE_KEY] = null },
+                    onReply = { review, progress ->
+                        navController.navigate(
+                            BusinessReplyDestination(
+                                review.id,
+                                review.rating,
+                                review.comment,
+                                review.author,
+                                review.createdAt,
+                                review.businessReply,
+                                progress
+                            )
+                        ) { launchSingleTop = true }
+                    },
+                    onMoments = { navController.navigate(BusinessMomentsDestination) { launchSingleTop = true } }
+                )
+            }
+            composable<BusinessReplyDestination> { backStack ->
+                ReviewReplyRoute(
+                    businessId = header.selectedId,
+                    target = backStack.toRoute<BusinessReplyDestination>().target(),
+                    onBack = { navController.popBackStack() },
+                    onPublished = { message ->
+                        navController.previousBackStackEntry?.savedStateHandle?.set(REPLY_MESSAGE_KEY, message)
+                        navController.popBackStack()
+                    }
+                )
+            }
+            composable<BusinessMomentsDestination> {
+                BusinessMomentsRoute(header.selectedId, onBack = { navController.popBackStack() })
+            }
+            composable<BusinessProfileDestination> {
+                BusinessProfileRoute(
+                    businessId = header.selectedId,
+                    navigation = ProfileNavigation(
+                        onData = { navController.navigate(BusinessDataDestination) { launchSingleTop = true } },
+                        onGallery = { navController.navigate(BusinessGalleryDestination) { launchSingleTop = true } },
+                        onPayments = { navController.navigate(BusinessPaymentsDestination) { launchSingleTop = true } },
+                        onCapacity = { navController.navigate(BusinessCapacityDestination) { launchSingleTop = true } },
+                        onTax = { navController.navigate(BusinessTaxDestination(it)) { launchSingleTop = true } },
+                        onExit = { exit -> if (exit == ProfileExit.LOGGED_OUT) onLoggedOut() else onExplore() }
+                    )
+                )
+            }
+            composable<BusinessDataDestination> {
+                BusinessDataRoute(header.selectedId, onBack = { navController.popBackStack() })
+            }
+            composable<BusinessGalleryDestination> {
+                GalleryRoute(header.selectedId, onBack = { navController.popBackStack() })
+            }
+            composable<BusinessPaymentsDestination> {
+                PaymentsRoute(
+                    businessId = header.selectedId,
+                    onBack = { navController.popBackStack() },
+                    onBank = { navController.navigate(BusinessBankDestination(it)) { launchSingleTop = true } }
+                )
+            }
+            composable<BusinessBankDestination> { backStack ->
+                BankAccountRoute(
+                    businessId = header.selectedId,
+                    lastFour = backStack.toRoute<BusinessBankDestination>().lastFour,
+                    onBack = { navController.popBackStack() }
+                )
+            }
+            composable<BusinessTaxDestination> { backStack ->
+                TaxDataRoute(
+                    businessId = header.selectedId,
+                    complete = backStack.toRoute<BusinessTaxDestination>().complete,
+                    onBack = { navController.popBackStack() }
+                )
+            }
             composable<BusinessStatsDestination> {
                 BusinessStatsRoute(header.selectedId, onBack = { navController.popBackStack() })
             }
@@ -152,14 +277,29 @@ private fun NavDestination?.tab(): BusinessTab = when {
     this == null -> BusinessTab.PANEL
     hasRoute<BusinessReservationsDestination>() || hasRoute<BusinessCheckinDestination>() -> BusinessTab.RESERVATIONS
     hasRoute<BusinessCouponsDestination>() || hasRoute<BusinessCouponFormDestination>() -> BusinessTab.COUPONS
+    isReviewsTab() -> BusinessTab.REVIEWS
+    isProfileTab() -> BusinessTab.PROFILE
     else -> BusinessTab.PANEL
 }
+
+private fun NavDestination.isReviewsTab(): Boolean = hasRoute<BusinessReviewsDestination>() ||
+    hasRoute<BusinessReplyDestination>() ||
+    hasRoute<BusinessMomentsDestination>()
+
+private fun NavDestination.isProfileTab(): Boolean = hasRoute<BusinessProfileDestination>() ||
+    hasRoute<BusinessDataDestination>() ||
+    hasRoute<BusinessGalleryDestination>() ||
+    hasRoute<BusinessPaymentsDestination>() ||
+    hasRoute<BusinessBankDestination>() ||
+    hasRoute<BusinessTaxDestination>()
 
 private fun NavHostController.openTab(tab: BusinessTab) {
     val route: Any = when (tab) {
         BusinessTab.PANEL -> BusinessPanelDestination
         BusinessTab.RESERVATIONS -> BusinessReservationsDestination
         BusinessTab.COUPONS -> BusinessCouponsDestination
+        BusinessTab.REVIEWS -> BusinessReviewsDestination
+        BusinessTab.PROFILE -> BusinessProfileDestination
     }
     navigate(route) {
         popUpTo(graph.findStartDestination().id) { saveState = true }
@@ -181,6 +321,9 @@ internal fun BusinessBar(selected: BusinessTab, onSelect: (BusinessTab) -> Unit)
                 BusinessTab.RESERVATIONS -> rememberVectorPainter(Icons.Outlined.DateRange) to
                     R.string.business_tab_reservations
                 BusinessTab.COUPONS -> painterResource(R.drawable.ic_wh_ticket) to R.string.business_tab_coupons
+                BusinessTab.REVIEWS -> rememberVectorPainter(Icons.Outlined.Star) to
+                    R.string.business_tab_reviews
+                BusinessTab.PROFILE -> rememberVectorPainter(Icons.Outlined.Home) to R.string.business_tab_profile
             }
             BarItem(tab == selected, icon, label, "business_bar_${tab.name.lowercase()}") { onSelect(tab) }
         }

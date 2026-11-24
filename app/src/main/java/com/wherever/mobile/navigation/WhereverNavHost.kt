@@ -600,7 +600,9 @@ fun WhereverNavHost(
                     navController.navigateOnResult(e, BusinessOnboardingRoute) {
                         popUpTo<BusinessHomeRoute> { inclusive = true }
                     }
-                }
+                },
+                onExplore = { navController.navigateOnResult(e, HomeRoute) { clearStack(navController) } },
+                onLoggedOut = { navController.navigateOnResult(e, LoginRoute) { clearStack(navController) } }
             )
         }
         composable<SessionsRoute> { e ->

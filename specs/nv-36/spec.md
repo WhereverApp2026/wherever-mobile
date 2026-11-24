@@ -13,13 +13,13 @@ Leer y responder las reseñas del negocio, ver el avance del Sello y agradecer o
 
 **HU.** Como dueño quiero responder reseñas.
 
-- [ ] `51_NegResenas`: resumen (`GET /negocios/{id}/resenas/resumen?periodo=mes|trimestre`) con promedio, aspectos y distribución; lista con `GET /lugares/{id}/resenas`.
-- [ ] `52_NegResp`: Respuesta rápida = `POST .../sugerir-respuesta` (IA); texto 1–500 → `PUT .../respuesta`; moderación rechazada = 422 explicado.
+- [x] `51_NegResenas`: resumen (`GET /negocios/{id}/resenas/resumen?periodo=mes|trimestre`) con promedio, aspectos y distribución; lista con `GET /lugares/{id}/resenas`.
+- [x] `52_NegResp`: Respuesta rápida = `POST .../sugerir-respuesta` (IA); texto 1–500 → `PUT .../respuesta`; moderación rechazada = 422 explicado.
 
 **HU.** Como dueño quiero ver el Sello y los momentos.
 
-- [ ] Avance del Sello con `avance_sello` del panel (criterios con meta y si cumple).
-- [ ] `NegMomentos`: Nuevos y Destacados (`GET /negocios/{id}/momentos?destacados=`); Agradecer y Destacar con `PATCH`.
+- [x] Avance del Sello con `avance_sello` del panel (criterios con meta y si cumple).
+- [x] `NegMomentos`: Nuevos y Destacados (`GET /negocios/{id}/momentos?destacados=`); Agradecer y Destacar con `PATCH`.
 
 ### UI (frames de Figma)
 
@@ -48,6 +48,14 @@ Colores, tipografía, espacios y componentes solo desde `core/designsystem`; tex
 - Modo negocio vive en `feature/business` con su propio `NavHost` interno y su barra (Panel, Reservas, Cupones, Reseñas, Perfil) armada con componentes de `core/designsystem`. En el grafo principal solo se registra una ruta, `BusinessHomeRoute` (una línea en `WhereverNavHost`, revisada por Jorge).
 - Descargar insignia digital: `GET /negocios/{id}/sello/insignia` está diferido en el backend; el botón no se dibuja (D-36a).
 - La maqueta limita la respuesta a 300; la API a 500. Se usa 500.
+
+### Decisiones al implementar (2026-11-23, Diego)
+
+- **D-36b Pestaña Reseñas** en la barra del negocio (después de Cupones). 52_NegResp y NegMomentos son destinos internos; 52 recibe la reseña como argumentos de la ruta porque no hay `GET` de una sola reseña.
+- **D-36c Respuestas rápidas:** los chips de la maqueta ponen una plantilla editable en el campo; «Sugerir con IA» llama a `sugerir-respuesta` y deja el texto para revisarlo (la IA nunca publica sola). Sin IA (503) se avisa y se escribe a mano.
+- **D-36d Lista de reseñas:** `GET /lugares/{id}/resenas?recientes` (la del negocio es la de su ficha). Resumen, Sello y momentos son complementos: si fallan, se ocultan y la lista se muestra igual.
+- **D-36e Aviso del Sello en 52:** usa el criterio de `avance_sello` cuyo nombre habla de responder; si el panel no lo manda, el aviso va sin porcentaje.
+- **D-36f Momentos:** la respuesta trae `agradecido_por_negocio` y `destacado_por_negocio`; el `PATCH` manda solo `agradecido` o `destacado`. «Agradecer» se apaga tras usarse (avisa al autor una vez) y un segundo toque mientras viaja se ignora.
 
 ### No-alcance
 
@@ -116,4 +124,4 @@ Rama `feat/nv-36-business` desde `main` actualizado → `plan.md` → `task.md` 
 - [ ] CHECKLIST_PR.md OK
 - [x] Sin conflicto con constitución
 
-**Estado:** ✅ Aprobada y lista para ejecutar. Responsable: Osmar.
+**Estado:** ✅ Aprobada y lista para ejecutar. Implementada el 2026-11-23 por Diego (a pedido suyo; reparto: Borre) en `feat/nv-36-business`, sobre `integracion/todo`; sin probar contra staging.
