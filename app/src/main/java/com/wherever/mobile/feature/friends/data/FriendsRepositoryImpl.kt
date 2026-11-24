@@ -12,6 +12,10 @@ import com.wherever.mobile.feature.friends.domain.Person
 import com.wherever.mobile.feature.friends.domain.PersonDetail
 import com.wherever.mobile.feature.friends.domain.Relation
 import javax.inject.Inject
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.contentOrNull
 
 class FriendsRepositoryImpl @Inject constructor(private val api: FriendsApi) : FriendsRepository {
     override suspend fun list(which: FriendshipList, query: String): Result<FriendshipPage> = safeApiCall {
@@ -56,10 +60,16 @@ internal fun PersonDto.toDomain() = Person(
     photoUrl = photoUrl?.takeIf { it.isNotBlank() }
 )
 
+private fun JsonElement.levelName(): String? = when (this) {
+    is JsonPrimitive -> contentOrNull
+    is JsonObject -> (this["nombre"] as? JsonPrimitive)?.contentOrNull
+    else -> null
+}
+
 internal fun PersonDetailDto.toDomain() = PersonDetail(
     person = Person(id, name, username?.takeIf { it.isNotBlank() }, photoUrl?.takeIf { it.isNotBlank() }),
     relation = Relation.from(relation),
-    level = level?.takeIf { it.isNotBlank() },
+    level = level?.levelName()?.takeIf { it.isNotBlank() },
     mutualFriends = mutualFriends,
     mutualGroups = mutualGroups,
     muted = muted

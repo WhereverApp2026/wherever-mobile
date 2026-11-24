@@ -6,7 +6,7 @@
 
 ## % real
 
-**98 de 162 = 60,5 %** con la API real (2026-11-24, 01:45: 13_Reacciones y 16_Historia probadas contra staging con QA A/B en el Xiaomi, en #68; antes, 2026-11-23 16:10: 32_ExpMapa con osmdroid probado contra staging en el Xiaomi, en #68; antes, 09:50: 83_Insignias, 43_CrearGrupo, 46_Grupo, 48_Votar, IAPalabra, 17_AjustaPlan, 41_AgregarParada, CrearPlan y 28_Vaca).
+**100 de 162 = 61,7 %** con la API real (2026-11-24, 02:00: InvitarPlan y 45_AgregarGasto con La vaca completa —gasto, reparto, deuda y Marcar pagado— contra staging con QA A/B; 26_PerfilAmigo arreglado: el backend ahora manda `nivel` como objeto; 01:45: 13_Reacciones y 16_Historia probadas contra staging con QA A/B en el Xiaomi, en #68; antes, 2026-11-23 16:10: 32_ExpMapa con osmdroid probado contra staging en el Xiaomi, en #68; antes, 09:50: 83_Insignias, 43_CrearGrupo, 46_Grupo, 48_Votar, IAPalabra, 17_AjustaPlan, 41_AgregarParada, CrearPlan y 28_Vaca).
 
 **Por sumar (2026-11-23, PR #67 `integracion/todo`, con código, pruebas y capturas; falta probar contra staging en el teléfono):** Jorge: 83_Insignias (ya con API real), 07_EncuentraAmigos, 43_CrearGrupo, 46_Grupo, 48_Votar, InvitarPlan. Diego: IAPalabra, 17_AjustaPlan, Generando 1/4–4/4, 39_Plan, 40_Cambiar, 41_AgregarParada, CrearPlan, 26_CheckinOk, 28_Vaca y variantes, 45_AgregarGasto. Negocio (nv-34/35/37): alta, panel, reservas, estadísticas, check-in, cupones y horas. Se cuentan al probarlos con staging (L-V 08:00–22:00).
 
@@ -14,12 +14,12 @@
 |---|---|---|---|---|
 | Cuenta y acceso | nv-06 a nv-16 | 17 | 17 | 100 % |
 | Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 21 | 72 % |
-| Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 21 | 68 % |
-| Planes: IA, detalle, Vaca, Mis planes, día del plan | nv-23, nv-24, nv-26, nv-28, nv-30 | 22 | 13 | 59 % |
+| Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 22 | 71 % |
+| Planes: IA, detalle, Vaca, Mis planes, día del plan | nv-23, nv-24, nv-26, nv-28, nv-30 | 22 | 14 | 64 % |
 | Reserva, pago y cupones | nv-27, nv-29 | 15 | 4 | 27 % |
 | Después del plan: Recuerdos, Reseñas, Ayuda | nv-31 a nv-33 | 22 | 22 | 100 % |
 | Modo negocio | nv-34 a nv-38 | 26 | 0 | 0 % |
-| **Total** | | **162** | **98** | **60,5 %** |
+| **Total** | | **162** | **100** | **61,7 %** |
 
 ## Pruebas con staging en el Xiaomi (2026-11-22, domingo con staging encendido)
 
