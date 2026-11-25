@@ -15,6 +15,7 @@ import java.time.Instant
 import java.time.ZoneOffset
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -124,6 +125,20 @@ class DirectChatViewModelTest {
 
         assertTrue(chats.calls.contains("newer:c1:m1"))
         assertEquals(listOf("m3", "m2", "m1"), vm.state.value.messages.map { it.id })
+    }
+
+    @Test
+    fun `al reanudar el sondeo pregunta de inmediato sin esperar 5 s`() = runTest {
+        chats.pageResult = Result.Success(PageResult(listOf(sampleDirect("m1", "u2", "2026-11-24T18:00:00Z")), null))
+        val vm = viewModel()
+        advanceUntilIdle()
+        chats.newerResult = Result.Success(listOf(sampleDirect("m2", "u2", "2026-11-24T18:01:00Z")))
+        vm.startPolling()
+        runCurrent()
+        vm.stopPolling()
+
+        assertTrue(chats.calls.contains("newer:c1:m1"))
+        assertEquals(listOf("m2", "m1"), vm.state.value.messages.map { it.id })
     }
 
     @Test

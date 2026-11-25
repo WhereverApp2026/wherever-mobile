@@ -391,6 +391,8 @@
 - A evitar: escribir scripts de Python con texto en español por la entrada estándar de Bash: la consola cambia la «Ñ» y el parche no encuentra el texto. Guardarlos en el scratchpad y correrlos con `python -X utf8`.
 - A evitar: nombres de prueba con `;` o `:` entre comillas invertidas: Kotlin/JVM no los acepta.
 
+- Estado (2026-11-24): `fix/nv-25-chat-baja-al-nuevo`. ChatAmigo y ChatGrupo bajan al mensaje nuevo solo si se veía lo último (`firstVisibleItemIndex <= 1` con `reverseLayout`); si se leía algo viejo no se mueve. El sondeo de ChatAmigo pregunta al reanudar y luego cada 5 s (antes esperaba 5 s, y al volver de InvitarPlan la invitación tardaba en aparecer). Prueba nueva en `DirectChatViewModelTest`. Verificado con JDK 17: ktlint, detekt, `assembleDebug`, 842 pruebas (16 fallos de siempre por MockK en Business/Help, solo local). Sin probar en teléfono.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).
