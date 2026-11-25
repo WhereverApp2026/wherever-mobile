@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.kover)
+    alias(libs.plugins.cyclonedx)
 }
 
 // Firebase (specs/nv-46): `google-services.json` va en app/ y no se sube a Git (constitución §6).
@@ -251,4 +252,10 @@ dependencies {
 tasks.withType<Test>().configureEach {
     val record = providers.gradleProperty("roborazzi.record").orNull == "true"
     systemProperty(if (record) "roborazzi.test.record" else "roborazzi.test.verify", "true")
+}
+
+// SBOM CycloneDX (specs/nv-39 §2.7): solo lo que viaja en el APK de release, sin pruebas ni herramientas.
+tasks.named<org.cyclonedx.gradle.CyclonedxDirectTask>("cyclonedxDirectBom") {
+    includeConfigs.set(listOf("releaseRuntimeClasspath"))
+    projectType.set(org.cyclonedx.model.Component.Type.APPLICATION)
 }

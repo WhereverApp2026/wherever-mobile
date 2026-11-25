@@ -13,7 +13,8 @@ import glob
 import subprocess
 import sys
 from pathlib import Path
-import xml.etree.ElementTree as ET
+# defusedxml: sin entidades externas (XXE) aunque el XML sea el de Kover del mismo job.
+from defusedxml import ElementTree as ET
 
 
 def sh(*args: str) -> str:
