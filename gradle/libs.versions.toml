@@ -27,7 +27,7 @@ androidxTestRunner = "1.7.0"
 detekt = "1.23.8"
 # Pruebas de captura (excepción de stack en specs/nv-55 §2): solo en pruebas.
 robolectric = "4.17"
-roborazzi = "1.77.0"
+roborazzi = "1.79.0"
 ktlintGradle = "14.2.0"
 kover = "0.9.11"
 googleServices = "4.6.0"
