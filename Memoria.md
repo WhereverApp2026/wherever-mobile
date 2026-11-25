@@ -392,6 +392,10 @@
 - A evitar: nombres de prueba con `;` o `:` entre comillas invertidas: Kotlin/JVM no los acepta.
 
 - Estado (2026-11-24): `fix/nv-25-chat-baja-al-nuevo`. ChatAmigo y ChatGrupo bajan al mensaje nuevo solo si se veía lo último (`firstVisibleItemIndex <= 1` con `reverseLayout`); si se leía algo viejo no se mueve. El sondeo de ChatAmigo pregunta al reanudar y luego cada 5 s (antes esperaba 5 s, y al volver de InvitarPlan la invitación tardaba en aparecer). Prueba nueva en `DirectChatViewModelTest`. Verificado con JDK 17: ktlint, detekt, `assembleDebug`, 842 pruebas (16 fallos de siempre por MockK en Business/Help, solo local). Sin probar en teléfono.
+- Estado (2026-11-25): `main` integra con `merge --no-ff` setup-java 6.3.0, serialization 1.13.0, roborazzi 1.79.0, mockk 1.14.12, el arreglo del chat, `chore/ci-devsecops` (CodeQL y SBOM de Gradle, además del de anchore), `feat/nv-31-memories` (docs) y `feat/nv-17-feed` (ya superada: lado de `main`). % real 101/162 = 62,3 % (ChatAmigo). Tabla por área en `docs/avance.md`, reparto en `docs/pendientes.md`. `cambios-restricciones-y-avance.diff` no existe en el equipo: no se aplicó nada.
+- Decisión: coil 3.6.3 y AGP 9.5.2 fuera. Porqué: coil 3.6.3 arrastra Compose UI 1.12, que exige SDK 37 y AGP ≥ 9.1 (`checkDebugAarMetadata`). Entran juntos al subir a SDK 37.
+- Decisión: en el conflicto de Semgrep del registro gana la versión de `main` (paquetes explícitos), no `--config=auto` de `chore/ci-devsecops`, que exige mandar métricas.
+- Hallazgo (negocio): nv-34 a nv-38 están completos en código y en `main` (Diego hizo f0134e1, 64f56de, aa81281, cdc01fa y a6b37c5; Jorge, el consentimiento de nv-34). Ninguna pantalla se ha probado contra staging, por el 503 de `POST /negocios/{id}/documentos`; por eso cuentan 0/27.
 
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).

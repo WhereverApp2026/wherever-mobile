@@ -4,48 +4,25 @@
 > Una pantalla cuenta si tiene código, llama a la API real, maneja carga, error y vacío, tiene pruebas y se probó en el teléfono.
 > "Con datos locales" = UI completa con repositorio falso detrás de una interfaz porque falta el endpoint (`docs/revision-jorge.md`); se cuentan aparte y **no** suman al % real.
 
-## Corte actual (main)
+## Corte actual (main, 2026-11-25, tras integrar las ramas con avance)
 
-| | Pantallas | % de 162 |
-|---|---|---|
-| Funcionan con la API real | 62 | **38,3 %** |
-| Con datos locales (falta endpoint) | 1 | 0,6 % |
-| Total con UI terminada | 63 | 38,9 % |
+«Hechas» = funcionan con la API real y se probaron en el teléfono contra staging. «En ramas sin integrar» = 0: después de este corte todas las ramas con avance están en `main` (salvo AGP 9.5.2 y coil 3.6.3, que no compilan con SDK 36). El código de Modo negocio, 34_Sello y 47_PuntoMedio ya está en `main`, pero solo cuenta cuando se pruebe contra staging.
 
-| Spec | Tema | Frames | Funcionan | Datos locales | Nota |
-|---|---|---|---|---|---|
-| nv-06 | Splash y bienvenida | 1 | 1 | 0 |  |
-| nv-07 | Iniciar sesión | 1 | 1 | 0 |  |
-| nv-08 | Recuperar contraseña | 3 | 3 | 0 | Nueva contraseña por enlace; sin token real (staging sin SMTP) |
-| nv-09 | Registro | 1 | 1 | 0 | probado en teléfono 2026-11-19 |
-| nv-10 | Gustos | 1 | 1 | 0 | probado en teléfono 2026-11-19 |
-| nv-11 | Permisos en contexto | 2 | 2 | 0 | 08_Permisos probado en teléfono (Android 12) 2026-11-20; diálogo de avisos de Android 13+ sin probar |
-| nv-13 | Ajustes y cerrar sesión | 1 | 1 | 0 |  |
-| nv-14 | Perfil, edición e insignias | 4 | 3 | 1 | Insignias con catálogo local (sin endpoint) |
-| nv-15 | Privacidad, mis datos, eliminar | 2 | 2 | 0 |  |
-| nv-16 | Sin conexión | 1 | 1 | 0 | más mantenimiento y versión mínima; probado en teléfono 2026-11-20 |
-| nv-17 | Inicio y feed | 15 | 7 | 0 | Amigos y PostDetalle probados en teléfono 2026-11-20 con datos de staging; PlanAmigo y MeApunto sin probar en teléfono (ningún momento de staging enlaza un plan); sin API: historias, reacciones, comentarios |
-| nv-18 | Notificaciones | 4 | 4 | 0 | aviso en la app, bloqueo y Aceptar; pushes de reserva/reseña pendientes de backend |
-| nv-19 | Búsqueda | 4 | 4 | 0 | Personas: Amigos, Agregar o Solicitud enviada probado en teléfono 2026-11-20 |
-| nv-20 | Amigos | 15 | 11 | 0 | 27_AmigoOpc (silenciar en staging) probado en teléfono 2026-11-20; falta QR (librería por acordar), 07_EncuentraAmigos (contactos) y variantes |
-| nv-21 | Explorar y lugares | 8 | 5 | 0 | staging sin negocios |
-| nv-22 | Favoritos | 2 | 2 | 0 |  |
-| nv-23 | Crear plan con IA | 6 | 4 | 0 | nv-48; falta `17_AjustaPlan` y el 4.º paso de `Generando` (spec conciliada 2026-11-22) |
-| nv-24 | Plan: detalle y edición | 5 | 3 | 0 | nv-48; faltan `CrearPlan` y `41_AgregarParada` completa (spec conciliada 2026-11-22) |
-| nv-25 | Compartir, grupos y chats | 12 | 2 | 2 |  |
-| nv-26 | Vaca virtual y gastos | 4 | 0 | 0 | API lista (backend nv-58); espera `46_Grupo` |
-| nv-27 | Reserva y pago | 10 | 4 | 0 | sin pago; staging sin negocios |
-| nv-28 | Mis planes | 2 | 2 | 0 | nv-48; faltan etiqueta de estado y uso sin red (`nv-56`) |
-| nv-29 | Cupones | 5 | 0 | 0 |  |
-| nv-30 | El día del plan | 5 | 0 | 0 | check-in con API lista; mapa y rutas esperan D25 |
-| nv-31 | Recuerdos y postales | 13 | 13 | 13 |  |
-| nv-32 | Reseñas | 8 | 8 | 8 |  |
-| nv-33 | Ayuda | 1 | 1 | 1 |  |
-| nv-34 | Negocio: registro | 6 | 0 | 0 |  |
-| nv-35 | Negocio: panel, reservas y check-in | 8 | 0 | 0 |  |
-| nv-36 | Negocio: reseñas y momentos | 3 | 0 | 0 |  |
-| nv-37 | Negocio: cupones y cupo | 3 | 0 | 0 |  |
-| nv-38 | Negocio: perfil, fotos y cobros | 6 | 0 | 0 |  |
+| Área | Specs (frames) | Hechas | En ramas sin integrar | Faltantes | Total | % |
+|---|---|---|---|---|---|---|
+| Auth/Onboarding | nv-06 a nv-11 | 9 | 0 | 0 | 9 | 100 % |
+| Inicio/Feed | nv-17 | 9 | 0 | 6 | 15 | 60 % |
+| Explorar/Mapa | nv-19, nv-21 (30, 31, 32), nv-22 | 9 | 0 | 0 | 9 | 100 % |
+| Detalle de lugar | nv-21 (33_Detalle y variantes), nv-27, nv-32 | 15 | 0 | 7 | 22 | 68 % |
+| Social | nv-20, nv-25, nv-31 | 32 | 0 | 8 | 40 | 80 % |
+| Planes/IA | nv-23, nv-24, nv-26, nv-28, nv-30 | 14 | 0 | 8 | 22 | 64 % |
+| Perfil/Ajustes | nv-13, nv-14, nv-15, nv-33 | 8 | 0 | 0 | 8 | 100 % |
+| Notificaciones | nv-18 | 4 | 0 | 0 | 4 | 100 % |
+| Negocios/Sello | nv-34 a nv-38, 34_Sello | 0 | 0 | 27 | 27 | 0 % |
+| Otros | nv-16, nv-29 | 1 | 0 | 5 | 6 | 17 % |
+| **Total** | | **101** | **0** | **61** | **162** | **62,3 %** |
+
+Cambio respecto al corte anterior (100): ChatAmigo, probado contra staging en el Xiaomi el 2026-11-24 (#72).
 
 ## Registro de cortes
 
@@ -64,6 +41,8 @@
 | 2026-11-23 | #68 mapa | 32_ExpMapa con osmdroid contra staging | 96 | 59,3 % |
 | 2026-11-24 | #68 social nv-17 | 13_Reacciones y 16_Historia contra staging (QA A/B); arreglos de conteo y «Ver más» en comentarios | 98 | 60,5 % |
 | 2026-11-24 | #68 social y vaca | InvitarPlan y 45_AgregarGasto contra staging (QA A/B); 26_PerfilAmigo con `nivel` como objeto | 100 | 61,7 % |
+| 2026-11-24 | #74 punto medio | 47_PuntoMedio | 100 | 61,7 % |
+| 2026-11-25 | integración en `main` | ChatAmigo probado contra staging; ramas de Dependabot, devsecops, chat y docs integradas (sin pantallas nuevas) | 101 | 62,3 % |
 
 ---
 

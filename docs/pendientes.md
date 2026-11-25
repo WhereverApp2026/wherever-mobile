@@ -1,25 +1,57 @@
 # Pendientes — Wherever Móvil
 
-> Actualizado: 2026-11-23 (09:30). Una rama y un PR por spec. Pruebas que esperan el teléfono: `docs/pruebas-telefono.md`.
+> Actualizado: 2026-11-25. Una rama y un PR por spec. Pruebas que esperan el teléfono: `docs/pruebas-telefono.md`.
 > Métrica: pantallas que funcionan de verdad / 162 frames de la maqueta (detalle y registro de cortes en `docs/avance.md`).
 > Una pantalla cuenta si tiene código, llama a la API real, maneja carga, error y vacío, tiene pruebas y se probó en el teléfono.
 
 ## % real
 
-**100 de 162 = 61,7 %** con la API real (2026-11-24, 02:00: InvitarPlan y 45_AgregarGasto con La vaca completa —gasto, reparto, deuda y Marcar pagado— contra staging con QA A/B; 26_PerfilAmigo arreglado: el backend ahora manda `nivel` como objeto; 01:45: 13_Reacciones y 16_Historia probadas contra staging con QA A/B en el Xiaomi, en #68; antes, 2026-11-23 16:10: 32_ExpMapa con osmdroid probado contra staging en el Xiaomi, en #68; antes, 09:50: 83_Insignias, 43_CrearGrupo, 46_Grupo, 48_Votar, IAPalabra, 17_AjustaPlan, 41_AgregarParada, CrearPlan y 28_Vaca).
+**101 de 162 = 62,3 %** con la API real (2026-11-25, `main` con todas las ramas con avance integradas). Tabla por área en `docs/avance.md`.
 
-**Por sumar (2026-11-23, PR #67 `integracion/todo`, con código, pruebas y capturas; falta probar contra staging en el teléfono):** Jorge: 83_Insignias (ya con API real), 07_EncuentraAmigos, 43_CrearGrupo, 46_Grupo, 48_Votar, InvitarPlan. Diego: IAPalabra, 17_AjustaPlan, Generando 1/4–4/4, 39_Plan, 40_Cambiar, 41_AgregarParada, CrearPlan, 26_CheckinOk, 28_Vaca y variantes, 45_AgregarGasto. Negocio (nv-34/35/37): alta, panel, reservas, estadísticas, check-in, cupones y horas. Se cuentan al probarlos con staging (L-V 08:00–22:00).
+## Lo que falta, por área (2026-11-25, para repartir)
 
-| Área | Specs | Frames | Funcionan | % |
-|---|---|---|---|---|
-| Cuenta y acceso | nv-06 a nv-16 | 17 | 17 | 100 % |
-| Descubrir: Inicio, Búsqueda, Explorar, Favoritos | nv-17, nv-19, nv-21, nv-22 | 29 | 21 | 72 % |
-| Social: Notificaciones, Amigos, Grupos y chats | nv-18, nv-20, nv-25 | 31 | 22 | 71 % |
-| Planes: IA, detalle, Vaca, Mis planes, día del plan | nv-23, nv-24, nv-26, nv-28, nv-30 | 22 | 14 | 64 % |
-| Reserva, pago y cupones | nv-27, nv-29 | 15 | 4 | 27 % |
-| Después del plan: Recuerdos, Reseñas, Ayuda | nv-31 a nv-33 | 22 | 22 | 100 % |
-| Modo negocio | nv-34 a nv-38 | 26 | 0 | 0 % |
-| **Total** | | **162** | **100** | **61,7 %** |
+Tabla por área en `docs/avance.md`. Prioridad: primero lo que ya tiene código en `main` y solo falta probar contra staging (suma rápido al %), luego lo que falta construir. Una línea = una tarea = una rama y un PR.
+
+### 1. Negocios/Sello (0/27): el código está en `main`, falta probarlo
+- P1 · Backend (Osmar): arreglar el 503 «expediente no disponible» de `POST /negocios/{id}/documentos` en staging; bloquea enviar el alta a revisión y todo el Modo negocio.
+- P1 · Probar nv-34 contra staging: 42_NegCuenta → 47_NegListo con una cuenta QA (sin la ubicación real del teléfono de Jorge).
+- P1 · Probar nv-35 contra staging: 48_NegPanel, 49_NegReservas, 50_NegCheckin (y variantes) y 56_NegStats con un negocio aprobado y una reserva de QA.
+- P2 · Probar nv-36 contra staging: 51_NegResenas, 52_NegResp (con y sin IA) y NegMomentos.
+- P2 · Probar nv-37 contra staging: 53_NegCupones, 54_NegCrear y 55_NegHoras.
+- P2 · Probar nv-38 contra staging: 58_NegPerfil, 87/88 galería, 57_NegCobros (Stripe), 89_NegBanco y 90_NegFiscal.
+- P3 · Probar 34_Sello con un negocio que tenga Sello en staging (hoy solo sale el vacío).
+- P3 · Marcar en las specs nv-34, nv-35 y nv-37 los frames ya construidos (las casillas siguen sin marcar).
+
+### 2. Social (32/40)
+- P1 · Probar 47_PuntoMedio en el teléfono con dos cuentas QA en el mismo grupo.
+- P2 · 42_Compartir: hoja para compartir plan o lugar.
+- P2 · Probar 07_EncuentraAmigos y su variante «solicitud enviada» con una agenda de prueba (no la de Jorge).
+- P3 · Variantes `ChatAmigo · *`, `GrupoChat · *` y `PerfilAmigo · *`: revisar contra Figma y probar.
+
+### 3. Planes/IA (14/22)
+- P1 · nv-30 El día del plan: 13_Mapa, 14_MapaFull, 15_Llegar y 18_Navegando con osmdroid (D25).
+- P1 · Probar 26_CheckinOk en el teléfono con un check-in real dentro de un plan.
+- P2 · nv-26: variantes `Vaca · *` (saldada, sin gastos) y probarlas.
+- P2 · nv-23: 4.º paso de `Generando` y probarlo contra staging.
+- P3 · nv-28 sin red: etiqueta de estado y planes en Room (`nv-56`).
+
+### 4. Detalle de lugar (15/22)
+- P1 · nv-27 pago: 35_Pasarela y 36_PagoError con Stripe (falta acordar la librería y una excepción de stack).
+- P2 · nv-27: 38_CambiarHora y 27_Cancelar contra staging con una reserva QA.
+- P2 · nv-27: variantes `DetReserva · *`.
+- P3 · nv-21: la variante que falta de `Detalle · *` con un negocio real.
+
+### 5. Inicio/Feed (9/15)
+- P1 · Probar 29_PlanAmigo, `PlanAmigo · *` y 14_MeApunto con un momento de staging que tenga `plan_id`.
+- P2 · 15_Crear: las 3 opciones que dicen «Próximamente».
+- P3 · 10_Inicio: corazón de favoritos y paradas en las tarjetas (falta que la API del feed los mande).
+
+### 6. Otros (1/6)
+- P1 · nv-29 Cupones: 29_Cupones, 47_DetCupon y `DetCupon · *` con la API real.
+
+### 7. Técnico (no suma frames)
+- Subir a SDK 37 + AGP 9.1 para poder integrar AGP 9.5.2 (#65), coil 3.6.3 (#63) y los PR #8–#12.
+- Arreglar las 16 pruebas JVM que fallan por MockK (ByteBuddy no se adjunta a la JVM local).
 
 ## Pruebas con staging en el Xiaomi (2026-11-22, domingo con staging encendido)
 
@@ -110,7 +142,7 @@ Reparto anterior (tres personas, 2026-11-20), con lo que funciona por área:
 
 Bugs conocidos del área: Bienvenida en horizontal (✅ nv-55); enlaces corridos (✅ nv-55); tema oscuro sin selección visible (✅ nv-55); Perfil cortado (✅ nv-55).
 
-## Lo que falta, en orden de prioridad
+## Lo que faltaba al 2026-11-20 (histórico)
 
 ### 1. Subir todo a GitHub
 - [x] Búsqueda (nv-19) de `wip/pausa` a `main`, con las 7 compuertas en verde.
