@@ -13,13 +13,13 @@ Crear y administrar cupones y ajustar el cupo de reservaciones por horario.
 
 **HU.** Como dueño quiero manejar mis cupones.
 
-- [ ] `53_NegCupones`: Activos, Programados, Terminados (`GET /negocios/{id}/cupones?estado=`), interruptor activo/pausado (`PATCH` con `If-Match`) y usos.
-- [ ] `54_NegCrear`: tipo (2x1, porcentaje, monto, regalo), valor, vigencia, días y horas, límite de usos y vista previa → `POST /negocios/{id}/cupones`; Sugerir título con IA.
+- [x] `53_NegCupones`: Activos, Programados, Terminados (`GET /negocios/{id}/cupones?estado=`), interruptor activo/pausado (`PATCH` con `If-Match`) y usos.
+- [x] `54_NegCrear`: tipo (2x1, porcentaje, monto, regalo), valor, vigencia, días y horas, límite de usos y vista previa → `POST /negocios/{id}/cupones`; Sugerir título con IA.
 - [ ] Con canjes, solo se cambian vigencia, límite y estado (409 `con_canjes` explicado); eliminar con canjes lo pausa.
 
 **HU.** Como dueño quiero ajustar el cupo.
 
-- [ ] `55_NegHoras`: disponibilidad por hora del día elegido (`GET /lugares/{id}/disponibilidad`) en barras.
+- [x] `55_NegHoras`: disponibilidad por hora del día elegido (`GET /lugares/{id}/disponibilidad`) en barras.
 - [ ] Cambiar el cupo por horario y la duración del turno con `PUT /negocios/{id}/reservas-config` (`If-Match`); cerrar horas con bloqueos (nv-35).
 
 ### UI (frames de Figma)

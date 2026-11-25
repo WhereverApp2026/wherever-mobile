@@ -247,11 +247,24 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
 
+// El agente de ByteBuddy que trae MockK (misma versión que resuelve el classpath de pruebas).
+val byteBuddyAgent: Configuration by configurations.creating {
+    isCanBeConsumed = false
+}
+dependencies {
+    byteBuddyAgent(libs.mockk)
+}
+
 // Capturas (specs/nv-55): por defecto se comparan con src/test/screenshots y la prueba falla si cambian.
 // Para grabarlas de nuevo, a propósito: ./gradlew testDebugUnitTest -Proborazzi.record=true
 tasks.withType<Test>().configureEach {
     val record = providers.gradleProperty("roborazzi.record").orNull == "true"
     systemProperty(if (record) "roborazzi.test.record" else "roborazzi.test.verify", "true")
+    // MockK necesita el agente de ByteBuddy. Cargarlo al vuelo (attach) truena en algunos Windows
+    // («Could not self-attach to current VM», o la JVM se cae en VirtualMachineImpl.enqueue): se
+    // carga al arrancar con -javaagent, que funciona igual en Linux (CI) y en Windows.
+    val agent = byteBuddyAgent.filter { it.name.startsWith("byte-buddy-agent") }
+    jvmArgumentProviders.add(CommandLineArgumentProvider { agent.files.map { "-javaagent:${it.absolutePath}" } })
 }
 
 // SBOM CycloneDX (specs/nv-39 §2.7): solo lo que viaja en el APK de release, sin pruebas ni herramientas.

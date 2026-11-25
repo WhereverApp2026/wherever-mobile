@@ -13,18 +13,18 @@ Ver el día del negocio de un vistazo, administrar reservaciones y registrar lle
 
 **HU.** Como dueño quiero ver el panel.
 
-- [ ] `48_NegPanel` con `GET /negocios/{id}/panel`: reservas hoy, próxima, cupones, llegadas, calificación de la semana, reseñas por responder y avance del Sello; cada dato nulo se oculta.
-- [ ] `56_NegStats` con `GET /negocios/{id}/estadisticas` (Semana, Mes; Año = 90 días máx. de la API, ver decisiones) y Descargar reporte mensual (`GET /negocios/{id}/reportes/mensual`, PDF).
+- [x] `48_NegPanel` con `GET /negocios/{id}/panel`: reservas hoy, próxima, cupones, llegadas, calificación de la semana, reseñas por responder y avance del Sello; cada dato nulo se oculta.
+- [x] `56_NegStats` con `GET /negocios/{id}/estadisticas` (Semana, Mes; Año = 90 días máx. de la API, ver decisiones) y Descargar reporte mensual (`GET /negocios/{id}/reportes/mensual`, PDF).
 
 **HU.** Como dueño quiero administrar mis reservaciones.
 
-- [ ] `49_NegReservas`: Hoy, Próximas, Pasadas con `GET /negocios/{id}/reservas?fecha=&estado=&q=`.
+- [x] `49_NegReservas`: Hoy, Próximas, Pasadas con `GET /negocios/{id}/reservas?fecha=&estado=&q=`.
 - [ ] Confirmar (desde pendiente), Llegó o No llegó con `PATCH /negocios/{id}/reservas/{rid}`; Contactar manda mensaje (≤ 500).
 - [ ] Cerrar horarios con `POST /negocios/{id}/bloqueos` y reabrir con `DELETE`.
 
 **HU.** Como dueño quiero registrar una llegada.
 
-- [ ] `50_NegCheckin`: escribir el código de la reserva → `POST /negocios/{id}/reservas/escanear`; ya usado = 409 «Este código ya se usó».
+- [x] `50_NegCheckin`: escribir el código de la reserva → `POST /negocios/{id}/reservas/escanear`; ya usado = 409 «Este código ya se usó».
 - [ ] Detalle del cliente con personas, nota y anticipo (`GET /negocios/{id}/reservas/{rid}/cobro` si hubo pago).
 
 ### UI (frames de Figma)
@@ -136,4 +136,4 @@ Rama `feat/nv-35-business` desde `main` actualizado → `plan.md` → `task.md` 
 - [ ] CHECKLIST_PR.md OK
 - [x] Sin conflicto con constitución
 
-**Estado:** ✅ Aprobada y lista para ejecutar. Responsable: Osmar.
+**Estado:** ✅ Aprobada y lista para ejecutar. Responsable: Osmar. Implementada el 2026-11-22 por Diego en `feat/nv-35-business`, ya en `main`; sin probar contra staging: espera el 503 de `POST /negocios/{id}/documentos` (backend).

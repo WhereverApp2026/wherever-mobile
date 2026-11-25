@@ -19,9 +19,9 @@ Dar de alta un negocio en cinco pasos y mandarlo a revisión.
 
 **HU.** Como dueño quiero completar la verificación.
 
-- [ ] `46_NegVerif`: mínimo 3 fotos (`PhotoRepository` + `POST /negocios/{id}/fotos`), INE frente y reverso y comprobante (`POST /negocios/{id}/documentos`, ≤ 5 MB), datos fiscales y CLABE opcionales.
+- [x] `46_NegVerif`: mínimo 3 fotos (`PhotoRepository` + `POST /negocios/{id}/fotos`), INE frente y reverso y comprobante (`POST /negocios/{id}/documentos`, ≤ 5 MB), datos fiscales y CLABE opcionales.
 - [ ] Enviar solicitud = `POST /negocios/{id}/enviar-revision`; si falta algo, la API responde 422 con la lista y se muestra tal cual.
-- [ ] `47_NegListo` con el estado de la revisión; Editar mi solicitud vuelve al paso que falte.
+- [x] `47_NegListo` con el estado de la revisión; Editar mi solicitud vuelve al paso que falte.
 
 ### UI (frames de Figma)
 
@@ -136,4 +136,4 @@ Rama `feat/nv-34-business` desde `main` actualizado → `plan.md` → `task.md` 
 - [ ] CHECKLIST_PR.md OK
 - [x] Sin conflicto con constitución
 
-**Estado:** ✅ Aprobada y lista para ejecutar. Responsable: Osmar.
+**Estado:** ✅ Aprobada y lista para ejecutar. Responsable: Osmar. Implementada el 2026-11-22 por Diego en `feat/nv-34-business`, ya en `main`; sin probar contra staging: espera el 503 de `POST /negocios/{id}/documentos` (backend).

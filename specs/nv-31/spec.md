@@ -25,7 +25,7 @@ Tomar postales de los lugares visitados, guardarlas en el álbum de recuerdos y 
 
 **HU.** Como usuario quiero publicar un momento.
 
-- [ ] `70_CrearPub` pestaña Foto: elijo postal, texto (≤ 280), etiqueto amigos aceptados (≤ 10) y visibilidad (amigos o pública); Publicar = `POST /momentos`.
+- [x] `70_CrearPub` pestaña Foto: elijo postal, texto (≤ 280), etiqueto amigos aceptados (≤ 10) y visibilidad (amigos o pública); Publicar = `POST /momentos`.
 - [ ] Pestaña Reseña abre el flujo de nv-32 (`77_ResPend`); pestaña Plan queda fuera (ver decisiones).
 
 ### UI (frames de Figma)

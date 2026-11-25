@@ -13,18 +13,18 @@ Reseñar las visitas con check-in, ver y administrar mis reseñas y leer las de 
 
 **HU.** Como usuario quiero reseñar un lugar que visité.
 
-- [ ] `77_ResPend` lista `GET /resenas/pendientes` (check-ins válidos sin reseña, 30 días).
-- [ ] `68_PostVisita`: estrellas 1–5, comentario ≤ 500, hasta 3 fotos (`PhotoRepository`); `78_ResCom` califica sabor, atención, ambiente, espera y precio-calidad (1–5) y chips (≤ 5).
+- [x] `77_ResPend` lista `GET /resenas/pendientes` (check-ins válidos sin reseña, 30 días).
+- [x] `68_PostVisita`: estrellas 1–5, comentario ≤ 500, hasta 3 fotos (`PhotoRepository`); `78_ResCom` califica sabor, atención, ambiente, espera y precio-calidad (1–5) y chips (≤ 5).
 - [ ] Publicar = `POST /resenas`; al terminar se ve `69_Publicado`. Texto rechazado por moderación (422) se explica sin perder lo escrito.
 
 **HU.** Como usuario quiero administrar mis reseñas.
 
-- [ ] `79_MisRes`: Publicadas (`GET /resenas/mias`) y Por reseñar; Editar solo si `editable` (48 h), con `If-Match`.
+- [x] `79_MisRes`: Publicadas (`GET /resenas/mias`) y Por reseñar; Editar solo si `editable` (48 h), con `If-Match`.
 - [ ] Eliminar pide confirmación y deja «Reseña eliminada» con Deshacer durante 5 s; el `DELETE` se manda al vencer el plazo.
 
 **HU.** Como usuario quiero leer las reseñas de un lugar.
 
-- [ ] `80_ResLugar`: promedio y distribución, filtros (estrellas, aspecto, con fotos, orden) y lista paginada.
+- [x] `80_ResLugar`: promedio y distribución, filtros (estrellas, aspecto, con fotos, orden) y lista paginada.
 - [ ] Útil (`PUT /resenas/{id}/util`) y Reportar (`POST /resenas/{id}/reportes`) con motivo.
 
 ### UI (frames de Figma)
