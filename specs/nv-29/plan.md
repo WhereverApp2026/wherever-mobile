@@ -3,11 +3,12 @@
 > Deriva de `specs/nv-29/spec.md`. Respeta constitución §4 (cadena de red y capas). Plantilla: `.specify/templates/plan-template.md`.
 
 ## 1. Mapeo
-- Sin código todavía. Paquete `feature/<nombre>/{ui,domain,data}` según `specs/nv-04`; los archivos se fijan al tomar la spec.
-- Ruta en `docs/routes.md` al implementar.
+- `feature/coupons/domain/Coupons.kt`; `feature/coupons/data/{CouponsApi,CouponRepositoryImpl}.kt` y `data/di/CouponsModule.kt`; `feature/coupons/ui/{CouponsScreen,CouponsViewModel,CouponDetailScreen,CouponDetailViewModel,CouponViews,CouponSamples}.kt`.
+- Entrada: atajo Cupones de `feature/profile/ui/ProfileScreen.kt` (`ProfileNavigation.onCoupons`).
+- Rutas `CouponsRoute` y `CouponDetailRoute(id)` en `navigation/Routes.kt`, `WhereverNavHost.kt` y `docs/routes.md`.
 
 ## 2. Guardarraíles
-- Constitución §2-§6: Room como fuente de verdad, cadena de red, textos en `strings.xml`, sin secretos.
+- Constitución §2-§6: cadena de red, textos en `strings.xml`, sin secretos. Sin Room por D-29b.
 - Sin lógica de negocio en Composables.
 - Lo marcado "Pendiente de backend" no se implementa con datos simulados (constitución §2.7).
 

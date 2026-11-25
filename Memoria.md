@@ -397,6 +397,18 @@
 - Decisión: en el conflicto de Semgrep del registro gana la versión de `main` (paquetes explícitos), no `--config=auto` de `chore/ci-devsecops`, que exige mandar métricas.
 - Hallazgo (negocio): nv-34 a nv-38 están completos en código y en `main` (Diego hizo f0134e1, 64f56de, aa81281, cdc01fa y a6b37c5; Jorge, el consentimiento de nv-34). Ninguna pantalla se ha probado contra staging, por el 503 de `POST /negocios/{id}/documentos`; por eso cuentan 0/27.
 
+## nv-29 Cupones (2026-11-25, Borre)
+- Estado: rama `feat/nv-29-cupones`. Spec conciliada con el contrato real (nv-61) y comprobada en staging; `feature/coupons` con 29_Cupones, 47_DetCupon y las 3 variantes; entrada desde el atajo Cupones de Perfil. Verificado: ktlint, lint, Konsist, pruebas de Cupones, Perfil y seguridad, 24 capturas de Roborazzi; suite completa 858/859 antes del último arreglo (la falla era de Cupones y quedó corregida). En el Samsung SM-A315G contra staging: Disponibles y Usados vacíos desde la API. Sin probar con datos: el detalle y el código (staging no tiene cupones publicados). detekt no corrió (ver abajo).
+- Decisión: el cupón no "se aplica solo al reservar" (D-29a). Porqué: `POST /reservas` no tiene campo de cupón; se usa con el código de canje de 5 min que valida el negocio.
+- Decisión: sin Room para cupones (D-29b). Porqué: mismo criterio que nv-23, nv-24 y nv-26; Room para planes y cupones va con nv-56 si el equipo lo pide.
+- Hallazgo: nv-34 lee `requiere_refresh` al crear el negocio pero no lo usa, y el `Authenticator` solo renueva ante 401: con el 403 del rol `comerciante` el alta se atora (anotado en `docs/pendientes.md`).
+- A evitar: `-Proborazzi.record=true` regraba **todas** las capturas con diferencias de fuentes de este equipo; después de grabar, restaurar con `git checkout` las que no son del slice.
+- A evitar: nombres de vistas previas o de textos que ya usa el negocio (`CouponsPreview`, `coupons_title`): Kotlin da "overload resolution ambiguity" y `check_strings.sh` marca duplicados. En cupones del consumidor se usa el prefijo `Wallet`/`coupons_wallet_`.
+- A evitar: `"${n}"` dentro de `Text(` en un Composable: Konsist lo toma por texto fijo. Usar `n.toString()`.
+- A recordar: el único JDK del equipo es el 25 (JBR); detekt 1.23 no corre con él. Sin JDK 17 local, detekt lo valida la CI.
+- A recordar: el teléfono de prueba tiene la app de la tienda (`com.wherever.mobile`, otra firma). La de depuración se instala aparte como `com.wherever.mobile.qa` con un init script fuera del repo que agrega `applicationIdSuffix '.qa'` (sin `google-services.json` no rompe nada). La firma de release no se toca.
+- A recordar: en Git Bash, `adb shell uiautomator dump /sdcard/...` necesita `MSYS_NO_PATHCONV=1`.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

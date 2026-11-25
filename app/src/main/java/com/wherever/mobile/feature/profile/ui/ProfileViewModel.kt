@@ -156,6 +156,7 @@ data class ProfileNavigation(
     val onFavorites: () -> Unit = {},
     val onMemories: () -> Unit = {},
     val onMyReviews: () -> Unit = {},
+    val onCoupons: () -> Unit = {},
     val onPendingReviews: () -> Unit = {},
     val onVerifyEmail: (String) -> Unit = {},
     val onPostcard: (String) -> Unit = {},
