@@ -34,16 +34,6 @@ import com.wherever.mobile.core.designsystem.WhereverTheme
 import com.wherever.mobile.feature.coupons.domain.CouponsTab
 import com.wherever.mobile.feature.coupons.domain.WalletCoupon
 
-/** Lo que la pantalla puede pedir; la navegación la resuelve el NavHost. */
-data class CouponsActions(
-    val onBack: () -> Unit = {},
-    val onTab: (CouponsTab) -> Unit = {},
-    val onOpen: (WalletCoupon) -> Unit = {},
-    val onExplore: () -> Unit = {},
-    val onLoadMore: () -> Unit = {},
-    val onRetry: () -> Unit = {}
-)
-
 /** 29_Cupones (specs/nv-29). */
 @Composable
 fun CouponsRoute(

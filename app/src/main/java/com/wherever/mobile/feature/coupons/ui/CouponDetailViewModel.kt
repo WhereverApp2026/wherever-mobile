@@ -113,16 +113,16 @@ class CouponDetailViewModel @Inject constructor(
 
     /** Sin el cupón en memoria (la app se cerró): se busca en las dos pestañas de la cartera. */
     private suspend fun findInWallet(): WalletCoupon? {
+        var error: AppError = AppError.NotFound()
+        var found: WalletCoupon? = null
         for (tab in CouponsTab.entries) {
             when (val page = repository.wallet(tab)) {
-                is Result.Success -> page.data.items.firstOrNull { it.id == id }?.let { return it }
-                is Result.Failure -> {
-                    mutableState.update { it.copy(error = page.error.toUiText()) }
-                    return null
-                }
+                is Result.Success -> found = page.data.items.firstOrNull { it.id == id }
+                is Result.Failure -> error = page.error
             }
+            if (found != null || error !is AppError.NotFound) break
         }
-        mutableState.update { it.copy(error = AppError.NotFound().toUiText()) }
-        return null
+        if (found == null) mutableState.update { it.copy(error = error.toUiText()) }
+        return found
     }
 }

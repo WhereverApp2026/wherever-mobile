@@ -53,15 +53,6 @@ private const val SECONDS_PER_MINUTE = 60
 private const val PREVIEW_DAYS_SOON = 3
 private const val PREVIEW_DAYS_TWO = 2
 
-data class CouponDetailActions(
-    val onBack: () -> Unit = {},
-    val onRedeem: () -> Unit = {},
-    val onCopy: (String) -> Unit = {},
-    val onReserve: (WalletCoupon) -> Unit = {},
-    val onPlace: (WalletCoupon) -> Unit = {},
-    val onRetry: () -> Unit = {}
-)
-
 /** 47_DetCupon y `DetCupon · *` (specs/nv-29). */
 @Composable
 fun CouponDetailRoute(
