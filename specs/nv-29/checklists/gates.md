@@ -8,7 +8,7 @@
 - [x] Integración: MockWebServer con el contrato publicado, sin staging (sin Room, D-29b)
 - [x] Seguridad verde (`CouponsSecurityTest`)
 - [x] `docs/routes.md` actualizado y enlazado desde la spec
-- [ ] Cobertura ≥45% (`scripts/check_coverage.sh --min 45`)
+- [x] Cobertura ≥45% (`koverVerifyDebug` en verde con la suite completa, 2026-11-25)
 - [ ] Puerta incremental advisory: delta ≥80% + mutación enfocada sin break (no bloquea)
 - [x] Sin secretos, sin tokens en logs, solo HTTPS
 - [x] Estados cubiertos: cargando, vacío, error, sin red
