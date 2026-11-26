@@ -94,6 +94,8 @@ import com.wherever.mobile.feature.plans.ui.PlanDetailPreview
 import com.wherever.mobile.feature.plans.ui.PlanFamilyPreview
 import com.wherever.mobile.feature.plans.ui.PlanGeneratingPreview
 import com.wherever.mobile.feature.plans.ui.PlanGeneratingStep3Preview
+import com.wherever.mobile.feature.plans.ui.PlanMapFullPreview
+import com.wherever.mobile.feature.plans.ui.PlanMapPreview
 import com.wherever.mobile.feature.plans.ui.PlanReadyPreview
 import com.wherever.mobile.feature.plans.ui.PlanWordPreview
 import com.wherever.mobile.feature.profile.ui.BadgesPreview
@@ -219,6 +221,8 @@ class ScreenshotTest {
         "86_ayuda_reportar" to { HelpReportPreview() },
         "ia_palabra" to { PlanWordPreview() },
         "17_ajusta_plan" to { PlanAdjustPreview() },
+        "13_mapa" to { PlanMapPreview() },
+        "14_mapa_full" to { PlanMapFullPreview() },
         "generando_1" to { PlanGeneratingPreview() },
         "generando_3" to { PlanGeneratingStep3Preview() },
         "generando_4" to { PlanReadyPreview() },

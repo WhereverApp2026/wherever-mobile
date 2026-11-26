@@ -77,6 +77,7 @@ import com.wherever.mobile.feature.plans.ui.CreatePlanRoute as CreatePlanScreen
 import com.wherever.mobile.feature.plans.ui.ManualPlanRoute as ManualPlanScreen
 import com.wherever.mobile.feature.plans.ui.MyPlansRoute as MyPlansScreen
 import com.wherever.mobile.feature.plans.ui.PlanDetailRoute as PlanDetailScreen
+import com.wherever.mobile.feature.plans.ui.PlanMapRoute as PlanMapScreen
 import com.wherever.mobile.feature.profile.ui.BadgesRoute as BadgesScreen
 import com.wherever.mobile.feature.profile.ui.EditProfileRoute as EditProfileScreen
 import com.wherever.mobile.feature.profile.ui.ProfileEditorRoute as ProfileEditorScreen
@@ -385,11 +386,19 @@ fun WhereverNavHost(
                 }
             )
         }
+        composable<PlanMapRoute> { e ->
+            val route = e.toRoute<PlanMapRoute>()
+            PlanMapScreen(
+                onBack = { navController.popFrom(e) },
+                onFull = { navController.navigateFrom(e, PlanMapRoute(route.id, full = true)) }
+            )
+        }
         composable<PlanRoute> { e ->
             PlanDetailScreen(
                 onBack = { navController.popOnResult(e) },
                 onOpenPlan = { id -> navController.navigateOnResult(e, PlanRoute(id)) },
                 onInviteFriends = { navController.navigateFrom(e, CreateGroupRoute(it)) },
+                onMap = { navController.navigateFrom(e, PlanMapRoute(it)) },
                 onArrived = { target ->
                     navController.navigateFrom(
                         e,

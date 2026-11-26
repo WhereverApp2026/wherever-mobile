@@ -397,6 +397,12 @@
 - Decisión: en el conflicto de Semgrep del registro gana la versión de `main` (paquetes explícitos), no `--config=auto` de `chore/ci-devsecops`, que exige mandar métricas.
 - Hallazgo (negocio): nv-34 a nv-38 están completos en código y en `main` (Diego hizo f0134e1, 64f56de, aa81281, cdc01fa y a6b37c5; Jorge, el consentimiento de nv-34). Ninguna pantalla se ha probado contra staging, por el 503 de `POST /negocios/{id}/documentos`; por eso cuentan 0/27.
 
+## nv-30 mapas del plan (2026-11-26, Borre)
+- Estado: rama `feat/nv-30-mapas`. 13_Mapa y 14_MapaFull con osmdroid: pin numerado por parada (coordenadas de `GET /lugares/{id}`), línea recta entre paradas, traslados reales del plan, «Cómo llegar» e «Iniciar ruta» a la app de mapas. Entrada: «Ver mapa» en 39_Plan. Verificado: ktlint, Konsist, pruebas de Planes, suite completa y `koverVerifyDebug`; en el Samsung con un plan de QA B (pin real en Tula, Iniciar ruta abre Google Maps).
+- Decisión: 15_Llegar y 18_Navegando no se construyen (D-30f). Porqué: piden instrucciones calle por calle y tiempos por modo; osmdroid no calcula rutas y la API no las da. Inventarlas viola constitución §2.7. Hace falta que Jorge elija un proveedor de rutas (OSRM o GraphHopper) con su excepción de stack.
+- A evitar: al restaurar las capturas que Roborazzi regraba por las fuentes, devolver también las de pantallas que el slice cambió a propósito (aquí 39_Plan y su variante «Paseo familiar» por «Ver mapa»). Antes de restaurar, listar qué pantallas tocó el slice y cuáles las reutilizan.
+- A recordar: los planes de QA B en staging tienen una sola parada; para ver la línea y los traslados en el teléfono hace falta un plan con 2 o más.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

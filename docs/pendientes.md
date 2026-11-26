@@ -29,7 +29,7 @@ Tabla por área en `docs/avance.md`. Prioridad: primero lo que ya tiene código 
 - P3 · Variantes `ChatAmigo · *`, `GrupoChat · *` y `PerfilAmigo · *`: revisar contra Figma y probar.
 
 ### 3. Planes/IA (14/22)
-- P1 · nv-30 El día del plan: 13_Mapa, 14_MapaFull, 15_Llegar y 18_Navegando con osmdroid (D25).
+- P1 · nv-30: 13_Mapa y 14_MapaFull hechos con osmdroid (`feat/nv-30-mapas`, 2026-11-26), probados en teléfono con un plan de QA B. 15_Llegar y 18_Navegando esperan un proveedor de rutas (instrucciones calle por calle y tiempos por modo; OSRM o GraphHopper con excepción de stack): decisión de Jorge (D-30f).
 - P1 · Probar 26_CheckinOk en el teléfono con un check-in real dentro de un plan.
 - P2 · nv-26: variantes `Vaca · *` (saldada, sin gastos) y probarlas.
 - P2 · nv-23: 4.º paso de `Generando` y probarlo contra staging.
