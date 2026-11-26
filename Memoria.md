@@ -397,6 +397,13 @@
 - Decisión: en el conflicto de Semgrep del registro gana la versión de `main` (paquetes explícitos), no `--config=auto` de `chore/ci-devsecops`, que exige mandar métricas.
 - Hallazgo (negocio): nv-34 a nv-38 están completos en código y en `main` (Diego hizo f0134e1, 64f56de, aa81281, cdc01fa y a6b37c5; Jorge, el consentimiento de nv-34). Ninguna pantalla se ha probado contra staging, por el 503 de `POST /negocios/{id}/documentos`; por eso cuentan 0/27.
 
+## nv-57 correcciones de la prueba en teléfono (2026-11-26, Borre)
+- Estado: rama `fix/negocio-detalles`. 48_NegPanel: «Aún no tienes reservas esta semana.» en lugar de rayas planas y «Sin reseñas esta semana» en lugar de «0.0 ★ (+0)». 33_Detalle: con letra grande, «Llamar» baja a su renglón (antes «Cómo lle…»). Probado: 87_NegGaleria sube fotos con Prueba QA (4 de 10, persiste).
+- Hallazgo: tres cosas que parecían errores eran datos: el «recuadro gris» del Panel es la portada de prueba (naranja con marco blanco) bajo la capa oscura; el aviso «cortado» de la galería es contenido con scroll; el nombre «Cafe Prueba QANegocio de prueba de la app» se escribió así (el alta manda nombre y descripción por separado).
+- Decisión: `requiere_refresh` no se arregla en `feature/business`. Porqué: forzar el refresh fuera del candado de `TokenRefreshAuthenticator` puede reusar un refresh rotado y cerrar todas las sesiones; va por Issue a Jorge (`core/network`).
+- A evitar: tocar el teléfono mientras la persona lo usa; antes de cada gesto, leer qué pantalla está al frente y, si cambió sin que yo la moviera, detenerse.
+- A recordar: «Cafe Prueba QA» (cuenta Prueba QA) está en revisión; sus fotos no salen en Explorar hasta que un administrador lo apruebe.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

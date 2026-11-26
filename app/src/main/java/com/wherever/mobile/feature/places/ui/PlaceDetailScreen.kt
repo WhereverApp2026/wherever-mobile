@@ -43,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -284,10 +285,7 @@ private fun Header(place: PlaceDetail, onSeal: () -> Unit) {
 private fun Actions(place: PlaceDetail, context: Context) {
     val shareText = stringResource(R.string.place_share_text, place.name, place.address)
     val shareTitle = stringResource(R.string.place_share)
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(Spacing.S),
-        modifier = Modifier.padding(horizontal = ScreenPadding)
-    ) {
+    val route = @Composable { modifier: Modifier ->
         WhereverOutlinedButton(
             text = stringResource(R.string.place_route),
             icon = Icons.Outlined.Place,
@@ -296,24 +294,43 @@ private fun Actions(place: PlaceDetail, context: Context) {
                 val uri = "geo:$point?q=$point"
                 context.startSafely(Intent(Intent.ACTION_VIEW, uri.toUri()))
             },
-            modifier = Modifier.weight(1f),
+            modifier = modifier,
             tag = "place_route"
         )
-        place.phone?.let { phone ->
-            WhereverOutlinedButton(
-                text = stringResource(R.string.place_call),
-                icon = Icons.Outlined.Call,
-                onClick = { context.startSafely(Intent(Intent.ACTION_DIAL, "tel:$phone".toUri())) },
-                modifier = Modifier.weight(1f),
-                tag = "place_call"
-            )
-        }
+    }
+    val call = @Composable { phone: String, modifier: Modifier ->
+        WhereverOutlinedButton(
+            text = stringResource(R.string.place_call),
+            icon = Icons.Outlined.Call,
+            onClick = { context.startSafely(Intent(Intent.ACTION_DIAL, "tel:$phone".toUri())) },
+            modifier = modifier,
+            tag = "place_call"
+        )
+    }
+    val share = @Composable {
         CircleIconButton(Icons.Outlined.Share, shareTitle, onClick = {
             val send = Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, shareText)
             context.startSafely(Intent.createChooser(send, shareTitle))
         })
     }
+    // Con letra grande, «Cómo llegar» y «Llamar» lado a lado se cortaban («Cómo lle…»): Llamar baja a su renglón
+    // (specs/nv-57).
+    val stacked = place.phone != null && LocalDensity.current.fontScale > STACK_FONT_SCALE
+    Column(
+        verticalArrangement = Arrangement.spacedBy(Spacing.S),
+        modifier = Modifier.padding(horizontal = ScreenPadding)
+    ) {
+        Row(horizontalArrangement = Arrangement.spacedBy(Spacing.S)) {
+            route(Modifier.weight(1f))
+            if (!stacked) place.phone?.let { call(it, Modifier.weight(1f)) }
+            share()
+        }
+        if (stacked) place.phone?.let { call(it, Modifier.fillMaxWidth()) }
+    }
 }
+
+/** A partir de esta escala de letra, los botones de acción no caben lado a lado. */
+private const val STACK_FONT_SCALE = 1.15f
 
 private fun Context.startSafely(intent: Intent) {
     try {

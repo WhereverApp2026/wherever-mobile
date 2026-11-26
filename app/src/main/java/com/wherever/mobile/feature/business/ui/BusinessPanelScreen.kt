@@ -275,12 +275,22 @@ private fun WeekCard(week: BusinessStats, onStats: () -> Unit) {
                     )
                 }
             }
-            BarChart(
-                values = week.series.map { it.reservations },
-                labels = week.series.map { it.start.dayInitial() },
-                height = Sizes.Thumbnail,
-                barColor = RouteBlueTint
-            )
+            if (week.series.all { it.reservations == 0 }) {
+                // Siete rayas planas no dicen nada: sin reservas en la semana, un mensaje (specs/nv-57).
+                Text(
+                    text = stringResource(R.string.business_week_empty),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.testTag("business_week_empty")
+                )
+            } else {
+                BarChart(
+                    values = week.series.map { it.reservations },
+                    labels = week.series.map { it.start.dayInitial() },
+                    height = Sizes.Thumbnail,
+                    barColor = RouteBlueTint
+                )
+            }
         }
     }
 }
@@ -354,11 +364,14 @@ private fun WeekSummaryCard(panel: BusinessPanel) {
             )
         }
         panel.weekRating?.let { rating ->
-            val change = panel.ratingChange?.let { stringResource(R.string.business_rating_change, it.signed()) }
-            add(
-                stringResource(R.string.business_week_rating) to
-                    listOfNotNull(stringResource(R.string.business_rating_value, rating), change).joinToString(" ")
-            )
+            // Las calificaciones van de 1 a 5: 0 es que no hubo reseñas, no un 0.0 (specs/nv-57).
+            val value = if (rating <= 0.0) {
+                stringResource(R.string.business_week_no_reviews)
+            } else {
+                val change = panel.ratingChange?.let { stringResource(R.string.business_rating_change, it.signed()) }
+                listOfNotNull(stringResource(R.string.business_rating_value, rating), change).joinToString(" ")
+            }
+            add(stringResource(R.string.business_week_rating) to value)
         }
         panel.reviewsToAnswer?.let { add(stringResource(R.string.business_reviews_to_answer) to it.toString()) }
         panel.activeCoupons?.let { add(stringResource(R.string.business_active_coupons) to it.toString()) }
@@ -438,4 +451,18 @@ private fun Double.signedPercent(): String = (if (this >= 0) "+" else "") + roun
 @Composable
 internal fun BusinessPanelPreview() {
     WhereverTheme { BusinessPanelContent(samplePanelState(), sampleHeader, {}, {}, {}) }
+}
+
+/** 48_NegPanel de un negocio nuevo: semana sin reservas y sin reseñas (specs/nv-57). */
+@Preview
+@Composable
+internal fun BusinessPanelEmptyWeekPreview() {
+    val base = samplePanelState()
+    val state = base.copy(
+        panel = base.panel?.copy(weekRating = 0.0, ratingChange = 0.0),
+        week = base.week?.let { week ->
+            week.copy(series = week.series.map { it.copy(reservations = 0) }, reservationsChange = null)
+        }
+    )
+    WhereverTheme { BusinessPanelContent(state, sampleHeader, {}, {}, {}) }
 }

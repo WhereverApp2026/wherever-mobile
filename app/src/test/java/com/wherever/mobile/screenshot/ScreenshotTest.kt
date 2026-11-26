@@ -28,6 +28,7 @@ import com.wherever.mobile.feature.business.ui.BusinessLocationPreview
 import com.wherever.mobile.feature.business.ui.BusinessMissingPreview
 import com.wherever.mobile.feature.business.ui.BusinessMomentsPreview
 import com.wherever.mobile.feature.business.ui.BusinessOperationPreview
+import com.wherever.mobile.feature.business.ui.BusinessPanelEmptyWeekPreview
 import com.wherever.mobile.feature.business.ui.BusinessPanelPreview
 import com.wherever.mobile.feature.business.ui.BusinessProfilePreview
 import com.wherever.mobile.feature.business.ui.BusinessRegisterPreview
@@ -236,6 +237,7 @@ class ScreenshotTest {
         "45_agregar_gasto" to { AddExpensePreview() },
         "45_agregar_gasto_personalizado" to { AddExpenseCustomPreview() },
         "48_neg_panel" to { BusinessPanelPreview() },
+        "48_neg_panel_semana_vacia" to { BusinessPanelEmptyWeekPreview() },
         "49_neg_reservas" to { BusinessReservationsPreview() },
         "49_neg_reservas_vacio" to { BusinessReservationsEmptyPreview() },
         "50_neg_checkin" to { CheckinPreview() },

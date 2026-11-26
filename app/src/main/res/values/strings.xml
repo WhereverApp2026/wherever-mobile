@@ -1873,4 +1873,8 @@
     <string name="tax_cfdi_s01">S01 · Sin efectos fiscales</string>
     <string name="tax_privacy">Tus datos fiscales viajan cifrados y no se guardan en el teléfono.</string>
     <string name="tax_save">Guardar datos</string>
+
+    <!-- nv-57: correcciones de la prueba en teléfono -->
+    <string name="business_week_empty">Aún no tienes reservas esta semana.</string>
+    <string name="business_week_no_reviews">Sin reseñas esta semana</string>
 </resources>
