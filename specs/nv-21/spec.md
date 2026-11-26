@@ -107,6 +107,12 @@ Slice propio: `spec→datos→dominio→ViewModel→UI→tests→gates→tag`. R
 - **34_Sello** con la API real: `GET /lugares?con_sello=true` (backend nv-85) y `sello_excelencia` en la tarjeta. Se entra tocando «Sello de Excelencia» en la ficha; muestra la regla del Sello de nv-56 (60 días, 20 reseñas verificadas en 90 días, promedio ≥ 4.5, sin rechazos de moderación), hasta 3 negocios con Sello cerca (por distancia con ubicación, por calificación sin ella) y «Ver negocios con Sello» abre Explorar con «Con Sello» puesto. En staging aún ningún negocio tiene Sello: sale el estado vacío.
 - Explorar suma el chip «Con Sello» y la tarjeta muestra la insignia. «Abierto ahora» y «Con Sello» comparten `onToggle(FilterFlag)`.
 
+## Decisiones (2026-11-26, Borre, rama `feat/portada-mapa`)
+
+- **D-21a Portada de mapa sin foto.** En staging ningún negocio tiene fotos (`foto_portada: ""`, `fotos: []`: solo las sube el dueño desde 87_NegGaleria). Cuando un lugar no tiene foto, la tarjeta de Explorar, la tarjeta de «Cerca de ti» en Inicio y la portada de la ficha (33_Detalle) muestran un mapa de OpenStreetMap centrado en su `ubicacion`, con un pin y la atribución «© OpenStreetMap». Con foto, todo queda igual. No es dato inventado: es la ubicación real que manda la API.
+- **D-21b Teselas como imagen.** Para no abrir un mapa de osmdroid por tarjeta en las listas, el mapa se arma con teselas PNG de `tile.openstreetmap.org` (las mismas de osmdroid, MAPNIK) cargadas con Coil, centradas en el punto, zoom 17. Cada petición manda un `User-Agent` propio (el paquete de la app), como pide la política de teselas de OSM; Coil las guarda en su caché.
+- **D-21c Datos.** `PlaceCard` gana `location` (de `ubicacion` en `GET /lugares`, `/lugares/buscar` y `/recomendaciones`); null si la API no lo manda, y entonces queda el pin de siempre.
+
 ## Aprobación
 - [x] Revisor: Jorge — fecha: 2026-11-06
 - [ ] CHECKLIST_PR.md OK

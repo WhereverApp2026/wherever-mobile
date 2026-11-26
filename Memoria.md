@@ -397,6 +397,12 @@
 - Decisión: en el conflicto de Semgrep del registro gana la versión de `main` (paquetes explícitos), no `--config=auto` de `chore/ci-devsecops`, que exige mandar métricas.
 - Hallazgo (negocio): nv-34 a nv-38 están completos en código y en `main` (Diego hizo f0134e1, 64f56de, aa81281, cdc01fa y a6b37c5; Jorge, el consentimiento de nv-34). Ninguna pantalla se ha probado contra staging, por el 503 de `POST /negocios/{id}/documentos`; por eso cuentan 0/27.
 
+## Portada de mapa sin foto (2026-11-26, Borre)
+- Estado: rama `feat/portada-mapa` (nv-21, D-21a a D-21c). Sin foto, las tarjetas de Explorar, «Cerca de ti» y la portada de la ficha muestran el mapa de OSM de la ubicación real (teselas con Coil, `User-Agent` propio, pin y «© OpenStreetMap»). Probado en el Samsung contra staging.
+- Hallazgo: staging no tiene fotos de negocios (`foto_portada: ""`, `fotos: []` en todos); solo las sube el dueño desde 87_NegGaleria. No era un error de la app.
+- A evitar: fijar números esperados en una prueba con una estimación mental (las teselas de Cafe Madero estaban mal); calcularlos antes con una herramienta.
+- A evitar: agregar una cadena sin buscar si ya existe (`map_attribution` ya estaba en Explorar); `check_strings.sh` marca duplicados y el segundo `sed` borra el que no es.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

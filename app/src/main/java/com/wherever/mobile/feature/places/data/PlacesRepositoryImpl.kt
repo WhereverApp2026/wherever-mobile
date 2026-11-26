@@ -138,7 +138,8 @@ fun PlaceCardDto.toDomain(): PlaceCard = PlaceCard(
     distanceMeters = distanceMeters,
     openNow = openNow,
     why = why?.takeIf { it.isNotBlank() },
-    seal = seal
+    seal = seal,
+    location = location?.let { GeoPoint(it.lat, it.lng) }
 )
 
 internal fun PlaceDetailDto.toDomain(): PlaceDetail = PlaceDetail(

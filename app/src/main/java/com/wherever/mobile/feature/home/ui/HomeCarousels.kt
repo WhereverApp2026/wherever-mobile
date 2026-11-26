@@ -49,6 +49,7 @@ import com.wherever.mobile.core.designsystem.WhereverShapes
 import com.wherever.mobile.core.designsystem.WhereverTextLink
 import com.wherever.mobile.feature.feed.ui.FeedItem
 import com.wherever.mobile.feature.places.domain.PlaceCard
+import com.wherever.mobile.feature.places.ui.PlaceMapCover
 import com.wherever.mobile.feature.places.ui.ratingLabel
 import com.wherever.mobile.feature.profile.ui.ProfileAvatar
 import kotlin.math.ceil
@@ -124,6 +125,7 @@ internal fun NearbyPlaceCard(
             }
             .testTag("home_place_${place.id}")
     ) {
+        val location = place.location
         if (place.coverUrl != null) {
             AsyncImage(
                 model = place.coverUrl,
@@ -131,6 +133,9 @@ internal fun NearbyPlaceCard(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.matchParentSize()
             )
+        } else if (location != null) {
+            // Sin foto: el mapa de su ubicación (specs/nv-21, D-21a).
+            PlaceMapCover(location, Modifier.matchParentSize())
         } else {
             Icon(
                 Icons.Outlined.Place,

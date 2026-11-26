@@ -75,6 +75,7 @@ import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverSnackbarHost
 import com.wherever.mobile.core.designsystem.WhereverTextButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
+import com.wherever.mobile.core.location.GeoPoint
 import com.wherever.mobile.feature.places.domain.DaySchedule
 import com.wherever.mobile.feature.places.domain.PlaceDetail
 import com.wherever.mobile.feature.places.domain.ReportReason
@@ -151,7 +152,8 @@ private fun PlaceContent(
     ) {
         item {
             Box {
-                Photos(place.photos)
+                // Sin ubicación la API manda 0,0: ese punto no es el lugar.
+                Photos(place.photos, place.location.takeIf { it.lat != 0.0 || it.lng != 0.0 })
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(Spacing.M),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -231,9 +233,9 @@ private fun PlaceContent(
 }
 
 @Composable
-private fun Photos(photos: List<String>) {
+private fun Photos(photos: List<String>, location: GeoPoint?) {
     if (photos.size <= 1) {
-        PlacePhoto(photos.firstOrNull(), height = Sizes.HeroImage)
+        PlacePhoto(photos.firstOrNull(), height = Sizes.HeroImage, location = location)
     } else {
         LazyRow(horizontalArrangement = Arrangement.spacedBy(Spacing.S)) {
             items(photos) { url ->

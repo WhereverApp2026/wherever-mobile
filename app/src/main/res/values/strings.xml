@@ -1705,6 +1705,8 @@
     <string name="map_search_here">Buscar en esta zona</string>
     <string name="map_empty">No hay lugares en esta zona. Mueve el mapa o quita el filtro.</string>
     <string name="map_attribution">© colaboradores de OpenStreetMap</string>
+    <!-- Forma corta para portadas pequeñas (specs/nv-21, D-21a). -->
+    <string name="map_attribution_short">© OpenStreetMap</string>
     <string name="map_card_line">%1$s · ★ %2$.1f</string>
     <string name="map_see_detail">Ver detalle</string>
     <string name="map_to_plan">A mi plan</string>
@@ -1873,4 +1875,5 @@
     <string name="tax_cfdi_s01">S01 · Sin efectos fiscales</string>
     <string name="tax_privacy">Tus datos fiscales viajan cifrados y no se guardan en el teléfono.</string>
     <string name="tax_save">Guardar datos</string>
+
 </resources>

@@ -40,6 +40,7 @@ import com.wherever.mobile.core.designsystem.Sizes
 import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.StatusPill
 import com.wherever.mobile.core.designsystem.SurfaceCard
+import com.wherever.mobile.core.location.GeoPoint
 import com.wherever.mobile.feature.places.domain.PlaceCard
 import java.util.Locale
 
@@ -69,9 +70,12 @@ fun distanceLabel(meters: Double): String = if (meters < METERS_PER_KM) {
 
 fun ratingLabel(rating: Double): String = String.format(Locale.US, "%.1f", rating)
 
-/** Foto de portada o un fondo con ícono si el negocio no tiene foto. */
+/**
+ * Foto de portada. Sin foto: el mapa de su ubicación (specs/nv-21, D-21a) o, si tampoco hay ubicación, un fondo
+ * con ícono.
+ */
 @Composable
-fun PlacePhoto(url: String?, height: Dp, modifier: Modifier = Modifier) {
+fun PlacePhoto(url: String?, height: Dp, modifier: Modifier = Modifier, location: GeoPoint? = null) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
@@ -80,15 +84,15 @@ fun PlacePhoto(url: String?, height: Dp, modifier: Modifier = Modifier) {
             .clip(RoundedCornerShape(Radius.L))
             .background(RouteBlueTint)
     ) {
-        if (url != null) {
-            AsyncImage(
+        when {
+            url != null -> AsyncImage(
                 model = url,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxWidth().height(height)
             )
-        } else {
-            Icon(Icons.Outlined.Place, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+            location != null -> PlaceMapCover(location, Modifier.matchParentSize())
+            else -> Icon(Icons.Outlined.Place, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
         }
     }
 }
@@ -150,7 +154,7 @@ fun PlaceCardItem(
             verticalArrangement = Arrangement.spacedBy(Spacing.S),
             modifier = Modifier.clickable(onClick = onClick).padding(Spacing.M)
         ) {
-            PlacePhoto(place.coverUrl, height = Sizes.CardImage)
+            PlacePhoto(place.coverUrl, height = Sizes.CardImage, location = place.location)
             Text(
                 place.name,
                 style = MaterialTheme.typography.titleMedium,

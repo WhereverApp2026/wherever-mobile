@@ -27,7 +27,8 @@ data class PlaceCardDto(
     @SerialName("distancia_m") val distanceMeters: Double? = null,
     @SerialName("abierto_ahora") val openNow: Boolean = false,
     @SerialName("por_que") val why: String? = null,
-    @SerialName("sello_excelencia") val seal: Boolean = false
+    @SerialName("sello_excelencia") val seal: Boolean = false,
+    @SerialName("ubicacion") val location: PointDto? = null
 )
 
 @Serializable
