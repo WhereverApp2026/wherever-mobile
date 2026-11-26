@@ -11,7 +11,7 @@
 - [x] 6. Pantalla Compose sin lógica; textos en `strings.xml`; ruta en `docs/routes.md`
 - [x] 7. Pruebas de los tres tipos (T2)
 - [ ] 8. Gates: cobertura ≥45% + `routes.md` + `permissions-matrix.md` + `masvs-checklist.md` vivos (detekt lo corre la CI: no hay JDK 17-22 en el equipo)
-- [x] 9. APK + verificación en teléfono contra staging (29_Cupones con la cartera vacía; el detalle espera un cupón real, `docs/pruebas-telefono.md` #26)
+- [x] 9. APK + verificación en teléfono contra staging (cuenta QA B, 2026-11-26: lista, detalle, código de canje, Copiar, Ver lugar y Reservar; `docs/pruebas-telefono.md` #26)
 - [x] 10. Actualizar `Memoria.md` + `CHECKLIST_PR.md`
 - **No hacer**: implementar con datos simulados lo que no tiene endpoint.
 

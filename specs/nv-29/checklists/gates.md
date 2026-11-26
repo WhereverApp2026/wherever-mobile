@@ -12,7 +12,7 @@
 - [ ] Puerta incremental advisory: delta ≥80% + mutación enfocada sin break (no bloquea)
 - [x] Sin secretos, sin tokens en logs, solo HTTPS
 - [x] Estados cubiertos: cargando, vacío, error, sin red
-- [x] Probado en teléfono contra staging (cartera vacía; detalle pendiente de un cupón real)
+- [x] Probado en teléfono contra staging (cuenta QA B, 2026-11-26)
 - [x] `Memoria.md` actualizada, sin secretos
 - [x] Aprobación: Revisor Jorge — 2026-11-06
 - [ ] Conciliación (2026-11-25): Revisor Osmar — fecha:

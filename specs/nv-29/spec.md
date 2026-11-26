@@ -101,7 +101,7 @@ Sin Room (D-29b). Dominio en `feature/coupons/domain/Coupons.kt`: `CouponKind`, 
 
 ## 7. Plan de entrega
 
-Un PR: "feat(nv-29): cupones con la API real". Prueba en teléfono contra staging; si la cartera de las cuentas QA está vacía (staging sin negocios con cupones), se prueba el vacío y queda anotado en `docs/pruebas-telefono.md`. Ver `plan.md`, `task.md` y `checklists/gates.md`.
+Un PR: "feat(nv-29): cupones con la API real" (#75). Probado en teléfono contra staging el 2026-11-26 con la cuenta QA B, que tiene guardados los cupones de Restaurante Cafe Madero (`docs/pruebas-telefono.md` #26). Ver `plan.md`, `task.md` y `checklists/gates.md`.
 
 ## Aprobación
 - [x] Revisor: Jorge — fecha: 2026-11-06

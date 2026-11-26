@@ -51,7 +51,7 @@ Tabla por área en `docs/avance.md`. Prioridad: primero lo que ya tiene código 
 - P3 · 10_Inicio: corazón de favoritos y paradas en las tarjetas (falta que la API del feed los mande).
 
 ### 6. Otros (1/6)
-- P1 · nv-29 Cupones: código en `feat/nv-29-cupones` (2026-11-25). 29_Cupones probado en teléfono con la cartera vacía; 47_DetCupon y `DetCupon · *` esperan un cupón real en staging (crearlo pide Modo negocio). Ver `docs/pruebas-telefono.md` #26.
+- ✅ nv-29 Cupones: 29_Cupones, 47_DetCupon y `DetCupon · *` probados en teléfono contra staging con la cuenta QA B (2026-11-26, `docs/pruebas-telefono.md` #26). PR #75. Las variantes de monto y regalo no tienen cupón en staging: se ven en las capturas de Roborazzi.
 
 ### 7. Técnico (no suma frames)
 - Subir a SDK 37 + AGP 9.1 para poder integrar AGP 9.5.2 (#65), coil 3.6.3 (#63) y los PR #8–#12.
