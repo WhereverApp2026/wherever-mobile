@@ -40,15 +40,18 @@ private const val BOX_MARGIN = 1.5f
 private const val LABEL_SCALE = 0.5f
 private const val ROUTE_WIDTH_SCALE = 2f
 
+/** Naranja, verde y azul se repiten cada tres paradas. */
+private const val STOP_COLORS = 3
+
 /** Color de cada parada como en la maqueta: 1 naranja, 2 verde, 3 azul, y vuelve a empezar. */
-internal fun stopColor(number: Int): Color = when ((number - 1) % 3) {
+internal fun stopColor(number: Int): Color = when ((number - 1) % STOP_COLORS) {
     0 -> Sunset
     1 -> Mint
     else -> RouteBlue
 }
 
 /** Texto sobre el color de la parada (oscuro sobre el naranja, claro sobre los demás). */
-internal fun onStopColor(number: Int): Color = if ((number - 1) % 3 == 0) Ink else Color.White
+internal fun onStopColor(number: Int): Color = if ((number - 1) % STOP_COLORS == 0) Ink else Color.White
 
 /**
  * Mapa de osmdroid (D25, E-04) con un pin numerado por parada y una línea recta entre ellas en orden.
