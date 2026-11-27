@@ -225,6 +225,14 @@ data object PendingReviewsRoute
 @Serializable
 data object MyReviewsRoute
 
+/** 29_Cupones (specs/nv-29). */
+@Serializable
+data object CouponsRoute
+
+/** 47_DetCupon (specs/nv-29). `id` (el de la cartera) lo lee CouponDetailViewModel. */
+@Serializable
+data class CouponDetailRoute(val id: String)
+
 /**
  * 68_PostVisita → 78_ResCom → 69_Publicado (specs/nv-32). Crear: `checkinId`; editar: `reviewId`.
  * ReviewFormViewModel lee los campos de SavedStateHandle por su nombre.
