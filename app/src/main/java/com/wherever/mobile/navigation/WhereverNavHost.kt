@@ -37,6 +37,8 @@ import com.wherever.mobile.feature.business.ui.BusinessOnboardingRoute as Busine
 import com.wherever.mobile.feature.business.ui.OnboardingNavigation
 import com.wherever.mobile.feature.checkin.ui.ArrivalNavigation
 import com.wherever.mobile.feature.checkin.ui.ArrivalRoute as ArrivalScreen
+import com.wherever.mobile.feature.coupons.ui.CouponDetailRoute as CouponDetailScreen
+import com.wherever.mobile.feature.coupons.ui.CouponsRoute as CouponsScreen
 import com.wherever.mobile.feature.directchat.ui.DirectChatRoute as DirectChatScreen
 import com.wherever.mobile.feature.feed.ui.FriendPlanNavigation
 import com.wherever.mobile.feature.feed.ui.FriendPlanRoute as FriendPlanScreen
@@ -565,6 +567,7 @@ fun WhereverNavHost(
                     onFavorites = { navController.navigateFrom(e, FavoritesRoute) },
                     onMemories = { navController.navigateFrom(e, AlbumRoute) },
                     onMyReviews = { navController.navigateFrom(e, MyReviewsRoute) },
+                    onCoupons = { navController.navigateFrom(e, CouponsRoute) },
                     onPendingReviews = { navController.navigateFrom(e, PendingReviewsRoute) },
                     onVerifyEmail = { email ->
                         navController.navigateFrom(e, CheckEmailRoute(CheckEmailMode.VERIFICATION.name, email))
@@ -573,6 +576,20 @@ fun WhereverNavHost(
                     onPlan = { navController.navigateFrom(e, PlanRoute(it)) },
                     onPlace = { navController.navigateFrom(e, PlaceRoute(it)) }
                 )
+            )
+        }
+        composable<CouponsRoute> { e ->
+            CouponsScreen(
+                onBack = { navController.popFrom(e) },
+                onOpen = { navController.navigateFrom(e, CouponDetailRoute(it.id)) },
+                onExplore = { navController.navigateFrom(e, ExploreRoute()) }
+            )
+        }
+        composable<CouponDetailRoute> { e ->
+            CouponDetailScreen(
+                onBack = { navController.popFrom(e) },
+                onReserve = { navController.navigateFrom(e, ReserveRoute(it.placeId, it.placeName)) },
+                onPlace = { navController.navigateFrom(e, PlaceRoute(it.placeId, origin = "cupon")) }
             )
         }
         composable<BadgesRoute> { e ->

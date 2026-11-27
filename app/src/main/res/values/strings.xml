@@ -1626,7 +1626,6 @@
     <string name="profile_shortcut_reservations">Reservas</string>
     <string name="profile_shortcut_favorites">Favoritos</string>
     <string name="profile_shortcut_coupons">Cupones</string>
-    <string name="profile_coupons_soon">Tus cupones llegan muy pronto.</string>
     <string name="profile_my_reviews_hint">Publicadas y pendientes</string>
     <plurals name="profile_pending_new">
         <item quantity="one">%1$d nueva</item>
@@ -1873,6 +1872,42 @@
     <string name="tax_cfdi_s01">S01 · Sin efectos fiscales</string>
     <string name="tax_privacy">Tus datos fiscales viajan cifrados y no se guardan en el teléfono.</string>
     <string name="tax_save">Guardar datos</string>
+
+    <!-- nv-29 Cupones -->
+    <string name="coupons_wallet_title">Cupones</string>
+    <string name="coupons_wallet_subtitle">Muestra el código en caja para usarlos.</string>
+    <string name="coupons_tab_available">Disponibles</string>
+    <string name="coupons_tab_available_count">Disponibles (%1$d)</string>
+    <string name="coupons_tab_used">Usados</string>
+    <string name="coupons_use">Usar</string>
+    <string name="coupons_badge_gift">Gratis</string>
+    <string name="coupons_used_label">Usado</string>
+    <string name="coupons_expires_today">Vence hoy</string>
+    <plurals name="coupons_expires_in_days">
+        <item quantity="one">Vence en %1$d día</item>
+        <item quantity="many">Vence en %1$d días</item>
+        <item quantity="other">Vence en %1$d días</item>
+    </plurals>
+    <string name="coupons_expires_on">Vence el %1$s</string>
+    <string name="coupons_expired">Vencido</string>
+    <string name="coupons_empty">Aún no tienes cupones guardados.</string>
+    <string name="coupons_used_empty">Todavía no has usado ningún cupón.</string>
+    <string name="coupons_explore">Explorar lugares</string>
+    <string name="coupons_load_more">Ver más</string>
+    <string name="coupons_detail_title">Tu cupón</string>
+    <string name="coupons_code_label">Código</string>
+    <string name="coupons_code_hint">Pídelo al llegar: dura 5 minutos.</string>
+    <string name="coupons_show_code">Mostrar código</string>
+    <string name="coupons_copy">Copiar</string>
+    <string name="coupons_code_copied">Código copiado</string>
+    <string name="coupons_code_expires">Vence en %1$d:%2$02d</string>
+    <string name="coupons_how_title">Cómo usarlo</string>
+    <string name="coupons_how_1">Reserva en %1$s desde Wherever o ve directo.</string>
+    <string name="coupons_how_2">Al llegar, toca Mostrar código.</string>
+    <string name="coupons_how_3">Di el código en caja antes de que venza.</string>
+    <string name="coupons_conditions">Condiciones</string>
+    <string name="coupons_reserve_with">Reservar con este cupón</string>
+    <string name="coupons_see_place">Ver %1$s</string>
 
     <!-- nv-57: correcciones de la prueba en teléfono -->
     <string name="business_week_empty">Aún no tienes reservas esta semana.</string>

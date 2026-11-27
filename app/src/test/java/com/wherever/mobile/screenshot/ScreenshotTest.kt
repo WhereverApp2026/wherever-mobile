@@ -49,6 +49,14 @@ import com.wherever.mobile.feature.business.ui.ReviewReplyPreview
 import com.wherever.mobile.feature.business.ui.TaxDataPreview
 import com.wherever.mobile.feature.checkin.ui.ArrivalOkPreview
 import com.wherever.mobile.feature.checkin.ui.ArrivalPermissionPreview
+import com.wherever.mobile.feature.coupons.ui.CouponDetailAmountPreview
+import com.wherever.mobile.feature.coupons.ui.CouponDetailCodePreview
+import com.wherever.mobile.feature.coupons.ui.CouponDetailGiftPreview
+import com.wherever.mobile.feature.coupons.ui.CouponDetailPercentPreview
+import com.wherever.mobile.feature.coupons.ui.CouponDetailPreview
+import com.wherever.mobile.feature.coupons.ui.WalletCouponsEmptyPreview
+import com.wherever.mobile.feature.coupons.ui.WalletCouponsPreview
+import com.wherever.mobile.feature.coupons.ui.WalletCouponsUsedPreview
 import com.wherever.mobile.feature.directchat.ui.DirectChatJoinedPreview
 import com.wherever.mobile.feature.directchat.ui.DirectChatPreview
 import com.wherever.mobile.feature.feed.ui.FriendPlanPreview
@@ -207,6 +215,14 @@ class ScreenshotTest {
         "79_mis_res" to { MyReviewsPreview() },
         "mis_res_confirmar_eliminar" to { MyReviewsConfirmPreview() },
         "80_res_lugar" to { PlaceReviewsPreview() },
+        "29_cupones" to { WalletCouponsPreview() },
+        "29_cupones_vacio" to { WalletCouponsEmptyPreview() },
+        "29_cupones_usados" to { WalletCouponsUsedPreview() },
+        "47_det_cupon" to { CouponDetailPreview() },
+        "det_cupon_codigo" to { CouponDetailCodePreview() },
+        "det_cupon_50_consumo" to { CouponDetailAmountPreview() },
+        "det_cupon_15_cuenta" to { CouponDetailPercentPreview() },
+        "det_cupon_postre" to { CouponDetailGiftPreview() },
         "70_crear_pub" to { CreateMomentPreview() },
         "71_camara" to { CameraPreview() },
         "72_postal" to { PostcardEditorPreview() },
