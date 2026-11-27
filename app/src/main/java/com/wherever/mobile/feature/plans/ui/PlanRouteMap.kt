@@ -1,7 +1,6 @@
 package com.wherever.mobile.feature.plans.ui
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Typeface
@@ -17,6 +16,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -127,7 +128,7 @@ private fun fit(view: MapView, points: List<OsmPoint>) {
 private fun numberPin(context: Context, density: Density, number: Int): BitmapDrawable {
     val size = with(density) { Sizes.StepBadge.roundToPx() }
     val ring = with(density) { Strokes.Thin.toPx() } * ROUTE_WIDTH_SCALE
-    val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+    val bitmap = createBitmap(size, size)
     val canvas = Canvas(bitmap)
     val radius = size / 2f
     val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -141,7 +142,7 @@ private fun numberPin(context: Context, density: Density, number: Int): BitmapDr
     paint.textAlign = Paint.Align.CENTER
     val baseline = radius - (paint.descent() + paint.ascent()) / 2
     canvas.drawText(number.toString(), radius, baseline, paint)
-    return BitmapDrawable(context.resources, bitmap)
+    return bitmap.toDrawable(context.resources)
 }
 
 private fun newRouteMap(context: Context): MapView {
