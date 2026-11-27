@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -50,11 +51,14 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wherever.mobile.R
 import com.wherever.mobile.core.designsystem.BackCircleButton
+import com.wherever.mobile.core.designsystem.ButtonText
 import com.wherever.mobile.core.designsystem.CircleIconButton
 import com.wherever.mobile.core.designsystem.ErrorBanner
 import com.wherever.mobile.core.designsystem.ErrorState
@@ -69,6 +73,7 @@ import com.wherever.mobile.core.designsystem.SelectChip
 import com.wherever.mobile.core.designsystem.Sizes
 import com.wherever.mobile.core.designsystem.Spacing
 import com.wherever.mobile.core.designsystem.StatusPill
+import com.wherever.mobile.core.designsystem.Strokes
 import com.wherever.mobile.core.designsystem.SurfaceCard
 import com.wherever.mobile.core.designsystem.WhereverDialog
 import com.wherever.mobile.core.designsystem.WhereverOutlinedButton
@@ -76,6 +81,9 @@ import com.wherever.mobile.core.designsystem.WhereverPrimaryButton
 import com.wherever.mobile.core.designsystem.WhereverSnackbarHost
 import com.wherever.mobile.core.designsystem.WhereverTextButton
 import com.wherever.mobile.core.designsystem.WhereverTextLink
+import com.wherever.mobile.core.designsystem.WhereverTheme
+import com.wherever.mobile.core.location.GeoPoint
+import com.wherever.mobile.feature.places.domain.AspectRatings
 import com.wherever.mobile.feature.places.domain.DaySchedule
 import com.wherever.mobile.feature.places.domain.PlaceDetail
 import com.wherever.mobile.feature.places.domain.ReportReason
@@ -313,24 +321,26 @@ private fun Actions(place: PlaceDetail, context: Context) {
             context.startSafely(Intent.createChooser(send, shareTitle))
         })
     }
-    // Con letra grande, «Cómo llegar» y «Llamar» lado a lado se cortaban («Cómo lle…»): Llamar baja a su renglón
-    // (specs/nv-57).
-    val stacked = place.phone != null && LocalDensity.current.fontScale > STACK_FONT_SCALE
-    Column(
-        verticalArrangement = Arrangement.spacedBy(Spacing.S),
-        modifier = Modifier.padding(horizontal = ScreenPadding)
-    ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(Spacing.S)) {
-            route(Modifier.weight(1f))
-            if (!stacked) place.phone?.let { call(it, Modifier.weight(1f)) }
-            share()
+    // Con letra o pantalla grande, «Cómo llegar» y «Llamar» lado a lado se cortaban («Cómo lle…»). Se mide el texto
+    // con el estilo del botón: si no cabe, «Llamar» baja a su renglón (specs/nv-57).
+    val measurer = rememberTextMeasurer()
+    val density = LocalDensity.current
+    val labels = listOf(stringResource(R.string.place_route), stringResource(R.string.place_call))
+    BoxWithConstraints(modifier = Modifier.padding(horizontal = ScreenPadding)) {
+        val textWidth = with(density) { labels.maxOf { measurer.measure(it, ButtonText).size.width }.toDp() }
+        val needed = Sizes.IconM + Spacing.S + textWidth + Spacing.L * 2 + Strokes.Hairline * 2
+        val available = (maxWidth - Sizes.TouchTarget - Spacing.S * 2) / 2
+        val stacked = place.phone != null && needed > available
+        Column(verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(Spacing.S)) {
+                route(Modifier.weight(1f))
+                if (!stacked) place.phone?.let { call(it, Modifier.weight(1f)) }
+                share()
+            }
+            if (stacked) place.phone?.let { call(it, Modifier.fillMaxWidth()) }
         }
-        if (stacked) place.phone?.let { call(it, Modifier.fillMaxWidth()) }
     }
 }
-
-/** A partir de esta escala de letra, los botones de acción no caben lado a lado. */
-private const val STACK_FONT_SCALE = 1.15f
 
 private fun Context.startSafely(intent: Intent) {
     try {
@@ -519,4 +529,42 @@ private fun ReportDialog(
         },
         dismissButton = { WhereverTextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } }
     )
+}
+
+private const val PREVIEW_LAT = 20.0589
+private const val PREVIEW_LNG = -99.3352
+
+/** Botones de la ficha con teléfono: en «chica con letra grande», Llamar baja de renglón (specs/nv-57). */
+@Preview
+@Composable
+internal fun PlaceActionsPreview() {
+    val place = PlaceDetail(
+        id = "p1",
+        name = "Restaurante Cafe Madero",
+        category = "restaurante",
+        description = "",
+        tags = emptyList(),
+        priceLevel = 2,
+        averagePrice = 180,
+        location = GeoPoint(PREVIEW_LAT, PREVIEW_LNG),
+        address = "Tula Iturbe 108, Villas del Salitre, Tula de Allende, Hidalgo",
+        phone = "7731234567",
+        schedules = emptyList(),
+        photos = emptyList(),
+        services = emptyList(),
+        accessibility = emptyList(),
+        dietOptions = emptyList(),
+        acceptsReservations = true,
+        rating = 0.0,
+        reviews = 0,
+        aspects = AspectRatings(0.0, 0.0, 0.0, 0.0, 0.0),
+        verified = false,
+        excellenceSeal = false,
+        openNow = true
+    )
+    WhereverTheme {
+        Column(Modifier.background(MaterialTheme.colorScheme.background).padding(vertical = Spacing.L)) {
+            Actions(place, LocalContext.current)
+        }
+    }
 }

@@ -420,7 +420,11 @@ private fun SealRow(criterion: SealCriterion) {
             modifier = Modifier.size(Sizes.IconM)
         )
         Spacer(Modifier.width(Spacing.S))
-        Text(text = criterion.name, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+        Text(
+            text = sealCriterionLabel(criterion.name),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.weight(1f)
+        )
         Text(
             text = stringResource(
                 R.string.business_seal_value,
@@ -431,6 +435,19 @@ private fun SealRow(criterion: SealCriterion) {
             fontWeight = FontWeight.Bold
         )
     }
+}
+
+/**
+ * La API manda la clave de cada requisito del Sello (nv-56 del backend); la persona ve un texto. Una clave nueva
+ * se muestra legible (sin guiones bajos) hasta que tenga el suyo (specs/nv-57).
+ */
+@Composable
+private fun sealCriterionLabel(key: String): String = when (key) {
+    "dias_aprobado" -> stringResource(R.string.business_seal_days)
+    "resenas_verificadas_90d" -> stringResource(R.string.business_seal_reviews)
+    "promedio_90d" -> stringResource(R.string.business_seal_average)
+    "rechazos_moderacion_90d" -> stringResource(R.string.business_seal_rejections)
+    else -> key.replace('_', ' ').replaceFirstChar { it.uppercase() }
 }
 
 /** «4.5» o «12». */

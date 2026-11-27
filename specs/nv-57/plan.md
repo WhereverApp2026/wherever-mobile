@@ -4,8 +4,9 @@
 
 ## 1. Mapeo
 - `feature/business/ui/BusinessPanelScreen.kt`: `WeekCard` (semana sin reservas) y la fila de calificación del resumen (0 = sin reseñas).
-- `feature/places/ui/PlaceDetailScreen.kt`: `Actions` (Llamar en su renglón con letra grande).
-- `strings.xml`: `business_week_empty`, `business_week_no_reviews`.
+- `feature/business/ui/BusinessPanelScreen.kt`: `SealRow` con `sealCriterionLabel` (requisitos del Sello con texto).
+- `feature/places/ui/PlaceDetailScreen.kt`: `Actions` (Llamar en su renglón cuando el texto medido con `ButtonText` no cabe) y `PlaceActionsPreview`.
+- `strings.xml`: `business_week_empty`, `business_week_no_reviews`, `business_seal_days`, `business_seal_reviews`, `business_seal_average`, `business_seal_rejections`.
 
 ## 2. Guardarraíles
 - Sin lógica de negocio en Composables: solo se decide qué mostrar con lo que ya trae el estado.

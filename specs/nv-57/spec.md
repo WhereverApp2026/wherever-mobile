@@ -13,7 +13,8 @@ Corregir lo que se vio mal en el teléfono, y dejar escrito qué no era un error
 
 - [x] 48_NegPanel, «Reservas de la semana» sin reservas: muestra «Aún no tienes reservas esta semana.» en lugar de siete rayas planas.
 - [x] 48_NegPanel, «Calificación de la semana» sin reseñas: muestra «Sin reseñas esta semana» en lugar de «0.0 ★ (+0)». Las calificaciones van de 1 a 5, así que 0 es que no hubo reseñas.
-- [x] 33_Detalle con letra grande: «Cómo llegar» y «Llamar» ya no se cortan («Cómo lle…»). Con escala de letra mayor a 1.15 y teléfono, «Llamar» baja a su renglón; con letra normal queda igual.
+- [x] 33_Detalle con letra o pantalla grande: «Cómo llegar» y «Llamar» ya no se cortan («Cómo lle…»). Se mide el texto con el estilo del botón (`ButtonText`) contra el ancho disponible; si no cabe, «Llamar» baja a su renglón. Un umbral fijo de escala (1.15) no bastaba: el Samsung de prueba tiene letra 1.1 y pantalla ampliada.
+- [x] 48_NegPanel, «Camino al Sello de Excelencia»: los requisitos salían con la clave de la API (`dias_aprobado`, `resenas_verificadas_90d`, `promedio_90d`, `rechazos_moderacion_90d`); ahora con su texto («Días publicado», «Reseñas verificadas (90 días)»…). Una clave nueva se muestra sin guiones bajos.
 
 ### Lo que no era un error de la app
 
@@ -46,7 +47,7 @@ Sin cambios. Sin tokens ni datos personales en logs; solo HTTPS (constitución �
 - Unit: sin lógica nueva en ViewModels (las tres correcciones son de presentación); `BusinessPanelViewModelTest` sigue verde.
 - Data: sin cambios de contrato; `BusinessHomeRepositoryImplTest` sigue verde.
 - Security: sin cambios; `SourceSecurityTest` y `ArchitectureTest` siguen verdes.
-- UI: capturas de Roborazzi de 48_NegPanel con semana vacía y sin reseñas, y de 33_Detalle con letra grande.
+- UI: capturas de Roborazzi `48_neg_panel_semana_vacia` y `33_detalle_acciones` (la ficha no tenía vista previa; con «chica con letra grande», Llamar baja de renglón).
 - Prueba en teléfono contra staging con Prueba QA (Panel) y cualquier cuenta (ficha de Restaurante Cafe Madero, que tiene teléfono).
 
 ## 7. Plan de entrega

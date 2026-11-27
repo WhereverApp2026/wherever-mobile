@@ -84,6 +84,7 @@ import com.wherever.mobile.feature.memories.ui.PostcardDetailPolaroidPreview
 import com.wherever.mobile.feature.memories.ui.PostcardDetailPreview
 import com.wherever.mobile.feature.memories.ui.PostcardEditorPreview
 import com.wherever.mobile.feature.memories.ui.PostcardGonePreview
+import com.wherever.mobile.feature.places.ui.PlaceActionsPreview
 import com.wherever.mobile.feature.places.ui.PlaceMapCardPreview
 import com.wherever.mobile.feature.places.ui.SealEmptyPreview
 import com.wherever.mobile.feature.places.ui.SealPreview
@@ -165,6 +166,7 @@ class ScreenshotTest {
         "11_inicio_amigos" to { FriendsFeedPreview() },
         "11_inicio_amigos_vacio" to { FriendsFeedEmptyPreview() },
         "17_post_detalle" to { MomentDetailPreview() },
+        "33_detalle_acciones" to { PlaceActionsPreview() },
         "29_plan_amigo" to { FriendPlanPreview() },
         "25_mi_codigo" to { MyCodePreview() },
         "07_encuentra_amigos" to { FindFriendsPreview() },
