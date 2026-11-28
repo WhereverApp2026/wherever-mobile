@@ -83,6 +83,9 @@ class FakePlanAssistantRepository : PlanAssistantRepository {
 class FakePlansRepository : PlansRepository {
     var plan: Plan = samplePlan()
     var editResult: Result<Plan>? = null
+
+    /** Si no es null, `get` lo devuelve en lugar del plan (p. ej. un error). */
+    var getResult: Result<Plan>? = null
     var saveResult: Result<Plan> = Result.Success(samplePlan())
     val calls = mutableListOf<String>()
     var lastOrder: List<String> = emptyList()
@@ -106,7 +109,7 @@ class FakePlansRepository : PlansRepository {
 
     override suspend fun get(id: String): Result<Plan> {
         calls += "get"
-        return Result.Success(plan)
+        return getResult ?: Result.Success(plan)
     }
 
     override suspend fun rename(plan: Plan, name: String): Result<Plan> = edited("rename:$name")

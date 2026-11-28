@@ -14,8 +14,8 @@ Acompañar a la persona durante el plan: ruta, llegada y check-in.
 
 **HU propuesta.** Como usuario quiero llegar a cada parada sin salir de la app.
 
-- [ ] Veo la ruta con tiempos y modo de transporte (traslados de `GET /planes/{id}`).
-- [ ] Veo instrucciones paso a paso (depende de D25).
+- [x] Veo la ruta con tiempos y modo de transporte (traslados de `GET /planes/{id}`; 13_Mapa y 14_MapaFull, D-30f).
+- [ ] Veo instrucciones paso a paso (espera un proveedor de rutas, D-30f; mientras, la app de mapas del teléfono, D-30g).
 - [ ] Sin permiso de ubicación se ofrece la ruta sin posición.
 
 **HU propuesta.** Como usuario quiero que mi visita quede verificada.
@@ -81,7 +81,7 @@ Contrato vivo: `wherever-backend/docs/endpoints.md`.
 
 ### Pendiente de backend o de decisión
 
-- **D25 (proveedor de mapa y rutas):** 13_Mapa, 14_MapaFull, 15_Llegar y 18_Navegando no se dibujan; la API no da rutas.
+- **D25 resuelta para el mapa** (Jorge, 2026-11-23: osmdroid + OpenStreetMap, excepción E-04). osmdroid dibuja el mapa pero **no calcula rutas**, y la API no las da: 15_Llegar y 18_Navegando siguen esperando un proveedor de rutas (ver D-30f).
 - **Sin consumir aún (conciliación de Borre):** `GET /planes/{id}/paquete-offline` (plan, fichas y reservas de hoy o mañana; `ETag` y 304; 30 por hora) espera Room de `nv-56`; `GET /checkins` (historial con cursor) no tiene pantalla.
 
 ### Decisiones al implementar (2026-11-22, Diego)
@@ -91,6 +91,14 @@ Contrato vivo: `wherever-backend/docs/endpoints.md`.
 - **D-30c Sin precisión:** `LocationProvider` (`core/location`) no da precisión y la API pide `precision_m` ≤ 100 m; si la API rechaza la ubicación, queda el código del mostrador. Pedirlo a Jorge (dueño de `core`).
 - **D-30d Sin Room:** el check-in vive en la API (`GET /checkins`); la ubicación no se guarda en el teléfono ni en logs.
 - **D-30e** «Cupón aplicado» de 26_CheckinOk no se dibuja: la respuesta del check-in no trae cupones.
+
+### Decisiones de los mapas (2026-11-25, Borre, rama `feat/nv-30-mapas`)
+
+- **D-30f Mapa sí, rutas no.** `13_Mapa` y `14_MapaFull` se dibujan con osmdroid: un pin numerado por parada (coordenadas de `GET /lugares/{id}`) unidos en orden por una línea recta, y en la hoja los traslados reales de `GET /planes/{id}` (minutos y km según la movilidad del plan). La línea no sigue calles: no hay proveedor de rutas. `15_Llegar` y `18_Navegando` piden instrucciones calle por calle y tiempos por modo que nadie da; no se construyen con datos inventados (constitución §2.7). Quedan para cuando el equipo elija un proveedor de rutas (p. ej. OSRM o GraphHopper, con su excepción de stack).
+- **D-30g Iniciar ruta y Cómo llegar** abren la app de mapas del teléfono, como D-30a: «Cómo llegar a {primera parada}» con `geo:` y «Iniciar ruta» con todas las paradas en orden (`https://www.google.com/maps/dir/?api=1` con `waypoints` y el `travelmode` de la movilidad del plan). Sin app de mapas, aviso.
+- **D-30h Sin "Tú" ni "Desde tu ubicación".** La maqueta dibuja la posición de la persona y el traslado desde ella. La API solo da traslados entre paradas y el mapa del plan no pide permiso de ubicación; se muestran solo los traslados reales entre paradas. "Ver pasos" de 14_MapaFull no se dibuja (no hay pasos).
+- **D-30i Totales.** "N min de traslados · X km" suma los traslados de la API; "h con paradas" va de la llegada a la primera parada al fin de la última (`llega` + `minutos`).
+- **D-30j Entrada.** 39_Plan gana «Ver mapa» bajo el resumen → `PlanMapRoute(id)` (13_Mapa); desde ahí «Ver todo el recorrido» → `PlanMapRoute(id, full = true)` (14_MapaFull).
 
 ## 4. Modelo de datos
 
@@ -120,4 +128,4 @@ Slice propio: rama `feat/nv-30-dia` (Fase 5 de `docs/itinerario-planes.md`). `26
 - [ ] CHECKLIST_PR.md OK
 - [ ] Sin conflicto con constitución
 
-**Estado:** ✅ Aprobada (Jorge, 2026-11-06). Contrato conciliado el 2026-11-22 en borrador, pendiente de Osmar. Parcial el 2026-11-22 (Diego) en `feat/nv-30-checkin`: 26_CheckinOk, check-in y «Cómo llegar»; 13, 14, 15 y 18 esperan D25.
+**Estado:** ✅ Aprobada (Jorge, 2026-11-06). Contrato conciliado el 2026-11-22 en borrador, pendiente de Osmar. Parcial el 2026-11-22 (Diego) en `feat/nv-30-checkin`: 26_CheckinOk, check-in y «Cómo llegar»; 13, 14, 15 y 18 esperan D25. 13_Mapa y 14_MapaFull el 2026-11-26 (Borre, `feat/nv-30-mapas`, D-30f a D-30j); 15 y 18 esperan un proveedor de rutas.

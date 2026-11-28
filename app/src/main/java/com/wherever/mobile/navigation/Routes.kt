@@ -119,6 +119,10 @@ data object ManualPlanRoute
 @Serializable
 data class PlanRoute(val id: String)
 
+/** 13_Mapa (`full = false`) y 14_MapaFull (`full = true`), specs/nv-30. PlanMapViewModel lee `id` y `full`. */
+@Serializable
+data class PlanMapRoute(val id: String, val full: Boolean = false)
+
 @Serializable
 data object MyPlansRoute
 
