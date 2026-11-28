@@ -46,8 +46,18 @@ jobs:
           queries: security-extended
 
       # Compilación sin caché para que CodeQL vea todo el código Kotlin.
+      # Sin daemon de Gradle y con Kotlin en el mismo proceso: si quedan vivos (hasta 4 GB de Gradle
+      # más el daemon de Kotlin), «Analizar» se queda sin memoria y el runner se cae (2026-11-27).
       - name: Compilar
-        run: ./gradlew --no-build-cache --no-configuration-cache assembleDebug
+        run: >-
+          ./gradlew --no-daemon --no-build-cache --no-configuration-cache
+          -Pkotlin.compiler.execution.strategy=in-process assembleDebug
+
+      - name: Liberar memoria
+        run: |
+          ./gradlew --stop || true
+          pkill -f KotlinCompileDaemon || true
+          free -h
 
       - name: Analizar
         uses: github/codeql-action/analyze@1fc58d04a4d4374f921bdac573c3811c240f9c26 # v4.39.2
