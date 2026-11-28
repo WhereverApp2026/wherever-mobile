@@ -410,6 +410,15 @@
 - A recordar: el teléfono de prueba tiene la app de la tienda (`com.wherever.mobile`, otra firma). La de depuración se instala aparte como `com.wherever.mobile.qa` con un init script fuera del repo que agrega `applicationIdSuffix '.qa'` (sin `google-services.json` no rompe nada). La firma de release no se toca.
 - A recordar: en Git Bash, `adb shell uiautomator dump /sdcard/...` necesita `MSYS_NO_PATHCONV=1`.
 
+## nv-57 correcciones de la prueba en teléfono (2026-11-26, Borre)
+- Estado: rama `fix/negocio-detalles`. 48_NegPanel: «Aún no tienes reservas esta semana.» en lugar de rayas planas, «Sin reseñas esta semana» en lugar de «0.0 ★ (+0)» y los requisitos del Sello con texto en lugar de la clave de la API (probado en el Samsung). 33_Detalle: «Llamar» baja de renglón cuando el texto medido con `ButtonText` no cabe (captura `33_detalle_acciones`). Probado: 87_NegGaleria sube fotos con Prueba QA (4 de 10, persiste).
+- A evitar: decidir un acomodo por la escala de letra (`fontScale > 1.15`): el Samsung de prueba tiene letra 1.1 y pantalla ampliada y el botón seguía cortado. Medir el texto con el estilo real contra el ancho disponible.
+- A evitar: dar por cerrado un slice sin `lintDebug`; en nv-30 Lint (UseKtx en `Bitmap.createBitmap`) solo falló en la CI.
+- Hallazgo: tres cosas que parecían errores eran datos: el «recuadro gris» del Panel es la portada de prueba (naranja con marco blanco) bajo la capa oscura; el aviso «cortado» de la galería es contenido con scroll; el nombre «Cafe Prueba QANegocio de prueba de la app» se escribió así (el alta manda nombre y descripción por separado).
+- Decisión: `requiere_refresh` no se arregla en `feature/business`. Porqué: forzar el refresh fuera del candado de `TokenRefreshAuthenticator` puede reusar un refresh rotado y cerrar todas las sesiones; va por Issue a Jorge (`core/network`).
+- A evitar: tocar el teléfono mientras la persona lo usa; antes de cada gesto, leer qué pantalla está al frente y, si cambió sin que yo la moviera, detenerse.
+- A recordar: «Cafe Prueba QA» (cuenta Prueba QA) está en revisión; sus fotos no salen en Explorar hasta que un administrador lo apruebe.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

@@ -1908,4 +1908,12 @@
     <string name="coupons_conditions">Condiciones</string>
     <string name="coupons_reserve_with">Reservar con este cupón</string>
     <string name="coupons_see_place">Ver %1$s</string>
+
+    <!-- nv-57: correcciones de la prueba en teléfono -->
+    <string name="business_week_empty">Aún no tienes reservas esta semana.</string>
+    <string name="business_week_no_reviews">Sin reseñas esta semana</string>
+    <string name="business_seal_days">Días publicado</string>
+    <string name="business_seal_reviews">Reseñas verificadas (90 días)</string>
+    <string name="business_seal_average">Calificación promedio (90 días)</string>
+    <string name="business_seal_rejections">Rechazos de moderación (90 días)</string>
 </resources>

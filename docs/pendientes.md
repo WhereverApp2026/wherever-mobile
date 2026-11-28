@@ -22,7 +22,8 @@ Tabla por área en `docs/avance.md`. Prioridad: primero lo que ya tiene código 
 - P1 · Probar nv-35 contra staging: 48_NegPanel, 49_NegReservas, 50_NegCheckin (y variantes) y 56_NegStats con un negocio aprobado y una reserva de QA.
 - P2 · Probar nv-36 contra staging: 51_NegResenas, 52_NegResp (con y sin IA) y NegMomentos.
 - P2 · Probar nv-37 contra staging: 53_NegCupones, 54_NegCrear y 55_NegHoras.
-- P2 · Probar nv-38 contra staging: 58_NegPerfil, 87/88 galería, 57_NegCobros (Stripe), 89_NegBanco y 90_NegFiscal.
+- P2 · Probar nv-38 contra staging: 58_NegPerfil, 88 agregar foto, 57_NegCobros (Stripe), 89_NegBanco y 90_NegFiscal. ✅ 87_NegGaleria: subir una foto con Prueba QA funciona (2026-11-26, `docs/pruebas-telefono.md` #29); para verla en Explorar falta que un administrador apruebe «Cafe Prueba QA» y la foto.
+- P1 · Backend/Jorge: tras crear el negocio la API manda `requiere_refresh: true` (agrega el rol `comerciante`), pero la app no renueva el token y `TokenRefreshAuthenticator` solo actúa ante 401; las rutas del dueño dan 403. Arreglo en `core/network`: Issue #78 (asignado a Jorge; ver `specs/nv-57` No-alcance).
 - P3 · Probar 34_Sello con un negocio que tenga Sello en staging (hoy solo sale el vacío).
 - P3 · Marcar en las specs nv-34, nv-35 y nv-37 los frames ya construidos (las casillas siguen sin marcar).
 

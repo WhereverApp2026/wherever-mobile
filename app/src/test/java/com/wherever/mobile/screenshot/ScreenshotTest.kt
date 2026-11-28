@@ -28,6 +28,7 @@ import com.wherever.mobile.feature.business.ui.BusinessLocationPreview
 import com.wherever.mobile.feature.business.ui.BusinessMissingPreview
 import com.wherever.mobile.feature.business.ui.BusinessMomentsPreview
 import com.wherever.mobile.feature.business.ui.BusinessOperationPreview
+import com.wherever.mobile.feature.business.ui.BusinessPanelEmptyWeekPreview
 import com.wherever.mobile.feature.business.ui.BusinessPanelPreview
 import com.wherever.mobile.feature.business.ui.BusinessProfilePreview
 import com.wherever.mobile.feature.business.ui.BusinessRegisterPreview
@@ -91,6 +92,7 @@ import com.wherever.mobile.feature.memories.ui.PostcardDetailPolaroidPreview
 import com.wherever.mobile.feature.memories.ui.PostcardDetailPreview
 import com.wherever.mobile.feature.memories.ui.PostcardEditorPreview
 import com.wherever.mobile.feature.memories.ui.PostcardGonePreview
+import com.wherever.mobile.feature.places.ui.PlaceActionsPreview
 import com.wherever.mobile.feature.places.ui.PlaceMapCardPreview
 import com.wherever.mobile.feature.places.ui.SealEmptyPreview
 import com.wherever.mobile.feature.places.ui.SealPreview
@@ -172,6 +174,7 @@ class ScreenshotTest {
         "11_inicio_amigos" to { FriendsFeedPreview() },
         "11_inicio_amigos_vacio" to { FriendsFeedEmptyPreview() },
         "17_post_detalle" to { MomentDetailPreview() },
+        "33_detalle_acciones" to { PlaceActionsPreview() },
         "29_plan_amigo" to { FriendPlanPreview() },
         "25_mi_codigo" to { MyCodePreview() },
         "07_encuentra_amigos" to { FindFriendsPreview() },
@@ -252,6 +255,7 @@ class ScreenshotTest {
         "45_agregar_gasto" to { AddExpensePreview() },
         "45_agregar_gasto_personalizado" to { AddExpenseCustomPreview() },
         "48_neg_panel" to { BusinessPanelPreview() },
+        "48_neg_panel_semana_vacia" to { BusinessPanelEmptyWeekPreview() },
         "49_neg_reservas" to { BusinessReservationsPreview() },
         "49_neg_reservas_vacio" to { BusinessReservationsEmptyPreview() },
         "50_neg_checkin" to { CheckinPreview() },
