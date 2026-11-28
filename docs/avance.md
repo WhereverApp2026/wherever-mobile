@@ -4,7 +4,7 @@
 > Una pantalla cuenta si tiene código, llama a la API real, maneja carga, error y vacío, tiene pruebas y se probó en el teléfono.
 > "Con datos locales" = UI completa con repositorio falso detrás de una interfaz porque falta el endpoint (`docs/revision-jorge.md`); se cuentan aparte y **no** suman al % real.
 
-## Corte actual (main, 2026-11-25, tras integrar las ramas con avance)
+## Corte actual (main, 2026-11-27, tras integrar nv-29 Cupones)
 
 «Hechas» = funcionan con la API real y se probaron en el teléfono contra staging. «En ramas sin integrar» = 0: después de este corte todas las ramas con avance están en `main` (salvo AGP 9.5.2 y coil 3.6.3, que no compilan con SDK 36). El código de Modo negocio, 34_Sello y 47_PuntoMedio ya está en `main`, pero solo cuenta cuando se pruebe contra staging.
 
@@ -19,10 +19,10 @@
 | Perfil/Ajustes | nv-13, nv-14, nv-15, nv-33 | 8 | 0 | 0 | 8 | 100 % |
 | Notificaciones | nv-18 | 4 | 0 | 0 | 4 | 100 % |
 | Negocios/Sello | nv-34 a nv-38, 34_Sello | 0 | 0 | 27 | 27 | 0 % |
-| Otros | nv-16, nv-29 | 1 | 0 | 5 | 6 | 17 % |
-| **Total** | | **101** | **0** | **61** | **162** | **62,3 %** |
+| Otros | nv-16, nv-29 | 4 | 0 | 2 | 6 | 67 % |
+| **Total** | | **104** | **0** | **58** | **162** | **64,2 %** |
 
-Cambio respecto al corte anterior (100): ChatAmigo, probado contra staging en el Xiaomi el 2026-11-24 (#72).
+Cambio respecto al corte anterior (101): 29_Cupones, 47_DetCupon y `DetCupon · 15 % en tu cuenta`, probados contra staging con la cuenta QA B el 2026-11-26 (#75, `docs/pruebas-telefono.md` #26). Las variantes `$50 en tu consumo` y `Postre de cortesía` no cuentan: staging no tiene cupones de esos tipos y solo están en las capturas de Roborazzi.
 
 ## Registro de cortes
 
@@ -43,6 +43,7 @@ Cambio respecto al corte anterior (100): ChatAmigo, probado contra staging en el
 | 2026-11-24 | #68 social y vaca | InvitarPlan y 45_AgregarGasto contra staging (QA A/B); 26_PerfilAmigo con `nivel` como objeto | 100 | 61,7 % |
 | 2026-11-24 | #74 punto medio | 47_PuntoMedio | 100 | 61,7 % |
 | 2026-11-25 | integración en `main` | ChatAmigo probado contra staging; ramas de Dependabot, devsecops, chat y docs integradas (sin pantallas nuevas) | 101 | 62,3 % |
+| 2026-11-27 | #75 cupones | 29_Cupones, 47_DetCupon y DetCupon · 15 % contra staging (QA B); #79 arreglos del negocio sin pantallas nuevas | 104 | 64,2 % |
 
 ---
 
