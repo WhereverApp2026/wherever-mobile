@@ -13,7 +13,11 @@
 Tabla por área en `docs/avance.md`. Prioridad: primero lo que ya tiene código en `main` y solo falta probar contra staging (suma rápido al %), luego lo que falta construir. Una línea = una tarea = una rama y un PR.
 
 ### 1. Negocios/Sello (0/27): el código está en `main`, falta probarlo
-- P1 · Backend (Osmar): arreglar el 503 «expediente no disponible» de `POST /negocios/{id}/documentos` en staging; bloquea enviar el alta a revisión y todo el Modo negocio.
+- P1 · Backend (Osmar): arreglar el 503 «expediente no disponible» de `POST /negocios/{id}/documentos` en staging; bloquea enviar el alta a revisión y todo el Modo negocio. Según el contrato, ese 503 sale «sin `DATA_KEYS` o sin bucket»: es configuración de staging, no código.
+- Cómo probar el alta en staging (Osmar, 2026-11-25):
+  - **409 `alta_cerrada`:** solo se suben documentos a un negocio en `borrador` o `rechazado`. Con uno ya aprobado (p. ej. «Restaurante Cafe Madero» de la cuenta QA) siempre da 409: hay que crear un alta nueva.
+  - **422 `consentimiento_requerido`:** la cuenta debe haber aceptado el consentimiento `datos_negocio`.
+  - **401 o 403 después de crear el negocio:** la app debe refrescar el token (`requiere_refresh: true`), porque ahí se agrega el rol `comerciante`. **Bug (2026-11-25):** nv-34 lee `requiere_refresh` (`BusinessOnboardingDraft.requiresRefresh`) pero nada lo usa, y `TokenRefreshAuthenticator` solo renueva ante 401: con el 403 del rol faltante el alta se atora. Arreglo: forzar el refresh tras crear el negocio; toca `core/network` (Issue a Jorge).
 - P1 · Probar nv-34 contra staging: 42_NegCuenta → 47_NegListo con una cuenta QA (sin la ubicación real del teléfono de Jorge).
 - P1 · Probar nv-35 contra staging: 48_NegPanel, 49_NegReservas, 50_NegCheckin (y variantes) y 56_NegStats con un negocio aprobado y una reserva de QA.
 - P2 · Probar nv-36 contra staging: 51_NegResenas, 52_NegResp (con y sin IA) y NegMomentos.
@@ -48,7 +52,7 @@ Tabla por área en `docs/avance.md`. Prioridad: primero lo que ya tiene código 
 - P3 · 10_Inicio: corazón de favoritos y paradas en las tarjetas (falta que la API del feed los mande).
 
 ### 6. Otros (1/6)
-- P1 · nv-29 Cupones: 29_Cupones, 47_DetCupon y `DetCupon · *` con la API real.
+- ✅ nv-29 Cupones: 29_Cupones, 47_DetCupon y `DetCupon · *` probados en teléfono contra staging con la cuenta QA B (2026-11-26, `docs/pruebas-telefono.md` #26). PR #75. Las variantes de monto y regalo no tienen cupón en staging: se ven en las capturas de Roborazzi.
 
 ### 7. Técnico (no suma frames)
 - Subir a SDK 37 + AGP 9.1 para poder integrar AGP 9.5.2 (#65), coil 3.6.3 (#63) y los PR #8–#12.

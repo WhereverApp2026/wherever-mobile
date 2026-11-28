@@ -35,7 +35,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -92,7 +91,6 @@ import com.wherever.mobile.feature.profile.domain.Preferences
 import com.wherever.mobile.feature.profile.domain.Privacy
 import com.wherever.mobile.feature.profile.domain.ProfileExtras
 import com.wherever.mobile.feature.profile.domain.UserProfile
-import kotlinx.coroutines.launch
 
 /** 81_Perfil (Figma `298:8711`). */
 @Composable
@@ -105,9 +103,7 @@ fun ProfileRoute(
     val photoState by photoViewModel.state.collectAsStateWithLifecycle()
     val photoActions = rememberPhotoActions(photoViewModel)
     val snackbar = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     val photoMessage = photoState.message?.asString()
-    val couponsSoon = stringResource(R.string.profile_coupons_soon)
     LaunchedEffect(photoMessage) {
         if (photoMessage != null) {
             snackbar.showSnackbar(photoMessage)
@@ -138,7 +134,7 @@ fun ProfileRoute(
                     state = state,
                     navigation = navigation,
                     onTab = viewModel::selectTab,
-                    onCoupons = { scope.launch { snackbar.showSnackbar(couponsSoon) } },
+                    onCoupons = navigation.onCoupons,
                     modifier = modifier,
                     avatar = { EditableProfileAvatar(current.name, current.photoUrl, photoState, photoActions) }
                 )

@@ -20,6 +20,8 @@
 | `FriendPlanRoute(id)` | Plan de un amigo con Me apunto y Hacer mi versión (29_PlanAmigo) | ninguno | release | nv-17 |
 | `PendingReviewsRoute` | Por reseñar (77_ResPend) | ninguno | release | nv-32 |
 | `MyReviewsRoute` | Mis reseñas, eliminar con Deshacer (79_MisRes) | ninguno | release | nv-32 |
+| `CouponsRoute` | Mis cupones: Disponibles y Usados (29_Cupones) | ninguno | release | nv-29 |
+| `CouponDetailRoute(id)` | Detalle del cupón con código de canje, Reservar y Ver lugar (47_DetCupon) | ninguno | release | nv-29 |
 | `ReviewFormRoute(checkinId, placeId, placeName, day, reviewId)` | Reseñar o editar: 68_PostVisita, 78_ResCom y 69_Publicado | ninguno (fotos con el selector del sistema) | release | nv-32 |
 | `PlaceReviewsRoute(placeId, placeName)` | Reseñas del lugar con filtros, Útil y Reportar (80_ResLugar) | ninguno | release | nv-32 |
 | `AlbumRoute` | Recuerdos: Todas, Por plan y vacío (73_Album, 74_RecPlan, 76_RecVacio) | ninguno | release | nv-31 |
