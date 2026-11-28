@@ -82,7 +82,7 @@ Traslada a CI lo que `nv-03` dejó escrito pero no ejecutable: los scripts de pu
 
 - **Semgrep del registro** (`--config=auto`) pasa a **bloqueante**. Baseline en 0: los 5 hallazgos del 2026-11-20 se resolvieron (`defusedxml` en `check_delta_coverage.py`) o se marcaron con `nosemgrep` y su porqué en el mismo archivo (`gcm-detection` en `KeystoreTokenCipher`: el IV lo genera Keystore en cada cifrado; `exported_activity`: el launcher, única actividad exportada, verificado por `PlatformSecurityTest`).
 - **OSV bloqueante** con `--fail-on high`: una vulnerabilidad conocida alta o crítica frena el PR; las moderadas y bajas se informan en el resumen del job. Si `api.osv.dev` no responde, el paso falla (falla cerrado).
-- **CodeQL** (`.github/workflows/codeql.yml`): `java-kotlin` con `security-extended`, en PR a `main`, push a `main` y semanal. Los hallazgos van a la pestaña Security del repo.
+- **CodeQL** (`.github/workflows/codeql.yml`): `java-kotlin` con `security-extended`, en PR a `main`, push a `main` y semanal. Los hallazgos van a la pestaña Security del repo. Compila sin daemon de Gradle y con Kotlin en el mismo proceso, y detiene los daemons antes de analizar: con ellos vivos el análisis se quedaba sin memoria y el runner se caía (#76, #79 y `main`, 2026-11-27).
 - **SBOM CycloneDX 1.6**: plugin `org.cyclonedx.bom` 3.5.1 (excepción de stack: solo herramienta de build, no entra al APK). `./gradlew :app:cyclonedxDirectBom` sobre `releaseRuntimeClasspath`; el CI lo sube como artefacto `wherever-sbom` (30 días).
 
 ## 3. Contratos (API y navegación)

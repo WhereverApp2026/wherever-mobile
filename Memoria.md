@@ -434,6 +434,11 @@
 ## Mapa de fases
 - `nv-00` = constitución, stack y gobernanza · `nv-01` = foundation (proyecto, tema, navegación, red segura, Room) · `nv-02` = molde Repository→ViewModel→UiState · `nv-03` = puerta de calidad incremental (advisory). Funcionalidades desde `nv-04`.
 
+## CodeQL sin memoria (2026-11-27, Borre)
+- Hallazgo: desde el 2026-11-26 CodeQL se caía a los ~49 min con «The hosted runner lost communication with the server» (#76, #79 y `main`), y a ratos pasaba en 4 min (#77). No eran errores del código: el paso «Compilar» dejaba vivos el daemon de Gradle (`-Xmx4g`) y el de Kotlin, y «Analizar» se quedaba sin memoria.
+- Decisión: compilar con `--no-daemon` y `kotlin.compiler.execution.strategy=in-process`, y detener los daemons antes de analizar (`specs/nv-39` §2.7).
+- A evitar: relanzar un CodeQL caído varias veces sin leer la anotación del job; «lost communication» es la máquina, no una falla del análisis.
+
 ## Caché de Robolectric en la CI (2026-11-28, Borre)
 - Hallazgo: `ScreenshotTest` y `PostcardExifSecurityTest` fallaban a ratos en la CI con `MavenArtifactFetcher` → `IOException` (#77 dos veces, nv-29): Robolectric baja sus jars de Android de Maven Central en cada corrida y a veces la descarga falla. No es el código: el otro gate del mismo commit pasaba.
 - Decisión: guardar `~/.m2/repository/org/robolectric` con `actions/cache` (v6.1.0 fijado por SHA), llave por `libs.versions.toml` y restauración parcial (`specs/nv-39` §2.2).
