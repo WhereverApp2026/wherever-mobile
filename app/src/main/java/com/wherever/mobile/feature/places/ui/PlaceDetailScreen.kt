@@ -160,7 +160,7 @@ private fun PlaceContent(
     ) {
         item {
             Box {
-                Photos(place.photos)
+                Photos(place.photos, place.location.orNullIfMissing())
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(Spacing.M),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -239,10 +239,13 @@ private fun PlaceContent(
     }
 }
 
+/** Sin ubicación la API manda 0,0: ese punto no es el lugar y la portada queda con el ícono. */
+private fun GeoPoint.orNullIfMissing(): GeoPoint? = takeIf { lat != 0.0 || lng != 0.0 }
+
 @Composable
-private fun Photos(photos: List<String>) {
+private fun Photos(photos: List<String>, location: GeoPoint?) {
     if (photos.size <= 1) {
-        PlacePhoto(photos.firstOrNull(), height = Sizes.HeroImage)
+        PlacePhoto(photos.firstOrNull(), height = Sizes.HeroImage, location = location)
     } else {
         LazyRow(horizontalArrangement = Arrangement.spacedBy(Spacing.S)) {
             items(photos) { url ->

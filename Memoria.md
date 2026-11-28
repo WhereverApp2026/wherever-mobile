@@ -425,6 +425,12 @@
 - A evitar: al restaurar las capturas que Roborazzi regraba por las fuentes, devolver también las de pantallas que el slice cambió a propósito (aquí 39_Plan y su variante «Paseo familiar» por «Ver mapa»). Antes de restaurar, listar qué pantallas tocó el slice y cuáles las reutilizan.
 - A recordar: los planes de QA B en staging tienen una sola parada; para ver la línea y los traslados en el teléfono hace falta un plan con 2 o más.
 
+## Portada de mapa sin foto (2026-11-26, Borre)
+- Estado: rama `feat/portada-mapa` (nv-21, D-21a a D-21c). Sin foto, las tarjetas de Explorar, «Cerca de ti» y la portada de la ficha muestran el mapa de OSM de la ubicación real (teselas con Coil, `User-Agent` propio, pin y «© OpenStreetMap»). Probado en el Samsung contra staging.
+- Hallazgo: staging no tiene fotos de negocios (`foto_portada: ""`, `fotos: []` en todos); solo las sube el dueño desde 87_NegGaleria. No era un error de la app.
+- A evitar: fijar números esperados en una prueba con una estimación mental (las teselas de Cafe Madero estaban mal); calcularlos antes con una herramienta.
+- A evitar: agregar una cadena sin buscar si ya existe (`map_attribution` ya estaba en Explorar); `check_strings.sh` marca duplicados y el segundo `sed` borra el que no es.
+
 ## Pendientes de decidir
 - Numeración única de pantallas: los frames repiten números con pantallas sin relación (D23).
 - Proveedor de mapa y de catálogo de lugares: licencias (D25).

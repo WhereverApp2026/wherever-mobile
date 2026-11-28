@@ -45,6 +45,7 @@ Tabla por área en `docs/avance.md`. Prioridad: primero lo que ya tiene código 
 - P2 · nv-27: 38_CambiarHora y 27_Cancelar contra staging con una reserva QA.
 - P2 · nv-27: variantes `DetReserva · *`.
 - P3 · nv-21: la variante que falta de `Detalle · *` con un negocio real.
+- ✅ nv-21 D-21a (`feat/portada-mapa`, 2026-11-26): sin foto, la tarjeta y la ficha muestran el mapa de OSM de la ubicación real. Staging no tiene fotos de negocios (`foto_portada` vacía, `fotos: []`); las sube el dueño desde 87_NegGaleria (cuenta Prueba QA para Cafe Madero).
 
 ### 5. Inicio/Feed (9/15)
 - P1 · Probar 29_PlanAmigo, `PlanAmigo · *` y 14_MeApunto con un momento de staging que tenga `plan_id`.
