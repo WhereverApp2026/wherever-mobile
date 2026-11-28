@@ -108,6 +108,7 @@ fun PlanDetailRoute(
     onOpenPlan: (String) -> Unit,
     onArrived: (ArrivalTarget) -> Unit = {},
     onInviteFriends: (String) -> Unit = {},
+    onMap: (String) -> Unit = {},
     viewModel: PlanDetailViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -138,6 +139,7 @@ fun PlanDetailRoute(
         onRetry = viewModel::load,
         onShare = viewModel::share,
         onInviteFriends = { state.plan?.id?.let(onInviteFriends) },
+        onMap = { state.plan?.id?.let(onMap) },
         onRepeat = viewModel::repeatTomorrow,
         onRename = viewModel::startRename,
         onDelete = viewModel::askDelete,
@@ -217,7 +219,7 @@ internal fun PlanDetailContent(
     if (plan != null) state.alternatives?.let { ChangeSheet(plan, it, actions, zone) }
 }
 
-/** 39_Plan. Sin mapa (D25): la tarjeta del mapa y «Cómo llegar» llegan con nv-30. */
+/** 39_Plan. «Ver mapa» abre 13_Mapa (specs/nv-30, D-30j). */
 @Composable
 private fun PlanBody(
     plan: Plan,
@@ -252,6 +254,13 @@ private fun PlanBody(
             )
         }
         PlanSummaryRow(plan.stops, plan.transfers, plan.costPerPerson)
+        if (plan.stops.isNotEmpty()) {
+            WhereverTextLink(
+                stringResource(R.string.plan_map_open),
+                actions.onMap,
+                modifier = Modifier.testTag("plan_open_map")
+            )
+        }
         if (plan.stops.isEmpty()) {
             InfoBanner(stringResource(R.string.plan_empty_stops), tag = "plan_empty")
         } else {

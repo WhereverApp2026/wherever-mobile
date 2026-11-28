@@ -1918,4 +1918,31 @@
     <string name="business_seal_reviews">Reseñas verificadas (90 días)</string>
     <string name="business_seal_average">Calificación promedio (90 días)</string>
     <string name="business_seal_rejections">Rechazos de moderación (90 días)</string>
+
+    <!-- nv-30 13_Mapa y 14_MapaFull -->
+    <plurals name="plan_map_full_title">
+        <item quantity="one">Ruta completa · %1$d parada</item>
+        <item quantity="many">Ruta completa · %1$d paradas</item>
+        <item quantity="other">Ruta completa · %1$d paradas</item>
+    </plurals>
+    <string name="plan_map_route_title">Ruta del plan</string>
+    <string name="plan_map_totals">%1$d min de traslados · %2$s km</string>
+    <string name="plan_map_from_stop">%1$d min %2$s desde la parada %3$d</string>
+    <plurals name="plan_map_missing">
+        <item quantity="one">%1$d parada no sale en el mapa porque no pudimos leer su ubicación.</item>
+        <item quantity="many">%1$d paradas no salen en el mapa porque no pudimos leer su ubicación.</item>
+        <item quantity="other">%1$d paradas no salen en el mapa porque no pudimos leer su ubicación.</item>
+    </plurals>
+    <string name="plan_map_see_full">Ver todo el recorrido</string>
+    <string name="plan_map_directions_to">Cómo llegar a %1$s</string>
+    <string name="plan_map_full_sheet">Todo tu recorrido</string>
+    <string name="plan_map_km">%1$s km</string>
+    <string name="plan_map_minutes">%1$d min</string>
+    <string name="plan_map_hours">%1$d h</string>
+    <string name="plan_map_hours_minutes">%1$d h %2$d min</string>
+    <string name="plan_map_stat_total">en total</string>
+    <string name="plan_map_stat_between">entre paradas</string>
+    <string name="plan_map_stat_with_stops">con paradas</string>
+    <string name="plan_map_start">Iniciar ruta</string>
+    <string name="plan_map_open">Ver mapa</string>
 </resources>

@@ -419,6 +419,12 @@
 - A evitar: tocar el teléfono mientras la persona lo usa; antes de cada gesto, leer qué pantalla está al frente y, si cambió sin que yo la moviera, detenerse.
 - A recordar: «Cafe Prueba QA» (cuenta Prueba QA) está en revisión; sus fotos no salen en Explorar hasta que un administrador lo apruebe.
 
+## nv-30 mapas del plan (2026-11-26, Borre)
+- Estado: rama `feat/nv-30-mapas`. 13_Mapa y 14_MapaFull con osmdroid: pin numerado por parada (coordenadas de `GET /lugares/{id}`), línea recta entre paradas, traslados reales del plan, «Cómo llegar» e «Iniciar ruta» a la app de mapas. Entrada: «Ver mapa» en 39_Plan. Verificado: ktlint, Konsist, pruebas de Planes, suite completa y `koverVerifyDebug`; en el Samsung con un plan de QA B (pin real en Tula, Iniciar ruta abre Google Maps).
+- Decisión: 15_Llegar y 18_Navegando no se construyen (D-30f). Porqué: piden instrucciones calle por calle y tiempos por modo; osmdroid no calcula rutas y la API no las da. Inventarlas viola constitución §2.7. Hace falta que Jorge elija un proveedor de rutas (OSRM o GraphHopper) con su excepción de stack.
+- A evitar: al restaurar las capturas que Roborazzi regraba por las fuentes, devolver también las de pantallas que el slice cambió a propósito (aquí 39_Plan y su variante «Paseo familiar» por «Ver mapa»). Antes de restaurar, listar qué pantallas tocó el slice y cuáles las reutilizan.
+- A recordar: los planes de QA B en staging tienen una sola parada; para ver la línea y los traslados en el teléfono hace falta un plan con 2 o más.
+
 ## Portada de mapa sin foto (2026-11-26, Borre)
 - Estado: rama `feat/portada-mapa` (nv-21, D-21a a D-21c). Sin foto, las tarjetas de Explorar, «Cerca de ti» y la portada de la ficha muestran el mapa de OSM de la ubicación real (teselas con Coil, `User-Agent` propio, pin y «© OpenStreetMap»). Probado en el Samsung contra staging.
 - Hallazgo: staging no tiene fotos de negocios (`foto_portada: ""`, `fotos: []` en todos); solo las sube el dueño desde 87_NegGaleria. No era un error de la app.

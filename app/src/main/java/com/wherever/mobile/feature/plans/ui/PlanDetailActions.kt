@@ -11,6 +11,8 @@ internal data class PlanDetailActions(
     val onShare: () -> Unit = {},
     /** 43_CrearGrupo con este plan (specs/nv-25). */
     val onInviteFriends: () -> Unit = {},
+    /** 13_Mapa del plan (specs/nv-30, D-30j). */
+    val onMap: () -> Unit = {},
     val onRepeat: () -> Unit = {},
     val onRename: () -> Unit = {},
     val onDelete: () -> Unit = {},
