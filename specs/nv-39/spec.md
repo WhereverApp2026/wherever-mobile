@@ -36,7 +36,7 @@ Traslada a CI lo que `nv-03` dejó escrito pero no ejecutable: los scripts de pu
 | 1 | `deps` | `./gradlew :app:dependencies --configuration debugRuntimeClasspath` → `build/deps.txt` | sí |
 | 2 | `build` | `./gradlew assembleDebug` + artefacto `wherever-debug-apk` | sí |
 | 3 | `lint` | `./gradlew ktlintCheck detekt lintDebug` (JDK 17) | sí |
-| 4-5 | `unit · data · security` | `./gradlew testDebugUnitTest` | sí |
+| 4-5 | `unit · data · security` | `./gradlew testDebugUnitTest`, antes caché de `~/.m2/repository/org/robolectric` (`actions/cache`, llave por `libs.versions.toml`) para no bajar los jars de Robolectric en cada corrida | sí |
 | 6 | `security · secretos` | `gitleaks git . --config .gitleaks.toml --redact` | sí |
 | 7 | `ui · data instrumentada` | `./gradlew connectedDebugAndroidTest` (emulador API 35, `google_apis`) | sí |
 | 8 | `critic` | `scripts/critic-guardrails.sh` | sí |

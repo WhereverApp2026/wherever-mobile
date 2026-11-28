@@ -76,6 +76,16 @@ jobs:
       - name: lint
         run: ./gradlew ktlintCheck detekt lintDebug
 
+      # Robolectric baja de Maven Central sus jars de Android (android-all-instrumented)
+      # a ~/.m2 en cada corrida; si la descarga falla, ScreenshotTest y PostcardExifSecurityTest
+      # caen con MavenArtifactFetcher (2026-11-28). Con la caché solo se bajan al cambiar versiones.
+      - name: Caché de Robolectric
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.m2/repository/org/robolectric
+          key: robolectric-${{ runner.os }}-${{ hashFiles('gradle/libs.versions.toml') }}
+          restore-keys: robolectric-${{ runner.os }}-
+
       # Unit, Data (MockWebServer), Security (manifiesto, red, tokens) y
       # Arquitectura viven en el mismo source set: specs/nv-39 §2.2.
       - name: "unit · data · security"

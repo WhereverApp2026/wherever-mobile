@@ -438,3 +438,9 @@
 - Hallazgo: desde el 2026-11-26 CodeQL se caía a los ~49 min con «The hosted runner lost communication with the server» (#76, #79 y `main`), y a ratos pasaba en 4 min (#77). No eran errores del código: el paso «Compilar» dejaba vivos el daemon de Gradle (`-Xmx4g`) y el de Kotlin, y «Analizar» se quedaba sin memoria.
 - Decisión: compilar con `--no-daemon` y `kotlin.compiler.execution.strategy=in-process`, y detener los daemons antes de analizar (`specs/nv-39` §2.7).
 - A evitar: relanzar un CodeQL caído varias veces sin leer la anotación del job; «lost communication» es la máquina, no una falla del análisis.
+
+## Caché de Robolectric en la CI (2026-11-28, Borre)
+- Hallazgo: `ScreenshotTest` y `PostcardExifSecurityTest` fallaban a ratos en la CI con `MavenArtifactFetcher` → `IOException` (#77 dos veces, nv-29): Robolectric baja sus jars de Android de Maven Central en cada corrida y a veces la descarga falla. No es el código: el otro gate del mismo commit pasaba.
+- Decisión: guardar `~/.m2/repository/org/robolectric` con `actions/cache` (v6.1.0 fijado por SHA), llave por `libs.versions.toml` y restauración parcial (`specs/nv-39` §2.2).
+- A evitar: encadenar `git push` detrás de un comando de pruebas sin mirar su salida: el 2026-11-28 se subió #77 con la suite local en rojo (5 capturas bloqueadas por el Control de aplicaciones de Windows y un check-in inestable). Leer el resultado antes de subir.
+- A recordar: en este equipo, Windows (Control de aplicaciones / Smart App Control) puede bloquear `libandroid_runtime.dll` de Robolectric: las capturas fallan en local con `UnsatisfiedLinkError` aunque en la CI pasen.
