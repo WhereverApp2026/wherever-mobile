@@ -13,13 +13,13 @@
 Tabla por área en `docs/avance.md`. Prioridad: primero lo que ya tiene código en `main` y solo falta probar contra staging (suma rápido al %), luego lo que falta construir. Una línea = una tarea = una rama y un PR.
 
 ### 1. Negocios/Sello (0/27): el código está en `main`, falta probarlo
-- P1 · Backend (Osmar): arreglar el 503 «expediente no disponible» de `POST /negocios/{id}/documentos` en staging; bloquea enviar el alta a revisión y todo el Modo negocio. Según el contrato, ese 503 sale «sin `DATA_KEYS` o sin bucket»: es configuración de staging, no código.
+- ✅ Resuelto (backend `0481d82`, 2026-11-25: el expediente usa el bucket privado; «Cafe Prueba QA» llegó a revisión el 2026-11-26). Antes: P1 · Backend (Osmar): arreglar el 503 «expediente no disponible» de `POST /negocios/{id}/documentos` en staging; bloquea enviar el alta a revisión y todo el Modo negocio. Según el contrato, ese 503 sale «sin `DATA_KEYS` o sin bucket»: es configuración de staging, no código.
 - Cómo probar el alta en staging (Osmar, 2026-11-25):
   - **409 `alta_cerrada`:** solo se suben documentos a un negocio en `borrador` o `rechazado`. Con uno ya aprobado (p. ej. «Restaurante Cafe Madero» de la cuenta QA) siempre da 409: hay que crear un alta nueva.
   - **422 `consentimiento_requerido`:** la cuenta debe haber aceptado el consentimiento `datos_negocio`.
   - **401 o 403 después de crear el negocio:** la app debe refrescar el token (`requiere_refresh: true`), porque ahí se agrega el rol `comerciante`. **Bug (2026-11-25):** nv-34 lee `requiere_refresh` (`BusinessOnboardingDraft.requiresRefresh`) pero nada lo usa, y `TokenRefreshAuthenticator` solo renueva ante 401: con el 403 del rol faltante el alta se atora. Arreglo: forzar el refresh tras crear el negocio; toca `core/network` (Issue a Jorge).
 - P1 · Probar nv-34 contra staging: 42_NegCuenta → 47_NegListo con una cuenta QA (sin la ubicación real del teléfono de Jorge).
-- P1 · Probar nv-35 contra staging: 48_NegPanel, 49_NegReservas, 50_NegCheckin (y variantes) y 56_NegStats con un negocio aprobado y una reserva de QA.
+- P1 · Probar nv-35 contra staging (✅ 48_NegPanel con Prueba QA el 2026-11-26, estados vacíos y Sello, `docs/pruebas-telefono.md` #30): 49_NegReservas, 50_NegCheckin (y variantes) y 56_NegStats con un negocio aprobado y una reserva de QA.
 - P2 · Probar nv-36 contra staging: 51_NegResenas, 52_NegResp (con y sin IA) y NegMomentos.
 - P2 · Probar nv-37 contra staging: 53_NegCupones, 54_NegCrear y 55_NegHoras.
 - P2 · Probar nv-38 contra staging: 58_NegPerfil, 88 agregar foto, 57_NegCobros (Stripe), 89_NegBanco y 90_NegFiscal. ✅ 87_NegGaleria: subir una foto con Prueba QA funciona (2026-11-26, `docs/pruebas-telefono.md` #29); para verla en Explorar falta que un administrador apruebe «Cafe Prueba QA» y la foto.

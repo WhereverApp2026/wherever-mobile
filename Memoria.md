@@ -433,3 +433,8 @@
 
 ## Mapa de fases
 - `nv-00` = constitución, stack y gobernanza · `nv-01` = foundation (proyecto, tema, navegación, red segura, Room) · `nv-02` = molde Repository→ViewModel→UiState · `nv-03` = puerta de calidad incremental (advisory). Funcionalidades desde `nv-04`.
+
+## Correcciones de documentos (2026-11-28, Borre)
+- Corrección: este equipo sí tiene el SDK 37 (`platforms/android-37.0`, instalado el 2026-11-04); la nota de arriba («este equipo no tiene Android SDK 37») quedó vieja. El proyecto sigue en 36 por decisión del equipo hasta que todos los equipos y la CI lo tengan; subir a 37 con AGP y coil (#63, #65, #8–#12) es de Jorge.
+- Corrección: el 503 «expediente no disponible» del alta se arregló en el backend (`0481d82`, 2026-11-25).
+- A evitar: fusionar #65 (AGP 9.5.2) o #63 (coil 3.6.3) sueltos aunque estén aprobados: sus checks verdes son del 2026-11-23 y la decisión vigente es subirlos junto con el SDK 37.

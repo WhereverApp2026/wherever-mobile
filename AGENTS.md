@@ -42,7 +42,7 @@
 - La app abre sin red y muestra el estado correspondiente.
 
 ## 5. Convenciones técnicas
-- `compileSdk` y `targetSdk` 36, `minSdk` 26 (no hay SDK 37 en este equipo; ver `app/build.gradle.kts`).
+- `compileSdk` y `targetSdk` 36, `minSdk` 26 (decisión del equipo hasta tener SDK 37 en todos los equipos y en la CI; este equipo ya tiene `android-37.0` desde el 2026-11-04; ver `app/build.gradle.kts`).
 - Un `UiState` por pantalla; el ViewModel lo expone con `StateFlow`; el Composable envía eventos.
 - Room fuente de verdad; el repositorio guarda lo que llega de la red y la UI lee de Room.
 - Cadena de red: `RequestId → AuthHeader → RedactedLogging`; `Authenticator` renueva el token una vez.
